@@ -1,0 +1,21 @@
+services:
+  fcp-sfd-frontend-internal:
+    ports:
+      - '3006:3006'
+      - '9262:9229'
+    networks:
+      - fcp-sfd
+    volumes:
+      - ./src:/home/node/src
+      - ./package.json:/home/node/package.json
+
+  redis:
+    ports:
+      - '6369:6379'
+    restart: always
+    networks:
+      - fcp-sfd
+
+networks:
+  fcp-sfd:
+    driver: bridge

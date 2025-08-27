@@ -155,7 +155,7 @@ docker build --target development --no-cache --tag fcp-sfd-frontend-internal:dev
 Run:
 
 ```bash
-docker run -p 3000:3000 fcp-sfd-frontend-internal:development
+docker run -p 3006:3006 fcp-sfd-frontend-internal:development
 ```
 
 ### Production image
@@ -169,7 +169,7 @@ docker build --no-cache --tag fcp-sfd-frontend-internal .
 Run:
 
 ```bash
-docker run -p 3000:3000 fcp-sfd-frontend-internal
+docker run -p 3006:3006 fcp-sfd-frontend-internal
 ```
 
 ### Docker Compose

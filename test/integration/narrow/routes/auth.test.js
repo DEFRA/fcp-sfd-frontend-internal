@@ -32,17 +32,14 @@ vi.mock('../../../../src/auth/state.js', () => ({
 const credentials = {
   sessionId: 'session-id',
   profile: {
-    sessionId: 'session-id',
-    crn: '1234567890',
-    organisationId: '1234567',
-    sbi: '653754363',
-    email: 'test.farmer@test.com'
+    sid: 'session-id',
+    email: 'test.rpa@test.com'
   },
-  token: 'DEFRA-ID-JWT',
-  refreshToken: 'DEFRA-ID-REFRESH-TOKEN'
+  token: 'ENTRA-JWT',
+  refreshToken: 'ENTRA-REFRESH-TOKEN'
 }
 
-const role = 'Farmer'
+const role = 'RPA'
 const scope = ['user']
 
 const signOutUrl = 'https://oidc.example.com/sign-out'
@@ -95,14 +92,12 @@ describe('auth routes', () => {
       expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
       expect(redirect.origin).toBe('https://oidc.example.com')
       expect(redirect.pathname).toBe('/authorize')
-      expect(params.get('serviceId')).toBe(process.env.DEFRA_ID_SERVICE_ID)
-      expect(params.get('p')).toBe(process.env.DEFRA_ID_POLICY)
       expect(params.get('response_mode')).toBe('query')
-      expect(params.get('client_id')).toBe(process.env.DEFRA_ID_CLIENT_ID)
+      expect(params.get('client_id')).toBe(process.env.ENTRA_CLIENT_ID)
       expect(params.get('response_type')).toBe('code')
-      expect(params.get('redirect_uri')).toBe(process.env.DEFRA_ID_REDIRECT_URL)
+      expect(params.get('redirect_uri')).toBe(process.env.ENTRA_REDIRECT_URL)
       expect(params.get('state')).toBeDefined()
-      expect(params.get('scope')).toBe(`openid offline_access ${process.env.DEFRA_ID_CLIENT_ID}`)
+      expect(params.get('scope')).toBe(`${process.env.ENTRA_CLIENT_ID}/.default offline_access`)
     })
   })
 
@@ -354,66 +349,6 @@ describe('auth routes', () => {
       })
       expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
       expect(response.headers.location).toBe('/signed-out')
-    })
-  })
-
-  describe('GET /auth/organisation', () => {
-    beforeEach(() => {
-      path = '/auth/organisation'
-    })
-
-    test('redirects to oidc sign in', async () => {
-      const response = await server.inject({
-        url: path
-      })
-
-      const redirect = new URL(response.headers.location)
-      const params = new URLSearchParams(redirect.search)
-
-      expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
-      expect(redirect.origin).toBe('https://oidc.example.com')
-      expect(redirect.pathname).toBe('/authorize')
-      expect(params.get('serviceId')).toBe(process.env.DEFRA_ID_SERVICE_ID)
-      expect(params.get('p')).toBe(process.env.DEFRA_ID_POLICY)
-      expect(params.get('response_mode')).toBe('query')
-      expect(params.get('client_id')).toBe(process.env.DEFRA_ID_CLIENT_ID)
-      expect(params.get('response_type')).toBe('code')
-      expect(params.get('redirect_uri')).toBe(process.env.DEFRA_ID_REDIRECT_URL)
-      expect(params.get('state')).toBeDefined()
-      expect(params.get('scope')).toBe(`openid offline_access ${process.env.DEFRA_ID_CLIENT_ID}`)
-    })
-
-    test('redirects to oidc sign in with "forceReselection" parameter', async () => {
-      const response = await server.inject({
-        url: path
-      })
-
-      const redirect = new URL(response.headers.location)
-      const params = new URLSearchParams(redirect.search)
-
-      expect(params.get('forceReselection')).toBe('true')
-    })
-
-    test('redirects to oidc sign in with "relationshipId" parameter if preselected organisation provided', async () => {
-      const response = await server.inject({
-        url: `${path}?organisationId=1234567`
-      })
-      const redirect = new URL(response.headers.location)
-      const params = new URLSearchParams(redirect.search)
-
-      expect(params.get('relationshipId')).toBe('1234567')
-    })
-
-    test('redirects to safe redirect path if authenticated', async () => {
-      const response = await server.inject({
-        url: path,
-        auth: {
-          strategy: 'entra',
-          credentials
-        }
-      })
-      expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
-      expect(response.headers.location).toBe('/home')
     })
   })
 })

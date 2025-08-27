@@ -53,21 +53,9 @@ function getBellOptions (oidcConfig) {
       return config.get('entra.redirectUrl')
     },
     providerParams: function (request) {
-      const params = {
+      return {
         response_mode: 'query'
       }
-
-      // TODO
-      // If user intends to switch organisation, force Entra to display the organisation selection screen
-      // if (request.path === '/auth/organisation') {
-      //   params.forceReselection = true
-      //   // If user has already selected an organisation in another service, pass the organisation Id to force Defra Id to skip the organisation selection screen
-      //   if (request.query.organisationId) {
-      //     params.relationshipId = request.query.organisationId
-      //   }
-      // }
-
-      return params
     }
   }
 }

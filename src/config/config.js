@@ -239,6 +239,18 @@ export const config = convict({
       default: '',
       env: 'ENTRA_CLIENT_SECRET',
       sensitive: true
+    },
+    refreshTokens: {
+      doc: 'Should Entra tokens be automatically refreshed',
+      format: Boolean,
+      default: true,
+      env: 'ENTRA_REFRESH_TOKENS'
+    },
+    redirectUrl: {
+      doc: 'The URL to redirect to after authentication',
+      format: String,
+      default: '',
+      env: 'ENTRA_REDIRECT_URL'
     }
   }
 })

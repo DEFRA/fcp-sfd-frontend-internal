@@ -12,6 +12,7 @@ services:
       ENTRA_TENANT_ID: ${ENTRA_TENANT_ID}
       ENTRA_CLIENT_ID: ${ENTRA_CLIENT_ID}
       ENTRA_CLIENT_SECRET: ${ENTRA_CLIENT_SECRET}
+      ENTRA_REDIRECT_URL: http://localhost:3006/auth/sign-in-oidc
 
   redis:
     image: redis:7.2.3-alpine3.18

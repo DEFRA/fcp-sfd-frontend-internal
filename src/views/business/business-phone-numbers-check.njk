@@ -1,0 +1,61 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink %}
+{% from "common/sub-header/macro.njk" import subHeader %}
+
+{% block beforeContent %}
+  {{ subHeader(businessName=businessName, sbi=sbi, userName=userName) }}
+  {{ appBackSignOutLink(backLink) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" novalidate>
+      <input type="hidden" name="crumb" value="{{ crumb }}">
+      <h1 class="govuk-heading-l">
+        {{ pageTitle }}
+      </h1>
+
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Business phone numbers
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <p class="govuk-body">
+              Telephone:
+              {% if businessTelephone %}
+                {{ businessTelephone }}
+              {% else %}
+                <span class="govuk-hint">
+                  Not added
+                </span>
+              {% endif %}
+              <br>
+              Mobile:
+              {% if businessMobile %}
+                {{ businessMobile }}
+              {% else %}
+                <span class="govuk-hint">
+                  Not added
+                </span>
+              {% endif %}
+            </p>
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href={{changeLink}}>Change<span class="govuk-visually-hidden">business phone numbers</span></a>
+          </dd>
+        </div>
+      </dl>
+
+        {{ govukButton({
+          text: "Submit",
+          preventDoubleClick: true
+        }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

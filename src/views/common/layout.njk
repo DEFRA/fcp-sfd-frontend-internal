@@ -1,0 +1,67 @@
+{% extends "govuk/template.njk" %}
+
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{% from "common/heading/macro.njk" import appHeading %}
+
+{% set mainClasses = "app-main-wrapper" %}
+
+{% block head %}
+  <link href="{{ getAssetPath('stylesheets/application.scss') }}" rel="stylesheet">
+  {% if metaDescription %}
+    <meta name="description" content="{{ metaDescription }}">
+  {% endif %}
+{% endblock %}
+
+{% block header %}
+  {{ govukHeader({
+    homepageUrl: "https://www.gov.uk/",
+    classes: "app-header",
+    containerClasses: "govuk-width-container",
+    serviceName: serviceName,
+    serviceUrl: serviceUrl,
+    useTudorCrown: true
+  }) }}
+  <div class="govuk-width-container">
+    {% include "common/phase-banner/phase-banner.njk" %}
+  </div>
+{% endblock %}
+
+{% block pageTitle %}
+  {{ pageTitle }} | {{ serviceName }}
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+{% block footer %}
+  {{ govukFooter({
+    meta: {
+      items: [
+        {
+          href: "/contact-help",
+          text: "Contact us"
+        },
+        {
+          href: "/cookies",
+          text: "Cookies"
+        },
+        {
+          href: "/accessibility-statement",
+          text: "Accessibility statement"
+        },
+        {
+          href: "https://www.gov.uk/government/organisations/rural-payments-agency/about/personal-information-charter",
+          text: "Personal Information Charter",
+          attributes: {
+            target: "_blank",
+            rel: "noopener noreferrer"
+          }
+        }
+      ]
+    }
+  }) }}
+{% endblock %}
+
+{% block bodyEnd %}
+  <script type="module" nonce="{{ nonce }} src="{{ getAssetPath('application.js') }}"></script>
+{% endblock %}

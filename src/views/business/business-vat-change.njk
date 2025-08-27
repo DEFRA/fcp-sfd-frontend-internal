@@ -1,0 +1,55 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink %}
+{% from "common/sub-header/macro.njk" import subHeader %}
+
+{% block beforeContent %}
+  {{ subHeader(businessName=businessName, sbi=sbi, userName=userName) }}
+  {{ appBackSignOutLink(backLink)}}
+{% endblock %}
+
+{% block content %}
+  {% if errors %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: errors.vatNumber.text,
+            href: "#business-vat"
+          }
+        ]
+    }) }}
+  {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" novalidate>
+      <input type="hidden" name="crumb" value="{{ crumb }}">
+      <div class="govuk-form-group">
+        {{ govukInput({
+          label: {
+            text: pageTitle,
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          classes: "govuk-input--width-20",
+          id: "business-vat",
+          name: "vatNumber",
+            value: vatNumber,
+          errorMessage: errors.vatNumber and {
+            text: errors.vatNumber.text
+          }
+        }) }}
+      </div>
+
+      {{ govukButton({
+        text: "Continue",
+        preventDoubleClick: true
+      }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

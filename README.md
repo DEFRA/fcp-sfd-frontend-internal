@@ -4,196 +4,96 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_fcp-sfd-frontend-internal&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DEFRA_fcp-sfd-frontend-internal)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_fcp-sfd-frontend-internal&metric=coverage)](https://sonarcloud.io/summary/new_code?id=DEFRA_fcp-sfd-frontend-internal)
 
-Core delivery platform Node.js Frontend Template.
+Frontend service for the Single Front Door (SFD) service. This service provides the user interface for customers to interact with the SFD service.
 
-- [Requirements](#requirements)
-  - [Node.js](#nodejs)
-- [Server-side Caching](#server-side-caching)
-- [Redis](#redis)
-- [Local Development](#local-development)
-  - [Setup](#setup)
-  - [Development](#development)
-  - [Production](#production)
-  - [Npm scripts](#npm-scripts)
-  - [Update dependencies](#update-dependencies)
-  - [Formatting](#formatting)
-    - [Windows prettier issue](#windows-prettier-issue)
-- [Docker](#docker)
-  - [Development image](#development-image)
-  - [Production image](#production-image)
-  - [Docker Compose](#docker-compose)
-  - [Dependabot](#dependabot)
-  - [SonarCloud](#sonarcloud)
-- [Licence](#licence)
-  - [About the licence](#about-the-licence)
+## Prerequisites
 
-## Requirements
+- Docker
+- Docker Compose
+- Node.js (v22 LTS)
 
-### Node.js
+## Environment Variables
 
-Please install [Node.js](http://nodejs.org/) `>= v22` and [npm](https://nodejs.org/) `>= v9`. You will find it
-easier to use the Node Version Manager [nvm](https://github.com/creationix/nvm)
+| Name | Default Value | Required | Description |
+| --- | --- | --- | --- |
+| ALLOW_ERROR_VIEWS | `false` | No | Enable error route views in local development to inspect error pages |
+| DAL_CONNECTION | `false` | No | Get user data from C_DAL if set to true, else, get user data from local mock-data |
+| DAL_ENDPOINT | `http://fcp-dal-api:3005/graphql`| No | Data access layer (DAL) endpoint |
+| ENTRA_WELL_KNOWN_URL | null | No | The Entra well known URL - Readable endpoint for Entra |
+| ENTRA_CLIENT_ID | null | No | The Entra client ID - Unique code for identifying fcp-sfd-frontend-internal |
+| ENTRA_CLIENT_SECRET | null | No | The Entra client secret - client secret for fcp-sfd-frontend-internal |
+| ENTRA_REDIRECT_URL | null | No | The Entra redirect URl - URL of the page to be redirected immediately after the user has successfully signed in |
+| ENTRA_SIGN_OUT_REDIRECT_URL | null | No | The Entra sign out redirect URL - URL of the page to be redirected after the user has successfully signed out |
+| ENTRA_REFRESH_TOKENS | `true` | No | Entra refresh tokens - Set to true to enable auto refresh of Entra tokens |
 
-To use the correct version of Node.js for this application, via nvm:
+## Setup
 
-```bash
+Clone the repository and install dependencies:
+```
+git clone https://github.com/DEFRA/fcp-sfd-frontend-internal.git
 cd fcp-sfd-frontend-internal
-nvm use
+npm install
+```
+
+## Environment variables
+
+Create a `.env` file in the root of the project with the required environment variables.
+The following ENTRA variables are need to be added onto the `.env` file, values for the variables are [here](https://defra.sharepoint.com/teams/Team1974/FCP%20Front%20Door%20team/Forms/AllItems.aspx?id=%2Fteams%2FTeam1974%2FFCP%20Front%20Door%20team%2FTechnology%2FProtected%5FData&viewid=9296ac29%2D76a0%2D4373%2Db652%2Dd876b3b8e35f)
+```bash
+ENTRA_WELL_KNOWN_URL
+ENTRA_CLIENT_ID
+ENTRA_CLIENT_SECRET
+ENTRA_SERVICE
+ENTRA_POLICY
+```
+
+For working with the Data Access Layer, you will need to add the following environment variable to your `.env` file. The value can be found in the table above.
+```bash
+DAL_ENDPOINT
+```
+
+## Running the application
+
+You can either run this service independently or alternatively run the [fcp-sfd-core](https://github.com/DEFRA/fcp-sfd-core) repository for local development if you need to run more services simultaneously.
+
+### Building the Docker image
+
+Container images are built using Docker Compose. It's important to note that in order to successfully run the [fcp-dal-api](https://github.com/defra/fcp-dal-api) and its [upstream-mock](https://github.com/defra/fcp-dal-upstream-mock) to interact with the Data Access Layer (DAL), you _must_ run this service as a Docker container. This is because the [Docker Compose configuration](./compose.yaml) for this repository pulls and runs the Docker images for the `fcp-dal-api` and `fcp-dal-upstream-mock` (a.k.a. the `kits-mock`) from the Docker registry.
+
+First, build the Docker image:
+```
+docker compose build
+```
+
+### Starting the Docker container
+
+After building the image, run the service locally in a container alongside `fcp-dal-api` and `fcp-dal-upstream-mock`:
+```
+docker compose up
+```
+Use the `-d` at the end of the above command to run in detached mode e.g. if you wish to view logs in another application such as Docker Desktop.
+
+You can find further information on how SFD integrates with the DAL on [Confluence](https://eaflood.atlassian.net/wiki/spaces/SFD/pages/5712838853/Single+Front+Door+Integration+with+Data+Access+Layer).
+
+## Tests
+
+### Running tests
+
+Run the tests with:
+
+```
+npm run docker:test
+```
+Or to run the tests in watch mode:
+```
+npm run docker:test:watch
 ```
 
 ## Server-side Caching
 
-We use Catbox for server-side caching. By default the service will use CatboxRedis when deployed and CatboxMemory for
-local development.
-You can override the default behaviour by setting the `SESSION_CACHE_ENGINE` environment variable to either `redis` or
-`memory`.
+We use Catbox for server-side caching. By default, the service will use CatboxRedis when deployed and CatboxMemory for local development. You can override the default behavior by setting the `SESSION_CACHE_ENGINE` environment variable to either `redis` or `memory`.
 
-Please note: CatboxMemory (`memory`) is _not_ suitable for production use! The cache will not be shared between each
-instance of the service and it will not persist between restarts.
-
-## Redis
-
-Redis is an in-memory key-value store. Every instance of a service has access to the same Redis key-value store similar
-to how services might have a database (or MongoDB). All frontend services are given access to a namespaced prefixed that
-matches the service name. e.g. `my-service` will have access to everything in Redis that is prefixed with `my-service`.
-
-If your service does not require a session cache to be shared between instances or if you don't require Redis, you can
-disable setting `SESSION_CACHE_ENGINE=false` or changing the default value in `src/config/index.js`.
-
-## Proxy
-
-We are using forward-proxy which is set up by default. To make use of this: `import { fetch } from 'undici'` then
-because of the `setGlobalDispatcher(new ProxyAgent(proxyUrl))` calls will use the ProxyAgent Dispatcher
-
-If you are not using Wreck, Axios or Undici or a similar http that uses `Request`. Then you may have to provide the
-proxy dispatcher:
-
-To add the dispatcher to your own client:
-
-```javascript
-import { ProxyAgent } from 'undici'
-
-return await fetch(url, {
-  dispatcher: new ProxyAgent({
-    uri: proxyUrl,
-    keepAliveTimeout: 10,
-    keepAliveMaxTimeout: 10
-  })
-})
-```
-
-## Local Development
-
-### Setup
-
-Install application dependencies:
-
-```bash
-npm install
-```
-
-### Development
-
-To run the application in `development` mode run:
-
-```bash
-npm run dev
-```
-
-### Production
-
-To mimic the application running in `production` mode locally run:
-
-```bash
-npm start
-```
-
-### Npm scripts
-
-All available Npm scripts can be seen in [package.json](./package.json)
-To view them in your command line run:
-
-```bash
-npm run
-```
-
-### Update dependencies
-
-To update dependencies use [npm-check-updates](https://github.com/raineorshine/npm-check-updates):
-
-> The following script is a good start. Check out all the options on
-> the [npm-check-updates](https://github.com/raineorshine/npm-check-updates)
-
-```bash
-ncu --interactive --format group
-```
-
-### Formatting
-
-#### Windows prettier issue
-
-If you are having issues with formatting of line breaks on Windows update your global git config by running:
-
-```bash
-git config --global core.autocrlf false
-```
-
-## Docker
-
-### Development image
-
-> [!TIP]
-> For Apple Silicon users, you may need to add `--platform linux/amd64` to the `docker run` command to ensure
-> compatibility fEx: `docker build --platform=linux/arm64 --no-cache --tag fcp-sfd-frontend-internal`
-
-Build:
-
-```bash
-docker build --target development --no-cache --tag fcp-sfd-frontend-internal:development .
-```
-
-Run:
-
-```bash
-docker run -p 3000:3000 fcp-sfd-frontend-internal:development
-```
-
-### Production image
-
-Build:
-
-```bash
-docker build --no-cache --tag fcp-sfd-frontend-internal .
-```
-
-Run:
-
-```bash
-docker run -p 3000:3000 fcp-sfd-frontend-internal
-```
-
-### Docker Compose
-
-A local environment with:
-
-- Localstack for AWS services (S3, SQS)
-- Redis
-- MongoDB
-- This service.
-- A commented out backend example.
-
-```bash
-docker compose up --build -d
-```
-
-### Dependabot
-
-We have added an example dependabot configuration file to the repository. You can enable it by renaming
-the [.github/example.dependabot.yml](.github/example.dependabot.yml) to `.github/dependabot.yml`
-
-### SonarCloud
-
-Instructions for setting up SonarCloud can be found in [sonar-project.properties](./sonar-project.properties).
+Please note: CatboxMemory (`memory`) is _not_ suitable for production use! The cache will not be shared between each instance of the service and it will not persist between restarts.
 
 ## Licence
 
@@ -207,8 +107,6 @@ The following attribution statement MUST be cited in your products and applicati
 
 ### About the licence
 
-The Open Government Licence (OGL) was developed by the Controller of Her Majesty's Stationery Office (HMSO) to enable
-information providers in the public sector to license the use and re-use of their information under a common open
-licence.
+The Open Government Licence (OGL) was developed by the Controller of His Majesty's Stationery Office (HMSO) to enable information providers in the public sector to license the use and re-use of their information under a common open licence.
 
 It is designed to encourage use and re-use of information freely and flexibly, with only a few conditions.

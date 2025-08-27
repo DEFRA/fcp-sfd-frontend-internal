@@ -8,6 +8,10 @@ services:
     depends_on:
       redis:
         condition: service_started
+    environment:
+      ENTRA_TENANT_ID: ${ENTRA_TENANT_ID}
+      ENTRA_CLIENT_ID: ${ENTRA_CLIENT_ID}
+      ENTRA_CLIENT_SECRET: ${ENTRA_CLIENT_SECRET}
 
   redis:
     image: redis:7.2.3-alpine3.18

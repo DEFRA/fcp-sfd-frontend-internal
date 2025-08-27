@@ -219,6 +219,27 @@ export const config = convict({
       default: 'x-cdp-request-id',
       env: 'TRACING_HEADER'
     }
+  },
+  entra: {
+    tenantId: {
+      doc: 'The Entra tenant ID',
+      format: String,
+      default: '',
+      env: 'ENTRA_TENANT_ID'
+    },
+    clientId: {
+      doc: 'The Entra client ID',
+      format: String,
+      default: '',
+      env: 'ENTRA_CLIENT_ID'
+    },
+    clientSecret: {
+      doc: 'The Entra client secret',
+      format: String,
+      default: '',
+      env: 'ENTRA_CLIENT_SECRET',
+      sensitive: true
+    }
   }
 })
 

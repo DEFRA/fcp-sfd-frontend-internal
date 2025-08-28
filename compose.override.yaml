@@ -11,7 +11,7 @@ services:
 
   kits-mock:
     ports:
-      - '3100:3100'
+      - '3101:3100'
     networks:
       - fcp-sfd
 
@@ -23,7 +23,7 @@ services:
 
   redis:
     ports:
-      - '6379:6379'
+      - '6369:6379'
     networks:
       - fcp-sfd
 

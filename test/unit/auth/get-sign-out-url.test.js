@@ -22,7 +22,7 @@ vi.mock('../../../src/config/index.js', () => ({
 const { getSignOutUrl } = await import('../../../src/auth/get-sign-out-url.js')
 
 const request = { mock: 'request' }
-const token = 'DEFRA-ID-JWT'
+const token = 'ENTRA-ID-JWT'
 
 describe('getSignOutUrl', () => {
   beforeEach(() => {

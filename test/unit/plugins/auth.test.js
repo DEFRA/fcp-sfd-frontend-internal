@@ -47,7 +47,7 @@ const token = {
   sid: 'session-id'
 }
 
-const refreshToken = 'DEFRA-ID-REFRESH-TOKEN'
+const refreshToken = 'ENTRA-ID-REFRESH-TOKEN'
 
 const { auth, getBellOptions, getCookieOptions } = await import('../../../src/plugins/auth.js')
 

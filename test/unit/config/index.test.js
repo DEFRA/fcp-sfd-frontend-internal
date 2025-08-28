@@ -1,7 +1,7 @@
 import { vi, beforeEach, describe, test, expect } from 'vitest'
 
 describe('Config', () => {
-  describe('DefraId', () => {
+  describe('Entra', () => {
     beforeEach(() => {
       vi.resetModules()
       process.env.ENTRA_WELL_KNOWN_URL = 'mockWellKnownUrl'

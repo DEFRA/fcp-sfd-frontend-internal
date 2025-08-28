@@ -43,8 +43,6 @@ The following ENTRA variables are need to be added onto the `.env` file, values 
 ENTRA_WELL_KNOWN_URL
 ENTRA_CLIENT_ID
 ENTRA_CLIENT_SECRET
-ENTRA_SERVICE
-ENTRA_POLICY
 ```
 
 For working with the Data Access Layer, you will need to add the following environment variable to your `.env` file. The value can be found in the table above.

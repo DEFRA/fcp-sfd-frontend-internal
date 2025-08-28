@@ -14,7 +14,6 @@ export const dalConnector = async (query, variables) => {
     const bearerToken = await getTokenService(tokenCache)
     const emailHeader = config.get('dalConfig.email')
 
-    // Email will be replaced by defraID token
     const response = await fetch(config.get('dalConfig.endpoint'), {
       method: 'POST',
       headers: {

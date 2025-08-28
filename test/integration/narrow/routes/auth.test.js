@@ -32,7 +32,7 @@ vi.mock('../../../../src/auth/state.js', () => ({
 const credentials = {
   sessionId: 'session-id',
   profile: {
-    sid: 'session-id',
+    sessionId: 'session-id',
     email: 'test.rpa@test.com'
   },
   token: 'ENTRA-JWT',
@@ -146,18 +146,6 @@ describe('auth routes', () => {
         }
       })
       expect(mockVerifyToken).toHaveBeenCalledWith(credentials.token)
-    })
-
-    test('should get user permissions', async () => {
-      await server.inject({
-        url: path,
-        auth: {
-          strategy: 'entra',
-          credentials
-        }
-      })
-      const { sbi, crn } = credentials.profile
-      expect(mockGetPermissions).toHaveBeenCalledWith(sbi, crn)
     })
 
     test('should set authentication status in session cache', async () => {

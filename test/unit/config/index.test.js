@@ -4,14 +4,12 @@ describe('Config', () => {
   describe('DefraId', () => {
     beforeEach(() => {
       vi.resetModules()
-      process.env.DEFRA_ID_WELL_KNOWN_URL = 'mockWellKnownUrl'
-      process.env.DEFRA_ID_CLIENT_ID = 'mockClientId'
-      process.env.DEFRA_ID_CLIENT_SECRET = 'mockClientSecret'
-      process.env.DEFRA_ID_SERVICE_ID = 'mockServiceId'
-      process.env.DEFRA_ID_POLICY = 'mockPolicy'
-      process.env.DEFRA_ID_REDIRECT_URL = 'mockRedirectUrl'
-      process.env.DEFRA_ID_SIGN_OUT_REDIRECT_URL = 'mockSignOutRedirectUrl'
-      process.env.DEFRA_ID_REFRESH_TOKENS = 'false'
+      process.env.ENTRA_WELL_KNOWN_URL = 'mockWellKnownUrl'
+      process.env.ENTRA_CLIENT_ID = 'mockClientId'
+      process.env.ENTRA_CLIENT_SECRET = 'mockClientSecret'
+      process.env.ENTRA_REDIRECT_URL = 'mockRedirectUrl'
+      process.env.ENTRA_SIGN_OUT_REDIRECT_URL = 'mockSignOutRedirectUrl'
+      process.env.ENTRA_REFRESH_TOKENS = 'false'
     })
 
     test('should return well known url from environment variable if set', async () => {
@@ -21,7 +19,7 @@ describe('Config', () => {
     })
 
     test('should return null if well known url environment variable is not set', async () => {
-      delete process.env.DEFRA_ID_WELL_KNOWN_URL
+      delete process.env.ENTRA_WELL_KNOWN_URL
       const { config } = await import('../../../src/config/index.js')
 
       expect(config.get('entra.wellKnownUrl')).toBe(null)
@@ -34,7 +32,7 @@ describe('Config', () => {
     })
 
     test('should return null if client id environment variable is not set', async () => {
-      delete process.env.DEFRA_ID_CLIENT_ID
+      delete process.env.ENTRA_CLIENT_ID
       const { config } = await import('../../../src/config/index.js')
 
       expect(config.get('entra.clientId')).toBe(null)
@@ -47,35 +45,10 @@ describe('Config', () => {
     })
 
     test('should return null if client secret environment variable is not set', async () => {
-      delete process.env.DEFRA_ID_CLIENT_SECRET
+      delete process.env.ENTRA_CLIENT_SECRET
       const { config } = await import('../../../src/config/index.js')
 
       expect(config.get('entra.clientSecret')).toBe(null)
-    })
-
-    test('should return service id from environment variable if set', async () => {
-      const { config } = await import('../../../src/config/index.js')
-
-      expect(config.get('entra.serviceId')).toBe('mockServiceId')
-    })
-
-    test('should return null if service id environment variable is not set', async () => {
-      delete process.env.DEFRA_ID_SERVICE_ID
-      const { config } = await import('../../../src/config/index.js')
-      expect(config.get('entra.serviceId')).toBe(null)
-    })
-
-    test('should return policy from environment variable if set', async () => {
-      const { config } = await import('../../../src/config/index.js')
-
-      expect(config.get('entra.policy')).toBe('mockPolicy')
-    })
-
-    test('should return null if policy environment variable is not set', async () => {
-      delete process.env.DEFRA_ID_POLICY
-      const { config } = await import('../../../src/config/index.js')
-
-      expect(config.get('entra.policy')).toBe(null)
     })
 
     test('should return redirect url from environment variable if set', async () => {
@@ -85,7 +58,7 @@ describe('Config', () => {
     })
 
     test('should return null if redirect url environment variable is not set', async () => {
-      delete process.env.DEFRA_ID_REDIRECT_URL
+      delete process.env.ENTRA_REDIRECT_URL
       const { config } = await import('../../../src/config/index.js')
       expect(config.get('entra.redirectUrl')).toBe(null)
     })
@@ -97,7 +70,7 @@ describe('Config', () => {
     })
 
     test('should return null if sign out redirect url environment variable is not set', async () => {
-      delete process.env.DEFRA_ID_SIGN_OUT_REDIRECT_URL
+      delete process.env.ENTRA_SIGN_OUT_REDIRECT_URL
       const { config } = await import('../../../src/config/index.js')
 
       expect(config.get('entra.signOutRedirectUrl')).toBe(null)
@@ -110,7 +83,7 @@ describe('Config', () => {
     })
 
     test('should default to refreshing tokens if environment variable is not set', async () => {
-      delete process.env.DEFRA_ID_REFRESH_TOKENS
+      delete process.env.ENTRA_REFRESH_TOKENS
       const { config } = await import('../../../src/config/index.js')
 
       expect(config.get('entra.refreshTokens')).toBe(true)

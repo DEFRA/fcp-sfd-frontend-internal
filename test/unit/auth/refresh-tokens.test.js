@@ -7,7 +7,7 @@ vi.mock('../../../src/auth/get-oidc-config.js', () => ({
 }))
 
 const mockWreckPost = vi.fn()
-const mockTokenPayload = { access_token: 'DEFRA_ID_JWT', refresh_token: 'DEFRA_ID_REFRESH_TOKEN_NEW' }
+const mockTokenPayload = { access_token: 'ENTRA_JWT', refresh_token: 'ENTRA_REFRESH_TOKEN_NEW' }
 vi.mock('@hapi/wreck', () => ({
   default: {
     post: mockWreckPost
@@ -23,7 +23,7 @@ vi.mock('../../../src/config/index.js', () => ({
 
 const { refreshTokens } = await import('../../../src/auth/refresh-tokens.js')
 
-const refreshToken = 'DEFRA_ID_REFRESH_TOKEN'
+const refreshToken = 'ENTRA_REFRESH_TOKEN'
 
 describe('refreshTokens', () => {
   beforeEach(() => {
@@ -82,7 +82,7 @@ describe('refreshTokens', () => {
     expect(url.searchParams.get('client_id')).toBe('mockClientId')
     expect(url.searchParams.get('client_secret')).toBe('mockClientSecret')
     expect(url.searchParams.get('grant_type')).toBe('refresh_token')
-    expect(url.searchParams.get('scope')).toBe('openid offline_access mockClientId')
+    expect(url.searchParams.get('scope')).toBe('mockClientId/.default offline_access')
     expect(url.searchParams.get('refresh_token')).toBe(refreshToken)
     expect(url.searchParams.get('redirect_uri')).toBe('https://mock-redirect-url.com')
   })

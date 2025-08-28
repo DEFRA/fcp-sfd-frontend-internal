@@ -41,11 +41,10 @@ const { privateKey } = generateKeyPairSync('rsa', {
 })
 
 const token = {
-  contactId: '1234567890',
-  firstName: 'Andrew',
-  lastName: 'Farmer',
-  currentRelationshipId: '1234567',
-  sessionId: 'session-id'
+  given_name: 'Andrew',
+  family_name: 'RPA',
+  email: 'test.rpa@test.com',
+  sid: 'session-id'
 }
 
 const refreshToken = 'DEFRA-ID-REFRESH-TOKEN'
@@ -61,10 +60,6 @@ describe('auth', () => {
           return 'mockClientId'
         case 'entra.clientSecret':
           return 'mockClientSecret'
-        case 'entra.serviceId':
-          return 'mockServiceId'
-        case 'entra.policy':
-          return 'mockPolicy'
         case 'entra.redirectUrl':
           return 'mockRedirectUrl'
         case 'entra.refreshTokens':
@@ -164,33 +159,8 @@ describe('auth', () => {
         expect(providerParams(request)).toBeInstanceOf(Object)
       })
 
-      test('should include serviceId from config', () => {
-        expect(providerParams(request).serviceId).toBe('mockServiceId')
-      })
-
-      test('should include policy from config', () => {
-        expect(providerParams(request).p).toBe('mockPolicy')
-      })
-
       test('should include response_mode as query', () => {
         expect(providerParams(request).response_mode).toBe('query')
-      })
-
-      test('should include forceReselection if request path is /auth/organisation', () => {
-        request.path = '/auth/organisation'
-        expect(providerParams(request).forceReselection).toBe(true)
-      })
-
-      test('should include relationshipId if request path is /auth/organisation and query includes organisationId', () => {
-        request.path = '/auth/organisation'
-        request.query.organisationId = '1234567'
-        expect(providerParams(request).relationshipId).toBe('1234567')
-      })
-
-      test('should not include relationshipId if request path is not /auth/organisation and query includes organisationId', () => {
-        request.path = '/some/other/path'
-        request.query.organisationId = '1234567'
-        expect(providerParams(request).relationshipId).toBeUndefined()
       })
     })
 
@@ -199,7 +169,7 @@ describe('auth', () => {
         expect(getBellOptions(mockOidcConfig).provider).toBeInstanceOf(Object)
       })
 
-      test('should be named "defra-id"', () => {
+      test('should be named "entra"', () => {
         expect(getBellOptions(mockOidcConfig).provider.name).toBe('entra')
       })
 
@@ -220,7 +190,7 @@ describe('auth', () => {
       })
 
       test('should create a scope array', () => {
-        expect(getBellOptions(mockOidcConfig).provider.scope).toEqual(['openid', 'offline_access', 'mockClientId'])
+        expect(getBellOptions(mockOidcConfig).provider.scope).toEqual(['mockClientId/.default', 'offline_access'])
       })
 
       test('should have a profile function', () => {
@@ -261,26 +231,9 @@ describe('auth', () => {
           expect(credentials.profile).toMatchObject({ ...token })
         })
 
-        test('should add crn property to credentials profile', () => {
+        test('should add sessionId property to credentials profile', () => {
           profile(credentials)
-          expect(credentials.profile.crn).toBe(token.contactId)
-        })
-
-        test('should add name property to credentials profile', () => {
-          profile(credentials)
-          expect(credentials.profile.name).toBe(`${token.firstName} ${token.lastName}`)
-        })
-
-        test('should add sbi property to credentials profile', () => {
-          const sbi = '1234567624'
-          mockGetSbiFromRelationships.mockReturnValue(sbi)
-          profile(credentials)
-          expect(credentials.profile.sbi).toBe(sbi)
-        })
-
-        test('should add organisationId property to credentials profile', () => {
-          profile(credentials)
-          expect(credentials.profile.organisationId).toBe(token.currentRelationshipId)
+          expect(credentials.profile.sessionId).toBe(token.sid)
         })
       })
     })

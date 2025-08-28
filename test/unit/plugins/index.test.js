@@ -1,7 +1,6 @@
 import { describe, test, expect } from 'vitest'
 import headersPlugin from '../../../src/plugins/headers.js'
 import errors from '../../../src/plugins/errors.js'
-import { sso } from '../../../src/plugins/sso.js'
 import { session } from '../../../src/plugins/session.js'
 import { csp } from '../../../src/plugins/content-security-policy.js'
 import { auth } from '../../../src/plugins/auth.js'
@@ -22,11 +21,6 @@ describe('registerPlugins', () => {
   test('should contain auth plugin', async () => {
     const authIndex = plugins.findIndex(plugin => plugin.plugin.name === 'auth')
     expect(auth).toEqual(plugins[authIndex])
-  })
-
-  test('should contain sso plugin', async () => {
-    const ssoIndex = plugins.findIndex(plugin => plugin.plugin.name === 'sso')
-    expect(sso).toEqual(plugins[ssoIndex])
   })
 
   test('should contain router plugin', async () => {

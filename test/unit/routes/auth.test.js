@@ -107,24 +107,6 @@ describe('auth', () => {
       expect(route.handler).toBeInstanceOf(Function)
     })
   })
-
-  describe('GET /auth/organisation', () => {
-    beforeEach(() => {
-      route = getRoute('GET', '/auth/organisation')
-    })
-
-    test('should exist', () => {
-      expect(route).toBeDefined()
-    })
-
-    test('should require authentication with Entra', () => {
-      expect(route.options.auth).toBe('entra')
-    })
-
-    test('should have a handler', () => {
-      expect(route.handler).toBeInstanceOf(Function)
-    })
-  })
 })
 
 function getRoute (method, path) {

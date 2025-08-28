@@ -9,7 +9,7 @@ async function refreshTokens (refreshToken) {
     `client_id=${config.get('entra.clientId')}`,
     `client_secret=${config.get('entra.clientSecret')}`,
     'grant_type=refresh_token',
-    'scope=openid offline_access profile email',
+    `scope=${config.get('entra.clientId')}/.default offline_access`,
     `refresh_token=${refreshToken}`,
     `redirect_uri=${config.get('entra.redirectUrl')}`
   ].join('&')

@@ -52,7 +52,7 @@ function getBellOptions (oidcConfig) {
 
       return config.get('entra.redirectUrl')
     },
-    providerParams: function (request) {
+    providerParams: function (_request) {
       return {
         response_mode: 'query'
       }

@@ -1,0 +1,57 @@
+services:
+  fcp-sfd-frontend-internal:
+    build:
+      context: .
+      target: development
+    links:
+      - 'redis:redis'
+    depends_on:
+      redis:
+        condition: service_started
+    environment:
+      PORT: 3006
+      NODE_ENV: development
+      ALLOW_ERROR_VIEWS: ${ALLOW_ERROR_VIEWS:-false}
+      DAL_ENDPOINT: ${DAL_ENDPOINT:-http://fcp-dal-api:3005/graphql}
+      DAL_TOKEN_ENDPOINT: https://login.microsoftonline.com/${DAL_TENANT_ID}/oauth2/v2.0/token
+      DAL_CONNECTION: ${DAL_CONNECTION:-false}
+      DAL_CLIENT_ID: ${DAL_CLIENT_ID}
+      DAL_CLIENT_SECRET: ${DAL_CLIENT_SECRET}
+      DAL_TENANT_ID: ${DAL_TENANT_ID}
+      ENTRA_WELL_KNOWN_URL: https://login.microsoftonline.com/${ENTRA_TENANT_ID}/v2.0/.well-known/openid-configuration
+      ENTRA_CLIENT_ID: ${ENTRA_CLIENT_ID}
+      ENTRA_CLIENT_SECRET: ${ENTRA_CLIENT_SECRET}
+      ENTRA_REDIRECT_URL: http://localhost:3006/auth/sign-in-oidc
+      ENTRA_SIGN_OUT_REDIRECT_URL: http://localhost:3006/auth/sign-out-oidc
+      DAL_EMAIL_HEADER: ${DAL_EMAIL_HEADER}
+
+  kits-mock:
+    image: defradigital/fcp-dal-upstream-mock
+    environment:
+      MOCK_LOG_LEVEL: info
+      MOCK_SERVER_COLLECTION: all
+      NODE_ENV: development
+      PORT: 3100
+
+  fcp-dal-api:
+    image: defradigital/fcp-dal-api:0.68.0
+    depends_on:
+      - kits-mock
+    environment:
+      ALL_SCHEMA_ON: true
+      LOG_LEVEL: info
+      NODE_ENV: development
+      PORT: 3005
+      ENVIRONMENT: dev
+      DISABLE_AUTH: true
+      DISABLE_PROXY: true
+      GRAPHQL_DASHBOARD_ENABLED: true
+      ADMIN_AD_GROUP_ID: unused
+      KITS_GATEWAY_INTERNAL_URL: http://kits-mock:3100/v1/
+      KITS_GATEWAY_TIMEOUT_MS: 3006
+      KITS_DISABLE_MTLS: true
+      DAL_REQUEST_TIMEOUT_MS: 3006
+
+  redis:
+    image: redis:7.2.3-alpine3.18
+    restart: always

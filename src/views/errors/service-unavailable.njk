@@ -1,0 +1,13 @@
+{% extends "errors/layout.njk" %}
+
+{% set pageTitle = "Sorry, the service is unavailable" %}
+{% set metaDescription = "The service is not currently available, but you can contact us." %}
+
+{% block error_content %}
+<h1 class="govuk-heading-l">
+  Sorry, the service is unavailable
+</h1>
+<p class="govuk-body">
+  You will be able to use the service later.
+</p>
+{% endblock %}

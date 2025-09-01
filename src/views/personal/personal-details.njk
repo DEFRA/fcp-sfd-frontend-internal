@@ -1,0 +1,140 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink %}
+
+{% block beforeContent %}
+  {{ appBackSignOutLink(backLink) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+      {# Notification banner #}
+      {% if notification %}
+        {{ govukNotificationBanner({
+          type: "success",
+          titleText: notification.title,
+          text: notification.text
+        }) }}
+      {% endif %}
+
+    <span  class="govuk-caption-l">{{fullName}}</span>
+
+    <h1 class="govuk-heading-l">
+      View and update your personal details
+    </h1>
+
+    {% set formattedAddress %}
+      {% for addressLine in address %}
+        <div>{{addressLine}}</div>
+      {% endfor %}
+    {% endset %}
+
+    {% set displayPersonalPhone %}
+      <div>Telephone: <div class="govuk-hint" style="display: inline;">{{personalTelephone}}</div></div>
+      <div>Mobile: <div class="govuk-hint" style="display: inline;">{{personalMobile}}</div></div>
+    {% endset %}
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: {
+            text: "Full name"
+          },
+          value: {
+            text: fullName
+          },
+          actions: {
+            items: [
+              {
+                href: "/",
+                text: "Change",
+                visuallyHiddenText: "Full name"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Date of birth"
+          },
+          value: {
+            text: dateOfBirth
+          },
+          actions: {
+            items: [
+              {
+                href: "/",
+                text: "Change",
+                visuallyHiddenText: "date of birth"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Customer reference number"
+          },
+          value: {
+            text: crn
+          }
+        },
+        {
+          key: {
+            text: "Personal address"
+          },
+          value: {
+            html: formattedAddress
+          },
+          actions: {
+            items: [
+              {
+                href: "/",
+                text: "Change",
+                visuallyHiddenText: "personal address"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Personal phone numbers"
+          },
+          value: {
+            html: displayPersonalPhone
+          },
+          actions: {
+            items: [
+              {
+                href: "/",
+                text: "Change",
+                visuallyHiddenText: "personal phone numbers"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Personal email address"
+          },
+          value: {
+            text: personalEmail
+          },
+          actions: {
+            items: [
+              {
+                href: "/",
+                text: "Change",
+                visuallyHiddenText: "personal email address"
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+
+  </div>
+</div>
+{% endblock %}

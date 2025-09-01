@@ -1,0 +1,18 @@
+{% macro appBackSignOutLink(params) %}
+  {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+<div class="govuk-grid-row sub-header-container govuk-!-padding-top-3">
+  <div class="govuk-grid-column-two-thirds">
+  {{ govukBackLink({
+    text: params.text | default("Back"),
+    href: params.href | default("#")
+  }) }}
+  </div>
+
+  <div  class="govuk-grid-column-one-third govuk-text-align-right">
+    <a href="/auth/sign-out" class="govuk-link">Sign out</a>
+  </div>
+
+</div>
+
+   <p class="govuk-body govuk-!-margin-bottom-0"></p>
+{% endmacro %}

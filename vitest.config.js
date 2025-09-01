@@ -1,21 +1,20 @@
-import { defineConfig, configDefaults } from 'vitest/config'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    globals: true,
-    environment: 'node',
-    clearMocks: true,
+    include: ['**/test/**/*.test.js'],
+    timeout: 10000,
+    hookTimeout: 10000,
     coverage: {
-      provider: 'v8',
-      reportsDirectory: './coverage',
-      reporter: ['text', 'lcov'],
-      include: ['src/**'],
+      reportOnFailure: true,
+      clean: false,
+      reporter: ['lcov'],
+      include: ['src/**/*.js'],
       exclude: [
-        ...configDefaults.exclude,
-        '.public',
-        'coverage',
-        'postcss.config.js',
-        'stylelint.config.js'
+        '**/node_modules/**',
+        '**/test/**',
+        '.server',
+        'src/index.js'
       ]
     }
   }

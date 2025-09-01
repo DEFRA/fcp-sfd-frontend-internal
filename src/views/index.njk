@@ -1,0 +1,28 @@
+{% extends 'common/layout.njk' %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  {{ appHeading({
+    text: heading,
+    caption: pageTitle
+  }) }}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+                <h1 class="govuk-heading-l">Sign into Single Front Door</h1>
+
+          <p class="govuk-body">Use this service to sign in with your Entra account.</p>
+
+          {{ govukButton({
+            classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
+            href: "/auth/sign-in",
+            isStartButton: true,
+            text: "Sign in"
+          }) }}
+
+          <h2 class="govuk-heading-m">Before you start</h2>
+          <p class="govuk-body">You’ll need your account added to the Single Front Door Entra role and an equivalent Rural Payments account.</p>
+    </div>
+  </div>
+
+{% endblock %}

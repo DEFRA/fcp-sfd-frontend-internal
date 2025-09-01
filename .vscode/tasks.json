@@ -1,0 +1,125 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "⬆️ Up Frontend",
+      "detail": "Start up the local docker dev environment",
+      "type": "shell",
+      "command": "docker compose up --build",
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "⬇️ Down Frontend",
+      "detail": "Stop and drop the containers",
+      "type": "shell",
+      "command": "docker compose down; echo \"All done! 🎉\"",
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "🪵 Log Frontend",
+      "detail": "Show the logs for the frontend",
+      "type": "shell",
+      "command": "docker compose logs -f",
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "✅ Test Frontend",
+      "detail": "Run all unit tests for Frontend",
+      "type": "shell",
+      "command": "docker compose down -v && docker compose -f compose.yaml -f compose.test.yaml run --build --rm 'fcp-sfd-frontend-internal'",
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "‼️ Only Test Frontend",
+      "detail": "Run the currently selected test file for frontend",
+      "type": "shell",
+      "command" : "docker compose down -v && docker compose -f compose.yaml -f compose.test.yaml run --rm fcp-sfd-frontend-internal npx vitest run ${relativeFile}",
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "🔍 Lint Frontend",
+      "detail": "Run linting on the frontend",
+      "type": "shell",
+      "command": "npm run lint; echo \"All done! 🎉\"",
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "🧹 Clean Frontend",
+      "detail": "Will drop the containers, remove related images and volumes",
+      "type": "shell",
+      "command": "docker compose down --rmi local -v; echo \"All done! 🎉\"",
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "⏯️ Restart Frontend",
+      "detail": "Restart the frontend app",
+      "type": "shell",
+      "command": "docker compose restart",
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    }
+  ]
+}

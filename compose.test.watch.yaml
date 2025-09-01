@@ -1,0 +1,8 @@
+services:
+  fcp-sfd-frontend-internal:
+    command: npm run test:watch
+    volumes:
+      - ./src/:/home/node/src
+      - ./test/:/home/node/test
+      - ./package.json:/home/node/package.json
+      - ./coverage:/home/node/coverage

@@ -1,0 +1,34 @@
+{% extends "common/layout.njk" %}
+
+{% set pageTitle = pageTitle | default("Error") %}
+{% set metaDescription = metaDescription | default("There was a problem") %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    {% block error_content %}
+    {% endblock %}
+    <p class="govuk-body">
+      If you were in the middle of updating your details, they may not be saved. You may need to start again when the service is available.
+    </p>
+    
+    <h2 class="govuk-heading-m">Contact Rural Payments for help</h2>
+    <p class="govuk-body">
+      Phone: 03000 200 301
+    </p>
+    <p class="govuk-body">
+      Monday to Friday, 8.30am to 5pm (except bank holidays)
+    </p>
+    <p class="govuk-body">
+      <a href="https://www.gov.uk/call-charges" class="govuk-link" target="_blank">Find out about call charges (opens in new tab)</a>.
+    </p>
+    <p class="govuk-body">
+      Email: <a href="mailto:ruralpayments@defra.gov.uk" class="govuk-link">ruralpayments@defra.gov.uk</a>
+    </p>
+    <p class="govuk-body">
+      We aim to respond to emails within 10 working days.
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'common/layout.njk' %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink %}
+
+{% block beforeContent %}
+{{ appBackSignOutLink({ href: backLink }) }}
+{% endblock %}
+
+{% block content %}
+
+ <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-body" data-testid="app-page-body">
+        <h1 class="govuk-heading-l">Accessibility statement</h1>
+        <p>Placeholder - not for development yet.</p>
+        <p>Accessibility statement will be drafted and added to this page before launch, following the expert review which Karina will arrange when we are nearer launch.</p>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

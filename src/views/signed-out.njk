@@ -1,0 +1,13 @@
+{% extends 'common/layout.njk' %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <p class="govuk-body">
+        {{ metaDescription }} <a href= {{ signInLink }} > {{ signInText }}</a>.
+      </p>
+ 
+    </div>
+  </div>
+{% endblock %}

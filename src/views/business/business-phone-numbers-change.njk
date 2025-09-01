@@ -1,0 +1,78 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink %}
+{% from "common/sub-header/macro.njk" import subHeader %}
+
+{% block beforeContent %}
+  {{ subHeader(businessName=businessName, sbi=sbi, userName=userName) }}
+  {{ appBackSignOutLink(backLink) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    {% if errors %}
+      {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: errors | toErrorList
+      }) }}
+    {% endif %}
+
+      <form method="post" novalidate>
+        <input type="hidden" name="crumb" value="{{ crumb }}">
+
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+              {{ pageTitle }}
+            </h1>
+          </legend>
+          <div class="govuk-hint">
+            Enter at least one phone number
+          </div>
+
+          {{ govukInput({
+          label: {
+            text: "Business telephone number"
+          },
+          classes: "govuk-input--width-20",
+          type: "tel",
+          id: "businessTelephone",
+          name: "businessTelephone",
+          value: businessTelephone,
+          autocomplete: "business-telephone",
+          errorMessage: errors.businessTelephone and {
+            text: errors.businessTelephone.text
+          }
+          }) }}
+
+          {{ govukInput({
+          label: {
+            text: "Business mobile phone number"
+          },
+          classes: "govuk-input--width-20",
+          type: "tel",
+          id: "businessMobile",
+          name: "businessMobile",
+          value: businessMobile,
+          autocomplete: "business-mobile",
+          errorMessage: errors.businessMobile and {
+            text: errors.businessMobile.text
+          }
+          }) }}
+        </fieldset>
+
+        {{ govukButton({
+          text: "Continue",
+          preventDoubleClick: true
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+{{ govukPhaseBanner({
+  tag: {
+    text: "Beta"
+  },
+  html: 'This is a new service - you can <a class="govuk-link" href="mailto:ruralpayments@defra.gov.uk">help improve the service with your feedback (opens in new tab)</a>.'
+}) }}

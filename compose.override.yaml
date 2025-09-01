@@ -10,14 +10,10 @@ services:
       - ./package.json:/home/node/package.json
 
   kits-mock:
-    ports:
-      - '3101:3100'
     networks:
       - fcp-sfd
 
   fcp-dal-api:
-    ports: 
-      - 3005:3005
     networks:
       - fcp-sfd
 

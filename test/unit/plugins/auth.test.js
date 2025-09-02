@@ -66,7 +66,7 @@ describe('auth', () => {
           return true
         case 'server.session.cookie.password':
           return 'mockPassword'
-        case 'server.isProduction':
+        case 'server.session.cookie.secure':
           return true
         default:
           return 'defaultConfigValue'

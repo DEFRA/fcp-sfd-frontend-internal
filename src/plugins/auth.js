@@ -41,7 +41,7 @@ function getBellOptions (oidcConfig) {
     clientId: config.get('entra.clientId'),
     clientSecret: config.get('entra.clientSecret'),
     password: config.get('server.session.cookie.password'),
-    isSecure: config.get('server.isProduction'),
+    isSecure: config.get('server.session.cookie.secure'),
     location: function (request) {
       // If request includes a redirect query parameter, store it in the session to allow redirection after authentication
       if (request.query.redirect) {
@@ -65,7 +65,7 @@ function getCookieOptions () {
     cookie: {
       password: config.get('server.session.cookie.password'),
       path: '/',
-      isSecure: config.get('server.isProduction'),
+      isSecure: config.get('server.session.cookie.secure'),
       isSameSite: 'Lax'
     },
     redirectTo: function (request) {

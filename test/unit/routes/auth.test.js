@@ -43,7 +43,7 @@ describe('auth', () => {
     })
 
     test('should require authentication with Entra', () => {
-      expect(route.options.auth).toEqual({ strategy: 'entra', mode: 'try' })
+      expect(route.options.auth).toBe('entra')
     })
 
     test('should have a handler', () => {

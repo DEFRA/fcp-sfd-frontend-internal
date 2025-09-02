@@ -7,9 +7,13 @@ const signIn = {
   method: 'GET',
   path: '/auth/sign-in',
   options: {
-    auth: 'entra'
+    auth: { strategy: 'entra', mode: 'try' }
   },
-  handler: function (_request, h) {
+  handler: function (request, h) {
+    if (!request.auth.isAuthenticated) {
+      request.logger.error(request.auth.error)
+      return h.view('unauthorised')
+    }
     return h.redirect('/home')
   }
 }

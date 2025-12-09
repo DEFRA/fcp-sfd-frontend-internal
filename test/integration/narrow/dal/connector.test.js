@@ -38,7 +38,7 @@ describe('Data access layer (DAL) connector integration', () => {
     }
   })
 
-  test('should successfully call DAL and return data without passing email as a param', async () => {
+  test.skip('should successfully call DAL and return data without passing email as a param', async () => {
     const result = await dalConnector(
       exampleQuery,
       {

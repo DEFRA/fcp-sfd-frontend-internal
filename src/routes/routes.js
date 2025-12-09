@@ -6,8 +6,6 @@ import { staticAssetRoutes } from './static-assets-routes.js'
 import { cookies } from './cookies-routes.js'
 import { signedOut } from './signed-out-routes.js'
 import { footerRoutes } from './footer/footer-routes.js'
-import { businessRoutes } from './business/business-routes.js'
-import { personalRoutes } from './personal/personal-routes.js'
 
 export const routes = [
   health,
@@ -17,7 +15,5 @@ export const routes = [
   signedOut,
   ...errors,
   ...staticAssetRoutes,
-  ...footerRoutes,
-  ...businessRoutes,
-  ...personalRoutes
+  ...footerRoutes
 ]

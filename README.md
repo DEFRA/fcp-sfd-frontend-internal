@@ -20,6 +20,7 @@ Frontend service for the Single Front Door (SFD) service. This service provides 
 | DAL_CONNECTION | `false` | No | Get user data from C_DAL if set to true, else, get user data from local mock-data |
 | DAL_ENDPOINT | `http://fcp-dal-api:3005/graphql`| No | Data access layer (DAL) endpoint |
 | ENTRA_WELL_KNOWN_URL | null | No | The Entra well known URL - Readable endpoint for Entra |
+| ENTRA_TENANT_ID | null | No | The Entra tenant ID - Unique identifier for the Entra tenant |
 | ENTRA_CLIENT_ID | null | No | The Entra client ID - Unique code for identifying fcp-sfd-frontend-internal |
 | ENTRA_CLIENT_SECRET | null | No | The Entra client secret - client secret for fcp-sfd-frontend-internal |
 | ENTRA_REDIRECT_URL | null | No | The Entra redirect URl - URL of the page to be redirected immediately after the user has successfully signed in |
@@ -41,6 +42,7 @@ Create a `.env` file in the root of the project with the required environment va
 The following ENTRA variables are need to be added onto the `.env` file, values for the variables are [here](https://defra.sharepoint.com/teams/Team1974/FCP%20Front%20Door%20team/Forms/AllItems.aspx?id=%2Fteams%2FTeam1974%2FFCP%20Front%20Door%20team%2FTechnology%2FProtected%5FData&viewid=9296ac29%2D76a0%2D4373%2Db652%2Dd876b3b8e35f)
 ```bash
 ENTRA_WELL_KNOWN_URL
+ENTRA_TENANT_ID
 ENTRA_CLIENT_ID
 ENTRA_CLIENT_SECRET
 ```
@@ -72,6 +74,10 @@ docker compose up
 Use the `-d` at the end of the above command to run in detached mode e.g. if you wish to view logs in another application such as Docker Desktop.
 
 You can find further information on how SFD integrates with the DAL on [Confluence](https://eaflood.atlassian.net/wiki/spaces/SFD/pages/5712838853/Single+Front+Door+Integration+with+Data+Access+Layer).
+
+### Accessing the application
+
+The application will be available at http://localhost:3006.
 
 ## Tests
 

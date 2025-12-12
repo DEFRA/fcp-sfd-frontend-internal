@@ -26,7 +26,7 @@ services:
       DAL_EMAIL_HEADER: ${DAL_EMAIL_HEADER}
 
   kits-mock:
-    image: defradigital/fcp-dal-upstream-mock
+    image: defradigital/fcp-dal-upstream-mock:0.38.0
     environment:
       MOCK_LOG_LEVEL: info
       MOCK_SERVER_COLLECTION: all
@@ -54,4 +54,3 @@ services:
 
   redis:
     image: redis:7.2.3-alpine3.18
-    restart: always

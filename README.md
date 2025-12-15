@@ -36,21 +36,9 @@ cd fcp-sfd-frontend-internal
 npm install
 ```
 
-## Environment variables
+## Configuration
 
-Create a `.env` file in the root of the project with the required environment variables.
-The following ENTRA variables are need to be added onto the `.env` file, values for the variables are [here](https://defra.sharepoint.com/teams/Team1974/FCP%20Front%20Door%20team/Forms/AllItems.aspx?id=%2Fteams%2FTeam1974%2FFCP%20Front%20Door%20team%2FTechnology%2FProtected%5FData&viewid=9296ac29%2D76a0%2D4373%2Db652%2Dd876b3b8e35f)
-```bash
-ENTRA_WELL_KNOWN_URL
-ENTRA_TENANT_ID
-ENTRA_CLIENT_ID
-ENTRA_CLIENT_SECRET
-```
-
-For working with the Data Access Layer, you will need to add the following environment variable to your `.env` file. The value can be found in the table above.
-```bash
-DAL_ENDPOINT
-```
+Check out [.env.example](/.env.example) for details of the required things you'll need in your `.env` file. Contact the SFD dev team if you are unsure of the values you need to use.
 
 ## Running the application
 

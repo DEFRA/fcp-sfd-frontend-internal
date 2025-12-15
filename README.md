@@ -12,21 +12,6 @@ Frontend service for the Single Front Door (SFD) service. This service provides 
 - Docker Compose
 - Node.js (v22 LTS)
 
-## Environment Variables
-
-| Name | Default Value | Required | Description |
-| --- | --- | --- | --- |
-| ALLOW_ERROR_VIEWS | `false` | No | Enable error route views in local development to inspect error pages |
-| DAL_CONNECTION | `false` | No | Get user data from C_DAL if set to true, else, get user data from local mock-data |
-| DAL_ENDPOINT | `http://fcp-dal-api:3005/graphql`| No | Data access layer (DAL) endpoint |
-| ENTRA_WELL_KNOWN_URL | null | No | The Entra well known URL - Readable endpoint for Entra |
-| ENTRA_TENANT_ID | null | No | The Entra tenant ID - Unique identifier for the Entra tenant |
-| ENTRA_CLIENT_ID | null | No | The Entra client ID - Unique code for identifying fcp-sfd-frontend-internal |
-| ENTRA_CLIENT_SECRET | null | No | The Entra client secret - client secret for fcp-sfd-frontend-internal |
-| ENTRA_REDIRECT_URL | null | No | The Entra redirect URl - URL of the page to be redirected immediately after the user has successfully signed in |
-| ENTRA_SIGN_OUT_REDIRECT_URL | null | No | The Entra sign out redirect URL - URL of the page to be redirected after the user has successfully signed out |
-| ENTRA_REFRESH_TOKENS | `true` | No | Entra refresh tokens - Set to true to enable auto refresh of Entra tokens |
-
 ## Setup
 
 Clone the repository and install dependencies:

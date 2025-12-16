@@ -12,20 +12,6 @@ Frontend service for the Single Front Door (SFD) service. This service provides 
 - Docker Compose
 - Node.js (v22 LTS)
 
-## Environment Variables
-
-| Name | Default Value | Required | Description |
-| --- | --- | --- | --- |
-| ALLOW_ERROR_VIEWS | `false` | No | Enable error route views in local development to inspect error pages |
-| DAL_CONNECTION | `false` | No | Get user data from C_DAL if set to true, else, get user data from local mock-data |
-| DAL_ENDPOINT | `http://fcp-dal-api:3005/graphql`| No | Data access layer (DAL) endpoint |
-| ENTRA_WELL_KNOWN_URL | null | No | The Entra well known URL - Readable endpoint for Entra |
-| ENTRA_CLIENT_ID | null | No | The Entra client ID - Unique code for identifying fcp-sfd-frontend-internal |
-| ENTRA_CLIENT_SECRET | null | No | The Entra client secret - client secret for fcp-sfd-frontend-internal |
-| ENTRA_REDIRECT_URL | null | No | The Entra redirect URl - URL of the page to be redirected immediately after the user has successfully signed in |
-| ENTRA_SIGN_OUT_REDIRECT_URL | null | No | The Entra sign out redirect URL - URL of the page to be redirected after the user has successfully signed out |
-| ENTRA_REFRESH_TOKENS | `true` | No | Entra refresh tokens - Set to true to enable auto refresh of Entra tokens |
-
 ## Setup
 
 Clone the repository and install dependencies:
@@ -35,20 +21,9 @@ cd fcp-sfd-frontend-internal
 npm install
 ```
 
-## Environment variables
+## Configuration
 
-Create a `.env` file in the root of the project with the required environment variables.
-The following ENTRA variables are need to be added onto the `.env` file, values for the variables are [here](https://defra.sharepoint.com/teams/Team1974/FCP%20Front%20Door%20team/Forms/AllItems.aspx?id=%2Fteams%2FTeam1974%2FFCP%20Front%20Door%20team%2FTechnology%2FProtected%5FData&viewid=9296ac29%2D76a0%2D4373%2Db652%2Dd876b3b8e35f)
-```bash
-ENTRA_WELL_KNOWN_URL
-ENTRA_CLIENT_ID
-ENTRA_CLIENT_SECRET
-```
-
-For working with the Data Access Layer, you will need to add the following environment variable to your `.env` file. The value can be found in the table above.
-```bash
-DAL_ENDPOINT
-```
+Check out [.env.example](/.env.example) for details of the required things you'll need in your `.env` file. Contact the SFD dev team if you are unsure of the values you need to use.
 
 ## Running the application
 
@@ -72,6 +47,10 @@ docker compose up
 Use the `-d` at the end of the above command to run in detached mode e.g. if you wish to view logs in another application such as Docker Desktop.
 
 You can find further information on how SFD integrates with the DAL on [Confluence](https://eaflood.atlassian.net/wiki/spaces/SFD/pages/5712838853/Single+Front+Door+Integration+with+Data+Access+Layer).
+
+### Accessing the application
+
+The application will be available at http://localhost:3006.
 
 ## Tests
 

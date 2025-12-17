@@ -17,6 +17,34 @@
         You have signed in
       </h1>
 
+      <h2 class="govuk-heading-m">DAL Data</h2>
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">SBI</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.sbi }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Organisation ID</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.organisationId }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">CRN</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.customer.crn }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">First Name</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.customer.firstName }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Last Name</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.customer.lastName }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Role</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.customer.role }}</dd>
+        </div>
+      </dl>
+
       <h3 class="govuk-heading-m"> Business details</h3>
       <p>
         <a href="/business-details">View and update your business details</a>

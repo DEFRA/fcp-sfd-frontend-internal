@@ -46,7 +46,7 @@ export const serverConfig = {
     serviceName: {
       doc: 'Applications Service Name',
       format: String,
-      default: 'Single Front Door'
+      default: 'Land and farm service'
     },
     root: {
       doc: 'Project root',
@@ -138,6 +138,11 @@ export const serverConfig = {
           doc: 'The cache segment.',
           format: String,
           default: 'session'
+        },
+        tokenSegment: {
+          doc: 'The segment of the cache used for storing tokens.',
+          format: String,
+          default: 'tokenCache'
         },
         ttl: {
           doc: 'server side session cache ttl',

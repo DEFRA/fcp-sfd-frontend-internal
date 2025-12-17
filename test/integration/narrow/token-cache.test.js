@@ -1,11 +1,21 @@
-import { vi, describe, test, expect, afterAll } from 'vitest'
-import { createServer, getTokenCache } from '../../../src/server.js'
+import { vi, describe, test, expect, afterAll, beforeAll, beforeEach } from 'vitest'
+import { createServer } from '../../../src/server.js'
+import { getTokenCache } from '../../../src/utils/caching/token-cache.js'
 
 vi.mock('../../../src/plugins/index.js', () => ({
   plugins: [] // do not register plugins as it causes server to hang
 }))
 
 let server
+
+beforeAll(async () => {
+  server = await createServer()
+  await server.initialize()
+})
+
+beforeEach(async () => {
+  vi.resetModules()
+})
 
 afterAll(async () => {
   if (server) {
@@ -15,9 +25,8 @@ afterAll(async () => {
 
 describe('When the server starts', () => {
   test('the tokenCache should be defined', async () => {
-    server = await createServer()
-    await server.initialize()
-    expect(server.app.tokenCache).toBeDefined()
+    const result = getTokenCache()
+    expect(result).toBeDefined()
   })
 })
 
@@ -26,27 +35,28 @@ describe('When the tokenCache is defined', () => {
     const key = 'testKey'
     const value = { test: 'val' }
 
-    await server.app.tokenCache.set(key, value, 1000)
-    const cachedValue = await server.app.tokenCache.get(key)
+    const tokenCache = getTokenCache()
+
+    await tokenCache.set(key, value, 10000)
+    const cachedValue = await tokenCache.get(key)
 
     expect(cachedValue).toEqual(value)
   })
 
   test('using getTokenCache returns the same instance', () => {
-    expect(getTokenCache()).toBe(server.app.tokenCache)
+    const tokenCache = getTokenCache()
+    expect(tokenCache).toBe(server.app.tokenCache)
   })
 })
 
 describe('When the tokenCache is undefined', () => {
   test('getTokenCache throws an error', async () => {
-    const mod = await vi.importActual('../../../src/server.js')
+    const mod = await vi.importActual('../../../src/utils/caching/token-cache.js')
 
-    // Overwrite getTokenCache to simulate if the cache is not created
+    // Overwrite initTokenCache to simulate if the cache is not created
     const mockedModule = {
       ...mod,
-      getTokenCache: () => {
-        throw new Error('Token cache is not initialized.')
-      }
+      initTokenCache: () => undefined
     }
 
     expect(() => mockedModule.getTokenCache()).toThrowError(

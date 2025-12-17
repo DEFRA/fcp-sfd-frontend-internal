@@ -30,12 +30,6 @@ export const dalConfig = {
       default: null,
       env: 'DAL_CLIENT_SECRET',
       sensitive: true
-    },
-    email: {
-      doc: 'Email address of the customer',
-      format: String,
-      default: null,
-      env: 'DAL_EMAIL_HEADER'
     }
   }
 }

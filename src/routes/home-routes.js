@@ -1,4 +1,11 @@
 import { SCOPE } from '../constants/scope/business-details.js'
+import { dalConnector } from '../dal/connector.js'
+import { exampleQuery } from '../dal/queries/example-query.js'
+
+const variables = {
+  sbi: '113775119',
+  crn: '1100186174'
+}
 
 const index = {
   method: 'GET',
@@ -17,8 +24,11 @@ const home = {
   options: {
     auth: { scope: SCOPE }
   },
-  handler: (_request, h) => {
-    return h.view('home')
+  handler: async (request, h) => {
+    const email = request.auth.credentials?.email
+    const response = await dalConnector(exampleQuery, variables, email)
+
+    return h.view('home', { dalData: response.data })
   }
 }
 

@@ -1,4 +1,3 @@
-import { SCOPE } from '../constants/scope/business-details.js'
 import { dalConnector } from '../dal/connector.js'
 import { exampleQuery } from '../dal/queries/example-query.js'
 
@@ -21,9 +20,6 @@ const index = {
 const home = {
   method: 'GET',
   path: '/home',
-  options: {
-    auth: { scope: SCOPE }
-  },
   handler: async (request, h) => {
     const email = request.auth.credentials?.email
     const response = await dalConnector(exampleQuery, variables, email)

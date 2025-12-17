@@ -1,13 +1,17 @@
+// Test framework dependencies
 import { vi, beforeEach, describe, test, expect } from 'vitest'
-import { homeRoutes } from '../../../src/routes/home-routes.js'
 
+// Things we need to mock
+import { dalConnector } from '../../../src/dal/connector.js'
+
+// Thing under test
+import { homeRoutes } from '../../../src/routes/home-routes.js'
 const [index, home] = homeRoutes
 
-const mockView = vi.fn()
-
-const mockH = {
-  view: vi.fn().mockReturnValue(mockView)
-}
+// Mocks
+vi.mock('../../../src/dal/connector.js', () => ({
+  dalConnector: vi.fn()
+}))
 
 describe('Root endpoint', () => {
   beforeEach(() => {
@@ -34,19 +38,49 @@ describe('Root endpoint', () => {
 })
 
 describe('Home endpoint', () => {
+  let h
+  let request
+
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  test('should have the correct method and path', () => {
-    expect(home.method).toBe('GET')
-    expect(home.path).toBe('/home')
-  })
+  describe('GET /home', () => {
+    beforeEach(() => {
+      h = {
+        view: vi.fn().mockReturnValue({})
+      }
 
-  test('should render the home view with correct data', () => {
-    const result = home.handler(null, mockH)
+      request = {
+        auth: {
+          credentials: {
+            email: 'test@example.com'
+          }
+        }
+      }
 
-    expect(mockH.view).toHaveBeenCalledWith('home')
-    expect(result).toBe(mockView)
+      dalConnector.mockResolvedValue(getMockDalResponse())
+    })
+
+    test('should have the correct method and path', () => {
+      expect(home.method).toBe('GET')
+      expect(home.path).toBe('/home')
+    })
+
+    test('it calls the dal connector and renders view', async () => {
+      await home.handler(request, h)
+
+      expect(dalConnector).toHaveBeenCalled()
+      expect(h.view).toHaveBeenCalledWith('home', { dalData: getMockDalResponse().data })
+    })
   })
+})
+
+const getMockDalResponse = () => ({
+  data: {
+    business: {
+      sbi: '107167406',
+      organisationId: '12345'
+    }
+  }
 })

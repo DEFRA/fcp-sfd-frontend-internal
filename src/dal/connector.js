@@ -7,19 +7,18 @@ import { getTokenCache } from '../utils/caching/token-cache.js'
 
 const logger = createLogger()
 
-export const dalConnector = async (query, variables) => {
+export const dalConnector = async (query, variables, email) => {
   const tokenCache = getTokenCache()
 
   try {
     const bearerToken = await getTokenService(tokenCache)
-    const emailHeader = config.get('dalConfig.email')
 
     const response = await fetch(config.get('dalConfig.endpoint'), {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
         Authorization: bearerToken,
-        email: emailHeader
+        email
       },
       body: JSON.stringify({ query, variables })
     })

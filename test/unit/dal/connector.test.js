@@ -5,7 +5,6 @@ import { exampleQuery } from '../../../src/dal/queries/example-query.js'
 vi.mock('../../../src/config/index.js', () => ({
   config: {
     get: vi.fn((key) => {
-      if (key === 'dalConfig.email') return 'mock-test-user@defra.gov.uk'
       if (key === 'dalConfig.endpoint') return 'http://test-dal-endpoint/graphql'
       return null
     })

@@ -23,7 +23,6 @@ services:
       ENTRA_CLIENT_SECRET: ${ENTRA_CLIENT_SECRET}
       ENTRA_REDIRECT_URL: http://localhost:3006/auth/sign-in-oidc
       ENTRA_SIGN_OUT_REDIRECT_URL: http://localhost:3006/auth/sign-out-oidc
-      DAL_EMAIL_HEADER: ${DAL_EMAIL_HEADER}
 
   kits-mock:
     image: defradigital/fcp-dal-upstream-mock:0.38.0

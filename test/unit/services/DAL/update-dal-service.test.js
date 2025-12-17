@@ -15,18 +15,17 @@ vi.mock('../../../../src/dal/connector.js', () => ({
 describe('updateDalService', () => {
   const mutation = 'updateBusinessName'
   const variables = { input: { name: 'Amazing Business Ltd', sbi: '123456789' } }
-  let responseData
+  const responseData = {
+    data: {
+      updateBusinessName: {
+        sbi: '123456789',
+        name: 'Amazing Business Ltd'
+      }
+    }
+  }
 
   beforeEach(() => {
     vi.clearAllMocks()
-    responseData = {
-      data: {
-        updateBusinessName: {
-          sbi: '123456789',
-          name: 'Amazing Business Ltd'
-        }
-      }
-    }
   })
 
   describe('when dalConnector resolves successfully', () => {
@@ -35,13 +34,13 @@ describe('updateDalService', () => {
     })
 
     test('it calls dalConnector with the correct arguments', async () => {
-      await updateDalService(mutation, variables)
+      await updateDalService(mutation, variables, 'test@example.com')
 
-      expect(dalConnector).toHaveBeenCalledWith(mutation, variables)
+      expect(dalConnector).toHaveBeenCalledWith(mutation, variables, 'test@example.com')
     })
 
     test('it returns the DAL response', async () => {
-      const result = await updateDalService(mutation, variables)
+      const result = await updateDalService(mutation, variables, 'test@example.com')
 
       expect(result).toEqual(responseData)
     })
@@ -53,7 +52,7 @@ describe('updateDalService', () => {
     })
 
     test('it throws an error', async () => {
-      await expect(updateDalService(mutation, variables)).rejects.toThrow('DAL error from mutation')
+      await expect(updateDalService(mutation, variables, 'test@example.com')).rejects.toThrow('DAL error from mutation')
     })
   })
 })

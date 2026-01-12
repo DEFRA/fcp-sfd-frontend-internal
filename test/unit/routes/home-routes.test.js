@@ -13,6 +13,17 @@ vi.mock('../../../src/dal/connector.js', () => ({
   dalConnector: vi.fn()
 }))
 
+vi.mock('../../../src/config/index.js', () => ({
+  config: {
+    get: vi.fn((key) => {
+      if (key === 'featureToggle.dalConnection') {
+        return true // Enable DAL connection for this test
+      }
+      return null
+    })
+  }
+}))
+
 describe('Root endpoint', () => {
   beforeEach(() => {
     vi.clearAllMocks()

@@ -1,28 +1,9 @@
 // Test framework dependencies
 import { vi, beforeEach, describe, test, expect } from 'vitest'
 
-// Things we need to mock
-import { dalConnector } from '../../../src/dal/connector.js'
-
 // Thing under test
 import { homeRoutes } from '../../../src/routes/home-routes.js'
 const [index, home] = homeRoutes
-
-// Mocks
-vi.mock('../../../src/dal/connector.js', () => ({
-  dalConnector: vi.fn()
-}))
-
-vi.mock('../../../src/config/index.js', () => ({
-  config: {
-    get: vi.fn((key) => {
-      if (key === 'featureToggle.dalConnection') {
-        return true // Enable DAL connection for this test
-      }
-      return null
-    })
-  }
-}))
 
 describe('Root endpoint', () => {
   beforeEach(() => {
@@ -65,12 +46,12 @@ describe('Home endpoint', () => {
       request = {
         auth: {
           credentials: {
-            email: 'test@example.com'
+            email: 'test@example.com',
+            name: 'Test User',
+            organisationId: '12345'
           }
         }
       }
-
-      dalConnector.mockResolvedValue(getMockDalResponse())
     })
 
     test('should have the correct method and path', () => {
@@ -78,20 +59,10 @@ describe('Home endpoint', () => {
       expect(home.path).toBe('/home')
     })
 
-    test('it calls the dal connector and renders view', async () => {
-      await home.handler(request, h)
+    test('it renders view with auth credentials', () => {
+      home.handler(request, h)
 
-      expect(dalConnector).toHaveBeenCalled()
-      expect(h.view).toHaveBeenCalledWith('home', { dalData: getMockDalResponse().data })
+      expect(h.view).toHaveBeenCalledWith('home', { auth: request.auth.credentials })
     })
   })
-})
-
-const getMockDalResponse = () => ({
-  data: {
-    business: {
-      sbi: '107167406',
-      organisationId: '12345'
-    }
-  }
 })

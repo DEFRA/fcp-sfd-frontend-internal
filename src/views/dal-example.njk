@@ -1,0 +1,47 @@
+{% extends 'common/layout.njk' %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row sub-header-container govuk-!-padding-top-3">
+    <div class="govuk-grid-column-full govuk-!-text-align-right">
+      <a href="/auth/sign-out" class="govuk-link">Sign out</a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">DAL Integration Example</h1>
+
+      <h2 class="govuk-heading-m">DAL Data</h2>
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">SBI</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.sbi }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Organisation ID</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.organisationId }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">CRN</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.customer.crn }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">First Name</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.customer.firstName }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Last Name</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.customer.lastName }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Role</dt>
+          <dd class="govuk-summary-list__value">{{ dalData.business.customer.role }}</dd>
+        </div>
+      </dl>
+
+    </div>
+  </div>
+{% endblock %}

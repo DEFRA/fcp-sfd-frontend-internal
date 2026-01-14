@@ -13,7 +13,7 @@ export const dalConfig = {
       env: 'DAL_TENANT_ID'
     },
     tokenEndpoint: {
-      doc: 'Token endpoint for retrieving an identity and authentication token for the Data Access Layer.',
+      doc: 'Token endpoint for retrieving an identity and authentication token for the Data Access Layer',
       format: String,
       default: null,
       env: 'DAL_TOKEN_ENDPOINT'

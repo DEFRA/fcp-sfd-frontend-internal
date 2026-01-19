@@ -18,6 +18,7 @@ vi.mock('../../../../src/utils/logger.js', () => ({
 
 const mockReadFileSync = vi.spyOn(fs, 'readFileSync').mockImplementation(() => '{}')
 const mockLoggerError = vi.fn()
+const mockCacheGet = vi.fn()
 vi.spyOn(console, 'error').mockImplementation(mockLoggerError)
 
 vi.mock('../../../../src/plugins/template-renderer/context.js', async (importOriginal) => {
@@ -76,7 +77,7 @@ describe('#context', () => {
             url: '/'
           }
         ],
-        serviceName: 'Single Front Door',
+        serviceName: 'Land and farm service',
         serviceUrl: '/'
       })
     })
@@ -149,7 +150,134 @@ describe('#context cache', () => {
             url: '/'
           }
         ],
-        serviceName: 'Single Front Door',
+        serviceName: 'Land and farm service',
+        serviceUrl: '/'
+      })
+    })
+  })
+  describe('session cache', () => {
+    const session = {
+      name: 'A Farmer',
+      isAuthenticated: true,
+      scope: ['user']
+    }
+
+    let request
+
+    beforeEach(() => {
+      request = {
+
+        server: {
+          app: {
+            cache: {
+              get: mockCacheGet
+            }
+          }
+        },
+        response: {
+          source: {
+            context: {}
+          }
+        },
+        auth: {
+          isAuthenticated: true,
+          credentials: {
+            sessionId: 'sessionId'
+          }
+        }
+      }
+
+      mockCacheGet.mockResolvedValue(session)
+    })
+
+    test('return value should contain request.response.source.context', async () => {
+      request.response.source.context = { existingContext: 'request context value' }
+      const result = await context(request)
+      expect(result).toEqual({
+        existingContext: 'request context value',
+        assetPath: '/public/assets',
+        auth: {
+          name: 'A Farmer',
+          isAuthenticated: true,
+          scope: ['user']
+        },
+        breadcrumbs: [],
+        getAssetPath: expect.any(Function),
+        navigation: [
+          {
+            isActive: true,
+            text: 'Home',
+            url: '/'
+          }
+        ],
+        serviceName: 'Land and farm service',
+        serviceUrl: '/'
+      })
+    })
+
+    test('return value should contain no request.response.source.context when request.response.source is null', async () => {
+      request.response.source = null
+      const result = await context(request)
+      expect(result).toEqual({
+        assetPath: '/public/assets',
+        auth: {
+          name: 'A Farmer',
+          isAuthenticated: true,
+          scope: ['user']
+        },
+        breadcrumbs: [],
+        getAssetPath: expect.any(Function),
+        navigation: [
+          {
+            isActive: true,
+            text: 'Home',
+            url: '/'
+          }
+        ],
+        serviceName: 'Land and farm service',
+        serviceUrl: '/'
+      })
+    })
+
+    test('should return property auth equal null if not authenticated', async () => {
+      request.auth.isAuthenticated = false
+      const result = await context(request)
+      expect(result).toEqual({
+        assetPath: '/public/assets',
+        auth: null,
+        breadcrumbs: [],
+        getAssetPath: expect.any(Function),
+        navigation: [
+          {
+            isActive: true,
+            text: 'Home',
+            url: '/'
+          }
+        ],
+        serviceName: 'Land and farm service',
+        serviceUrl: '/'
+      })
+    })
+
+    test('should return property auth equal session data if authenticated', async () => {
+      const result = await context(request)
+      expect(result).toEqual({
+        assetPath: '/public/assets',
+        auth: {
+          name: 'A Farmer',
+          isAuthenticated: true,
+          scope: ['user']
+        },
+        breadcrumbs: [],
+        getAssetPath: expect.any(Function),
+        navigation: [
+          {
+            isActive: true,
+            text: 'Home',
+            url: '/'
+          }
+        ],
+        serviceName: 'Land and farm service',
         serviceUrl: '/'
       })
     })

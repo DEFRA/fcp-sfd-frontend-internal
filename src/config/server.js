@@ -16,7 +16,7 @@ export const serverConfig = {
       env: 'SERVICE_VERSION'
     },
     env: {
-      doc: 'The application environment.',
+      doc: 'The application environment',
       format: [
         'production',
         'development',
@@ -32,7 +32,7 @@ export const serverConfig = {
       env: 'ALLOW_ERROR_VIEWS'
     },
     port: {
-      doc: 'The port to bind.',
+      doc: 'The port to bind',
       format: 'port',
       default: 3006,
       env: 'PORT'
@@ -46,7 +46,7 @@ export const serverConfig = {
     serviceName: {
       doc: 'Applications Service Name',
       format: String,
-      default: 'Single Front Door'
+      default: 'Land and farm service'
     },
     root: {
       doc: 'Project root',
@@ -88,7 +88,7 @@ export const serverConfig = {
         env: 'LOG_LEVEL'
       },
       format: {
-        doc: 'Format to output logs in.',
+        doc: 'Format to output logs in',
         format: ['ecs', 'pino-pretty'],
         default: isProduction ? 'ecs' : 'pino-pretty',
         env: 'LOG_FORMAT'
@@ -135,9 +135,14 @@ export const serverConfig = {
           env: 'SESSION_CACHE_NAME'
         },
         segment: {
-          doc: 'The cache segment.',
+          doc: 'The cache segment',
           format: String,
           default: 'session'
+        },
+        tokenSegment: {
+          doc: 'The segment of the cache used for storing tokens',
+          format: String,
+          default: 'tokenCache'
         },
         ttl: {
           doc: 'server side session cache ttl',

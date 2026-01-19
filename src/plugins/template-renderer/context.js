@@ -22,7 +22,7 @@ export const context = async (request) => {
       logger.error(`Webpack ${path.basename(manifestPath)} not found`)
     }
   }
-  const ctx = request.response.source.context || {}
+  const ctx = request.response.source?.context || {}
   const serverAuth = request.auth?.isAuthenticated ? await request.server.app.cache.get(request.auth.credentials.sessionId) : null
   return {
     ...ctx,

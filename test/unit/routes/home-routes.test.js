@@ -1,13 +1,9 @@
+// Test framework dependencies
 import { vi, beforeEach, describe, test, expect } from 'vitest'
+
+// Thing under test
 import { homeRoutes } from '../../../src/routes/home-routes.js'
-
 const [index, home] = homeRoutes
-
-const mockView = vi.fn()
-
-const mockH = {
-  view: vi.fn().mockReturnValue(mockView)
-}
 
 describe('Root endpoint', () => {
   beforeEach(() => {
@@ -34,19 +30,39 @@ describe('Root endpoint', () => {
 })
 
 describe('Home endpoint', () => {
+  let h
+  let request
+
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  test('should have the correct method and path', () => {
-    expect(home.method).toBe('GET')
-    expect(home.path).toBe('/home')
-  })
+  describe('GET /home', () => {
+    beforeEach(() => {
+      h = {
+        view: vi.fn().mockReturnValue({})
+      }
 
-  test('should render the home view with correct data', () => {
-    const result = home.handler(null, mockH)
+      request = {
+        auth: {
+          credentials: {
+            email: 'test@example.com',
+            name: 'Test User',
+            organisationId: '12345'
+          }
+        }
+      }
+    })
 
-    expect(mockH.view).toHaveBeenCalledWith('home')
-    expect(result).toBe(mockView)
+    test('should have the correct method and path', () => {
+      expect(home.method).toBe('GET')
+      expect(home.path).toBe('/home')
+    })
+
+    test('it renders view with auth credentials', () => {
+      home.handler(request, h)
+
+      expect(h.view).toHaveBeenCalledWith('home', { auth: request.auth.credentials })
+    })
   })
 })

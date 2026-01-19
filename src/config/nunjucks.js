@@ -3,7 +3,7 @@ import { isDevelopment } from '../constants/environments.js'
 export const nunjucksConfig = {
   nunjucks: {
     watch: {
-      doc: 'Reload templates when they are changed.',
+      doc: 'Reload templates when they are changed',
       format: Boolean,
       default: isDevelopment
     },

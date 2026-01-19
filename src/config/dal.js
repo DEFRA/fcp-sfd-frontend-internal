@@ -13,7 +13,7 @@ export const dalConfig = {
       env: 'DAL_TENANT_ID'
     },
     tokenEndpoint: {
-      doc: 'Token endpoint for retrieving an identity and authentication token for the Data Access Layer.',
+      doc: 'Token endpoint for retrieving an identity and authentication token for the Data Access Layer',
       format: String,
       default: null,
       env: 'DAL_TOKEN_ENDPOINT'
@@ -30,12 +30,6 @@ export const dalConfig = {
       default: null,
       env: 'DAL_CLIENT_SECRET',
       sensitive: true
-    },
-    email: {
-      doc: 'Email address of the customer',
-      format: String,
-      default: null,
-      env: 'DAL_EMAIL_HEADER'
     }
   }
 }

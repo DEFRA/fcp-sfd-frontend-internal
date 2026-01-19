@@ -29,7 +29,7 @@ export const redisConfig = {
       env: 'REDIS_KEY_PREFIX'
     },
     useSingleInstanceCache: {
-      doc: 'Connect to a single instance of redis instead of a cluster.',
+      doc: 'Connect to a single instance of redis instead of a cluster',
       format: Boolean,
       default: !isProduction,
       env: 'USE_SINGLE_INSTANCE_CACHE'

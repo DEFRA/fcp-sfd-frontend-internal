@@ -1,5 +1,3 @@
-import { SCOPE } from '../constants/scope/business-details.js'
-
 const index = {
   method: 'GET',
   path: '/',
@@ -14,11 +12,8 @@ const index = {
 const home = {
   method: 'GET',
   path: '/home',
-  options: {
-    auth: { scope: SCOPE }
-  },
-  handler: (_request, h) => {
-    return h.view('home')
+  handler: (request, h) => {
+    return h.view('home', { auth: request.auth.credentials })
   }
 }
 

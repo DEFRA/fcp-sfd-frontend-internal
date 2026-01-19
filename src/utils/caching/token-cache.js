@@ -1,6 +1,6 @@
 /**
- * Token cache helpers for storing DAL access tokens in the server cache.
- * @module tokenCache
+* Token cache helpers for storing DAL access tokens in the server cache.
+* @module tokenCache
  */
 import { config } from '../../config/index.js'
 

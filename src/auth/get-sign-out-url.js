@@ -2,7 +2,7 @@ import { getOidcConfig } from './get-oidc-config.js'
 import { createState } from './state.js'
 import { config } from '../config/index.js'
 
-async function getSignOutUrl (request, token) {
+async function getSignOutUrl (request, loginHint) {
   const { end_session_endpoint: url } = await getOidcConfig()
 
   // To prevent CSRF attacks, the state parameter should be passed during redirection
@@ -12,7 +12,7 @@ async function getSignOutUrl (request, token) {
 
   const query = [
     `post_logout_redirect_uri=${config.get('entra.signOutRedirectUrl')}`,
-    `id_token_hint=${token}`,
+    `logout_hint=${loginHint}`,
     `state=${state}`
   ].join('&')
   return encodeURI(`${url}?${query}`)

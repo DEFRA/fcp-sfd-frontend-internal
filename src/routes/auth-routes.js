@@ -65,7 +65,7 @@ const signOut = {
     if (!request.auth.isAuthenticated) {
       return h.redirect('/')
     }
-    const signOutUrl = await getSignOutUrl(request, request.auth.credentials.token)
+    const signOutUrl = await getSignOutUrl(request, request.auth.credentials.loginHint)
     return h.redirect(signOutUrl)
   }
 }

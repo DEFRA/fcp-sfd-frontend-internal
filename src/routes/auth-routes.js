@@ -62,10 +62,13 @@ const signOut = {
   },
   handler: async function (request, h) {
     await request.yar.reset()
+    request.server.logger.info('Reset session yar data')
     if (!request.auth.isAuthenticated) {
+      request.server.logger.info('User not authenticated, redirecting to home page')
       return h.redirect('/')
     }
     const signOutUrl = await getSignOutUrl(request, request.auth.credentials.token)
+    request.server.logger.info(`Redirecting to sign out URL: ${signOutUrl}`)
     return h.redirect(signOutUrl)
   }
 }

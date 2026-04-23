@@ -30,6 +30,8 @@ export const auth = {
 }
 
 function getBellOptions (oidcConfig) {
+  const sessionCookieSecure = config.get('server.session.cookie.secure')
+
   return {
     provider: {
       name: 'entra',
@@ -43,8 +45,8 @@ function getBellOptions (oidcConfig) {
     clientId: config.get('entra.clientId'),
     clientSecret: config.get('entra.clientSecret'),
     password: config.get('server.session.cookie.password'),
-    isSecure: config.get('server.session.cookie.secure'),
-    forceHttps: config.get('server.session.cookie.secure'),
+    isSecure: sessionCookieSecure,
+    forceHttps: sessionCookieSecure,
     location: function (request) {
       // If request includes a redirect query parameter, store it in the session to allow redirection after authentication
       if (request.query.redirect) {
@@ -64,11 +66,13 @@ function getBellOptions (oidcConfig) {
 }
 
 function getCookieOptions () {
+  const sessionCookieSecure = config.get('server.session.cookie.secure')
+
   return {
     cookie: {
       password: config.get('server.session.cookie.password'),
       path: '/',
-      isSecure: config.get('server.session.cookie.secure'),
+      isSecure: sessionCookieSecure,
       isSameSite: 'Lax'
     },
     redirectTo: function (request) {

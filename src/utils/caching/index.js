@@ -1,9 +1,3 @@
-import { get } from './get.js'
-import { set } from './set.js'
-import { drop } from './drop.js'
-
-export {
-  get,
-  set,
-  drop
-}
+export { get } from './get.js'
+export { set } from './set.js'
+export { drop } from './drop.js'

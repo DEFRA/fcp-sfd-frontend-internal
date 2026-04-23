@@ -66,6 +66,8 @@ function getBellOptions (oidcConfig) {
 }
 
 function getCookieOptions () {
+  const sessionCookieSecure = config.get('server.session.cookie.secure')
+
   return {
     cookie: {
       password: config.get('server.session.cookie.password'),

@@ -33,7 +33,7 @@ services:
       PORT: 3100
 
   fcp-dal-api:
-    image: defradigital/fcp-dal-api:0.68.0
+    image: defradigital/fcp-dal-api:2.2.5
     depends_on:
       - kits-mock
     environment:

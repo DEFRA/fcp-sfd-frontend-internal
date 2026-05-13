@@ -43,7 +43,9 @@ jobs:
           chmod -R a+rw ./coverage
           docker compose -f compose.yaml -f compose.test.yaml run --rm "fcp-sfd-frontend-internal"
 
+        if: ${{ github.actor != 'dependabot[bot]' }}
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v7
+        uses: SonarSource/sonarqube-scan-action@v8
+        if: github.actor != 'dependabot[bot]'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

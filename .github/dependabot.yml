@@ -8,15 +8,83 @@ updates:
     commit-message:
       prefix: "chore"
     open-pull-requests-limit: 5
+    groups:
+      docker-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      docker-non-security:
+        applies-to: version-updates
+        patterns:
+          - "*"
+
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "daily"
     commit-message:
       prefix: "chore"
+    groups:
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      build:
+        applies-to: version-updates
+        patterns:
+          - "autoprefixer"
+          - "webpack"
+          - "webpack-*"
+          - "terser-webpack-plugin"
+      lint:
+        applies-to: version-updates
+        patterns:
+          - "eslint"
+          - "stylelint"
+      logging:
+        applies-to: version-updates
+        patterns:
+          - "*-pino"
+          - "*-pino-format"
+          - "pino"
+          - "pino-*"
+      tools:
+        applies-to: version-updates
+        patterns:
+          - "vitest"
+          - "vitest-*"
+          - "nodemon"
+          - "npm-run-all"
+          - "source-map-loader"
+          - "sass-*"
+          - "postcss-*"
+      types:
+        applies-to: version-updates
+        patterns:
+          - "@types/*"
+      npm-production:
+        applies-to: version-updates
+        dependency-type: "production"
+        patterns:
+          - "*"
+      npm-development:
+        applies-to: version-updates
+        dependency-type: "development"
+        patterns:
+          - "*"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
     commit-message:
       prefix: "chore"
+    groups:
+      github-actions-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      github-actions-non-security:
+        applies-to: version-updates
+        patterns:
+          - "*"

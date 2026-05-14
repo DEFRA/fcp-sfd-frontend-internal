@@ -6,7 +6,8 @@
   "main": "src/index.js",
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=22",
+    "npm": ">=11.10"
   },
   "scripts": {
     "build": "NODE_ENV=production webpack",

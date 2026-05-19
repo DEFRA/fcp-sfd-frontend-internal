@@ -24,18 +24,27 @@ services:
       ENTRA_REDIRECT_URL: http://localhost:3006/auth/sign-in-oidc
       ENTRA_SIGN_OUT_REDIRECT_URL: http://localhost:3006/auth/sign-out-oidc
 
-  kits-mock:
-    image: defradigital/fcp-dal-upstream-mock:0.38.0
+  upstream-mock:
+    image: defradigital/fcp-dal-upstream-mock:0.79.0
     environment:
       MOCK_LOG_LEVEL: info
       MOCK_SERVER_COLLECTION: all
       NODE_ENV: development
       PORT: 3100
+      KIT_EXT_PERSON_ID_OVERRIDE: 3000000
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3100/health']
+      interval: 3s
+      timeout: 2s
+      retries: 5
 
   fcp-dal-api:
-    image: defradigital/fcp-dal-api:0.68.0
+    image: defradigital/fcp-dal-api:2.2.1
     depends_on:
-      - kits-mock
+      upstream-mock:
+        condition: service_healthy
+      mongo:
+        condition: service_started
     environment:
       ALL_SCHEMA_ON: true
       LOG_LEVEL: info
@@ -43,13 +52,22 @@ services:
       PORT: 3005
       ENVIRONMENT: dev
       DISABLE_AUTH: true
+      HITACHI_DISABLE_AUTH: true
       DISABLE_PROXY: true
       GRAPHQL_DASHBOARD_ENABLED: true
       ADMIN_AD_GROUP_ID: unused
-      KITS_GATEWAY_INTERNAL_URL: http://kits-mock:3100/v1/
-      KITS_GATEWAY_TIMEOUT_MS: 3006
+      KITS_INTERNAL_GATEWAY_URL: http://upstream-mock:3100/extapi/
+      KITS_EXTERNAL_GATEWAY_URL: http://upstream-mock:3100/extapi/
+      KIT_EXT_PERSON_ID_OVERRIDE: 3000000
+      KITS_GATEWAY_TIMEOUT_MS: 3000
       KITS_DISABLE_MTLS: true
-      DAL_REQUEST_TIMEOUT_MS: 3006
+      HITACHI_GATEWAY_URL: http://upstream-mock:3100/api/
+      HITACHI_TIMEOUT_MS: 3000
+      MONGO_URI: mongodb://mongo:27017
+      DAL_REQUEST_TIMEOUT_MS: 3000
 
   redis:
     image: redis:7.2.3-alpine3.18
+
+  mongo:
+    image: mongo:8.2

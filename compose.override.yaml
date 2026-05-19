@@ -10,7 +10,7 @@ services:
       - ./src:/home/node/src
       - ./package.json:/home/node/package.json
 
-  kits-mock:
+  upstream-mock:
     ports:
       - '3101:3100'
     networks:
@@ -27,6 +27,12 @@ services:
       - '6380:6379'
     networks:
       - fcp-sfd
+
+  mongo:
+    networks:
+      - fcp-sfd
+    attach: false
+    command: ["--quiet"]
 
 networks:
   fcp-sfd:

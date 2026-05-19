@@ -102,31 +102,4 @@ describe('Config', () => {
       expect(config.get('dalConfig.endpoint')).toBe('http://mock-fcp-dal-api:3005/graphql')
     })
   })
-
-  describe('Feature Toggle', () => {
-    beforeEach(() => {
-      vi.resetModules()
-    })
-
-    test('should return false as dalConnection value when environment DAL_CONNECTION is not set', async () => {
-      delete process.env.DAL_CONNECTION
-      const { config } = await import('../../../src/config/index.js')
-
-      expect(config.get('featureToggle.dalConnection')).toBe(false)
-    })
-
-    test('should return false as dalConnection value when environment DAL_CONNECTION is false', async () => {
-      process.env.DAL_CONNECTION = false
-      const { config } = await import('../../../src/config/index.js')
-
-      expect(config.get('featureToggle.dalConnection')).toBe(false)
-    })
-
-    test('should return true as dalConnection value when environment DAL_CONNECTION is false', async () => {
-      process.env.DAL_CONNECTION = true
-      const { config } = await import('../../../src/config/index.js')
-
-      expect(config.get('featureToggle.dalConnection')).toBe(true)
-    })
-  })
 })

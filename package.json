@@ -76,7 +76,7 @@
   },
   "devDependencies": {
     "@types/convict": "6.1.6",
-    "@types/hapi__catbox-memory": "4.1.8",
+    "@types/hapi__catbox-memory": "6.0.2",
     "@types/node": "22.9.0",
     "@types/nunjucks": "3.2.6",
     "@types/webpack-assets-manifest": "5.1.4",

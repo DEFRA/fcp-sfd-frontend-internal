@@ -4,7 +4,7 @@ import { auth } from './auth-routes.js'
 import { homeRoutes } from './home-routes.js'
 import { dalExampleRoutes } from './dal-example-routes.js'
 import { staticAssetRoutes } from './static-assets-routes.js'
-import { cookies } from './cookies-routes.js'
+import { cookies } from './footer/cookies-routes.js'
 import { signedOut } from './signed-out-routes.js'
 import { footerRoutes } from './footer/footer-routes.js'
 

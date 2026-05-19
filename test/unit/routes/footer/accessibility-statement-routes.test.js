@@ -1,5 +1,5 @@
 import { vi, beforeEach, describe, test, expect } from 'vitest'
-import { accessibilityStatement } from '../../../src/routes/footer/accessibility-statement-routes'
+import { accessibilityStatement } from '../../../../src/routes/footer/accessibility-statement-routes.js'
 
 describe('Accessibility statement endpoint', () => {
   let viewMock

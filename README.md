@@ -4,13 +4,13 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_fcp-sfd-frontend-internal&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DEFRA_fcp-sfd-frontend-internal)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_fcp-sfd-frontend-internal&metric=coverage)](https://sonarcloud.io/summary/new_code?id=DEFRA_fcp-sfd-frontend-internal)
 
-Frontend service for the Single Front Door (SFD) service. This service provides the user interface for customers to interact with the SFD service.
+Frontend service for the Single Front Door (SFD) service. This service provides the user interface for internal users to interact with the SFD service.
 
 ## Prerequisites
 
 - Docker
 - Docker Compose
-- Node.js (v22 LTS)
+- Node.js (v24 LTS)
 
 ## Setup
 

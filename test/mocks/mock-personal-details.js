@@ -1,4 +1,3 @@
-/** @type {object} Raw DAL API response for personal details */
 const dalData = {
   customer: {
     crn: '123456890',
@@ -36,7 +35,6 @@ const dalData = {
   }
 }
 
-/** @type {object} Mapped personal details for presenter consumption */
 const mappedData = {
   crn: '123456890',
   info: {

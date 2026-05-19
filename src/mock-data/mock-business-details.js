@@ -1,3 +1,4 @@
+/** @type {object} Raw DAL API response for business details */
 const dalData = {
   business: {
     organisationId: '5565448',
@@ -42,6 +43,7 @@ const dalData = {
   }
 }
 
+/** @type {object} Mapped business details for presenter consumption */
 const mappedData = {
   info: {
     sbi: '107183280',

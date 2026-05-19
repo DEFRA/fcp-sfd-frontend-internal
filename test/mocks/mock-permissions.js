@@ -1,3 +1,4 @@
+/** @type {object} Raw DAL API response for permissions */
 const dalData = {
   business: {
     customer: {
@@ -34,6 +35,7 @@ const dalData = {
   }
 }
 
+/** @type {object} Mapped permissions for presenter consumption */
 const mappedData = {
   privileges: [
     'BASIC_PAYMENT_SCHEME:SUBMIT',

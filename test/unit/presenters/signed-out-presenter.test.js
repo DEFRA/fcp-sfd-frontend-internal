@@ -2,7 +2,7 @@
 import { describe, test, expect } from 'vitest'
 
 // Thing under test
-import { signedOutPresenter } from '../../../src/presenters/signed-out-presenter'
+import { signedOutPresenter } from '../../../src/presenters/signed-out-presenter.js'
 
 describe('signedOutPresenter', () => {
   test('it correctly presents the data', () => {

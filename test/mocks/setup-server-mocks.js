@@ -1,5 +1,6 @@
 import { vi } from 'vitest'
 
+/** @type {object} Mock OIDC discovery configuration */
 const mockOidcConfig = {
   authorization_endpoint: 'https://oidc.example.com/authorize',
   token_endpoint: 'https://oidc.example.com/token',

@@ -1,4 +1,4 @@
-import { getSafeRedirect } from '../../../src/utils/get-safe-redirect'
+import { getSafeRedirect } from '../../../src/utils/get-safe-redirect.js'
 import { describe, test, expect } from 'vitest'
 
 describe('getSafeRedirect', () => {

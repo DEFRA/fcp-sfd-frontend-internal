@@ -24,7 +24,7 @@ vi.mock('../../../../src/services/DAL/token/get-token-service.js', async () => {
 const { createServer } = await import('../../../../src/server.js')
 const { config } = await import('../../../../src/config/index.js')
 
-const mockDefraIdToken =
+const mockEntraToken =
   'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250YWN0SWQiOjMwMjAwMDAwMDAsInJlbGF0aW9uc2hpcHMiOlsiMzAwOTAwMDozMDA5MDAwMDE6Q2xlYW4gY29udHJvbCAtIGV4YW1wbGUgMToxOkV4dGVybmFsOjAiXSwicm9sZXMiOlsiMzAwOTAwMDpBZ2VudDozIl19.mock-signature'
 
 describe('Data access layer (DAL) connector integration', () => {
@@ -48,7 +48,7 @@ describe('Data access layer (DAL) connector integration', () => {
         sbi: '300900001',
         crn: '3020000000'
       },
-      mockDefraIdToken
+      mockEntraToken
     )
 
     expect(result.data).toBeDefined()

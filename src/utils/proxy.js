@@ -28,7 +28,8 @@ const provideProxy = () => {
     proxyAgent: new ProxyAgent({
       uri: proxyUrl,
       keepAliveTimeout: 10,
-      keepAliveMaxTimeout: 10
+      keepAliveMaxTimeout: 10,
+      allowH2: false
     }),
     httpAndHttpsProxyAgent: new HttpsProxyAgent(url)
   }

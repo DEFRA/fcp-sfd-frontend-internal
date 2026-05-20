@@ -66,7 +66,7 @@ describe('#context', () => {
     test('Should provide expected context', () => {
       expect(contextResult).toEqual({
         existingKey: 'value',
-        assetPath: '/public/assets',
+        assetPath: '/public/assets/rebrand',
         auth: null,
         breadcrumbs: [],
         getAssetPath: expect.any(Function),
@@ -139,7 +139,7 @@ describe('#context cache', () => {
     test('Should provide expected context', () => {
       expect(secondContextResult).toEqual({
         existingKey: 'value',
-        assetPath: '/public/assets',
+        assetPath: '/public/assets/rebrand',
         auth: null,
         breadcrumbs: [],
         getAssetPath: expect.any(Function),
@@ -195,7 +195,7 @@ describe('#context cache', () => {
       const result = await context(request)
       expect(result).toEqual({
         existingContext: 'request context value',
-        assetPath: '/public/assets',
+        assetPath: '/public/assets/rebrand',
         auth: {
           name: 'A Farmer',
           isAuthenticated: true,
@@ -219,7 +219,7 @@ describe('#context cache', () => {
       request.response.source = null
       const result = await context(request)
       expect(result).toEqual({
-        assetPath: '/public/assets',
+        assetPath: '/public/assets/rebrand',
         auth: {
           name: 'A Farmer',
           isAuthenticated: true,
@@ -243,7 +243,7 @@ describe('#context cache', () => {
       request.auth.isAuthenticated = false
       const result = await context(request)
       expect(result).toEqual({
-        assetPath: '/public/assets',
+        assetPath: '/public/assets/rebrand',
         auth: null,
         breadcrumbs: [],
         getAssetPath: expect.any(Function),
@@ -262,7 +262,7 @@ describe('#context cache', () => {
     test('should return property auth equal session data if authenticated', async () => {
       const result = await context(request)
       expect(result).toEqual({
-        assetPath: '/public/assets',
+        assetPath: '/public/assets/rebrand',
         auth: {
           name: 'A Farmer',
           isAuthenticated: true,

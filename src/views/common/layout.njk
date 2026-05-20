@@ -28,7 +28,11 @@
 {% endblock %}
 
 {% block pageTitle %}
-  {{ pageTitle }} | {{ serviceName }}
+    {% if pageTitle %}
+    {{ pageTitle }} | {{ serviceName }}
+  {% else %}
+    {{ serviceName }}
+  {% endif %}
 {% endblock %}
 
 {% block content %}{% endblock %}

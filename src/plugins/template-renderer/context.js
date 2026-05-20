@@ -26,7 +26,7 @@ export const context = async (request) => {
   const serverAuth = request.auth?.isAuthenticated ? await request.server.app.cache.get(request.auth.credentials.sessionId) : null
   return {
     ...ctx,
-    assetPath: `${assetPath}/assets`,
+    assetPath: `${assetPath}/assets/rebrand`,
     serviceName: config.get('server.serviceName'),
     serviceUrl: '/',
     breadcrumbs: [],

@@ -11,7 +11,6 @@ services:
     environment:
       ALLOW_ERROR_VIEWS: false
       DAL_ENDPOINT: http://fcp-dal-api:3005/graphql
-      DAL_CONNECTION: false
       ENTRA_WELL_KNOWN_URL: https://accounts.test.com/.well-known/openid-configuration
       ENTRA_CLIENT_ID: test-client-id
       ENTRA_CLIENT_SECRET: test-client-secret

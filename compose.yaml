@@ -38,7 +38,7 @@ services:
       retries: 5
 
   fcp-dal-api:
-    image: defradigital/fcp-dal-api:2.2.1
+    image: defradigital/fcp-dal-api:2.3.2
     depends_on:
       upstream-mock:
         condition: service_healthy

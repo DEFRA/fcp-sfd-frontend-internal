@@ -77,7 +77,7 @@ describe('#context', () => {
             url: '/'
           }
         ],
-        serviceName: 'Land and farm service',
+        serviceName: 'Farm and Land Service',
         serviceUrl: '/'
       })
     })
@@ -150,7 +150,7 @@ describe('#context cache', () => {
             url: '/'
           }
         ],
-        serviceName: 'Land and farm service',
+        serviceName: 'Farm and Land Service',
         serviceUrl: '/'
       })
     })
@@ -210,7 +210,7 @@ describe('#context cache', () => {
             url: '/'
           }
         ],
-        serviceName: 'Land and farm service',
+        serviceName: 'Farm and Land Service',
         serviceUrl: '/'
       })
     })
@@ -234,7 +234,7 @@ describe('#context cache', () => {
             url: '/'
           }
         ],
-        serviceName: 'Land and farm service',
+        serviceName: 'Farm and Land Service',
         serviceUrl: '/'
       })
     })
@@ -254,7 +254,7 @@ describe('#context cache', () => {
             url: '/'
           }
         ],
-        serviceName: 'Land and farm service',
+        serviceName: 'Farm and Land Service',
         serviceUrl: '/'
       })
     })
@@ -277,7 +277,7 @@ describe('#context cache', () => {
             url: '/'
           }
         ],
-        serviceName: 'Land and farm service',
+        serviceName: 'Farm and Land Service',
         serviceUrl: '/'
       })
     })

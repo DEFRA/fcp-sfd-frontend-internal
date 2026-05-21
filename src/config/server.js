@@ -46,7 +46,7 @@ export const serverConfig = {
     serviceName: {
       doc: 'Applications Service Name',
       format: String,
-      default: 'Land and farm service'
+      default: 'Farm and Land Service'
     },
     root: {
       doc: 'Project root',

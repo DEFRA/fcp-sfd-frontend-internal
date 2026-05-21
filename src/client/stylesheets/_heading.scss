@@ -16,3 +16,9 @@
   margin-top: govuk-spacing(2);
   margin-bottom: govuk-spacing(4);
 }
+
+@media (max-width: 640px) {
+  .govuk-header__logotype {
+    height: 20px;
+  }
+}

@@ -1,10 +1,16 @@
 {% extends "govuk/template.njk" %}
 
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
 {% from "common/heading/macro.njk" import appHeading %}
 
 {% set mainClasses = "app-main-wrapper" %}
+
+{% block headIcons %}
+  <link rel="icon" href="{{ getAssetPath('assets/images/brand.ico') }}" type="image/x-icon">
+  <link rel="apple-touch-icon" href="{{ getAssetPath('assets/images/brand.ico') }}">
+{% endblock %}
 
 {% block head %}
   <link href="{{ getAssetPath('stylesheets/application.scss') }}" rel="stylesheet">
@@ -14,14 +20,21 @@
 {% endblock %}
 
 {% block header %}
-  {{ govukHeader({
-    homepageUrl: "https://www.gov.uk/",
-    classes: "app-header",
-    containerClasses: "govuk-width-container",
+  <div class="govuk-header">
+    <div class="govuk-header__container govuk-width-container">
+      <div class="govuk-header__logo">
+        <a href="https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs" class="govuk-header__homepage-link">
+          <img src="{{ getAssetPath('assets/images/brand.png') }}" alt="Department for Environment, Food and Rural Affairs" class="govuk-header__logotype" height="30">
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {{ govukServiceNavigation({
     serviceName: serviceName,
-    serviceUrl: serviceUrl,
-    useTudorCrown: true
+    serviceUrl: serviceUrl
   }) }}
+
   <div class="govuk-width-container">
     {% include "common/phase-banner/phase-banner.njk" %}
   </div>

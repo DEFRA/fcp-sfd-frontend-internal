@@ -1,4 +1,4 @@
-import { dalConnector } from '../dal/connector.js'
+import { getDalConnector } from '../dal/connector.js'
 import { exampleQuery } from '../dal/queries/example-query.js'
 
 const variables = {
@@ -11,7 +11,8 @@ const dalExample = {
   path: '/dal-example',
   handler: async (request, h) => {
     const email = request.auth.credentials?.email
-    const response = await dalConnector(exampleQuery, variables, email)
+    const dalConnector = getDalConnector()
+    const response = await dalConnector.query(exampleQuery, variables, email)
 
     return h.view('dal-example', { dalData: response.data })
   }

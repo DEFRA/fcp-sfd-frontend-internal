@@ -1,6 +1,5 @@
-import { vi, describe, test, expect, afterAll, beforeAll, beforeEach } from 'vitest'
+import { vi, describe, test, expect, afterAll, beforeAll } from 'vitest'
 import { createServer } from '../../../src/server.js'
-import { getTokenCache } from '../../../src/utils/caching/token-cache.js'
 
 vi.mock('../../../src/plugins/index.js', () => ({
   plugins: [] // do not register plugins as it causes server to hang
@@ -13,10 +12,6 @@ beforeAll(async () => {
   await server.initialize()
 })
 
-beforeEach(async () => {
-  vi.resetModules()
-})
-
 afterAll(async () => {
   if (server) {
     await server.stop()
@@ -25,7 +20,7 @@ afterAll(async () => {
 
 describe('When the server starts', () => {
   test('the tokenCache should be defined', async () => {
-    const result = getTokenCache()
+    const result = server.app.tokenCache
     expect(result).toBeDefined()
   })
 })
@@ -35,7 +30,7 @@ describe('When the tokenCache is defined', () => {
     const key = 'testKey'
     const value = { test: 'val' }
 
-    const tokenCache = getTokenCache()
+    const tokenCache = server.app.tokenCache
 
     await tokenCache.set(key, value, 10000)
     const cachedValue = await tokenCache.get(key)
@@ -43,24 +38,8 @@ describe('When the tokenCache is defined', () => {
     expect(cachedValue).toEqual(value)
   })
 
-  test('using getTokenCache returns the same instance', () => {
-    const tokenCache = getTokenCache()
+  test('using server.app.tokenCache returns the same instance', () => {
+    const tokenCache = server.app.tokenCache
     expect(tokenCache).toBe(server.app.tokenCache)
-  })
-})
-
-describe('When the tokenCache is undefined', () => {
-  test('getTokenCache throws an error', async () => {
-    const mod = await vi.importActual('../../../src/utils/caching/token-cache.js')
-
-    // Overwrite initTokenCache to simulate if the cache is not created
-    const mockedModule = {
-      ...mod,
-      initTokenCache: () => undefined
-    }
-
-    expect(() => mockedModule.getTokenCache()).toThrowError(
-      'Token cache is not initialized.'
-    )
   })
 })

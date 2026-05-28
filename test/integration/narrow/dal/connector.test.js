@@ -1,19 +1,16 @@
+// Test framework dependencies
 import { vi, describe, test, expect, beforeAll, afterAll } from 'vitest'
-import { dalConnector } from '../../../../src/dal/connector.js'
+
+// Thing under test
+import { getDalConnector } from '../../../../src/dal/connector.js'
 import { exampleQuery } from '../../../../src/dal/queries/example-query.js'
 
-const mockOidcConfig = {
-  authorization_endpoint: 'https://oidc.example.com/authorize',
-  token_endpoint: 'https://oidc.example.com/token',
-  end_session_endpoint: 'https://oidc.example.com/logout',
-  jwks_uri: 'https://oidc.example.com/jwks'
-}
+// Setup
+import '../../../mocks/setup-server-mocks.js'
+import { createServer } from '../../../../src/server.js'
 
-vi.mock('../../../../src/auth/get-oidc-config.js', async () => {
-  return {
-    getOidcConfig: async () => (mockOidcConfig)
-  }
-})
+// Mock dependencies
+import { config } from '../../../../src/config/index.js'
 
 vi.mock('../../../../src/services/DAL/token/get-token-service.js', async () => {
   return {
@@ -21,18 +18,20 @@ vi.mock('../../../../src/services/DAL/token/get-token-service.js', async () => {
   }
 })
 
-const { createServer } = await import('../../../../src/server.js')
-const { config } = await import('../../../../src/config/index.js')
+// Test constants
+const email = 'testuser01@defra.gov.uk'
+const sbi = '300900001'
+const crn = '3020000000'
+const invalidDalEndpoint = 'http://nonexistent-domain-12345.invalid/graphql'
 
-const mockEntraToken =
-  'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250YWN0SWQiOjMwMjAwMDAwMDAsInJlbGF0aW9uc2hpcHMiOlsiMzAwOTAwMDozMDA5MDAwMDE6Q2xlYW4gY29udHJvbCAtIGV4YW1wbGUgMToxOkV4dGVybmFsOjAiXSwicm9sZXMiOlsiMzAwOTAwMDpBZ2VudDozIl19.mock-signature'
-
-describe('Data access layer (DAL) connector integration', () => {
+describe('DAL (data access layer) connector integration', () => {
   let server
+  let dalConnector
 
   beforeAll(async () => {
     server = await createServer()
     await server.initialize()
+    dalConnector = getDalConnector()
   })
 
   afterAll(async () => {
@@ -41,60 +40,80 @@ describe('Data access layer (DAL) connector integration', () => {
     }
   })
 
-  test('should successfully call DAL and return data', async () => {
-    const result = await dalConnector(
-      exampleQuery,
-      {
-        sbi: '300900001',
-        crn: '3020000000'
-      },
-      mockEntraToken
-    )
+  describe('when DAL responds successfully', () => {
+    test('should return data without errors and status 200', async () => {
+      const result = await dalConnector.query(
+        exampleQuery,
+        {
+          sbi,
+          crn
+        },
+        email
+      )
 
-    expect(result.data).toBeDefined()
-    expect(result.errors).toBeNull()
-    expect(result.statusCode).toBe(200)
+      expect(result.data).toBeDefined()
+      expect(result.errors).toBeNull()
+      expect(result.statusCode).toBe(200)
+    })
   })
 
-  test('should handle network errors by setting config directly', async () => {
-    const originalEndpoint = config.get('dalConfig.endpoint')
+  describe('when DAL endpoint is unavailable', () => {
+    test('should return 500 error', async () => {
+      const originalEndpoint = config.get('dalConfig.endpoint')
 
-    try {
-      config.set('dalConfig.endpoint', 'http://nonexistent-domain-12345.invalid/graphql')
+      try {
+        config.set('dalConfig.endpoint', invalidDalEndpoint)
 
-      const result = await dalConnector(exampleQuery, { sbi: 107591843 })
+        const result = await dalConnector.query(
+          exampleQuery,
+          { sbi },
+          email
+        )
+
+        expect(result.data).toBeNull()
+        expect(result.errors).toBeDefined()
+        expect(result.statusCode).toBe(500)
+      } finally {
+        config.set('dalConfig.endpoint', originalEndpoint)
+      }
+    })
+  })
+
+  describe('when GraphQL query syntax is invalid', () => {
+    test('should return 400 error', async () => {
+      const invalidQuery = `
+        query Business($sbi: ID!) {
+          business(sbi: $sbi) {
+            sbi
+            invalidSyntax {{{
+        }
+      `
+
+      const result = await dalConnector.query(
+        invalidQuery,
+        { sbi },
+        email
+      )
 
       expect(result.data).toBeNull()
       expect(result.errors).toBeDefined()
-      expect(result).toHaveProperty('statusCode', 500)
-    } finally {
-      config.set('dalConfig.endpoint', originalEndpoint)
-    }
+      expect(result.errors[0].message).toBe('Syntax Error: Expected Name, found "{".')
+      expect(result.statusCode).toBe(400)
+    })
   })
 
-  test('should handle invalid GraphQL query syntax as bad request (400) error', async () => {
-    const invalidQuery = `
-      query Business($sbi: ID!) {
-        business(sbi: $sbi) {
-          sbi
-          invalidSyntax {{{
-      }
-    `
+  describe('when required query variables are missing', () => {
+    test('should return 400 error', async () => {
+      const result = await dalConnector.query(
+        exampleQuery,
+        {},
+        email
+      )
 
-    const result = await dalConnector(invalidQuery, { sbi: 107591843 })
-
-    expect(result.data).toBeNull()
-    expect(result.errors).toBeDefined()
-    expect(result.errors[0].message).toBe('Syntax Error: Expected Name, found "{".')
-    expect(result.statusCode).toBe(400)
-  })
-
-  test('should handle missing required query params as bad request (400) error', async () => {
-    const result = await dalConnector(exampleQuery, {})
-
-    expect(result.data).toBeNull()
-    expect(result.errors).toBeDefined()
-    expect(result.errors[0].message).toBe('Variable "$sbi" of required type "ID!" was not provided.')
-    expect(result.statusCode).toBe(400)
+      expect(result.data).toBeNull()
+      expect(result.errors).toBeDefined()
+      expect(result.errors[0].message).toBe('Variable "$sbi" of required type "ID!" was not provided.')
+      expect(result.statusCode).toBe(400)
+    })
   })
 })

@@ -9,6 +9,7 @@ services:
     volumes:
       - ./src:/home/node/src
       - ./package.json:/home/node/package.json
+      - ../fcp-sfd-dev-environment/repos/fcp-sfd-frontend-engine:/home/node/node_modules/@defra/fcp-sfd-frontend-engine
 
   upstream-mock:
     ports:

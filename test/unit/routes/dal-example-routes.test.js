@@ -1,17 +1,17 @@
 // Test framework dependencies
 import { vi, beforeEach, describe, test, expect } from 'vitest'
 
-// Things we need to mock
-import { dalConnector } from '../../../src/dal/connector.js'
-
 // Thing under test
 import { dalExampleRoutes } from '../../../src/routes/dal-example-routes.js'
-const [dalExample] = dalExampleRoutes
 
-// Mocks
+// Things we need to mock
+const mockDalConnector = { query: vi.fn() }
+
 vi.mock('../../../src/dal/connector.js', () => ({
-  dalConnector: vi.fn()
+  getDalConnector: vi.fn(() => mockDalConnector)
 }))
+
+const [dalExample] = dalExampleRoutes
 
 describe('DAL Example endpoint', () => {
   let h
@@ -35,7 +35,7 @@ describe('DAL Example endpoint', () => {
         }
       }
 
-      dalConnector.mockResolvedValue(getMockDalResponse())
+      mockDalConnector.query.mockResolvedValue(getMockDalResponse())
     })
 
     test('should have the correct method and path', () => {
@@ -46,7 +46,7 @@ describe('DAL Example endpoint', () => {
     test('it calls the dal connector and renders view', async () => {
       await dalExample.handler(request, h)
 
-      expect(dalConnector).toHaveBeenCalled()
+      expect(mockDalConnector.query).toHaveBeenCalled()
       expect(h.view).toHaveBeenCalledWith('dal-example', { dalData: getMockDalResponse().data })
     })
   })

@@ -8,6 +8,7 @@ import { setupProxy } from './utils/setup-proxy.js'
 import { catchAll } from './utils/errors.js'
 import { getCacheEngine } from './utils/caching/cache-engine.js'
 import { initTokenCache } from './utils/caching/token-cache.js'
+import { initDalConnector } from './dal/connector.js'
 
 export const createServer = async () => {
   setupProxy()
@@ -59,6 +60,9 @@ export const createServer = async () => {
   })
 
   server.app.tokenCache = initTokenCache(server, CACHE_NAME)
+
+  // DAL connector must be initialized during startup before any service calls getDalConnector()
+  initDalConnector(server.app.tokenCache)
 
   server.validator(Joi)
   await server.register(plugins)

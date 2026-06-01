@@ -10,10 +10,11 @@
  * or extra error handling in the future.
  */
 
-import { dalConnector } from '../../dal/connector.js'
+import { getDalConnector } from '../../dal/connector.js'
 
 const updateDalService = async (mutation, variables, email) => {
-  const response = await dalConnector(mutation, variables, email)
+  const dalConnector = getDalConnector()
+  const response = await dalConnector.query(mutation, variables, email)
 
   if (response.errors) {
     throw new Error('DAL error from mutation')

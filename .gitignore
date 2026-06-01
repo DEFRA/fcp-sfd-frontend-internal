@@ -1,7 +1,6 @@
 .DS_Store
 .npm/
 .vscode/*
-!.vscode/tasks.json
 !.vscode/README.md
 .idea
 .server

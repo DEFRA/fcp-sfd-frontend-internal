@@ -1,0 +1,10 @@
+{% macro appSignOutLink(params) %}
+  {% if auth.isAuthenticated %}
+    <div class="govuk-grid-row sub-header-container govuk-!-padding-top-3">
+      <div class="govuk-grid-column-full govuk-!-text-align-right">
+        <a href="/auth/sign-out" class="govuk-link govuk-link--no-visited-state">Sign out</a>
+      </div>
+    </div>
+  {% endif %}
+  <p class="govuk-body govuk-!-margin-bottom-0"></p>
+{% endmacro %}

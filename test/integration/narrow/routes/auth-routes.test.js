@@ -9,16 +9,6 @@ vi.mock('../../../../src/auth/verify-token', async () => ({
   verifyToken: mockVerifyToken
 }))
 
-const mockGetPermissions = vi.fn()
-vi.mock('../../../../src/auth/get-permissions.js', async () => ({
-  getPermissions: mockGetPermissions
-}))
-
-const mockGetSafeRedirect = vi.fn()
-vi.mock('../../../../src/utils/get-safe-redirect.js', () => ({
-  getSafeRedirect: mockGetSafeRedirect
-}))
-
 const mockGetSignOutUrl = vi.fn()
 vi.mock('../../../../src/auth/get-sign-out-url.js', () => ({
   getSignOutUrl: mockGetSignOutUrl
@@ -39,9 +29,6 @@ const credentials = {
   refreshToken: 'ENTRA-REFRESH-TOKEN'
 }
 
-const role = 'RPA'
-const scope = ['user']
-
 const signOutUrl = 'https://oidc.example.com/sign-out'
 
 const { createServer } = await import('../../../../src/server.js')
@@ -52,8 +39,6 @@ let path
 describe('auth routes', () => {
   beforeAll(async () => {
     vi.clearAllMocks()
-
-    mockGetSafeRedirect.mockReturnValue('/search-sbi')
 
     server = await createServer()
     await server.initialize()
@@ -104,7 +89,6 @@ describe('auth routes', () => {
   describe('GET /auth/sign-in-oidc', () => {
     beforeEach(() => {
       path = '/auth/sign-in-oidc'
-      mockGetPermissions.mockResolvedValue({ role, scope })
     })
 
     test('redirects to oidc sign in page if unauthenticated', async () => {
@@ -198,17 +182,6 @@ describe('auth routes', () => {
       expect(sessionCookie).toBeDefined()
       expect(sessionCookie).not.toMatch(/Expires=/)
       expect(sessionCookie).not.toMatch(/Max-Age=/)
-    })
-
-    test('should ensure redirect path is safe', async () => {
-      await server.inject({
-        url: path,
-        auth: {
-          strategy: 'entra',
-          credentials
-        }
-      })
-      expect(mockGetSafeRedirect).toHaveBeenCalledWith('/search-sbi')
     })
 
     test('redirects to safe redirect path', async () => {

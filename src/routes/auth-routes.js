@@ -1,7 +1,6 @@
 import { getSignOutUrl } from '../auth/get-sign-out-url.js'
 import { validateState } from '../auth/state.js'
 import { verifyToken } from '../auth/verify-token.js'
-import { getSafeRedirect } from '../utils/get-safe-redirect.js'
 
 const signIn = {
   method: 'GET',
@@ -10,7 +9,7 @@ const signIn = {
     auth: 'entra'
   },
   handler: function (_request, h) {
-    return h.redirect('/home')
+    return h.redirect('/search-sbi')
   }
 }
 

@@ -53,7 +53,7 @@ describe('auth routes', () => {
   beforeAll(async () => {
     vi.clearAllMocks()
 
-    mockGetSafeRedirect.mockReturnValue('/home')
+    mockGetSafeRedirect.mockReturnValue('/search-sbi')
 
     server = await createServer()
     await server.initialize()
@@ -70,7 +70,7 @@ describe('auth routes', () => {
       path = '/auth/sign-in'
     })
 
-    test('redirects to /home if authenticated', async () => {
+    test('redirects to /search-sbi if authenticated', async () => {
       const response = await server.inject({
         url: path,
         auth: {
@@ -79,7 +79,7 @@ describe('auth routes', () => {
         }
       })
       expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
-      expect(response.headers.location).toBe('/home')
+      expect(response.headers.location).toBe('/search-sbi')
     })
 
     test('redirects to oidc sign in if unauthenticated', async () => {
@@ -208,7 +208,7 @@ describe('auth routes', () => {
           credentials
         }
       })
-      expect(mockGetSafeRedirect).toHaveBeenCalledWith('/home')
+      expect(mockGetSafeRedirect).toHaveBeenCalledWith('/search-sbi')
     })
 
     test('redirects to safe redirect path', async () => {
@@ -220,7 +220,7 @@ describe('auth routes', () => {
         }
       })
       expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
-      expect(response.headers.location).toBe('/home')
+      expect(response.headers.location).toBe('/search-sbi')
     })
   })
 

@@ -1,5 +1,7 @@
 services:
   fcp-sfd-frontend-internal:
+    command: npm run dev:link-engine
     volumes:
+      - ./nodemon.link-engine.json:/home/node/nodemon.link-engine.json
       - ../fcp-sfd-frontend-engine/dist:/home/node/node_modules/@defra/fcp-sfd-frontend-engine/dist
       - ../fcp-sfd-frontend-engine/package.json:/home/node/node_modules/@defra/fcp-sfd-frontend-engine/package.json

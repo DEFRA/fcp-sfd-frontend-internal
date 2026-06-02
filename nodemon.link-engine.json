@@ -1,0 +1,10 @@
+{
+  "watch": ["./src", "./node_modules/@defra/fcp-sfd-frontend-engine/dist"],
+  "ext": "cjs,js,json,njk",
+  "ignoreRoot": [],
+  "ignore": ["**/*.test.*", "./src/client", "./node_modules/.cache"],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "signal": "SIGINT"
+}

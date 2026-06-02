@@ -4,75 +4,20 @@ import { describe, test, expect, beforeEach } from 'vitest'
 // Thing under test
 import { mapBusinessDetailsBySbi } from '../../../src/mappers/business-details-by-sbi-mapper.js'
 
+// Test helpers
+import { getDalData, getMappedData } from '../../mocks/mock-business-details-by-sbi.js'
+
 describe('business details by SBI mapper', () => {
   let rawData
 
   beforeEach(() => {
-    rawData = {
-      business: {
-        sbi: '106705779',
-        info: {
-          name: 'Herberts Lawn Mowing',
-          traderNumber: '876432',
-          vendorNumber: '673920',
-          address: {
-            pafOrganisationName: 'Herberts Lawn Mowing Ltd',
-            buildingNumberRange: '14',
-            flatName: 'Flat 2',
-            buildingName: 'The Lawn Building',
-            dependentLocality: 'Taunton Borough',
-            doubleDependentLocality: 'Chip Lane Area',
-            street: 'Chip Lane',
-            county: 'Somerset',
-            uprn: '100012345678',
-            line1: '14 Chip Lane',
-            line2: 'Taunton Sorting Office',
-            line3: null,
-            line4: 'Somerset',
-            line5: null,
-            city: 'Taunton',
-            postalCode: 'TA1 1AA',
-            country: 'England'
-          }
-        }
-      }
-    }
+    rawData = getDalData()
   })
 
   test('it maps all fields correctly', () => {
     const result = mapBusinessDetailsBySbi(rawData)
 
-    expect(result).toEqual({
-      info: {
-        sbi: '106705779',
-        businessName: 'Herberts Lawn Mowing',
-        traderNumber: '876432',
-        vendorNumber: '673920'
-      },
-      address: {
-        lookup: {
-          pafOrganisationName: 'Herberts Lawn Mowing Ltd',
-          buildingNumberRange: '14',
-          flatName: 'Flat 2',
-          buildingName: 'The Lawn Building',
-          dependentLocality: 'Taunton Borough',
-          doubleDependentLocality: 'Chip Lane Area',
-          street: 'Chip Lane',
-          county: 'Somerset',
-          uprn: '100012345678'
-        },
-        manual: {
-          line1: '14 Chip Lane',
-          line2: 'Taunton Sorting Office',
-          line3: null,
-          line4: 'Somerset',
-          line5: null
-        },
-        city: 'Taunton',
-        postcode: 'TA1 1AA',
-        country: 'England'
-      }
-    })
+    expect(result).toEqual(getMappedData())
   })
 
   describe('when the business has no trader number', () => {

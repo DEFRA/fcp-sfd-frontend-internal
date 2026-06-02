@@ -96,4 +96,35 @@ describe('fetchSbiSearchDetailsService', () => {
       expect(mockMapBusinessDetailsBySbi).not.toHaveBeenCalled()
     })
   })
+
+  describe('when the DAL response has no errors property', () => {
+    beforeEach(() => {
+      mockDalConnector.query.mockResolvedValue({
+        data: null,
+        statusCode: 500
+      })
+    })
+
+    test('should throw a generic error without crashing on undefined errors', async () => {
+      await expect(fetchSbiSearchDetailsService(sbi, email)).rejects.toThrowError('Failed to retrieve business details')
+
+      expect(mockMapBusinessDetailsBySbi).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('when the DAL response has an empty errors array', () => {
+    beforeEach(() => {
+      mockDalConnector.query.mockResolvedValue({
+        data: null,
+        errors: [],
+        statusCode: 500
+      })
+    })
+
+    test('should throw a generic error without crashing on empty array', async () => {
+      await expect(fetchSbiSearchDetailsService(sbi, email)).rejects.toThrowError('Failed to retrieve business details')
+
+      expect(mockMapBusinessDetailsBySbi).not.toHaveBeenCalled()
+    })
+  })
 })

@@ -108,4 +108,36 @@ describe('business details by SBI mapper', () => {
       expect(result.address.postcode).toEqual('EX1 2AB')
     })
   })
+
+  describe('when the address object is null', () => {
+    beforeEach(() => {
+      rawData.business.info.address = null
+    })
+
+    test('it maps all address fields to null without crashing', () => {
+      const result = mapBusinessDetailsBySbi(rawData)
+
+      expect(result.address.lookup).toEqual({
+        pafOrganisationName: undefined,
+        buildingNumberRange: undefined,
+        flatName: undefined,
+        buildingName: undefined,
+        dependentLocality: undefined,
+        doubleDependentLocality: undefined,
+        street: undefined,
+        county: undefined,
+        uprn: undefined
+      })
+      expect(result.address.manual).toEqual({
+        line1: undefined,
+        line2: undefined,
+        line3: undefined,
+        line4: undefined,
+        line5: undefined
+      })
+      expect(result.address.city).toEqual(undefined)
+      expect(result.address.postcode).toEqual(undefined)
+      expect(result.address.country).toEqual(undefined)
+    })
+  })
 })

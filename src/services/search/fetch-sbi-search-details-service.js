@@ -19,7 +19,8 @@ const fetchSbiSearchDetailsService = async (sbi, email) => {
     return mappedResponse
   }
 
-  if (dalResponse.errors[0].message === 'Rural payments organisation not found') {
+  const errorMessage = dalResponse?.errors?.[0]?.message
+  if (errorMessage === 'Rural payments organisation not found') {
     return null
   }
 

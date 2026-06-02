@@ -2,6 +2,7 @@
 .npm/
 .vscode/*
 !.vscode/README.md
+!.vscode/tasks.json
 .idea
 .server
 node_modules

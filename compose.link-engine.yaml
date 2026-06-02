@@ -1,0 +1,5 @@
+services:
+  fcp-sfd-frontend-internal:
+    volumes:
+      - ../fcp-sfd-frontend-engine/dist:/home/node/node_modules/@defra/fcp-sfd-frontend-engine/dist
+      - ../fcp-sfd-frontend-engine/package.json:/home/node/node_modules/@defra/fcp-sfd-frontend-engine/package.json

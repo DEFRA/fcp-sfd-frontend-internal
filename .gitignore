@@ -2,8 +2,7 @@
 .npm/
 .vscode/*
 !.vscode/README.md
-!.vscode/tasks.json
-.idea
+!.idea
 .server
 node_modules
 npm-debug.log

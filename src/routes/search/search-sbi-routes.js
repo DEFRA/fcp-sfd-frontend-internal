@@ -6,6 +6,7 @@ import { searchSbiPresenter } from '../../presenters/search/search-sbi-presenter
 
 const SEARCH_SBI_PATH = '/search-sbi'
 const SEARCH_SBI_SESSION_KEY = 'searchSbi'
+const SEARCH_SBI_VIEW = 'search/search-sbi'
 
 const getSearchSbi = {
   method: 'GET',
@@ -14,7 +15,7 @@ const getSearchSbi = {
     const searchState = request.yar.get(SEARCH_SBI_SESSION_KEY)
 
     if (!searchState) {
-      return h.view('search/search-sbi')
+      return h.view(SEARCH_SBI_VIEW)
     }
 
     const email = request.auth.credentials?.email
@@ -23,7 +24,7 @@ const getSearchSbi = {
 
     request.yar.clear(SEARCH_SBI_SESSION_KEY)
 
-    return h.view('search/search-sbi', pageData)
+    return h.view(SEARCH_SBI_VIEW, pageData)
   }
 }
 
@@ -46,7 +47,7 @@ const postSearchSbi = {
       const errors = utils.formatValidationErrors(validation.error.details || [])
       const pageData = { ...payload, errors }
 
-      return h.view('search/search-sbi', pageData).code(BAD_REQUEST).takeover()
+      return h.view(SEARCH_SBI_VIEW, pageData).code(BAD_REQUEST).takeover()
     }
 
     const { sbi } = validation.value

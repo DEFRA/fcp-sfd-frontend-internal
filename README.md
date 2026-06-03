@@ -88,7 +88,7 @@ The `fcp-sfd-frontend-engine` repository must be cloned as a sibling of this one
    ```
    The overlay mounts the engine's local `dist/` and `package.json` into the container and configures nodemon to restart the server whenever the engine rebuilds.
 
-> **Note:** VS Code tasks for both of the above steps are provided by [`fcp-sfd-dev-environment`](https://github.com/DEFRA/fcp-sfd-dev-environment) — see the **"🔨 Watch Engine"** and **"🔗 Up Frontend internal with local Engine"** tasks.
+> **Note:** VS Code tasks for both of the above steps are provided by [`fcp-sfd-dev-environment`](https://github.com/DEFRA/fcp-sfd-dev-environment) — see the **"🔨 Watch and Rebuild Engine"** and **"🔗 Up Frontend internal with local Engine"** tasks.
 
 ## Server-side Caching
 

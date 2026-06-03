@@ -85,6 +85,30 @@ Or to run the tests in watch mode:
 npm run docker:test:watch
 ```
 
+## Local engine development
+
+If you are working on [`fcp-sfd-frontend-engine`](https://github.com/DEFRA/fcp-sfd-frontend-engine) alongside this service, you can mount your local engine build directly into the container without changing `package.json`.
+
+### Prerequisites
+
+The `fcp-sfd-frontend-engine` repository must be cloned as a sibling of this one (i.e. both under the same parent directory).
+
+### Workflow
+
+1. In the engine repo, start the TypeScript watch build:
+   ```
+   npx tsup --watch
+   ```
+   This continuously rebuilds the engine `dist/` folder when source files change.
+
+2. Start this service using the engine overlay:
+   ```
+   docker compose -f compose.yaml -f compose.override.yaml -f compose.link-engine.yaml up --build
+   ```
+   The overlay mounts the engine's local `dist/` and `package.json` into the container and configures nodemon to restart the server whenever the engine rebuilds.
+
+> **Note:** VS Code tasks for both of the above steps are provided by [`fcp-sfd-dev-environment`](https://github.com/DEFRA/fcp-sfd-dev-environment) — see the **"🔨 Watch and Rebuild Engine"** and **"🔗 Up Frontend internal with local Engine"** tasks.
+
 ## Server-side Caching
 
 We use Catbox for server-side caching. By default, the service will use CatboxRedis when deployed and CatboxMemory for local development. You can override the default behavior by setting the `SESSION_CACHE_ENGINE` environment variable to either `redis` or `memory`.

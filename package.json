@@ -12,6 +12,7 @@
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "dev": "run-p frontend:watch server:watch",
+    "dev:link-engine": "run-p frontend:watch server:watch:link-engine",
     "dev:debug": "run-p frontend:watch server:debug",
     "frontend:watch": "NODE_ENV=development webpack --watch",
     "postinstall": "npm run build",
@@ -30,6 +31,7 @@
     "test:lint": "standard",
     "start:debug": "nodemon --watch src --exec 'node --experimental-vm-modules --inspect-brk=0.0.0.0 src/index.js'",
     "server:watch": "nodemon --inspect=0.0.0.0 --ext js,njk --legacy-watch src/index.js",
+    "server:watch:link-engine": "nodemon --config nodemon.link-engine.json --inspect=0.0.0.0 --legacy-watch src/index.js",
     "server:debug": "nodemon --inspect-brk=0.0.0.0 --ext js --legacy-watch src/index.js",
     "prestart": "npm run build",
     "start": "NODE_ENV=production node --use-strict ."
@@ -42,7 +44,7 @@
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
-    "@defra/fcp-sfd-frontend-engine": "0.2.0",
+    "@defra/fcp-sfd-frontend-engine": "0.2.5",
     "@defra/hapi-tracing": "1.30.0",
     "@elastic/ecs-pino-format": "1.5.0",
     "@hapi/bell": "13.1.0",

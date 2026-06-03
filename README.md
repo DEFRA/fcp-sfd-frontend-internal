@@ -65,7 +65,7 @@ If you need to modify mock responses or the upstream deployed environments are u
    npm run docker:dal-local
    ```
 
-> **Note:** a VS Code task for running the local mock is provided by [`fcp-sfd-dev-environment`](https://github.com/DEFRA/fcp-sfd-dev-environment) — see the **🧪🔧 Run with local DAL mock** task.
+> **Note:** a VS Code task for running the local mock is provided by [`fcp-sfd-dev-environment`](https://github.com/DEFRA/fcp-sfd-dev-environment) — see the **🧪🔧 Up Frontend internal with local DAL mock** task.
 
 ### Accessing the application
 

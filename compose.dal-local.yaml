@@ -10,6 +10,3 @@ services:
     command: ["node", "src"]
     healthcheck:
       test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:3100/health']
-  fcp-dal-api:
-    environment:
-      KITS_GATEWAY_INTERNAL_URL: http://upstream-mock:3100/extapi/

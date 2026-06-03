@@ -1,7 +1,6 @@
 import { getSignOutUrl } from '../auth/get-sign-out-url.js'
 import { validateState } from '../auth/state.js'
 import { verifyToken } from '../auth/verify-token.js'
-import { getSafeRedirect } from '../utils/get-safe-redirect.js'
 
 const signIn = {
   method: 'GET',
@@ -10,7 +9,7 @@ const signIn = {
     auth: 'entra'
   },
   handler: function (_request, h) {
-    return h.redirect('/home')
+    return h.redirect('/search-sbi')
   }
 }
 
@@ -45,12 +44,10 @@ const signInOidc = {
     // Create a new session using cookie authentication strategy which is used for all subsequent requests
     request.cookieAuth.set({ sessionId })
 
-    // Redirect user to the page they were trying to access before signing in or to the home page if no redirect was set
-    const redirect = request.yar.get('redirect') ?? '/home'
     request.yar.clear('redirect')
-    // Ensure redirect is a relative path to prevent redirect attacks
-    const safeRedirect = getSafeRedirect(redirect)
-    return h.redirect(safeRedirect)
+
+    // Redirect to the search sbi page
+    return h.redirect('/search-sbi')
   }
 }
 

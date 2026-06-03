@@ -4,3 +4,60 @@
 @use "core";
 @use "heading";
 @use "navigation";
+
+// Internal search result blocks
+
+.internal-list__search header {
+  border-top: 1px solid #b1b4b6;
+  padding: 30px 0;
+}
+
+.internal-list__search li > p {
+  font-weight: 600;
+  color: #505a5f;
+}
+
+.internal-list__search li:last-of-type {
+  border-bottom: 1px solid #b1b4b6;
+  padding: 30px 0;
+  margin: 0 0 30px 0;
+}
+
+.sfd-definition-list {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.sfd-definition-list__title {
+  font-weight: 700;
+}
+
+.sfd-definition-list__definition {
+  margin: 0;
+}
+
+.sfd-definition-list__definition--hint {
+  color: govuk-frontend.govuk-colour("dark-grey");
+}
+
+.sfd-definition-list--meta {
+  overflow: hidden;
+  font-size: 0.875rem;
+  line-height: 1.1428571429;
+}
+
+.sfd-definition-list--meta .sfd-definition-list__title {
+  clear: both;
+  float: left;
+  font-weight: normal;
+  color: #505a5f;
+  margin-right: 0.3em;
+}
+
+.sfd-definition-list--meta .sfd-definition-list__title:after {
+  content: ":";
+}
+
+.sfd-definition-list--meta .sfd-definition-list__definition {
+  float: left;
+}

@@ -1,0 +1,92 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "common/navigation/sign-out-link.njk" import appSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appSignOutLink() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [{
+            text: errors.sbi.text,
+            href: "#sbi"
+        }]
+    }) }}
+  {% endif %}
+
+<div class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" novalidate>
+        <input type="hidden" name="crumb" value="{{ crumb }}">
+        {{ govukInput({
+            label: {
+              text: "Search by single business identifier (SBI)",
+              classes: "govuk-label--l",
+              isPageHeading: true
+            },
+            classes: "govuk-input--width-25",
+            hint: {
+              text: "Enter the full SBI"
+            },
+            id: "sbi",
+            name: "sbi",
+            value: sbi,
+            errorMessage: errors.sbi and {
+              text: errors.sbi.text
+            }
+          }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({ text: "Search", preventDoubleClick: true }) }}
+          <a class="govuk-link" href="#">Change search criteria</a>
+        </div>
+
+        {% if showClear %}
+          <p class="govuk-body">
+            <a class="govuk-link govuk-link--no-visited-state" href="/search-sbi">Clear search</a>
+          </p>
+        {% endif %}
+
+        {% if showResults %}
+            <h2 class="govuk-heading-m">{{ resultText }}</h2>
+            {% if showBusinessDetails %}
+            <ol class="govuk-list internal-list__search">
+              <li class="govuk-!-padding-top-6">
+                <header class="govuk-!-padding-bottom-0">
+                  <h3 class="govuk-heading-m govuk-!-margin-bottom-2">
+                    <a class="govuk-link govuk-link--no-visited-state" href="#">{{ businessName }}</a>
+                  </h3>
+                </header>
+                <p class="govuk-body govuk-!-margin-bottom-2">SBI: {{ sbi }}</p>
+                <div>
+                  <p class="govuk-body govuk-!-margin-bottom-0">{{ businessAddress }}</p>
+                  <p class="govuk-body govuk-!-margin-bottom-2">{{ businessPostcode }}</p>
+                </div>
+                {% if businessTraderNumber %}
+                  <dl class="sfd-definition-list sfd-definition-list--meta govuk-!-margin-bottom-1">
+                    <dt class="sfd-definition-list__title">Trader number</dt>
+                    <dd class="sfd-definition-list__definition">{{ businessTraderNumber }}</dd>
+                  </dl>
+                {% endif %}
+                {% if businessVendorNumber %}
+                  <dl class="sfd-definition-list sfd-definition-list--meta govuk-!-margin-bottom-1">
+                    <dt class="sfd-definition-list__title">Vendor number</dt>
+                    <dd class="sfd-definition-list__definition">{{ businessVendorNumber }}</dd>
+                  </dl>
+                {% endif %}
+              </li>
+            </ol>
+            {% endif %}
+        {% endif %}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -31,7 +31,7 @@ You can either run this service independently or alternatively run the [fcp-sfd-
 
 ### Building the Docker image
 
-Container images are built using Docker Compose. It's important to note that in order to successfully run the [fcp-dal-api](https://github.com/defra/fcp-dal-api) and its [upstream-mock](https://github.com/defra/fcp-dal-upstream-mock) to interact with the Data Access Layer (DAL), you _must_ run this service as a Docker container. This is because the [Docker Compose configuration](./compose.yaml) for this repository pulls and runs the Docker images for the `fcp-dal-api` and `fcp-dal-upstream-mock` (a.k.a. the `kits-mock`) from the Docker registry.
+Container images are built using Docker Compose. It's important to note that in order to successfully run the [fcp-dal-api](https://github.com/defra/fcp-dal-api) and its [upstream-mock](https://github.com/defra/fcp-dal-upstream-mock) to interact with the Data Access Layer (DAL), you _must_ run this service as a Docker container. This is because the [Docker Compose configuration](./compose.yaml) for this repository pulls and runs the Docker images for the `fcp-dal-api` and `fcp-dal-upstream-mock` (a.k.a. the DAL or Kits mock) from the Docker registry.
 
 First, build the Docker image:
 ```
@@ -47,6 +47,25 @@ docker compose up
 Use the `-d` at the end of the above command to run in detached mode e.g. if you wish to view logs in another application such as Docker Desktop.
 
 You can find further information on how SFD integrates with the DAL on [Confluence](https://eaflood.atlassian.net/wiki/spaces/SFD/pages/5712838853/Single+Front+Door+Integration+with+Data+Access+Layer).
+
+### Running with a local upstream mock
+
+If you need to modify mock responses or the upstream deployed environments are unavailable, you can build `fcp-dal-upstream-mock` from a local checkout instead of using the published Docker image.
+
+1. Clone the upstream mock repository:
+   ```
+   git clone https://github.com/DEFRA/fcp-dal-upstream-mock.git
+   ```
+2. Add the path to your `.env` file:
+   ```
+   DAL_UPSTREAM_MOCK_LOCAL_PATH=/path/to/fcp-dal-upstream-mock
+   ```
+3. Start the stack using the local mock:
+   ```
+   npm run docker:dal-local
+   ```
+
+> **Note:** a VS Code task for running the local mock is provided by [`fcp-sfd-dev-environment`](https://github.com/DEFRA/fcp-sfd-dev-environment) — see the **🧪🔧 Up Frontend internal with local DAL mock** task.
 
 ### Accessing the application
 

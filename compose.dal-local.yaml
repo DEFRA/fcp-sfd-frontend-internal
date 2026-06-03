@@ -1,0 +1,15 @@
+services:
+  fcp-sfd-frontend-internal:
+    environment:
+      DAL_ENDPOINT: http://fcp-dal-api:3005/graphql
+  upstream-mock:
+    image: fcp-dal-upstream-mock:local
+    build:
+      context: ${DAL_UPSTREAM_MOCK_LOCAL_PATH}
+      target: development
+    command: ["node", "src"]
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:3100/health']
+  fcp-dal-api:
+    environment:
+      KITS_GATEWAY_INTERNAL_URL: http://upstream-mock:3100/extapi/

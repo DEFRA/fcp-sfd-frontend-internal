@@ -22,6 +22,7 @@
     "pretest": "npm run test:lint",
     "docker:debug": "docker compose -f compose.yaml -f compose.debug.yaml -p \"fcp-sfd-frontend-internal\" up",
     "docker:dev": "docker compose up",
+    "docker:dal-local": "docker compose -f compose.yaml -f compose.override.yaml -f compose.dal-local.yaml up --build",
     "docker:test": "npm run lint && mkdir -p coverage 2>/dev/null || true docker compose -p fcp-sfd-frontend-internal-test down -v && docker compose -f compose.yaml -f compose.test.yaml -p fcp-sfd-frontend-internal-test run --build --rm fcp-sfd-frontend-internal",
     "docker:test:watch": "docker compose -p fcp-sfd-frontend-internal-test down -v && docker compose -f compose.yaml -f compose.test.yaml -f compose.test.watch.yaml -p fcp-sfd-frontend-internal-test run --build --rm fcp-sfd-frontend-internal",
     "test": "rm -rf ./coverage/** && vitest run --coverage",

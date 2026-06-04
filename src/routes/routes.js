@@ -8,6 +8,7 @@ import { cookies } from './footer/cookies-routes.js'
 import { signedOut } from './signed-out-routes.js'
 import { footerRoutes } from './footer/footer-routes.js'
 import { searchSbiRoutes } from './search/search-sbi-routes.js'
+import { searchCrnRoutes } from './search/search-crn-routes.js'
 
 export const routes = [
   health,
@@ -19,5 +20,6 @@ export const routes = [
   ...errors,
   ...staticAssetRoutes,
   ...footerRoutes,
-  ...searchSbiRoutes
+  ...searchSbiRoutes,
+  ...searchCrnRoutes
 ]

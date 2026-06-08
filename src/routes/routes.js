@@ -9,6 +9,7 @@ import { signedOut } from './signed-out-routes.js'
 import { footerRoutes } from './footer/footer-routes.js'
 import { searchSbiRoutes } from './search/search-sbi-routes.js'
 import { searchCrnRoutes } from './search/search-crn-routes.js'
+import { changeSearchCriteriaRoutes } from './search/change-search-criteria-routes.js'
 
 export const routes = [
   health,
@@ -21,5 +22,6 @@ export const routes = [
   ...staticAssetRoutes,
   ...footerRoutes,
   ...searchSbiRoutes,
-  ...searchCrnRoutes
+  ...searchCrnRoutes,
+  ...changeSearchCriteriaRoutes
 ]

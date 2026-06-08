@@ -92,6 +92,18 @@ describe('customer details by CRN mapper', () => {
     })
   })
 
+  describe('when the name object is null', () => {
+    beforeEach(() => {
+      rawData.customer.info.name = null
+    })
+
+    test('it maps name fields to undefined without crashing', () => {
+      const result = mapCustomerDetailsByCrn(rawData)
+
+      expect(result.info.customerName).toEqual('undefined undefined')
+    })
+  })
+
   describe('when the address object is null', () => {
     beforeEach(() => {
       rawData.customer.info.address = null

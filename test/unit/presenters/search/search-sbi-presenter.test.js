@@ -141,7 +141,7 @@ describe('searchSbiPresenter', () => {
       test('it should return 0 results', () => {
         const result = searchSbiPresenter(data, payload)
 
-        expect(result.resultText).toEqual('0 results')
+        expect(result.resultText).toEqual('0 results for "106705779"')
       })
     })
   })

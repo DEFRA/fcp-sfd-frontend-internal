@@ -5,7 +5,9 @@
 
 const searchCrnPresenter = (customerDetails, payload) => {
   const { addressLines, postcode } = getFormattedAddress(customerDetails?.address)
-  const resultText = customerDetails ? `1 result for "${payload}"` : '0 results'
+  const resultText = customerDetails
+    ? `1 result for "${payload}"`
+    : `0 results for "${payload}"`
 
   return {
     customerName: customerDetails?.info?.customerName || '',

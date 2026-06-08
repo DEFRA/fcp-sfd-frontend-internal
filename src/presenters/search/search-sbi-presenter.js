@@ -5,7 +5,9 @@
 
 const searchSbiPresenter = (businessDetails, payload) => {
   const { addressLines, postcode } = getFormattedAddress(businessDetails?.address)
-  const resultText = businessDetails ? `1 result for "${payload}"` : '0 results'
+  const resultText = businessDetails
+    ? `1 result for "${payload}"`
+    : `0 results for "${payload}"`
 
   return {
     businessName: businessDetails?.info?.businessName || '',

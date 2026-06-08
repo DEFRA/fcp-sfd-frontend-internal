@@ -1,0 +1,64 @@
+/**
+ * Base presenter for formatting data for display
+ */
+
+/**
+ * Formats an address object into a comma-separated address string and a separate postcode.
+ *
+ * If the address contains a UPRN, the user selected it from an address lookup.
+ * Otherwise it is treated as a manually entered address.
+ *
+ * The postcode is always returned separately so views can render it on its own line.
+ *
+ * @param {Object} address - The address object from the mapped DAL response
+ *
+ * @returns {{ addressLines: string, postcode: string }}
+ */
+export const formatAddressLines = (address) => {
+  if (!address) {
+    return { addressLines: '', postcode: '' }
+  }
+
+  const lookup = address.lookup || {}
+  const manual = address.manual || {}
+  const postcode = address.postcode || ''
+  const country = address.country || ''
+  const city = address.city || ''
+
+  let lines = []
+
+  if (lookup.uprn) {
+    // The user selected an address from the lookup tool
+    const buildingAndStreet = [lookup.buildingNumberRange, lookup.street]
+      .filter(Boolean)
+      .join(' ')
+
+    lines = [
+      lookup.pafOrganisationName,
+      lookup.flatName,
+      lookup.buildingName,
+      buildingAndStreet,
+      lookup.doubleDependentLocality,
+      lookup.dependentLocality,
+      city,
+      lookup.county,
+      country
+    ]
+  } else {
+    // The user typed their address in manually
+    lines = [
+      manual.line1,
+      manual.line2,
+      manual.line3,
+      city,
+      manual.line4, // County
+      manual.line5,
+      country
+    ]
+  }
+
+  return {
+    addressLines: lines.filter(Boolean).join(', '),
+    postcode: postcode || ''
+  }
+}

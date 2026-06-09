@@ -1,0 +1,60 @@
+{# Page: int-bv01 — Business overview (internal) #}
+{# TODO: Add pagination (20 per page) and alphabetical sorting when required #}
+{% extends 'common/layout.njk' %}
+
+{% from "common/navigation/sign-out-link.njk" import appSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appSignOutLink() }}
+
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="{{ searchResultsLink }}">Search results</a>
+      </li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">Single business identifier (SBI): {{ sbi }}</span>
+      {{ businessName }}
+    </h1>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-5">
+      Business details
+    </h2>
+
+    <p class="govuk-body">
+      <a href="#" class="govuk-link govuk-link--no-visited-state">View and update business details</a>
+    </p>
+  </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-top-5">
+  <div class="govuk-grid-column-two-thirds">
+    <table class="govuk-table">
+      <caption class="govuk-table__caption govuk-table__caption--m">Customers linked to this business</caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Customer name</th>
+          <th scope="col" class="govuk-table__header">Customer reference number (CRN)</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for customer in customers %}
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">{{ customer.name }}</a>
+          </th>
+          <td class="govuk-table__cell">{{ customer.crn }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

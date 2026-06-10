@@ -22,11 +22,6 @@ describe('change search criteria routes', () => {
     }
 
     request = {
-      yar: {
-        get: vi.fn(),
-        set: vi.fn(),
-        clear: vi.fn()
-      },
       payload: {}
     }
 
@@ -42,49 +37,10 @@ describe('change search criteria routes', () => {
       expect(getChangeSearchCriteria.path).toBe('/change-search-criteria')
     })
 
-    describe('when no search criteria is in session', () => {
-      beforeEach(() => {
-        request.yar.get.mockReturnValue(undefined)
-      })
+    test('it renders the search criteria page', async () => {
+      await getChangeSearchCriteria.handler(request, h)
 
-      test('it renders the search criteria page with no page data', async () => {
-        await getChangeSearchCriteria.handler(request, h)
-
-        expect(request.yar.get).toHaveBeenCalledWith('changeSearchCriteria')
-        expect(h.view).toHaveBeenCalledWith('search/change-search-criteria')
-        expect(h.redirect).not.toHaveBeenCalled()
-        expect(request.yar.clear).not.toHaveBeenCalled()
-      })
-    })
-
-    describe('when search criteria is in session', () => {
-      describe('when the stored criteria is sbi', () => {
-        beforeEach(() => {
-          request.yar.get.mockReturnValue({ searchCriteria: 'sbi' })
-        })
-
-        test('it clears session state and redirects to /search-sbi', async () => {
-          await getChangeSearchCriteria.handler(request, h)
-
-          expect(request.yar.clear).toHaveBeenCalledWith('changeSearchCriteria')
-          expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
-          expect(h.view).not.toHaveBeenCalled()
-        })
-      })
-
-      describe('when the stored criteria is crn', () => {
-        beforeEach(() => {
-          request.yar.get.mockReturnValue({ searchCriteria: 'crn' })
-        })
-
-        test('it clears session state and redirects to /search-crn', async () => {
-          await getChangeSearchCriteria.handler(request, h)
-
-          expect(request.yar.clear).toHaveBeenCalledWith('changeSearchCriteria')
-          expect(h.redirect).toHaveBeenCalledWith('/search-crn')
-          expect(h.view).not.toHaveBeenCalled()
-        })
-      })
+      expect(h.view).toHaveBeenCalledWith('search/change-search-criteria')
     })
   })
 
@@ -139,11 +95,10 @@ describe('change search criteria routes', () => {
         request.payload = { searchCriteria: 'sbi' }
       })
 
-      test('it stores the criteria in session and redirects to /change-search-criteria', async () => {
+      test('it redirects to /search-sbi', async () => {
         await postChangeSearchCriteria.options.handler(request, h)
 
-        expect(request.yar.set).toHaveBeenCalledWith('changeSearchCriteria', { searchCriteria: 'sbi' })
-        expect(h.redirect).toHaveBeenCalledWith('/change-search-criteria')
+        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
         expect(h.view).not.toHaveBeenCalled()
       })
     })
@@ -153,11 +108,10 @@ describe('change search criteria routes', () => {
         request.payload = { searchCriteria: 'crn' }
       })
 
-      test('it stores the criteria in session and redirects to /change-search-criteria', async () => {
+      test('it redirects to /search-crn', async () => {
         await postChangeSearchCriteria.options.handler(request, h)
 
-        expect(request.yar.set).toHaveBeenCalledWith('changeSearchCriteria', { searchCriteria: 'crn' })
-        expect(h.redirect).toHaveBeenCalledWith('/change-search-criteria')
+        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
         expect(h.view).not.toHaveBeenCalled()
       })
     })

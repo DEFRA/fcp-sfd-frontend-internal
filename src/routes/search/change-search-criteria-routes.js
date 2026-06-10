@@ -1,3 +1,6 @@
+import { utils } from '@defra/fcp-sfd-frontend-engine'
+
+import { searchCriteriaSchema } from '../../schemas/search/search-criteria-schema.js'
 import { BAD_REQUEST } from '../../constants/status-codes.js'
 
 const CHANGE_SEARCH_CRITERIA_PATH = '/change-search-criteria'
@@ -30,17 +33,22 @@ const getChangeSearchCriteria = {
 const postChangeSearchCriteria = {
   method: 'POST',
   path: CHANGE_SEARCH_CRITERIA_PATH,
-  handler: async (request, h) => {
-    const { searchCriteria } = request.payload
+  options: {
+    validate: {
+      payload: searchCriteriaSchema,
+      options: { abortEarly: false },
+      failAction: async (request, h, err) => {
+        const errors = utils.formatValidationErrors(err.details || [])
+        return h.view(CHANGE_SEARCH_CRITERIA_VIEW, { errors }).code(BAD_REQUEST).takeover()
+      }
+    },
+    handler: async (request, h) => {
+      const { searchCriteria } = request.payload
 
-    if (!searchCriteria) {
-      const errors = { searchCriteria: { text: 'Select what you want to search by' } }
-      return h.view(CHANGE_SEARCH_CRITERIA_VIEW, { errors }).code(BAD_REQUEST).takeover()
+      request.yar.set(CHANGE_SEARCH_CRITERIA_SESSION_KEY, { searchCriteria })
+
+      return h.redirect(CHANGE_SEARCH_CRITERIA_PATH)
     }
-
-    request.yar.set(CHANGE_SEARCH_CRITERIA_SESSION_KEY, { searchCriteria })
-
-    return h.redirect(CHANGE_SEARCH_CRITERIA_PATH)
   }
 }
 

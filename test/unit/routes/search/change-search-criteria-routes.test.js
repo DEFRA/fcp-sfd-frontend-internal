@@ -94,13 +94,23 @@ describe('change search criteria routes', () => {
       expect(postChangeSearchCriteria.path).toBe('/change-search-criteria')
     })
 
-    describe('when no option is selected', () => {
+    describe('when the validation fails', () => {
+      let err
+
       beforeEach(() => {
-        request.payload = {}
+        err = {
+          details: [
+            {
+              message: 'Select what you want to search by',
+              path: ['searchCriteria'],
+              type: 'any.required'
+            }
+          ]
+        }
       })
 
       test('it renders the view with a validation error and bad request status', async () => {
-        await postChangeSearchCriteria.handler(request, h)
+        await postChangeSearchCriteria.options.validate.failAction(request, h, err)
 
         expect(h.view).toHaveBeenCalledWith('search/change-search-criteria', {
           errors: {
@@ -111,8 +121,16 @@ describe('change search criteria routes', () => {
         })
         expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()
-        expect(request.yar.set).not.toHaveBeenCalled()
-        expect(h.redirect).not.toHaveBeenCalled()
+      })
+
+      test('it should handle undefined errors', async () => {
+        await postChangeSearchCriteria.options.validate.failAction(request, h, [])
+
+        expect(h.view).toHaveBeenCalledWith('search/change-search-criteria', {
+          errors: {}
+        })
+        expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
+        expect(responseStub.takeover).toHaveBeenCalled()
       })
     })
 
@@ -122,7 +140,7 @@ describe('change search criteria routes', () => {
       })
 
       test('it stores the criteria in session and redirects to /change-search-criteria', async () => {
-        await postChangeSearchCriteria.handler(request, h)
+        await postChangeSearchCriteria.options.handler(request, h)
 
         expect(request.yar.set).toHaveBeenCalledWith('changeSearchCriteria', { searchCriteria: 'sbi' })
         expect(h.redirect).toHaveBeenCalledWith('/change-search-criteria')
@@ -136,7 +154,7 @@ describe('change search criteria routes', () => {
       })
 
       test('it stores the criteria in session and redirects to /change-search-criteria', async () => {
-        await postChangeSearchCriteria.handler(request, h)
+        await postChangeSearchCriteria.options.handler(request, h)
 
         expect(request.yar.set).toHaveBeenCalledWith('changeSearchCriteria', { searchCriteria: 'crn' })
         expect(h.redirect).toHaveBeenCalledWith('/change-search-criteria')

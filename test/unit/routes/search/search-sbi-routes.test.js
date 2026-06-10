@@ -171,7 +171,8 @@ describe('search sbi routes', () => {
             sbi: {
               text: 'SBI must be 9 digits'
             }
-          }
+          },
+          showClear: true
         })
         expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()

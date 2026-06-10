@@ -14,7 +14,7 @@ const SEARCH_PATHS = {
 const getChangeSearchCriteria = {
   method: 'GET',
   path: CHANGE_SEARCH_CRITERIA_PATH,
-  handler: async (request, h) => {
+  handler: async (_request, h) => {
     return h.view(CHANGE_SEARCH_CRITERIA_VIEW)
   }
 }
@@ -26,7 +26,7 @@ const postChangeSearchCriteria = {
     validate: {
       payload: searchCriteriaSchema,
       options: { abortEarly: false },
-      failAction: async (request, h, err) => {
+      failAction: async (_request, h, err) => {
         const errors = utils.formatValidationErrors(err.details || [])
         return h.view(CHANGE_SEARCH_CRITERIA_VIEW, { errors }).code(BAD_REQUEST).takeover()
       }

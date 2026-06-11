@@ -171,7 +171,8 @@ describe('search crn routes', () => {
             crn: {
               text: 'Enter the full CRN'
             }
-          }
+          },
+          showClear: true
         })
         expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()

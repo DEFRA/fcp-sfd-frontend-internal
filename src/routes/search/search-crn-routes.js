@@ -45,7 +45,7 @@ const postSearchCrn = {
 
     if (validation.error) {
       const errors = utils.formatValidationErrors(validation.error.details || [])
-      const pageData = { ...payload, errors }
+      const pageData = { ...payload, errors, showClear: true }
 
       return h.view(SEARCH_CRN_VIEW, pageData).code(BAD_REQUEST).takeover()
     }

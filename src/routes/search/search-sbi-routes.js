@@ -45,7 +45,7 @@ const postSearchSbi = {
 
     if (validation.error) {
       const errors = utils.formatValidationErrors(validation.error.details || [])
-      const pageData = { ...payload, errors }
+      const pageData = { ...payload, errors, showClear: true }
 
       return h.view(SEARCH_SBI_VIEW, pageData).code(BAD_REQUEST).takeover()
     }

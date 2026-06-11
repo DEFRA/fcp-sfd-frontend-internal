@@ -80,4 +80,38 @@ describe('businessOverviewPresenter', () => {
       })
     })
   })
+
+  describe('the "pagination" property', () => {
+    test('it returns null when there are 20 or fewer customers', () => {
+      const result = businessOverviewPresenter(data)
+
+      expect(result.pagination).toBeNull()
+    })
+
+    test('it returns pagination data when there are more than 20 customers', () => {
+      data.customers = Array.from({ length: 25 }, (_, i) => ({
+        crn: `110000000${i}`,
+        firstName: `First${i}`,
+        lastName: `Last${i}`
+      }))
+
+      const result = businessOverviewPresenter(data)
+
+      expect(result.pagination).not.toBeNull()
+      expect(result.pagination.next).toBeDefined()
+    })
+
+    test('it slices customers to the current page', () => {
+      data.customers = Array.from({ length: 25 }, (_, i) => ({
+        crn: `110000000${i}`,
+        firstName: `First${i}`,
+        lastName: `Last${i}`
+      }))
+
+      const result = businessOverviewPresenter(data, 2)
+
+      expect(result.customers).toHaveLength(5)
+      expect(result.customers[0].name).toBe('First20 Last20')
+    })
+  })
 })

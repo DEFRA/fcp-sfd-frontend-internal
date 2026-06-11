@@ -12,7 +12,7 @@ const getBusinessOverview = {
   options: {
     validate: {
       query: schemas.business.sbi,
-      options: { abortEarly: false },
+      options: { abortEarly: false, allowUnknown: true },
       failAction: async (_request, h, err) => {
         const errors = utils.formatValidationErrors(err.details || [])
 
@@ -27,9 +27,10 @@ const getBusinessOverview = {
       }
 
       const email = request.auth.credentials?.email
+      const page = parseInt(request.query.page, 10) || 1
 
       const businessOverview = await fetchBusinessOverviewService(sbi, email)
-      const pageData = businessOverviewPresenter(businessOverview)
+      const pageData = businessOverviewPresenter(businessOverview, page)
 
       return h.view(BUSINESS_OVERVIEW_VIEW, pageData)
     }

@@ -155,10 +155,10 @@ describe('business overview routes', () => {
         expect(fetchBusinessOverviewService).toHaveBeenCalledWith('106705779', 'test.user@defra.gov.uk')
       })
 
-      test('should call presenter with service result', async () => {
+      test('should call presenter with service result and default page 1', async () => {
         await getBusinessOverview.options.handler(request, h)
 
-        expect(businessOverviewPresenter).toHaveBeenCalledWith(mappedData)
+        expect(businessOverviewPresenter).toHaveBeenCalledWith(mappedData, 1)
       })
 
       test('should render the business overview view with presented data', async () => {
@@ -179,6 +179,34 @@ describe('business overview routes', () => {
         await getBusinessOverview.options.handler(request, h)
 
         expect(fetchBusinessOverviewService).toHaveBeenCalledWith('106705779', 'test.user@defra.gov.uk')
+      })
+    })
+
+    describe('when page query param is provided', () => {
+      beforeEach(() => {
+        request.query.page = '3'
+        fetchBusinessOverviewService.mockResolvedValue(getMappedData())
+        businessOverviewPresenter.mockReturnValue(getPresentedData())
+      })
+
+      test('should pass the page number to the presenter', async () => {
+        await getBusinessOverview.options.handler(request, h)
+
+        expect(businessOverviewPresenter).toHaveBeenCalledWith(getMappedData(), 3)
+      })
+    })
+
+    describe('when page query param is not a number', () => {
+      beforeEach(() => {
+        request.query.page = 'abc'
+        fetchBusinessOverviewService.mockResolvedValue(getMappedData())
+        businessOverviewPresenter.mockReturnValue(getPresentedData())
+      })
+
+      test('should default to page 1', async () => {
+        await getBusinessOverview.options.handler(request, h)
+
+        expect(businessOverviewPresenter).toHaveBeenCalledWith(getMappedData(), 1)
       })
     })
   })

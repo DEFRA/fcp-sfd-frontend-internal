@@ -38,7 +38,8 @@ const getPresentedData = () => ({
     { name: 'Alice Smith', crn: '1100000001' },
     { name: 'Bob Jones', crn: '1100000002' },
     { name: 'Charlie Brown', crn: '1100000003' }
-  ]
+  ],
+  pagination: null
 })
 
 export {

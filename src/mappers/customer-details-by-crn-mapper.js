@@ -1,5 +1,3 @@
-import { mapAddress } from './address-mapper.js'
-
 /**
  * Takes the raw customer details by CRN data and maps it to a more usable format
  *
@@ -7,6 +5,8 @@ import { mapAddress } from './address-mapper.js'
  *
  * @returns {Object} Formatted customer details data
  */
+
+import { mappers } from '@defra/fcp-sfd-frontend-engine'
 
 export const mapCustomerDetailsByCrn = (value) => {
   const info = value?.customer?.info ?? {}
@@ -18,6 +18,6 @@ export const mapCustomerDetailsByCrn = (value) => {
       crn: value.customer.crn,
       customerName: `${name.first} ${name.last}`
     },
-    address: mapAddress(address)
+    address: mappers.address(address)
   }
 }

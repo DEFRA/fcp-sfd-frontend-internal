@@ -28,6 +28,7 @@ const postChangeSearchCriteria = {
       options: { abortEarly: false },
       failAction: async (_request, h, err) => {
         const errors = utils.formatValidationErrors(err.details || [])
+
         return h.view(CHANGE_SEARCH_CRITERIA_VIEW, { errors }).code(BAD_REQUEST).takeover()
       }
     },

@@ -1,5 +1,3 @@
-import { mapAddress } from './address-mapper.js'
-
 /**
  * Takes the raw business details by sbi data and maps it to a more usable format
  *
@@ -7,6 +5,8 @@ import { mapAddress } from './address-mapper.js'
  *
  * @returns {Object} Formatted business details data
  */
+
+import { mappers } from '@defra/fcp-sfd-frontend-engine'
 
 export const mapBusinessDetailsBySbi = (value) => {
   const address = value?.business?.info?.address ?? {}
@@ -19,8 +19,6 @@ export const mapBusinessDetailsBySbi = (value) => {
       traderNumber: info.traderNumber,
       vendorNumber: info.vendorNumber
     },
-    address: mapAddress(address, {
-      pafOrganisationName: address.pafOrganisationName
-    })
+    address: mappers.address(address)
   }
 }

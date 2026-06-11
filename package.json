@@ -29,6 +29,7 @@
     "test": "rm -rf ./coverage/** && vitest run --coverage",
     "test:watch": "vitest watch",
     "test:lint": "standard",
+    "sonar": "node scripts/sonar-scan.js",
     "start:debug": "nodemon --watch src --exec 'node --experimental-vm-modules --inspect-brk=0.0.0.0 src/index.js'",
     "server:watch": "nodemon --inspect=0.0.0.0 --ext js,njk --legacy-watch src/index.js",
     "server:watch:link-engine": "nodemon --config nodemon.link-engine.json --inspect=0.0.0.0 --legacy-watch src/index.js",

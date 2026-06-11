@@ -13,21 +13,21 @@ import { getMappedData, getPresentedData } from '../../../mocks/mock-business-ov
 import { businessOverviewRoutes } from '../../../../src/routes/business/business-overview-routes.js'
 const [getBusinessOverview] = businessOverviewRoutes
 
-const { mockValidate, mockFormatValidationErrors } = vi.hoisted(() => ({
-  mockValidate: vi.fn(),
-  mockFormatValidationErrors: vi.fn()
-}))
-
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
   schemas: {
     business: {
       sbi: {
-        validate: mockValidate
+        type: 'object'
       }
     }
   },
   utils: {
-    formatValidationErrors: mockFormatValidationErrors
+    formatValidationErrors: (details) => {
+      return details.reduce((acc, detail) => {
+        acc[detail.path[0]] = { text: detail.message }
+        return acc
+      }, {})
+    }
   }
 }))
 
@@ -49,7 +49,8 @@ describe('business overview routes', () => {
     vi.clearAllMocks()
 
     responseStub = {
-      code: vi.fn().mockReturnThis()
+      code: vi.fn().mockReturnThis(),
+      takeover: vi.fn().mockReturnThis()
     }
 
     request = {
@@ -75,13 +76,53 @@ describe('business overview routes', () => {
       expect(getBusinessOverview.path).toBe('/business-overview')
     })
 
+    describe('when the validation fails', () => {
+      let err
+
+      beforeEach(() => {
+        err = {
+          details: [
+            {
+              message: 'Enter the full SBI',
+              path: ['sbi'],
+              type: 'string.pattern.base'
+            }
+          ]
+        }
+      })
+
+      test('it renders the view with a validation error and bad request status', async () => {
+        await getBusinessOverview.options.validate.failAction(request, h, err)
+
+        expect(h.view).toHaveBeenCalledWith('business/business-overview', {
+          errors: {
+            sbi: {
+              text: 'Enter the full SBI'
+            }
+          }
+        })
+        expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
+        expect(responseStub.takeover).toHaveBeenCalled()
+      })
+
+      test('it should handle undefined errors', async () => {
+        await getBusinessOverview.options.validate.failAction(request, h, [])
+
+        expect(h.view).toHaveBeenCalledWith('business/business-overview', {
+          errors: {}
+        })
+        expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
+        expect(responseStub.takeover).toHaveBeenCalled()
+      })
+    })
+
     describe('when sbi query param is empty', () => {
       beforeEach(() => {
         request.query.sbi = ''
       })
 
       test('should redirect to search-sbi', async () => {
-        await getBusinessOverview.handler(request, h)
+        await getBusinessOverview.options.handler(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
       })
@@ -93,27 +134,9 @@ describe('business overview routes', () => {
       })
 
       test('should redirect to search-sbi', async () => {
-        await getBusinessOverview.handler(request, h)
+        await getBusinessOverview.options.handler(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
-      })
-    })
-
-    describe('when sbi validation fails', () => {
-      const mockErrors = { sbi: { text: 'Enter a valid SBI' } }
-
-      beforeEach(() => {
-        mockValidate.mockReturnValue({
-          error: { details: [{ path: ['sbi'], message: 'Enter a valid SBI' }] }
-        })
-        mockFormatValidationErrors.mockReturnValue(mockErrors)
-      })
-
-      test('should return the view with errors and a 400 status', async () => {
-        await getBusinessOverview.handler(request, h)
-
-        expect(h.view).toHaveBeenCalledWith('business/business-overview', { errors: mockErrors })
-        expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
       })
     })
 
@@ -122,25 +145,24 @@ describe('business overview routes', () => {
       const presentedData = getPresentedData()
 
       beforeEach(() => {
-        mockValidate.mockReturnValue({ value: { sbi: '106705779' } })
         fetchBusinessOverviewService.mockResolvedValue(mappedData)
         businessOverviewPresenter.mockReturnValue(presentedData)
       })
 
       test('should call service with sbi and email', async () => {
-        await getBusinessOverview.handler(request, h)
+        await getBusinessOverview.options.handler(request, h)
 
         expect(fetchBusinessOverviewService).toHaveBeenCalledWith('106705779', 'test.user@defra.gov.uk')
       })
 
       test('should call presenter with service result', async () => {
-        await getBusinessOverview.handler(request, h)
+        await getBusinessOverview.options.handler(request, h)
 
         expect(businessOverviewPresenter).toHaveBeenCalledWith(mappedData)
       })
 
       test('should render the business overview view with presented data', async () => {
-        await getBusinessOverview.handler(request, h)
+        await getBusinessOverview.options.handler(request, h)
 
         expect(h.view).toHaveBeenCalledWith('business/business-overview', presentedData)
       })
@@ -149,15 +171,14 @@ describe('business overview routes', () => {
     describe('when sbi has leading/trailing whitespace', () => {
       beforeEach(() => {
         request.query.sbi = '  106705779  '
-        mockValidate.mockReturnValue({ value: { sbi: '106705779' } })
         fetchBusinessOverviewService.mockResolvedValue(getMappedData())
         businessOverviewPresenter.mockReturnValue(getPresentedData())
       })
 
-      test('should trim the sbi before validation', async () => {
-        await getBusinessOverview.handler(request, h)
+      test('should trim the sbi before calling the service', async () => {
+        await getBusinessOverview.options.handler(request, h)
 
-        expect(mockValidate).toHaveBeenCalledWith({ sbi: '106705779' })
+        expect(fetchBusinessOverviewService).toHaveBeenCalledWith('106705779', 'test.user@defra.gov.uk')
       })
     })
   })

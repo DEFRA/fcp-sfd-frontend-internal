@@ -17,6 +17,8 @@ const searchSbiPresenter = (businessDetails, payload) => {
     businessVendorNumber: businessDetails?.info?.vendorNumber || '',
     businessAddress: addressLines,
     businessPostcode: postcode,
+    businessOverviewLink: `/business-overview?sbi=${payload ?? ''}`,
+    clearSearchLink: '/search-sbi',
     resultText,
     showResults: true,
     showBusinessDetails: Boolean(businessDetails),

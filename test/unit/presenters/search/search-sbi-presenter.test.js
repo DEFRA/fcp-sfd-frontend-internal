@@ -27,6 +27,8 @@ describe('searchSbiPresenter', () => {
         businessVendorNumber: '673920',
         businessAddress: 'Herberts Lawn Mowing Ltd, Flat 2, The Lawn Building, 14 Chip Lane, Chip Lane Area, Taunton Borough, Taunton, Somerset, England',
         businessPostcode: 'TA1 1AA',
+        businessOverviewLink: '/business-overview?sbi=106705779',
+        clearSearchLink: '/search-sbi',
         resultText: '1 result for "106705779"',
         showResults: true,
         showBusinessDetails: true,
@@ -156,6 +158,20 @@ describe('searchSbiPresenter', () => {
         const result = searchSbiPresenter(data, payload)
 
         expect(result.sbi).toEqual('')
+      })
+    })
+  })
+
+  describe('the "businessOverviewLink" property', () => {
+    describe('when payload is missing', () => {
+      beforeEach(() => {
+        payload = null
+      })
+
+      test('it should return the link with an empty sbi', () => {
+        const result = searchSbiPresenter(data, payload)
+
+        expect(result.businessOverviewLink).toBe('/business-overview?sbi=')
       })
     })
   })

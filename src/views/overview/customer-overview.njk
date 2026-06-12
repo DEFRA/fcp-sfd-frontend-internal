@@ -1,0 +1,61 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "common/navigation/breadcrumbs-sign-out-link.njk" import appBreadcrumbsSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appBreadcrumbsSignOutLink({breadcrumbs: breadcrumbs }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+        <span class="govuk-caption-l">Customer reference number (CRN): {{ crn }}</span>
+        {{ customerName }}
+      </h1>
+
+      <h2 class="govuk-heading-m govuk-!-margin-top-5">Personal details</h2>
+      <p class="govuk-body"><a href="details-personal-details?view=int" class="govuk-link--no-visited-state">View and update personal details</a></p>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row govuk-!-margin-top-5">
+    <div class="govuk-grid-column-two-thirds">
+      {% if hasBusinesses %}
+        {{ govukTable({
+          caption: "Businesses linked to this customer",
+          captionClasses: "govuk-table__caption--m",
+          firstCellIsHeader: true,
+          head: [
+            {
+              text: "Business name"
+            },
+            {
+              text: "Single business identifier (SBI)"
+            }
+          ],
+          rows: businesses.rows
+        }) }}
+
+      {% if pagination.numberOfPages > 1 %}
+        <div class="govuk-grid-row govuk-!-margin-top-9">
+          <div class="govuk-grid-column-full">
+            {{ govukPagination(pagination.component) }}
+          </div>
+        </div>
+
+      <p class="govuk-body">Showing <b>{{ pagination.startItem }}</b> to <b>{{ pagination.endItem }}</b> of <b>{{ pagination.paginationTotal }}</b> businesses</p>
+      {% endif %}
+        {% else %}
+          <p class="govuk-body">No businesses linked to this customer.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

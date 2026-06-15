@@ -6,6 +6,8 @@
  * @returns {Object} Formatted customer details data
  */
 
+import { mappers } from '@defra/fcp-sfd-frontend-engine'
+
 export const mapCustomerDetailsByCrn = (value) => {
   const info = value?.customer?.info ?? {}
   const name = info?.name ?? {}
@@ -16,27 +18,6 @@ export const mapCustomerDetailsByCrn = (value) => {
       crn: value.customer.crn,
       customerName: `${name.first} ${name.last}`
     },
-    address: {
-      lookup: {
-        buildingNumberRange: address.buildingNumberRange,
-        flatName: address.flatName,
-        buildingName: address.buildingName,
-        dependentLocality: address.dependentLocality,
-        doubleDependentLocality: address.doubleDependentLocality,
-        street: address.street,
-        county: address.county,
-        uprn: address.uprn
-      },
-      manual: {
-        line1: address.line1,
-        line2: address.line2,
-        line3: address.line3,
-        line4: address.line4,
-        line5: address.line5
-      },
-      city: address.city,
-      postcode: address.postalCode,
-      country: address.country
-    }
+    address: mappers.address(address)
   }
 }

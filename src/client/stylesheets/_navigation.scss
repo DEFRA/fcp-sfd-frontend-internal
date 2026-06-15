@@ -1,66 +1,61 @@
 @use "govuk-frontend" as *;
-@use "variables/colours" as *;
 
-$navigation-height: 60px;
-$border-bottom-width: 4px;
-
-.app-navigation {
-  border-bottom: 1px solid govuk-colour("mid-grey");
-  background-color: $app-light-grey;
+// Login/sign-out navigation
+.login-nav {
+  @include govuk-clearfix;
+  @include govuk-font($size: 16);
+  @include govuk-text-colour;
+  margin-top: 15px;
 }
 
-.app-navigation__list {
+.login-nav-aligned {
+  float: right;
+}
+
+.login-nav__list {
   margin: 0;
   padding: 0;
-  list-style: none;
-
-  @include govuk-media-query($from: tablet) {
-    display: flex;
-    height: $navigation-height;
-    height: govuk-px-to-rem($navigation-height);
-  }
+  list-style-type: none;
+  float: right;
 }
 
-.app-navigation__list-item {
-  margin: 0 govuk-spacing(2) 0 0;
-
-  > a:focus {
-    box-shadow: none;
-    border-bottom: $border-bottom-width solid govuk-colour("black");
-  }
+.login-nav__list-item {
+  position: relative;
+  margin-bottom: govuk-spacing(1);
+  margin-right: govuk-spacing(4);
+  padding-left: 0;
+  float: left;
 }
 
-.app-navigation__link {
-  border: 0;
-  margin: govuk-spacing(2) 0 govuk-spacing(1);
-  padding-bottom: govuk-spacing(1);
-  display: inline-block;
-  text-decoration: none;
-  border-bottom: 4px solid transparent;
-
-  @include govuk-link-style-no-visited-state;
-  @include govuk-font(24, "bold");
-
-  @include govuk-media-query($from: tablet) {
-    padding-bottom: 0;
-    margin: 0;
-    display: flex;
-    height: $navigation-height - $border-bottom-width;
-    height: govuk-px-to-rem($navigation-height - $border-bottom-width);
-    align-items: center;
-  }
-
-  &:hover {
-    color: govuk-colour("black");
-    border-bottom: $border-bottom-width solid govuk-colour("black");
-  }
+.login-nav__list li:last-child {
+  margin-right: govuk-spacing(0);
 }
 
-.app-navigation__link--active {
-  border-bottom: $border-bottom-width solid govuk-colour("blue");
+a.login-nav__link:link {
+  margin-right: govuk-spacing(1);
+  color: #0b0c0c;
+}
 
-  &:hover {
-    color: govuk-colour("dark-blue");
-    border-bottom: $border-bottom-width solid govuk-colour("dark-blue");
+.login-nav__list li:last-child a.login-nav__link:link {
+  margin-right: govuk-spacing(0);
+}
+
+a.login-nav__link:visited {
+  color: #0b0c0c;
+}
+
+a.login-nav__link:hover {
+  color: rgba(11, 12, 12, 0.99);
+}
+
+a.login-nav-iahw__link:link,
+a.login-nav-iahw__link:visited,
+a.login-nav-iahw__link:hover {
+  color: $govuk-link-colour;
+}
+
+@media all and (max-width: 40.0625em) {
+  .login-nav__list {
+    float: none;
   }
 }

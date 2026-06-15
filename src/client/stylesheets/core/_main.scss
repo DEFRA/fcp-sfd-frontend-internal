@@ -11,3 +11,62 @@
 .display-inline {
   display: inline;
 }
+
+.login-nav {
+  @include govuk-clearfix;
+  @include govuk-font($size: 16);
+  @include govuk-text-colour;
+  margin-top: 15px;
+}
+
+.login-nav-aligned {
+  float: right;
+}
+
+.login-nav__list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  float: right;
+}
+
+.login-nav__list-item {
+  position: relative;
+  margin-bottom: govuk-spacing(1);
+  margin-right: govuk-spacing(4);
+  padding-left: 0;
+  float: left;
+}
+
+.login-nav__list li:last-child {
+  margin-right: govuk-spacing(0);
+}
+
+a.login-nav__link:link {
+  margin-right: govuk-spacing(1);
+  color: #0b0c0c;
+}
+
+.login-nav__list li:last-child a.login-nav__link:link {
+  margin-right: govuk-spacing(0);
+}
+
+a.login-nav__link:visited {
+  color: #0b0c0c;
+}
+
+a.login-nav__link:hover {
+  color: rgba(11, 12, 12, 0.99);
+}
+
+a.login-nav-iahw__link:link,
+a.login-nav-iahw__link:visited,
+a.login-nav-iahw__link:hover {
+  color: $govuk-link-colour;
+}
+
+@media all and (max-width: 40.0625em) {
+  .login-nav__list {
+    float: none;
+  }
+}

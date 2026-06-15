@@ -113,7 +113,7 @@ const PAGE_SIZE = 20
 const paginationPresenter = (numberOfRecords, pageNumber, path, numberOfShownItems, message, queryArgs = {}) => {
   // Round up the number of pages to the nearest whole number as we can't have a fraction of a page
   const numberOfPages = Math.ceil(numberOfRecords / PAGE_SIZE)
-  const builtQueryString = queryString(queryArgs)
+  const builtQueryString = buildQueryString(queryArgs)
 
   const currentPageNumber = pageNumber ? Number(pageNumber) : 1
   const { startItem, endItem, paginationTotal } = showingRange(numberOfRecords, numberOfShownItems, currentPageNumber)
@@ -207,12 +207,12 @@ const complexPaginatorStart = (currentPageNumber, numberOfPages, path, queryStri
  *
  * @returns {string} formatted query string with leading '&' (e.g. '&search=test&status=active'), or empty string if no args
  */
-const queryString = (queryArgs) => {
+const buildQueryString = (queryArgs) => {
   const params = new URLSearchParams(queryArgs)
-  const queryString = params.toString()
+  const queryParamsString = params.toString()
 
   // Return with '&' prefix if there are params, or empty string if none
-  return queryString ? `&${queryString}` : ''
+  return queryParamsString ? `&${queryParamsString}` : ''
 }
 
 /**

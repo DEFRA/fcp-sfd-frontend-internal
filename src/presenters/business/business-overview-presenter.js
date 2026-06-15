@@ -46,7 +46,13 @@ const businessOverviewPresenter = (data, page = 1) => {
     sbi: data.sbi,
     businessName: data.businessName,
     customers: paginatedCustomers, // Only the slice for the current page
-    pagination // null (no component) or { previous, next, items } for govukPagination
+    pagination, // null (no component) or { previous, next, items } for govukPagination
+    breadcrumbs: [
+      {
+        text: 'Search results',
+        href: '/search-sbi'
+      }
+    ]
   }
 }
 

@@ -1,19 +1,13 @@
-{# Page: int-bv01 — Business overview (internal) #}
 {% extends 'common/layout.njk' %}
 
-{% from "common/navigation/sign-out-link.njk" import appSignOutLink with context %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "common/navigation/breadcrumbs-sign-out-link.njk" import appBreadcrumbsSignOutLink with context %}
 
 {% block beforeContent %}
-  {{ appSignOutLink() }}
-
-  <div class="govuk-breadcrumbs">
-    <ol class="govuk-breadcrumbs__list">
-      <li class="govuk-breadcrumbs__list-item">
-        <a class="govuk-breadcrumbs__link" href="{{ searchResultsLink }}">Search results</a>
-      </li>
-    </ol>
-  </div>
+  {{ appBreadcrumbsSignOutLink({ breadcrumbs: breadcrumbs }) }}
 {% endblock %}
 
 {% block content %}

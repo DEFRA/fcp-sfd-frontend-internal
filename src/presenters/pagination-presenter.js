@@ -21,11 +21,11 @@ const PAGE_SIZE = 20
  * `<- Previous 1 ... 6 [7] 8 ... 42 Next ->`
  *
  * The first step is to take the total number of records and divide them by our page size config (currently defaults to
- * 20) to determine how many pages are needed. If only 1 page is required (`numberOfRecords` is less then or equal to
+ * 20) to determine how many pages are needed. If only 1 page is required (`numberOfRecords` is less than or equal to
  * 20) no pagination is needed and the presenter doesn't generate the component data.
  *
  * If pagination is needed, the next step is to determine the type. This is because the paginator is expected to behave
- * and display differently depending on the number of pages and which page is selected.
+ * differently depending on the number of pages and which page is selected.
  *
  * ## Previous & Next
  *

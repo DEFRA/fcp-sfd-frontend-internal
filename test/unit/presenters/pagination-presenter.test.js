@@ -7,7 +7,7 @@ import { paginationPresenter } from '../../../src/presenters/pagination-presente
 describe('Paginator Presenter', () => {
   const path = '/search-sbi'
 
-  // NOTE: We set the number to records according to the default page size we use in these tests (20) to get the number
+// We set the number of records to match the default page size used in these tests (20), so we get the expected number of pages
   // to pages we expect
   let numberOfRecords
   let queryArgs
@@ -16,7 +16,7 @@ describe('Paginator Presenter', () => {
   let message
 
   beforeEach(async () => {
-    // The default page count is used, as the queries will be returning this amount.
+    // Use the default page size (20), as this is what the queries return
     currentAmount = 20
     message = 'businesses'
   })
@@ -27,7 +27,7 @@ describe('Paginator Presenter', () => {
         numberOfRecords = 1
       })
 
-      test('returns just the number to pages calculated (no pagination component returned)', () => {
+      test('returns just the number of pages calculated (no pagination component returned)', () => {
         const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
         expect(result).toMatchObject({

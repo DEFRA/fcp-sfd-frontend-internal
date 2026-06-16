@@ -1,25 +1,21 @@
 /**
- * Formats data ready for presenting in the `/search-crn` page
+ * Formats data ready for presenting in the `/customer-overview/{crn}` page
  * @module customerOverviewPresenter
  */
 
 import { paginationPresenter } from '../pagination-presenter.js'
+import { CUSTOMER_OVERVIEW_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 
-const PAGE_SIZE = 20
-
-const customerOverviewPresenter = (customerDetails, pageNumber) => {
+const customerOverviewPresenter = (customerDetails, page) => {
   const businesses = customerDetails?.businesses ?? []
-  const totalBusinesses = businesses.length
-  const requestedPageNumber = normalisePageNumber(pageNumber)
-  const currentPageNumber = clampPageNumber(requestedPageNumber, totalBusinesses)
-  const pagedBusinesses = paginateBusinesses(businesses, currentPageNumber)
-  const pagination = paginationPresenter(
-    totalBusinesses,
-    currentPageNumber,
-    `/customer-overview/${customerDetails?.info?.crn}`,
-    pagedBusinesses.length,
-    'businesses'
-  )
+
+  const { sortedBusinesses, totalBusinesses } = sortAndCountBusinesses(businesses)
+  const requestedPageNumber = normalisePageNumber(page)
+  const currentPage = clampPageNumber(requestedPageNumber, totalBusinesses)
+  const pagedBusinesses = paginateBusinesses(sortedBusinesses, currentPage)
+  const routeURL = `/customer-overview/${customerDetails?.info?.crn}`
+
+  const pagination = paginationPresenter(totalBusinesses, currentPage, routeURL, pagedBusinesses.length, 'businesses')
 
   return {
     customerName: customerDetails?.info?.customerName || '',
@@ -30,7 +26,7 @@ const customerOverviewPresenter = (customerDetails, pageNumber) => {
     breadcrumbs: [
       {
         text: 'Search results',
-        href: '/search-sbi'
+        href: '/search-crn'
       }
     ]
   }
@@ -40,14 +36,43 @@ const customerOverviewPresenter = (customerDetails, pageNumber) => {
  * Converts whatever page number came from the URL query into a valid number
  * @private
  */
-const normalisePageNumber = (pageNumber) => {
-  const parsedPage = Number(pageNumber)
+const normalisePageNumber = (page) => {
+  const parsedPage = Number(page)
 
   if (!Number.isInteger(parsedPage) || parsedPage < 1) {
     return 1
   }
 
   return parsedPage
+}
+
+/**
+ * Sorts a list of businesses by their name in alphabetical order (A → Z).
+ *
+ * - Does NOT change the original array (it creates a copy first)
+ * - Sorting is case-insensitive (e.g. "apple" and "Apple" are treated the same)
+ *
+ * localeCompare compares two strings:
+ * - returns < 0 if a comes before b
+ * - returns 0 if they are equal
+ * - returns > 0 if a comes after b
+ *
+ * @private
+ */
+const sortAndCountBusinesses = (businesses) => {
+  const businessesCopy = [...businesses]
+
+  // Sort alphabetically by business name
+  const sortedBusinesses = businessesCopy.sort((a, b) => {
+    const nameA = (a?.name ?? '').toLowerCase()
+    const nameB = (b?.name ?? '').toLowerCase()
+
+    return nameA.localeCompare(nameB)
+  })
+
+  const totalBusinesses = sortedBusinesses.length
+
+  return { sortedBusinesses, totalBusinesses }
 }
 
 /**
@@ -78,9 +103,9 @@ const clampPageNumber = (requestedPageNumber, totalBusinesses) => {
  * Returns only the businesses for the current page.
  * @private
  */
-const paginateBusinesses = (businesses, currentPageNumber) => {
+const paginateBusinesses = (businesses, currentPage) => {
   // Page 1 starts at index 0, page 2 starts at index 20, etc.
-  const pageOffset = currentPageNumber - 1
+  const pageOffset = currentPage - 1
   const startIndex = pageOffset * PAGE_SIZE
 
   // Include up to PAGE_SIZE items from the starting index.

@@ -30,6 +30,12 @@ export const dalConfig = {
       default: null,
       env: 'DAL_CLIENT_SECRET',
       sensitive: true
+    },
+    emailHeader: {
+      doc: 'Email address to use for testing the DAL email header feature',
+      format: String,
+      default: null,
+      env: 'DAL_EMAIL_HEADER'
     }
   }
 }

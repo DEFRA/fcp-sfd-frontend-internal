@@ -12,7 +12,7 @@ export const mapCustomerOverviewDetails = (value) => {
   return {
     info: {
       crn: value?.customer?.crn,
-      customerName: `${name.first} ${name.last}`
+      customerName: `${name.first ?? ''} ${name.last ?? ''}`.trim()
     },
     businesses: formatBusinesses(value?.customer?.businesses ?? [])
   }

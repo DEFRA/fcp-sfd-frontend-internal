@@ -54,10 +54,34 @@ describe('customer overview details mapper', () => {
       rawData.customer.info.name = null
     })
 
-    test('it maps name fields to undefined without crashing', () => {
+    test('it maps to an empty string when name is missing', () => {
       const result = mapCustomerOverviewDetails(rawData)
 
-      expect(result.info.customerName).toEqual('undefined undefined')
+      expect(result.info.customerName).toEqual('')
+    })
+  })
+
+  describe('when only the first name is provided', () => {
+    beforeEach(() => {
+      rawData.customer.info.name = { first: 'Jane', last: null }
+    })
+
+    test('it returns only the first name trimmed', () => {
+      const result = mapCustomerOverviewDetails(rawData)
+
+      expect(result.info.customerName).toEqual('Jane')
+    })
+  })
+
+  describe('when only the last name is provided', () => {
+    beforeEach(() => {
+      rawData.customer.info.name = { first: null, last: 'Smith' }
+    })
+
+    test('it returns only the last name trimmed', () => {
+      const result = mapCustomerOverviewDetails(rawData)
+
+      expect(result.info.customerName).toEqual('Smith')
     })
   })
 

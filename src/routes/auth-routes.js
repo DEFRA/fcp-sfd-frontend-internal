@@ -1,6 +1,7 @@
 import { getSignOutUrl } from '../auth/get-sign-out-url.js'
 import { validateState } from '../auth/state.js'
 import { verifyToken } from '../auth/verify-token.js'
+import { config } from '../config/index.js'
 
 const signIn = {
   method: 'GET',
@@ -32,6 +33,13 @@ const signInOidc = {
     await verifyToken(token)
 
     const { sessionId, roles } = profile
+
+    // TEMPORARY CODE FOR TESTING PURPOSES ONLY - REMOVE WHEN DAL TEST EMAIL FEATURE IS NO LONGER NEEDED
+    // Check if DAL test email feature is enabled
+    if (config.get('featureToggle.useDalTestEmail')) {
+      profile.email = config.get('dalConfig.emailHeader')
+    }
+
     // Store token and all useful data in the session cache
     await request.server.app.cache.set(sessionId, {
       isAuthenticated: true,

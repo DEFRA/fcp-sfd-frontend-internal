@@ -62,17 +62,17 @@ const normalisePageNumber = (page) => {
 const sortAndCountBusinesses = (businesses) => {
   const businessesCopy = [...businesses]
 
-  // Sort alphabetically by business name
-  const sortedBusinesses = businessesCopy.sort((a, b) => {
+  businessesCopy.sort((a, b) => {
     const nameA = (a?.name ?? '').toLowerCase()
     const nameB = (b?.name ?? '').toLowerCase()
 
     return nameA.localeCompare(nameB)
   })
 
-  const totalBusinesses = sortedBusinesses.length
-
-  return { sortedBusinesses, totalBusinesses }
+  return {
+    sortedBusinesses: businessesCopy,
+    totalBusinesses: businessesCopy.length
+  }
 }
 
 /**

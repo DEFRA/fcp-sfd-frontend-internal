@@ -86,11 +86,7 @@ const clampPageNumber = (requestedPageNumber, totalBusinesses) => {
   const totalPages = Math.ceil(totalBusinesses / PAGE_SIZE)
 
   // When there are no businesses we still treat page 1 as the only valid page.
-  let maxPageNumber = totalPages
-
-  if (maxPageNumber < 1) {
-    maxPageNumber = 1
-  }
+  const maxPageNumber = Math.max(totalPages, 1)
 
   if (requestedPageNumber > maxPageNumber) {
     return maxPageNumber
@@ -104,15 +100,10 @@ const clampPageNumber = (requestedPageNumber, totalBusinesses) => {
  * @private
  */
 const paginateBusinesses = (businesses, currentPage) => {
-  // Page 1 starts at index 0, page 2 starts at index 20, etc.
-  const pageOffset = currentPage - 1
-  const startIndex = pageOffset * PAGE_SIZE
-
-  // Include up to PAGE_SIZE items from the starting index.
+  const startIndex = (currentPage - 1) * PAGE_SIZE
   const endIndex = startIndex + PAGE_SIZE
-  const businessesForCurrentPage = businesses.slice(startIndex, endIndex)
 
-  return businessesForCurrentPage
+  return businesses.slice(startIndex, endIndex)
 }
 
 const formatBusinessesToRows = (businesses = []) => {

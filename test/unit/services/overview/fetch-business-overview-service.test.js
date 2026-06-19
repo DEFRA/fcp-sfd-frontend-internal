@@ -2,13 +2,10 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 
 // Things we need to mock
-import { businessOverviewQuery } from '../../../../src/dal/queries/overview/business-details-overview.js'
-
-// Test helpers
-import { getDalData, getMappedData } from '../../../mocks/mock-business-overview.js'
+import { businessDetailsOverview } from '../../../../src/dal/queries/overview/business-details-overview.js'
 
 // Mock dependencies
-const mockMapBusinessOverview = vi.fn()
+const mockMapBusinessOverviewDetails = vi.fn()
 const mockDalConnector = { query: vi.fn() }
 
 // Mock imports
@@ -17,13 +14,13 @@ vi.mock('../../../../src/dal/connector.js', () => ({
 }))
 
 vi.mock('../../../../src/mappers/overview/business-overview-details-mapper.js', () => ({
-  mapBusinessOverview: mockMapBusinessOverview
+  mapBusinessOverviewDetails: mockMapBusinessOverviewDetails
 }))
 
 // Thing under test
-const { fetchBusinessOverviewService } = await import('../../../../src/services/overview/fetch-business-overview-service.js')
+const { fetchBusinessOverviewDetailsService } = await import('../../../../src/services/overview/fetch-business-overview-details-service.js')
 
-describe('fetchBusinessOverviewService', () => {
+describe('fetchBusinessOverviewDetailsService', () => {
   let sbi
   let email
   let dalData
@@ -35,58 +32,59 @@ describe('fetchBusinessOverviewService', () => {
     sbi = '106705779'
     email = 'test.user@defra.gov.uk'
 
-    dalData = getDalData()
-    mappedData = getMappedData()
+    dalData = {
+      business: {
+        sbi: '106705779',
+        info: { name: 'Herberts Lawn Mowing' },
+        customers: [
+          { crn: '1100000001', firstName: 'Alice', lastName: 'Smith' }
+        ]
+      }
+    }
+
+    mappedData = {
+      sbi: '106705779',
+      businessName: 'Herberts Lawn Mowing',
+      customers: [
+        { crn: '1100000001', firstName: 'Alice', lastName: 'Smith' }
+      ]
+    }
   })
 
   describe('when DAL returns data', () => {
     beforeEach(() => {
       mockDalConnector.query.mockResolvedValue({ data: dalData })
-      mockMapBusinessOverview.mockReturnValue(mappedData)
+      mockMapBusinessOverviewDetails.mockReturnValue(mappedData)
     })
 
-    test('should call DAL connector with businessOverviewQuery and sbi', async () => {
-      await fetchBusinessOverviewService(sbi, email)
+    test('should call DAL connector with businessDetailsOverview and sbi', async () => {
+      await fetchBusinessOverviewDetailsService(sbi, email)
 
       expect(mockDalConnector.query).toHaveBeenCalledWith(
-        businessOverviewQuery,
+        businessDetailsOverview,
         { sbi },
         email
       )
     })
 
     test('should return mapped data', async () => {
-      const result = await fetchBusinessOverviewService(sbi, email)
+      const result = await fetchBusinessOverviewDetailsService(sbi, email)
 
+      expect(mockDalConnector.query).toHaveBeenCalled()
+      expect(mockMapBusinessOverviewDetails).toHaveBeenCalledWith(dalData)
       expect(result).toEqual(mappedData)
-    })
-
-    test('should call mapper with DAL data', async () => {
-      await fetchBusinessOverviewService(sbi, email)
-
-      expect(mockMapBusinessOverview).toHaveBeenCalledWith(dalData)
     })
   })
 
-  describe('when DAL returns no data', () => {
+  describe('when the DAL returns no data', () => {
     beforeEach(() => {
       mockDalConnector.query.mockResolvedValue({ data: null })
     })
 
-    test('should throw an error', async () => {
-      await expect(fetchBusinessOverviewService(sbi, email))
-        .rejects.toThrow('Failed to retrieve business overview')
-    })
-  })
+    test('should throw a generic error', async () => {
+      await expect(fetchBusinessOverviewDetailsService(sbi, email)).rejects.toThrowError('Failed to retrieve business details')
 
-  describe('when DAL returns undefined data', () => {
-    beforeEach(() => {
-      mockDalConnector.query.mockResolvedValue({})
-    })
-
-    test('should throw an error', async () => {
-      await expect(fetchBusinessOverviewService(sbi, email))
-        .rejects.toThrow('Failed to retrieve business overview')
+      expect(mockMapBusinessOverviewDetails).not.toHaveBeenCalled()
     })
   })
 })

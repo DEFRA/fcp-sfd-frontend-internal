@@ -2,19 +2,17 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 
 // Things we need to mock
-import { fetchBusinessOverviewService } from '../../../../src/services/overview/fetch-business-overview-details-service.js'
+import { fetchBusinessOverviewDetailsService } from '../../../../src/services/overview/fetch-business-overview-details-service.js'
 import { businessOverviewPresenter } from '../../../../src/presenters/overview/business-overview-presenter.js'
-
-// Test helpers
-import { getMappedData } from '../../../mocks/mock-business-overview.js'
 
 // Thing under test
 import { businessOverviewRoutes } from '../../../../src/routes/overview/business-overview-routes.js'
+
 const [getBusinessOverview] = businessOverviewRoutes
 
 // Mocks
-vi.mock('../../../../src/services/overview/fetch-business-overview-service.js', () => ({
-  fetchBusinessOverviewService: vi.fn()
+vi.mock('../../../../src/services/overview/fetch-business-overview-details-service.js', () => ({
+  fetchBusinessOverviewDetailsService: vi.fn()
 }))
 
 vi.mock('../../../../src/presenters/overview/business-overview-presenter.js', () => ({
@@ -24,20 +22,17 @@ vi.mock('../../../../src/presenters/overview/business-overview-presenter.js', ()
 describe('business overview routes', () => {
   let request
   let h
-  let mappedData
-  let presentedData
 
   beforeEach(() => {
     vi.clearAllMocks()
 
-    mappedData = getMappedData()
-    presentedData = { sbi: '106705779', businessName: 'Herberts Lawn Mowing', customers: [], pagination: null }
-
     request = {
+      query: {
+        page: '2'
+      },
       params: {
         sbi: '106705779'
       },
-      query: {},
       auth: {
         credentials: {
           email: 'test.user@defra.gov.uk'
@@ -56,42 +51,60 @@ describe('business overview routes', () => {
       expect(getBusinessOverview.path).toBe('/business-overview/{sbi}')
     })
 
-    describe('when sbi is valid', () => {
+    describe('when auth credentials contain an email', () => {
+      const businessDetails = {
+        sbi: '106705779',
+        businessName: 'Herberts Lawn Mowing',
+        customers: []
+      }
+      const pageData = {
+        sbi: '106705779',
+        businessName: 'Herberts Lawn Mowing',
+        hasCustomers: false,
+        customers: { rows: [] },
+        pagination: null
+      }
+
       beforeEach(() => {
-        fetchBusinessOverviewService.mockResolvedValue(mappedData)
-        businessOverviewPresenter.mockReturnValue(presentedData)
+        fetchBusinessOverviewDetailsService.mockResolvedValue(businessDetails)
+        businessOverviewPresenter.mockReturnValue(pageData)
       })
 
-      test('should call service with sbi and email', async () => {
+      test('it fetches details, presents them and renders the business overview page', async () => {
         await getBusinessOverview.handler(request, h)
 
-        expect(fetchBusinessOverviewService).toHaveBeenCalledWith('106705779', 'test.user@defra.gov.uk')
-      })
-
-      test('should call presenter with service result and page from query', async () => {
-        await getBusinessOverview.handler(request, h)
-
-        expect(businessOverviewPresenter).toHaveBeenCalledWith(mappedData, undefined)
-      })
-
-      test('should render the business overview view with presented data', async () => {
-        await getBusinessOverview.handler(request, h)
-
-        expect(h.view).toHaveBeenCalledWith('business/business-overview', presentedData)
+        expect(fetchBusinessOverviewDetailsService).toHaveBeenCalledWith('106705779', 'test.user@defra.gov.uk')
+        expect(businessOverviewPresenter).toHaveBeenCalledWith(businessDetails, '2')
+        expect(h.view).toHaveBeenCalledWith('overview/business-overview', pageData)
       })
     })
 
-    describe('when page query param is provided', () => {
+    describe('when auth credentials have no email', () => {
+      const businessDetails = {
+        sbi: '106705779',
+        businessName: 'Herberts Lawn Mowing',
+        customers: []
+      }
+      const pageData = {
+        sbi: '106705779',
+        businessName: 'Herberts Lawn Mowing',
+        hasCustomers: false,
+        customers: { rows: [] },
+        pagination: null
+      }
+
       beforeEach(() => {
-        request.query.page = '3'
-        fetchBusinessOverviewService.mockResolvedValue(mappedData)
-        businessOverviewPresenter.mockReturnValue(presentedData)
+        request.auth = { credentials: undefined }
+        fetchBusinessOverviewDetailsService.mockResolvedValue(businessDetails)
+        businessOverviewPresenter.mockReturnValue(pageData)
       })
 
-      test('should pass the page to the presenter', async () => {
+      test('it passes undefined email to the service and still renders the page', async () => {
         await getBusinessOverview.handler(request, h)
 
-        expect(businessOverviewPresenter).toHaveBeenCalledWith(mappedData, '3')
+        expect(fetchBusinessOverviewDetailsService).toHaveBeenCalledWith('106705779', undefined)
+        expect(businessOverviewPresenter).toHaveBeenCalledWith(businessDetails, '2')
+        expect(h.view).toHaveBeenCalledWith('overview/business-overview', pageData)
       })
     })
   })

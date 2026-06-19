@@ -6,7 +6,7 @@
  * @returns {Object} Formatted business overview details data
  */
 
-export const mapBusinessOverview = (value) => {
+export const mapBusinessOverviewDetails = (value) => {
   const business = value?.business ?? {}
 
   return {

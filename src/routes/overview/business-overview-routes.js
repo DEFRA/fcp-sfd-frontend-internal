@@ -1,4 +1,4 @@
-import { fetchBusinessOverviewService } from '../../services/overview/fetch-business-overview-details-service.js'
+import { fetchBusinessOverviewDetailsService } from '../../services/overview/fetch-business-overview-details-service.js'
 import { businessOverviewPresenter } from '../../presenters/overview/business-overview-presenter.js'
 
 const getBusinessOverview = {

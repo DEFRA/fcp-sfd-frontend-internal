@@ -2,31 +2,46 @@
 import { describe, test, expect, beforeEach } from 'vitest'
 
 // Thing under test
-import { mapBusinessOverview } from '../../../../src/mappers/overview/business-overview-details-mapper.js'
+import { mapBusinessOverviewDetails } from '../../../../src/mappers/overview/business-overview-details-mapper.js'
 
-// Test helpers
-import { getDalData, getMappedData } from '../../../mocks/mock-business-overview.js'
-
-describe('business overview mapper', () => {
+describe('business overview details mapper', () => {
   let rawData
 
   beforeEach(() => {
-    rawData = getDalData()
+    rawData = {
+      business: {
+        sbi: '106705779',
+        info: {
+          name: 'Herberts Lawn Mowing'
+        },
+        customers: [
+          { crn: '1100000001', firstName: 'Alice', lastName: 'Smith' },
+          { crn: '1100000002', firstName: 'Bob', lastName: 'Jones' }
+        ]
+      }
+    }
   })
 
   test('it maps all fields correctly', () => {
-    const result = mapBusinessOverview(rawData)
+    const result = mapBusinessOverviewDetails(rawData)
 
-    expect(result).toEqual(getMappedData())
+    expect(result).toEqual({
+      sbi: '106705779',
+      businessName: 'Herberts Lawn Mowing',
+      customers: [
+        { crn: '1100000001', firstName: 'Alice', lastName: 'Smith' },
+        { crn: '1100000002', firstName: 'Bob', lastName: 'Jones' }
+      ]
+    })
   })
 
-  describe('when business has no customers', () => {
+  describe('when the customers array is empty', () => {
     beforeEach(() => {
       rawData.business.customers = []
     })
 
-    test('it returns an empty customers array', () => {
-      const result = mapBusinessOverview(rawData)
+    test('it maps customers as an empty array', () => {
+      const result = mapBusinessOverviewDetails(rawData)
 
       expect(result.customers).toEqual([])
     })
@@ -37,20 +52,32 @@ describe('business overview mapper', () => {
       rawData.business.customers = null
     })
 
-    test('it returns an empty customers array', () => {
-      const result = mapBusinessOverview(rawData)
+    test('it maps customers as an empty array', () => {
+      const result = mapBusinessOverviewDetails(rawData)
 
       expect(result.customers).toEqual([])
     })
   })
 
-  describe('when business name is missing', () => {
+  describe('when a customer is missing fields', () => {
+    beforeEach(() => {
+      rawData.business.customers = [{ crn: null, firstName: null, lastName: null }]
+    })
+
+    test('it maps the missing fields as null', () => {
+      const result = mapBusinessOverviewDetails(rawData)
+
+      expect(result.customers).toEqual([{ crn: null, firstName: null, lastName: null }])
+    })
+  })
+
+  describe('when the business name is missing', () => {
     beforeEach(() => {
       delete rawData.business.info.name
     })
 
-    test('it returns businessName as null', () => {
-      const result = mapBusinessOverview(rawData)
+    test('it maps businessName as null', () => {
+      const result = mapBusinessOverviewDetails(rawData)
 
       expect(result.businessName).toBeNull()
     })
@@ -61,8 +88,8 @@ describe('business overview mapper', () => {
       delete rawData.business.info
     })
 
-    test('it returns businessName as null', () => {
-      const result = mapBusinessOverview(rawData)
+    test('it maps businessName as null', () => {
+      const result = mapBusinessOverviewDetails(rawData)
 
       expect(result.businessName).toBeNull()
     })

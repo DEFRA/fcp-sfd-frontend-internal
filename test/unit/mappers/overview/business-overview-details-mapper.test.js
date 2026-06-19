@@ -2,10 +2,10 @@
 import { describe, test, expect, beforeEach } from 'vitest'
 
 // Thing under test
-import { mapBusinessOverview } from '../../../src/mappers/business-overview-mapper.js'
+import { mapBusinessOverview } from '../../../../src/mappers/overview/business-overview-details-mapper.js'
 
 // Test helpers
-import { getDalData, getMappedData } from '../../mocks/mock-business-overview.js'
+import { getDalData, getMappedData } from '../../../mocks/mock-business-overview.js'
 
 describe('business overview mapper', () => {
   let rawData

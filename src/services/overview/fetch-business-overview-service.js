@@ -5,9 +5,9 @@
  * @module fetchBusinessOverviewService
  */
 
-import { businessOverviewQuery } from '../../dal/queries/business-overview.js'
+import { businessOverviewQuery } from '../../dal/queries/overview/business-details-overview.js'
 import { getDalConnector } from '../../dal/connector.js'
-import { mapBusinessOverview } from '../../mappers/business-overview-mapper.js'
+import { mapBusinessOverview } from '../../mappers/overview/business-overview-details-mapper.js'
 
 // TODO: If businesses can have hundreds of customers, how will it perform?
 

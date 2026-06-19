@@ -2,15 +2,15 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 
 // Things we need to mock
-import { fetchBusinessOverviewService } from '../../../../src/services/business/fetch-business-overview-service.js'
-import { businessOverviewPresenter } from '../../../../src/presenters/business/business-overview-presenter.js'
+import { fetchBusinessOverviewService } from '../../../../src/services/overview/fetch-business-overview-service.js'
+import { businessOverviewPresenter } from '../../../../src/presenters/overview/business-overview-presenter.js'
 
 // Test helpers
 import { BAD_REQUEST } from '../../../../src/constants/status-codes.js'
 import { getMappedData, getPresentedData } from '../../../mocks/mock-business-overview.js'
 
 // Thing under test
-import { businessOverviewRoutes } from '../../../../src/routes/business/business-overview-routes.js'
+import { businessOverviewRoutes } from '../../../../src/routes/overview/business-overview-routes.js'
 const [getBusinessOverview] = businessOverviewRoutes
 
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({

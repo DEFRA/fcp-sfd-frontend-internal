@@ -2,7 +2,7 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 
 // Things we need to mock
-import { businessOverviewQuery } from '../../../../src/dal/queries/business-overview.js'
+import { businessOverviewQuery } from '../../../../src/dal/queries/overview/business-details-overview.js'
 
 // Test helpers
 import { getDalData, getMappedData } from '../../../mocks/mock-business-overview.js'
@@ -16,12 +16,12 @@ vi.mock('../../../../src/dal/connector.js', () => ({
   getDalConnector: vi.fn(() => mockDalConnector)
 }))
 
-vi.mock('../../../../src/mappers/business-overview-mapper.js', () => ({
+vi.mock('../../../../src/mappers/overview/business-overview-details-mapper.js', () => ({
   mapBusinessOverview: mockMapBusinessOverview
 }))
 
 // Thing under test
-const { fetchBusinessOverviewService } = await import('../../../../src/services/business/fetch-business-overview-service.js')
+const { fetchBusinessOverviewService } = await import('../../../../src/services/overview/fetch-business-overview-service.js')
 
 describe('fetchBusinessOverviewService', () => {
   let sbi

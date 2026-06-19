@@ -1,7 +1,7 @@
 import { schemas, utils } from '@defra/fcp-sfd-frontend-engine'
 
-import { fetchBusinessOverviewService } from '../../services/business/fetch-business-overview-service.js'
-import { businessOverviewPresenter } from '../../presenters/business/business-overview-presenter.js'
+import { fetchBusinessOverviewService } from '../../services/overview/fetch-business-overview-service.js'
+import { businessOverviewPresenter } from '../../presenters/overview/business-overview-presenter.js'
 import { BAD_REQUEST } from '../../constants/status-codes.js'
 
 const BUSINESS_OVERVIEW_VIEW = 'business/business-overview'

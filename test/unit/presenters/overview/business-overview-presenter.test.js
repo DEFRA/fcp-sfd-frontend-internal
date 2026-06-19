@@ -5,7 +5,7 @@ import { describe, test, expect, beforeEach } from 'vitest'
 import { getMappedData, getPresentedData } from '../../../mocks/mock-business-overview.js'
 
 // Thing under test
-import { businessOverviewPresenter } from '../../../../src/presenters/business/business-overview-presenter.js'
+import { businessOverviewPresenter } from '../../../../src/presenters/overview/business-overview-presenter.js'
 
 describe('businessOverviewPresenter', () => {
   let data

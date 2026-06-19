@@ -7,7 +7,7 @@ import { paginationPresenter } from '../../../src/presenters/pagination-presente
 describe('Paginator Presenter', () => {
   const path = '/search-sbi'
 
-// We set the number of records to match the default page size used in these tests (20), so we get the expected number of pages
+  // We set the number of records to match the default page size used in these tests (20), so we get the expected number of pages
   // to pages we expect
   let numberOfRecords
   let queryArgs
@@ -924,7 +924,7 @@ describe('Paginator Presenter', () => {
     describe('and there are query arguments', () => {
       beforeEach(() => {
         queryArgs = {
-          'crn': '01234567891',
+          crn: '01234567891'
         }
       })
 

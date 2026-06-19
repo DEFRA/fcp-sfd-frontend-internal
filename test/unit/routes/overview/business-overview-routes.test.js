@@ -107,5 +107,24 @@ describe('business overview routes', () => {
         expect(h.view).toHaveBeenCalledWith('overview/business-overview', pageData)
       })
     })
+
+    describe('when fetchBusinessOverviewDetailsService throws', () => {
+      const serviceError = new Error('Failed to retrieve business details')
+
+      beforeEach(() => {
+        fetchBusinessOverviewDetailsService.mockRejectedValue(serviceError)
+      })
+
+      test('the error propagates out of the handler', async () => {
+        await expect(getBusinessOverview.handler(request, h)).rejects.toThrow('Failed to retrieve business details')
+      })
+
+      test('the presenter and view are not called', async () => {
+        await expect(getBusinessOverview.handler(request, h)).rejects.toThrow()
+
+        expect(businessOverviewPresenter).not.toHaveBeenCalled()
+        expect(h.view).not.toHaveBeenCalled()
+      })
+    })
   })
 })

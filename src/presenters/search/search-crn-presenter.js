@@ -12,14 +12,15 @@ const searchCrnPresenter = (customerDetails, payload) => {
     : `0 results for "${payload}"`
 
   return {
+    clearSearchLink: '/search-crn',
     customerName: customerDetails?.info?.customerName || '',
     customerAddress: addressLines,
     customerPostcode: postcode,
+    crn: payload ?? '',
     resultText,
     showResults: true,
     showCustomerDetails: Boolean(customerDetails),
-    showClear: true,
-    crn: payload ?? ''
+    showClear: true
   }
 }
 

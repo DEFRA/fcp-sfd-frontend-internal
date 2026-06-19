@@ -10,7 +10,7 @@ export const mapBusinessOverviewDetails = (value) => {
   const business = value?.business ?? {}
 
   return {
-    sbi: business.sbi,
+    sbi: business.sbi ?? null,
     businessName: business.info?.name ?? null,
     customers: formatCustomers(business.customers ?? [])
   }

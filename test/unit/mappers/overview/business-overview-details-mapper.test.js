@@ -94,4 +94,16 @@ describe('business overview details mapper', () => {
       expect(result.businessName).toBeNull()
     })
   })
+
+  describe('when sbi is missing', () => {
+    beforeEach(() => {
+      delete rawData.business.sbi
+    })
+
+    test('it maps sbi as null', () => {
+      const result = mapBusinessOverviewDetails(rawData)
+
+      expect(result.sbi).toBeNull()
+    })
+  })
 })

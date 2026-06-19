@@ -172,7 +172,8 @@ describe('search crn routes', () => {
               text: 'Enter the full CRN'
             }
           },
-          showClear: true
+          showClear: true,
+          clearSearchLink: '/search-crn'
         })
         expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()

@@ -22,7 +22,7 @@ const businessOverviewPresenter = (businessDetails, page) => {
     sbi: businessDetails?.sbi || '',
     businessName: businessDetails?.businessName || '',
     hasCustomers: totalCustomers > 0,
-    customers: formatCustomersToRows(pagedCustomers),
+    customers: formatCustomers(pagedCustomers),
     pagination,
     breadcrumbs: [
       {
@@ -115,17 +115,15 @@ const paginateCustomers = (customers, currentPage) => {
   return customers.slice(startIndex, endIndex)
 }
 
-const formatCustomersToRows = (customers = []) => {
-  const rows = customers.map((customer) => [
-    {
-      html: `<a href="#" class="govuk-link govuk-link--no-visited-state">${buildName(customer?.firstName, customer?.lastName)}</a>`
-    },
-    {
-      text: customer?.crn ?? ''
-    }
-  ])
+const formatCustomer = (customer) => {
+  return {
+    fullName: buildName(customer?.firstName, customer?.lastName),
+    crn: customer?.crn ?? ''
+  }
+}
 
-  return { rows }
+const formatCustomers = (customers = []) => {
+  return customers.map(formatCustomer)
 }
 
 export {

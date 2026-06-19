@@ -22,14 +22,15 @@ describe('searchCrnPresenter', () => {
       const result = searchCrnPresenter(data, payload)
 
       expect(result).toEqual({
+        clearSearchLink: '/search-crn',
         customerName: 'Jane Smith',
         customerAddress: 'Flat 1, The Farm House, 12 Farm Lane, Rural Area, West Fields, Exeter, Devon, England',
         customerPostcode: 'EX1 1AA',
+        crn: '1234567890',
         resultText: '1 result for "1234567890"',
         showResults: true,
         showCustomerDetails: true,
-        showClear: true,
-        crn: '1234567890'
+        showClear: true
       })
     })
   })

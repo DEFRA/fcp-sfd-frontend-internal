@@ -1,0 +1,1 @@
+export const CUSTOMER_OVERVIEW_PAGE_SIZE = 20

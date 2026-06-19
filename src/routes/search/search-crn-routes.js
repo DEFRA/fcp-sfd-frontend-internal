@@ -14,6 +14,9 @@ const getSearchCrn = {
   handler: async (request, h) => {
     const searchState = request.yar.get(SEARCH_CRN_SESSION_KEY)
 
+    // Requests sent to the /search page might be either to just show the search page or to view search results,
+    // so we need to check whether this is just an initial request to display the page or whether it is a request for a
+    // page of results
     if (!searchState) {
       return h.view(SEARCH_CRN_VIEW)
     }

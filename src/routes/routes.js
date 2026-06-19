@@ -10,7 +10,7 @@ import { footerRoutes } from './footer/footer-routes.js'
 import { searchSbiRoutes } from './search/search-sbi-routes.js'
 import { searchCrnRoutes } from './search/search-crn-routes.js'
 import { changeSearchCriteriaRoutes } from './search/change-search-criteria-routes.js'
-import { businessOverviewRoutes } from './business/business-overview-routes.js'
+import { customerOverviewRoutes } from './overview/customer-overview-routes.js'
 
 export const routes = [
   health,
@@ -25,5 +25,5 @@ export const routes = [
   ...searchSbiRoutes,
   ...searchCrnRoutes,
   ...changeSearchCriteriaRoutes,
-  ...businessOverviewRoutes
+  ...customerOverviewRoutes
 ]

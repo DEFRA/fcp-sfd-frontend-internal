@@ -1,337 +1,2381 @@
 // Test framework dependencies
-import { describe, test, expect } from 'vitest'
+import { describe, test, expect, beforeEach } from 'vitest'
 
 // Thing under test
-import { paginationPresenter, PAGE_SIZE_DEFAULT } from '../../../src/presenters/pagination-presenter.js'
+import { paginationPresenter } from '../../../src/presenters/pagination-presenter.js'
 
-describe('paginationPresenter', () => {
-  const baseUrl = '/business-overview?sbi=106705779'
+describe('Paginator Presenter', () => {
+  const path = '/search-sbi'
 
-  describe('when there is only one page of results', () => {
-    test('it returns null when totalItems is less than pageSize', () => {
-      const result = paginationPresenter({
-        totalItems: 15,
-        currentPage: 1,
-        pageSize: 20,
-        baseUrl
-      })
+// We set the number of records to match the default page size used in these tests (20), so we get the expected number of pages
+  // to pages we expect
+  let numberOfRecords
+  let queryArgs
+  let selectedPage
+  let currentAmount
+  let message
 
-      expect(result).toBeNull()
-    })
-
-    test('it returns null when totalItems equals pageSize', () => {
-      const result = paginationPresenter({
-        totalItems: 20,
-        currentPage: 1,
-        pageSize: 20,
-        baseUrl
-      })
-
-      expect(result).toBeNull()
-    })
-
-    test('it returns null when totalItems is 0', () => {
-      const result = paginationPresenter({
-        totalItems: 0,
-        currentPage: 1,
-        pageSize: 20,
-        baseUrl
-      })
-
-      expect(result).toBeNull()
-    })
+  beforeEach(async () => {
+    // Use the default page size (20), as this is what the queries return
+    currentAmount = 20
+    message = 'businesses'
   })
 
-  describe('when on the first page', () => {
-    const result = paginationPresenter({
-      totalItems: 60,
-      currentPage: 1,
-      pageSize: 20,
-      baseUrl
-    })
-
-    test('it does not include a previous link', () => {
-      expect(result.previous).toBeUndefined()
-    })
-
-    test('it includes a next link to page 2', () => {
-      expect(result.next).toEqual({
-        href: '/business-overview?sbi=106705779&page=2'
+  describe('when no pagination is needed', () => {
+    describe('for 1 page', () => {
+      beforeEach(() => {
+        numberOfRecords = 1
       })
-    })
 
-    test('it marks page 1 as current', () => {
-      const currentItem = result.items.find((item) => item.current)
+      test('returns just the number of pages calculated (no pagination component returned)', () => {
+        const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
-      expect(currentItem.number).toBe(1)
-    })
-  })
-
-  describe('when on the last page', () => {
-    const result = paginationPresenter({
-      totalItems: 60,
-      currentPage: 3,
-      pageSize: 20,
-      baseUrl
-    })
-
-    test('it includes a previous link to page 2', () => {
-      expect(result.previous).toEqual({
-        href: '/business-overview?sbi=106705779&page=2'
+        expect(result).toMatchObject({
+          currentPageNumber: 1,
+          numberOfPages: 1,
+          showingMessage: 'Showing all 1 businesses'
+        })
       })
-    })
 
-    test('it does not include a next link', () => {
-      expect(result.next).toBeUndefined()
-    })
+      test('returns the "Showing all X <message>" message', () => {
+        const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
-    test('it marks the last page as current', () => {
-      const currentItem = result.items.find((item) => item.current)
-
-      expect(currentItem.number).toBe(3)
-    })
-  })
-
-  describe('when on a middle page', () => {
-    const result = paginationPresenter({
-      totalItems: 60,
-      currentPage: 2,
-      pageSize: 20,
-      baseUrl
-    })
-
-    test('it includes both previous and next links', () => {
-      expect(result.previous).toEqual({
-        href: '/business-overview?sbi=106705779&page=1'
-      })
-      expect(result.next).toEqual({
-        href: '/business-overview?sbi=106705779&page=3'
+        expect(result.showingMessage).toEqual('Showing all 1 businesses')
       })
     })
   })
 
-  describe('items array with few pages (no ellipsis needed)', () => {
-    const result = paginationPresenter({
-      totalItems: 60,
-      currentPage: 2,
-      pageSize: 20,
-      baseUrl
+  describe('when pagination is needed', () => {
+    describe('and there are no query arguments', () => {
+      describe('for 2 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 35
+        })
+
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 2,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: true },
+                  { href: '/search-sbi?page=2', current: false }
+                ],
+                next: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 2
+          })
+
+          test('returns <- Previous 1 [2]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 2,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: true }
+                ],
+                previous: { href: '/search-sbi?page=1' }
+              }
+            })
+          })
+        })
+      })
+
+      describe('for 3 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 55
+        })
+
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2  3 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 3,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: true },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false }
+                ],
+                next: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+
+        describe('and page 2 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 2
+          })
+
+          test('returns <- Previous 1 [2] 3 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 3,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: true },
+                  { href: '/search-sbi?page=3', current: false }
+                ],
+                next: { href: '/search-sbi?page=3' },
+                previous: { href: '/search-sbi?page=1' }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 3
+          })
+
+          test('returns <- Previous 1 2 [3]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 3,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: true }
+                ],
+                previous: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+      })
+
+      describe('for 4 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 75
+        })
+
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 3 4 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 4,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: true },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: false }
+                ],
+                next: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+
+        describe('and page 2 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 2
+          })
+
+          test('returns <- Previous 1 [2] 3 4 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 4,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: true },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: false }
+                ],
+                next: { href: '/search-sbi?page=3' },
+                previous: { href: '/search-sbi?page=1' }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 4
+          })
+
+          test('returns <- Previous 1 2 3 [4]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 4,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: true }
+                ],
+                previous: { href: '/search-sbi?page=3' }
+              }
+            })
+          })
+        })
+      })
+
+      describe('for 5 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 95
+        })
+
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 3 4 5 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 5,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: true },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: false }
+                ],
+                next: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+
+        describe('and page 3 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 3
+          })
+
+          test('returns <- Previous 1 2 [3] 4 5 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 5,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: true },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: false }
+                ],
+                next: { href: '/search-sbi?page=4' },
+                previous: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 5
+          })
+
+          test('returns <- Previous 1 2 3 4 [5]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 5,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: true }
+                ],
+                previous: { href: '/search-sbi?page=4' }
+              }
+            })
+          })
+        })
+      })
+
+      describe('for 6 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 115
+        })
+
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 3 4 5 6 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 6,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: true },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: false },
+                  { href: '/search-sbi?page=6', current: false }
+                ],
+                next: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+
+        describe('and page 3 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 3
+          })
+
+          test('returns <- Previous 1 2 [3] 4 5 6 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 6,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: true },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: false },
+                  { href: '/search-sbi?page=6', current: false }
+                ],
+                next: { href: '/search-sbi?page=4' },
+                previous: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 6
+          })
+
+          test('returns <- Previous 1 2 3 4 5 [6]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 6,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: false },
+                  { href: '/search-sbi?page=6', current: true }
+                ],
+                previous: { href: '/search-sbi?page=5' }
+              }
+            })
+          })
+        })
+      })
+
+      describe('for 7 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 135
+        })
+
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 3 4 5 6 7 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 7,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: true },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: false },
+                  { href: '/search-sbi?page=6', current: false },
+                  { href: '/search-sbi?page=7', current: false }
+                ],
+                next: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+
+        describe('and page 4 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 4
+          })
+
+          test('returns <- Previous 1 2 3 [4] 5 6 7 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 7,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: true },
+                  { href: '/search-sbi?page=5', current: false },
+                  { href: '/search-sbi?page=6', current: false },
+                  { href: '/search-sbi?page=7', current: false }
+                ],
+                next: { href: '/search-sbi?page=5' },
+                previous: { href: '/search-sbi?page=3' }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 7
+          })
+
+          test('returns <- Previous 1 2 3 4 5 6 [7]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 7,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: false },
+                  { href: '/search-sbi?page=6', current: false },
+                  { href: '/search-sbi?page=7', current: true }
+                ],
+                previous: { href: '/search-sbi?page=6' }
+              }
+            })
+          })
+        })
+      })
+
+      describe('for 8 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 155
+        })
+
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 3 4 5 .. 8 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 8,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: true },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=8', current: false }
+                ],
+                next: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+
+        describe('and page 4 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 4
+          })
+
+          test('returns <- Previous 1 2 3 [4] 5 .. 8 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 8,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: true },
+                  { href: '/search-sbi?page=5', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=8', current: false }
+                ],
+                next: { href: '/search-sbi?page=5' },
+                previous: { href: '/search-sbi?page=3' }
+              }
+            })
+          })
+        })
+
+        describe('and page 5 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 5
+          })
+
+          test('returns <- Previous 1 .. 4 [5] 6 7 8 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 8,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: true },
+                  { href: '/search-sbi?page=6', current: false },
+                  { href: '/search-sbi?page=7', current: false },
+                  { href: '/search-sbi?page=8', current: false }
+                ],
+                next: { href: '/search-sbi?page=6' },
+                previous: { href: '/search-sbi?page=4' }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 8
+          })
+
+          test('returns <- Previous 1 .. 4 5 6 7 [8]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 8,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: false },
+                  { href: '/search-sbi?page=6', current: false },
+                  { href: '/search-sbi?page=7', current: false },
+                  { href: '/search-sbi?page=8', current: true }
+                ],
+                previous: { href: '/search-sbi?page=7' }
+              }
+            })
+          })
+        })
+      })
+
+      describe('for 9 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 175
+        })
+
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 3 4 5 .. 9 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 9,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: true },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=9', current: false }
+                ],
+                next: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+
+        describe('and page 4 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 4
+          })
+
+          test('returns <- Previous 1 2 3 [4] 5 .. 9 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 9,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: true },
+                  { href: '/search-sbi?page=5', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=9', current: false }
+                ],
+                next: { href: '/search-sbi?page=5' },
+                previous: { href: '/search-sbi?page=3' }
+              }
+            })
+          })
+        })
+
+        describe('and page 5 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 5
+          })
+
+          test('returns <- Previous 1 .. 4 [5] 6 .. 9 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 9,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: true },
+                  { href: '/search-sbi?page=6', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=9', current: false }
+                ],
+                next: { href: '/search-sbi?page=6' },
+                previous: { href: '/search-sbi?page=4' }
+              }
+            })
+          })
+        })
+
+        describe('and page 6 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 6
+          })
+
+          test('returns <- Previous 1 .. 5 [6] 7 8 9 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 9,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=5', current: false },
+                  { href: '/search-sbi?page=6', current: true },
+                  { href: '/search-sbi?page=7', current: false },
+                  { href: '/search-sbi?page=8', current: false },
+                  { href: '/search-sbi?page=9', current: false }
+                ],
+                next: { href: '/search-sbi?page=7' },
+                previous: { href: '/search-sbi?page=5' }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 9
+          })
+
+          test('returns <- Previous 1 .. 5 6 7 8 [9]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 9,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=5', current: false },
+                  { href: '/search-sbi?page=6', current: false },
+                  { href: '/search-sbi?page=7', current: false },
+                  { href: '/search-sbi?page=8', current: false },
+                  { href: '/search-sbi?page=9', current: true }
+                ],
+                previous: { href: '/search-sbi?page=8' }
+              }
+            })
+          })
+        })
+      })
+
+      describe('for 100 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 1995
+        })
+
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 3 4 5 .. 100 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 100,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: true },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: false },
+                  { href: '/search-sbi?page=5', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=100', current: false }
+                ],
+                next: { href: '/search-sbi?page=2' }
+              }
+            })
+          })
+        })
+
+        describe('and page 4 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 4
+          })
+
+          test('returns <- Previous 1 2 3 [4] 5 .. 100 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 100,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { href: '/search-sbi?page=2', current: false },
+                  { href: '/search-sbi?page=3', current: false },
+                  { href: '/search-sbi?page=4', current: true },
+                  { href: '/search-sbi?page=5', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=100', current: false }
+                ],
+                next: { href: '/search-sbi?page=5' },
+                previous: { href: '/search-sbi?page=3' }
+              }
+            })
+          })
+        })
+
+        describe('and page 49 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 49
+          })
+
+          test('returns <- Previous 1 .. 48 [49] 50 .. 100 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 100,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=48', current: false },
+                  { href: '/search-sbi?page=49', current: true },
+                  { href: '/search-sbi?page=50', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=100', current: false }
+                ],
+                next: { href: '/search-sbi?page=50' },
+                previous: { href: '/search-sbi?page=48' }
+              }
+            })
+          })
+        })
+
+        describe('and page 97 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 97
+          })
+
+          test('returns <- Previous 1 .. 96 [97] 98 99 100 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 100,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=96', current: false },
+                  { href: '/search-sbi?page=97', current: true },
+                  { href: '/search-sbi?page=98', current: false },
+                  { href: '/search-sbi?page=99', current: false },
+                  { href: '/search-sbi?page=100', current: false }
+                ],
+                next: { href: '/search-sbi?page=98' },
+                previous: { href: '/search-sbi?page=96' }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            currentAmount = 3
+            selectedPage = 100
+          })
+
+          test('returns <- Previous 1 .. 96 97 98 99 [100]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 100,
+              component: {
+                items: [
+                  { href: '/search-sbi?page=1', current: false },
+                  { ellipsis: true },
+                  { href: '/search-sbi?page=96', current: false },
+                  { href: '/search-sbi?page=97', current: false },
+                  { href: '/search-sbi?page=98', current: false },
+                  { href: '/search-sbi?page=99', current: false },
+                  { href: '/search-sbi?page=100', current: true }
+                ],
+                previous: { href: '/search-sbi?page=99' }
+              }
+            })
+          })
+
+          describe('when "numberOfShownItems" is less than the default page size', () => {
+            test('returns the "Showing 3 to 4975 businesses"', () => {
+              const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
+
+              expect(result.showingMessage).toEqual('Showing 1981 to 1983 of 1995 businesses')
+            })
+          })
+        })
+      })
     })
 
-    test('it shows all page numbers without ellipsis', () => {
-      const numbers = result.items.map((item) => item.number)
-
-      expect(numbers).toEqual([1, 2, 3])
-    })
-
-    test('it does not include any ellipsis items', () => {
-      const ellipses = result.items.filter((item) => item.ellipsis)
-
-      expect(ellipses).toHaveLength(0)
-    })
-  })
-
-  describe('items array with many pages (ellipsis needed)', () => {
-    describe('when on page 5 of 100', () => {
-      const result = paginationPresenter({
-        totalItems: 2000,
-        currentPage: 5,
-        pageSize: 20,
-        baseUrl
+    describe('and there are query arguments', () => {
+      beforeEach(() => {
+        queryArgs = {
+          'crn': '01234567891',
+        }
       })
 
-      test('it shows first, neighbours of current, and last with ellipses', () => {
-        expect(result.items).toEqual([
-          { number: 1, href: '/business-overview?sbi=106705779&page=1' },
-          { ellipsis: true },
-          { number: 4, href: '/business-overview?sbi=106705779&page=4' },
-          { number: 5, href: '/business-overview?sbi=106705779&page=5', current: true },
-          { number: 6, href: '/business-overview?sbi=106705779&page=6' },
-          { ellipsis: true },
-          { number: 100, href: '/business-overview?sbi=106705779&page=100' }
-        ])
-      })
-    })
+      describe('URL encodes the query string', () => {
+        beforeEach(() => {
+          queryArgs = {
+            name: 'Mr T'
+          }
+        })
 
-    describe('when on page 1 of 100', () => {
-      const result = paginationPresenter({
-        totalItems: 2000,
-        currentPage: 1,
-        pageSize: 20,
-        baseUrl
+        test('encodes special characters correctly', () => {
+          const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+          expect(result.component.previous.href).toEqual('/search-sbi?page=99&name=Mr+T')
+        })
       })
 
-      test('it shows [1] 2 ... 100', () => {
-        expect(result.items).toEqual([
-          { number: 1, href: '/business-overview?sbi=106705779&page=1', current: true },
-          { number: 2, href: '/business-overview?sbi=106705779&page=2' },
-          { ellipsis: true },
-          { number: 100, href: '/business-overview?sbi=106705779&page=100' }
-        ])
-      })
-    })
+      describe('for 2 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 35
+        })
 
-    describe('when on page 3 of 100', () => {
-      const result = paginationPresenter({
-        totalItems: 2000,
-        currentPage: 3,
-        pageSize: 20,
-        baseUrl
-      })
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
 
-      test('it shows 1 2 [3] 4 ... 100', () => {
-        expect(result.items).toEqual([
-          { number: 1, href: '/business-overview?sbi=106705779&page=1' },
-          { number: 2, href: '/business-overview?sbi=106705779&page=2' },
-          { number: 3, href: '/business-overview?sbi=106705779&page=3', current: true },
-          { number: 4, href: '/business-overview?sbi=106705779&page=4' },
-          { ellipsis: true },
-          { number: 100, href: '/business-overview?sbi=106705779&page=100' }
-        ])
-      })
-    })
+          test('returns [1] 2 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
-    describe('when on page 99 of 100', () => {
-      const result = paginationPresenter({
-        totalItems: 2000,
-        currentPage: 99,
-        pageSize: 20,
-        baseUrl
-      })
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 2,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
 
-      test('it shows 1 ... 98 [99] 100', () => {
-        expect(result.items).toEqual([
-          { number: 1, href: '/business-overview?sbi=106705779&page=1' },
-          { ellipsis: true },
-          { number: 98, href: '/business-overview?sbi=106705779&page=98' },
-          { number: 99, href: '/business-overview?sbi=106705779&page=99', current: true },
-          { number: 100, href: '/business-overview?sbi=106705779&page=100' }
-        ])
-      })
-    })
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 2
+          })
 
-    describe('when on page 100 of 100', () => {
-      const result = paginationPresenter({
-        totalItems: 2000,
-        currentPage: 100,
-        pageSize: 20,
-        baseUrl
-      })
+          test('returns <- Previous 1 [2]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
-      test('it shows 1 ... 99 [100]', () => {
-        expect(result.items).toEqual([
-          { number: 1, href: '/business-overview?sbi=106705779&page=1' },
-          { ellipsis: true },
-          { number: 99, href: '/business-overview?sbi=106705779&page=99' },
-          { number: 100, href: '/business-overview?sbi=106705779&page=100', current: true }
-        ])
-      })
-    })
-
-    describe('when on page 4 of 100 (no ellipsis between first and neighbour)', () => {
-      const result = paginationPresenter({
-        totalItems: 2000,
-        currentPage: 4,
-        pageSize: 20,
-        baseUrl
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 2,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: true
+                  }
+                ],
+                previous: {
+                  href: '/search-sbi?page=1&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
       })
 
-      test('it shows 1 2 3 [4] 5 ... 100 (no ellipsis where gap is 1)', () => {
-        expect(result.items).toEqual([
-          { number: 1, href: '/business-overview?sbi=106705779&page=1' },
-          { ellipsis: true },
-          { number: 3, href: '/business-overview?sbi=106705779&page=3' },
-          { number: 4, href: '/business-overview?sbi=106705779&page=4', current: true },
-          { number: 5, href: '/business-overview?sbi=106705779&page=5' },
-          { ellipsis: true },
-          { number: 100, href: '/business-overview?sbi=106705779&page=100' }
-        ])
+      describe('for 3 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 55
+        })
+
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2  3 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 3,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 2 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 2
+          })
+
+          test('returns <- Previous 1 [2] 3 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 3,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=3&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=1&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 3
+          })
+
+          test('returns <- Previous 1 2 [3]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 3,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: true
+                  }
+                ],
+                previous: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
       })
-    })
-  })
 
-  describe('the "current" property', () => {
-    test('it is only set on the current page item', () => {
-      const result = paginationPresenter({
-        totalItems: 60,
-        currentPage: 2,
-        pageSize: 20,
-        baseUrl
+      describe('for 4 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 75
+        })
+
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 3 4 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 4,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 2 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 2
+          })
+
+          test('returns <- Previous 1 [2] 3 4 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 4,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=3&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=1&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 4
+          })
+
+          test('returns <- Previous 1 2 3 [4]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 4,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: true
+                  }
+                ],
+                previous: {
+                  href: '/search-sbi?page=3&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
       })
 
-      const itemsWithCurrent = result.items.filter((item) => item.current)
+      describe('for 5 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 95
+        })
 
-      expect(itemsWithCurrent).toHaveLength(1)
-      expect(itemsWithCurrent[0].number).toBe(2)
-    })
-  })
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
 
-  describe('href construction', () => {
-    test('it appends page param with & when baseUrl already has query params', () => {
-      const result = paginationPresenter({
-        totalItems: 40,
-        currentPage: 1,
-        pageSize: 20,
-        baseUrl: '/business-overview?sbi=123'
+          test('returns [1] 2 3 4 5 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 5,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 3 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 3
+          })
+
+          test('returns <- Previous 1 2 [3] 4 5 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 5,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=4&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 5
+          })
+
+          test('returns <- Previous 1 2 3 4 [5]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 5,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: true
+                  }
+                ],
+                previous: {
+                  href: '/search-sbi?page=4&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
       })
 
-      expect(result.next.href).toBe('/business-overview?sbi=123&page=2')
-    })
+      describe('for 6 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 115
+        })
 
-    test('it appends page param with ? when baseUrl has no query params', () => {
-      const result = paginationPresenter({
-        totalItems: 40,
-        currentPage: 1,
-        pageSize: 20,
-        baseUrl: '/results'
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 3 4 5 6 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 6,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=6&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 3 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 3
+          })
+
+          test('returns <- Previous 1 2 [3] 4 5 6 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 6,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=6&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=4&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 6
+          })
+
+          test('returns <- Previous 1 2 3 4 5 [6]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 6,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=6&crn=01234567891',
+                    current: true
+                  }
+                ],
+                previous: {
+                  href: '/search-sbi?page=5&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
       })
 
-      expect(result.next.href).toBe('/results?page=2')
-    })
-  })
+      describe('for 7 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 135
+        })
 
-  describe('default pageSize', () => {
-    test('it exports PAGE_SIZE_DEFAULT as 20', () => {
-      expect(PAGE_SIZE_DEFAULT).toBe(20)
-    })
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
 
-    test('it uses 20 as default when pageSize is not provided', () => {
-      const result = paginationPresenter({
-        totalItems: 21,
-        currentPage: 1,
-        baseUrl
+          test('returns [1] 2 3 4 5 6 7 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 7,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=6&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=7&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 4 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 4
+          })
+
+          test('returns <- Previous 1 2 3 [4] 5 6 7 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 7,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=6&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=7&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=5&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=3&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 7
+          })
+
+          test('returns <- Previous 1 2 3 4 5 6 [7]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 7,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=6&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=7&crn=01234567891',
+                    current: true
+                  }
+                ],
+                previous: {
+                  href: '/search-sbi?page=6&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
       })
 
-      expect(result).not.toBeNull()
-      expect(result.next.href).toContain('page=2')
-    })
-  })
+      describe('for 8 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 155
+        })
 
-  describe('edge cases', () => {
-    test('it clamps currentPage to 1 when given 0', () => {
-      const result = paginationPresenter({
-        totalItems: 40,
-        currentPage: 0,
-        pageSize: 20,
-        baseUrl
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 3 4 5 .. 8 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 8,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=8&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 4 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 4
+          })
+
+          test('returns <- Previous 1 2 3 [4] 5 .. 8 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 8,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=8&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=5&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=3&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 5 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 5
+          })
+
+          test('returns <- Previous 1 .. 4 [5] 6 7 8 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 8,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=6&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=7&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=8&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=6&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=4&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 8
+          })
+
+          test('returns <- Previous 1 .. 4 5 6 7 [8]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 8,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=6&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=7&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=8&crn=01234567891',
+                    current: true
+                  }
+                ],
+                previous: {
+                  href: '/search-sbi?page=7&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
       })
 
-      const currentItem = result.items.find((item) => item.current)
+      describe('for 9 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 175
+        })
 
-      expect(currentItem.number).toBe(1)
-    })
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
 
-    test('it clamps currentPage to totalPages when given a value beyond the last page', () => {
-      const result = paginationPresenter({
-        totalItems: 40,
-        currentPage: 99,
-        pageSize: 20,
-        baseUrl
+          test('returns [1] 2 3 4 5 .. 9 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 9,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=9&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 4 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 4
+          })
+
+          test('returns <- Previous 1 2 3 [4] 5 .. 9 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 9,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=9&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=5&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=3&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 5 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 5
+          })
+
+          test('returns <- Previous 1 .. 4 [5] 6 .. 9 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 9,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=6&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=9&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=6&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=4&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 6 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 6
+          })
+
+          test('returns <- Previous 1 .. 5 [6] 7 8 9 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 9,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=6&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=7&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=8&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=9&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=7&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=5&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 9
+          })
+
+          test('returns <- Previous 1 .. 5 6 7 8 [9]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 9,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=6&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=7&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=8&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=9&crn=01234567891',
+                    current: true
+                  }
+                ],
+                previous: {
+                  href: '/search-sbi?page=8&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
       })
 
-      const currentItem = result.items.find((item) => item.current)
+      describe('for 100 pages', () => {
+        beforeEach(() => {
+          numberOfRecords = 1995
+        })
 
-      expect(currentItem.number).toBe(2)
+        describe('and the first page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 1
+          })
+
+          test('returns [1] 2 3 4 5 .. 100 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 100,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=100&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=2&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 4 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 4
+          })
+
+          test('returns <- Previous 1 2 3 [4] 5 .. 100 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 100,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=2&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=3&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=4&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=5&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=100&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=5&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=3&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 49 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 49
+          })
+
+          test('returns <- Previous 1 .. 48 [49] 50 .. 100 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 100,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=48&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=49&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=50&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=100&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=50&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=48&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and page 97 is selected', () => {
+          beforeEach(() => {
+            selectedPage = 97
+          })
+
+          test('returns <- Previous 1 .. 96 [97] 98 99 100 Next ->', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 100,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=96&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=97&crn=01234567891',
+                    current: true
+                  },
+                  {
+                    href: '/search-sbi?page=98&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=99&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=100&crn=01234567891',
+                    current: false
+                  }
+                ],
+                next: {
+                  href: '/search-sbi?page=98&crn=01234567891'
+                },
+                previous: {
+                  href: '/search-sbi?page=96&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+
+        describe('and the last page is selected', () => {
+          beforeEach(() => {
+            selectedPage = 100
+          })
+
+          test('returns <- Previous 1 .. 96 97 98 99 [100]', () => {
+            const result = paginationPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+
+            expect(result).toMatchObject({
+              currentPageNumber: selectedPage,
+              numberOfPages: 100,
+              component: {
+                items: [
+                  {
+                    href: '/search-sbi?page=1&crn=01234567891',
+                    current: false
+                  },
+                  { ellipsis: true },
+                  {
+                    href: '/search-sbi?page=96&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=97&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=98&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=99&crn=01234567891',
+                    current: false
+                  },
+                  {
+                    href: '/search-sbi?page=100&crn=01234567891',
+                    current: true
+                  }
+                ],
+                previous: {
+                  href: '/search-sbi?page=99&crn=01234567891'
+                }
+              }
+            })
+          })
+        })
+      })
     })
   })
 })

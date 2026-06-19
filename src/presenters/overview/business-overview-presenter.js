@@ -1,52 +1,29 @@
 /**
- * Formats data ready for presenting in the `/business-overview` page
+ * Formats data ready for presenting in the `/business-overview/{sbi}` page
  * @module businessOverviewPresenter
  */
 
-import { paginationPresenter, PAGE_SIZE_DEFAULT } from '../pagination-presenter.js'
+import { paginationPresenter } from '../pagination-presenter.js'
+import { BUSINESS_OVERVIEW_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 
-/**
- * Transforms raw business overview data into the shape expected by the
- * business-overview Nunjucks template.
- *
- * @param {object} data - Mapped DAL response from fetchBusinessOverviewService
- * @param {number} [page=1] - The current page number (from the `?page` query param)
- * @returns {object} Presenter object passed directly to the view
- */
-const businessOverviewPresenter = (data, page = 1) => {
-  // Build the full customer list first — pagination slices this below.
-  // Names are constructed from firstName + lastName, filtering out any nulls
-  // so a missing first or last name doesn't leave a leading/trailing space.
-  const allCustomers = data.customers.map((customer) => ({
-    name: [customer.firstName, customer.lastName].filter(Boolean).join(' '),
-    crn: customer.crn
-  }))
+const businessOverviewPresenter = (businessDetails, page) => {
+  const customers = businessDetails?.customers ?? []
 
-  // Work out which slice of customers belongs on the current page.
-  // e.g. page 2 with PAGE_SIZE_DEFAULT=20: startIndex=20, slice [20..39]
-  const startIndex = (page - 1) * PAGE_SIZE_DEFAULT
-  const paginatedCustomers = allCustomers.slice(startIndex, startIndex + PAGE_SIZE_DEFAULT)
+  const { sortedCustomers, totalCustomers } = sortAndCountCustomers(customers)
+  const requestedPageNumber = normalisePageNumber(page)
+  const currentPage = clampPageNumber(requestedPageNumber, totalCustomers)
+  const pagedCustomers = paginateCustomers(sortedCustomers, currentPage)
+  const routeURL = `/business-overview/${businessDetails?.sbi}`
 
-  // The SBI must be included in the pagination hrefs so each page link
-  // continues to show the correct business (e.g. /business-overview?sbi=123&page=2)
-  const baseUrl = `/business-overview?sbi=${data.sbi}`
-
-  // paginationPresenter returns null when there is only one page, in which
-  // case the template simply won't render the pagination component.
-  const pagination = paginationPresenter({
-    totalItems: allCustomers.length,
-    currentPage: page,
-    pageSize: PAGE_SIZE_DEFAULT,
-    baseUrl
-  })
+  const pagination = paginationPresenter(totalCustomers, currentPage, routeURL, pagedCustomers.length, 'customers')
 
   return {
-    searchResultsLink: '/search-sbi',
     pageTitle: 'Business overview',
-    sbi: data.sbi,
-    businessName: data.businessName,
-    customers: paginatedCustomers, // Only the slice for the current page
-    pagination, // null (no component) or { previous, next, items } for govukPagination
+    sbi: businessDetails?.sbi || '',
+    businessName: businessDetails?.businessName || '',
+    hasCustomers: totalCustomers > 0,
+    customers: formatCustomersToRows(pagedCustomers),
+    pagination,
     breadcrumbs: [
       {
         text: 'Search results',
@@ -54,6 +31,101 @@ const businessOverviewPresenter = (data, page = 1) => {
       }
     ]
   }
+}
+
+/**
+ * Assembles a customer's full name from their first and last name parts.
+ * @private
+ */
+const buildName = (firstName, lastName) => {
+  return [firstName, lastName].filter(Boolean).join(' ')
+}
+
+/**
+ * Converts whatever page number came from the URL query into a valid number
+ * @private
+ */
+const normalisePageNumber = (page) => {
+  const parsedPage = Number(page)
+
+  if (!Number.isInteger(parsedPage) || parsedPage < 1) {
+    return 1
+  }
+
+  return parsedPage
+}
+
+/**
+ * Sorts a list of customers by their full assembled name in alphabetical order (A → Z).
+ *
+ * - Does NOT change the original array (it creates a copy first)
+ * - Sorting is case-insensitive (e.g. "alice" and "Alice" are treated the same)
+ *
+ * localeCompare compares two strings:
+ * - returns < 0 if a comes before b
+ * - returns 0 if they are equal
+ * - returns > 0 if a comes after b
+ *
+ * @private
+ */
+const sortAndCountCustomers = (customers) => {
+  const customersCopy = [...customers]
+
+  customersCopy.sort((a, b) => {
+    const nameA = buildName(a?.firstName, a?.lastName).toLowerCase()
+    const nameB = buildName(b?.firstName, b?.lastName).toLowerCase()
+
+    return nameA.localeCompare(nameB)
+  })
+
+  return {
+    sortedCustomers: customersCopy,
+    totalCustomers: customersCopy.length
+  }
+}
+
+/**
+ * Caps a requested page to the max so we never point past the final page.
+ *
+ * If a user has requested a page that is beyond the end of the list of results i.e they have manually edited the URL
+ * to have an invalid page number, we will show them the last page of results instead of an empty page.
+ * @private
+ */
+const clampPageNumber = (requestedPageNumber, totalCustomers) => {
+  const totalPages = Math.ceil(totalCustomers / PAGE_SIZE)
+
+  // When there are no customers we still treat page 1 as the only valid page.
+  const maxPageNumber = Math.max(totalPages, 1)
+
+  if (requestedPageNumber > maxPageNumber) {
+    return maxPageNumber
+  }
+
+  return requestedPageNumber
+}
+
+/**
+ * Returns only the customers for the current page.
+ * @private
+ */
+const paginateCustomers = (customers, currentPage) => {
+  const startIndex = (currentPage - 1) * PAGE_SIZE
+  const endIndex = startIndex + PAGE_SIZE
+
+  return customers.slice(startIndex, endIndex)
+}
+
+const formatCustomersToRows = (customers = []) => {
+  const rows = customers.map((customer) => [
+    {
+      html: `<a href="#" class="govuk-link govuk-link--no-visited-state">${buildName(customer?.firstName, customer?.lastName)}</a>`
+    },
+    {
+      text: customer?.crn ?? ''
+    }
+  ])
+
+  return { rows }
 }
 
 export {

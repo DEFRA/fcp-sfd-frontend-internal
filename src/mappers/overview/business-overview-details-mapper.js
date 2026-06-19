@@ -1,9 +1,9 @@
 /**
- * Takes the raw business overview data and maps it to a more usable format
+ * Takes the raw business overview details data and maps it to a more usable format
  *
  * @param {Object} value - The data from the DAL
  *
- * @returns {Object} Formatted business overview data
+ * @returns {Object} Formatted business overview details data
  */
 
 export const mapBusinessOverview = (value) => {
@@ -12,10 +12,14 @@ export const mapBusinessOverview = (value) => {
   return {
     sbi: business.sbi,
     businessName: business.info?.name ?? null,
-    customers: (business.customers ?? []).map((customer) => ({
-      crn: customer.crn,
-      firstName: customer.firstName,
-      lastName: customer.lastName
-    }))
+    customers: formatCustomers(business.customers ?? [])
   }
+}
+
+const formatCustomers = (customers) => {
+  return customers.map((customer) => ({
+    crn: customer.crn,
+    firstName: customer.firstName,
+    lastName: customer.lastName
+  }))
 }

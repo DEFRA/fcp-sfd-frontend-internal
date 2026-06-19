@@ -1,4 +1,4 @@
-export const businessOverviewQuery = `
+export const businessDetailsOverview = `
   query Business($sbi: ID!) {
   business(sbi: $sbi) {
     sbi

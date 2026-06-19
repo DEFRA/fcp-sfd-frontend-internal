@@ -1,117 +1,255 @@
 // Test framework dependencies
 import { describe, test, expect, beforeEach } from 'vitest'
 
-// Test helpers
-import { getMappedData, getPresentedData } from '../../../mocks/mock-business-overview.js'
-
 // Thing under test
 import { businessOverviewPresenter } from '../../../../src/presenters/overview/business-overview-presenter.js'
 
 describe('businessOverviewPresenter', () => {
   let data
+  let page
 
   beforeEach(() => {
-    data = getMappedData()
+    data = {
+      sbi: '106705779',
+      businessName: 'Herberts Lawn Mowing',
+      customers: [
+        { crn: '1100000001', firstName: 'Alice', lastName: 'Smith' },
+        { crn: '1100000002', firstName: 'Bob', lastName: 'Jones' },
+        { crn: '1100000003', firstName: 'Charlie', lastName: 'Brown' }
+      ]
+    }
+
+    page = 1
   })
 
-  describe('when provided with business overview data', () => {
+  describe('when provided with business overview data and a page number', () => {
     test('it correctly presents the data', () => {
-      const result = businessOverviewPresenter(data)
+      const result = businessOverviewPresenter(data, page)
 
-      expect(result).toEqual(getPresentedData())
+      expect(result).toEqual({
+        pageTitle: 'Business overview',
+        sbi: '106705779',
+        businessName: 'Herberts Lawn Mowing',
+        hasCustomers: true,
+        customers: {
+          rows: [
+            [
+              { html: '<a href="#" class="govuk-link govuk-link--no-visited-state">Alice Smith</a>' },
+              { text: '1100000001' }
+            ],
+            [
+              { html: '<a href="#" class="govuk-link govuk-link--no-visited-state">Bob Jones</a>' },
+              { text: '1100000002' }
+            ],
+            [
+              { html: '<a href="#" class="govuk-link govuk-link--no-visited-state">Charlie Brown</a>' },
+              { text: '1100000003' }
+            ]
+          ]
+        },
+        pagination: {
+          currentPageNumber: 1,
+          numberOfPages: 1,
+          showingMessage: 'Showing all 3 customers',
+          startItem: 1,
+          endItem: 3,
+          paginationTotal: 3
+        },
+        breadcrumbs: [
+          {
+            text: 'Search results',
+            href: '/search-sbi'
+          }
+        ]
+      })
     })
   })
 
-  describe('the "searchResultsLink" property', () => {
-    test('it returns the search results link', () => {
-      const result = businessOverviewPresenter(data)
-      expect(result.searchResultsLink).toBe('/search-sbi')
-    })
-  })
-
-  describe('the "pageTitle" property', () => {
-    test('it returns the correct page title', () => {
-      const result = businessOverviewPresenter(data)
-
-      expect(result.pageTitle).toBe('Business overview')
-    })
-  })
-
-  describe('the "customers" property', () => {
-    test('it builds full name from firstName and lastName', () => {
-      const result = businessOverviewPresenter(data)
-
-      expect(result.customers[0].name).toBe('Alice Smith')
-    })
-
-    describe('when a customer has no firstName', () => {
+  describe('the "sbi" property', () => {
+    describe('when the sbi property is missing', () => {
       beforeEach(() => {
-        data.customers[0].firstName = null
+        delete data.sbi
       })
 
-      test('it returns lastName only', () => {
-        const result = businessOverviewPresenter(data)
+      test('it should return sbi as an empty string', () => {
+        const result = businessOverviewPresenter(data, page)
 
-        expect(result.customers[0].name).toBe('Smith')
+        expect(result.sbi).toEqual('')
       })
     })
+  })
 
-    describe('when a customer has no lastName', () => {
+  describe('the "businessName" property', () => {
+    describe('when the businessName property is missing', () => {
       beforeEach(() => {
-        data.customers[0].lastName = null
+        delete data.businessName
       })
 
-      test('it returns firstName only', () => {
-        const result = businessOverviewPresenter(data)
+      test('it should return businessName as an empty string', () => {
+        const result = businessOverviewPresenter(data, page)
 
-        expect(result.customers[0].name).toBe('Alice')
+        expect(result.businessName).toEqual('')
       })
     })
+  })
 
-    describe('when customers array is empty', () => {
+  describe('the "hasCustomers" property', () => {
+    describe('when there are no customers', () => {
       beforeEach(() => {
         data.customers = []
       })
 
-      test('it returns an empty array', () => {
-        const result = businessOverviewPresenter(data)
+      test('it should return hasCustomers as false', () => {
+        const result = businessOverviewPresenter(data, page)
 
-        expect(result.customers).toEqual([])
+        expect(result.hasCustomers).toEqual(false)
+      })
+    })
+
+    describe('when customers are missing', () => {
+      beforeEach(() => {
+        delete data.customers
+      })
+
+      test('it should return hasCustomers as false', () => {
+        const result = businessOverviewPresenter(data, page)
+
+        expect(result.hasCustomers).toEqual(false)
       })
     })
   })
 
-  describe('the "pagination" property', () => {
-    test('it returns null when there are 20 or fewer customers', () => {
-      const result = businessOverviewPresenter(data)
+  describe('the "customers" property', () => {
+    describe('sorting', () => {
+      test('it should return customers sorted alphabetically by full name (A to Z)', () => {
+        const result = businessOverviewPresenter(data, page)
 
-      expect(result.pagination).toBeNull()
+        expect(result.customers.rows).toEqual([
+          [
+            { html: '<a href="#" class="govuk-link govuk-link--no-visited-state">Alice Smith</a>' },
+            { text: '1100000001' }
+          ],
+          [
+            { html: '<a href="#" class="govuk-link govuk-link--no-visited-state">Bob Jones</a>' },
+            { text: '1100000002' }
+          ],
+          [
+            { html: '<a href="#" class="govuk-link govuk-link--no-visited-state">Charlie Brown</a>' },
+            { text: '1100000003' }
+          ]
+        ])
+      })
+
+      test('it should sort case-insensitively', () => {
+        data.customers = [
+          { crn: '1100000001', firstName: 'zebra', lastName: 'Farmer' },
+          { crn: '1100000002', firstName: 'Apple', lastName: 'Grower' }
+        ]
+
+        const result = businessOverviewPresenter(data, page)
+
+        expect(result.customers.rows).toEqual([
+          [
+            { html: '<a href="#" class="govuk-link govuk-link--no-visited-state">Apple Grower</a>' },
+            { text: '1100000002' }
+          ],
+          [
+            { html: '<a href="#" class="govuk-link govuk-link--no-visited-state">zebra Farmer</a>' },
+            { text: '1100000001' }
+          ]
+        ])
+      })
     })
 
-    test('it returns pagination data when there are more than 20 customers', () => {
-      data.customers = Array.from({ length: 25 }, (_, i) => ({
-        crn: `110000000${i}`,
-        firstName: `First${i}`,
-        lastName: `Last${i}`
-      }))
+    describe('when there are no customers', () => {
+      beforeEach(() => {
+        data.customers = []
+      })
 
-      const result = businessOverviewPresenter(data)
+      test('it should return an empty rows array', () => {
+        const result = businessOverviewPresenter(data, page)
 
-      expect(result.pagination).not.toBeNull()
-      expect(result.pagination.next).toBeDefined()
+        expect(result.customers).toEqual({ rows: [] })
+      })
     })
 
-    test('it slices customers to the current page', () => {
-      data.customers = Array.from({ length: 25 }, (_, i) => ({
-        crn: `110000000${i}`,
-        firstName: `First${i}`,
-        lastName: `Last${i}`
-      }))
+    describe('when a customer has missing firstName, lastName, or crn', () => {
+      beforeEach(() => {
+        data.customers = [{ crn: null, firstName: null, lastName: null }]
+      })
 
-      const result = businessOverviewPresenter(data, 2)
+      test('it should fall back to empty strings in the row', () => {
+        const result = businessOverviewPresenter(data, page)
 
-      expect(result.customers).toHaveLength(5)
-      expect(result.customers[0].name).toBe('First20 Last20')
+        expect(result.customers.rows[0]).toEqual([
+          { html: '<a href="#" class="govuk-link govuk-link--no-visited-state"></a>' },
+          { text: '' }
+        ])
+      })
+    })
+  })
+
+  describe('the "breadcrumbs" property', () => {
+    test('it should always return the static search results breadcrumb', () => {
+      const result = businessOverviewPresenter(data, page)
+
+      expect(result.breadcrumbs).toEqual([
+        {
+          text: 'Search results',
+          href: '/search-sbi'
+        }
+      ])
+    })
+  })
+
+  describe('page normalisation', () => {
+    describe('when the page is not a valid integer', () => {
+      test('it should default to page 1 when page is a string', () => {
+        const result = businessOverviewPresenter(data, 'abc')
+
+        expect(result.pagination.currentPageNumber).toEqual(1)
+      })
+
+      test('it should default to page 1 when page is a decimal', () => {
+        const result = businessOverviewPresenter(data, 1.5)
+
+        expect(result.pagination.currentPageNumber).toEqual(1)
+      })
+
+      test('it should default to page 1 when page is less than 1', () => {
+        const result = businessOverviewPresenter(data, -1)
+
+        expect(result.pagination.currentPageNumber).toEqual(1)
+      })
+
+      test('it should default to page 1 when page is 0', () => {
+        const result = businessOverviewPresenter(data, 0)
+
+        expect(result.pagination.currentPageNumber).toEqual(1)
+      })
+    })
+  })
+
+  describe('page clamping', () => {
+    describe('when the requested page exceeds the total number of pages', () => {
+      test('it should clamp to the last page', () => {
+        // 3 customers fit on 1 page, so requesting page 5 should clamp to page 1
+        const result = businessOverviewPresenter(data, 5)
+
+        expect(result.pagination.currentPageNumber).toEqual(1)
+      })
+    })
+
+    describe('when there are no customers', () => {
+      beforeEach(() => {
+        data.customers = []
+      })
+
+      test('it should clamp to page 1 as the only valid page', () => {
+        const result = businessOverviewPresenter(data, 3)
+
+        expect(result.pagination.currentPageNumber).toEqual(1)
+      })
     })
   })
 })

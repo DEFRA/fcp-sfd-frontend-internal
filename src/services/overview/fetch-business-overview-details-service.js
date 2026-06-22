@@ -5,6 +5,7 @@
  * @module fetchBusinessOverviewDetailsService
  */
 
+import Boom from '@hapi/boom'
 import { businessDetailsOverview } from '../../dal/queries/overview/business-details-overview.js'
 import { getDalConnector } from '../../dal/connector.js'
 import { mapBusinessOverviewDetails } from '../../mappers/overview/business-overview-details-mapper.js'
@@ -19,7 +20,7 @@ const fetchBusinessOverviewDetailsService = async (sbi, email) => {
     return mappedResponse
   }
 
-  throw new Error('Failed to retrieve business details')
+  throw Boom.notFound('Business not found')
 }
 
 export {

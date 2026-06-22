@@ -5,6 +5,7 @@
 
 import { paginationPresenter } from '../pagination-presenter.js'
 import { CUSTOMER_OVERVIEW_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
+import { htmlEscape } from '../../utils/html-escape.js'
 
 const customerOverviewPresenter = (customerDetails, page) => {
   const businesses = customerDetails?.businesses ?? []
@@ -109,7 +110,7 @@ const paginateBusinesses = (businesses, currentPage) => {
 const formatBusinessesToRows = (businesses = []) => {
   const rows = businesses.map((business) => [
     {
-      html: `<a href="/business/${business?.sbi ?? ''}" class="govuk-link govuk-link--no-visited-state">${business?.name ?? ''}</a>`
+      html: `<a href="/business/${htmlEscape(business?.sbi ?? '')}" class="govuk-link govuk-link--no-visited-state">${htmlEscape(business?.name ?? '')}</a>`
     },
     {
       text: business?.sbi ?? ''

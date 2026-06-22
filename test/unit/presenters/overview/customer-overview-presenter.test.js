@@ -156,6 +156,34 @@ describe('customerOverviewPresenter', () => {
         expect(result.businesses[0]).toEqual({ name: '', sbi: '' })
       })
     })
+
+    describe('when a business name contains special HTML characters', () => {
+      test('it should escape HTML special characters in the business name', () => {
+        data.businesses = [
+          { name: 'Farm & Co <script>alert("xss")</script>', sbi: '123456789' }
+        ]
+
+        const result = customerOverviewPresenter(data, page)
+
+        expect(result.businesses.rows[0]).toEqual([
+          { html: '<a href="/business/123456789" class="govuk-link govuk-link--no-visited-state">Farm &amp; Co &lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;</a>' },
+          { text: '123456789' }
+        ])
+      })
+
+      test('it should escape single quotes in the business name', () => {
+        data.businesses = [
+          { name: "O'Malley's Farm", sbi: '123456789' }
+        ]
+
+        const result = customerOverviewPresenter(data, page)
+
+        expect(result.businesses.rows[0]).toEqual([
+          { html: '<a href="/business/123456789" class="govuk-link govuk-link--no-visited-state">O&#39;Malley&#39;s Farm</a>' },
+          { text: '123456789' }
+        ])
+      })
+    })
   })
 
   describe('the "breadcrumbs" property', () => {

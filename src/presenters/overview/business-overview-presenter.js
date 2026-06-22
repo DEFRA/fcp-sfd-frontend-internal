@@ -5,6 +5,7 @@
 
 import { paginationPresenter } from '../pagination-presenter.js'
 import { BUSINESS_OVERVIEW_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
+import { htmlEscape } from '../../utils/html-escape.js'
 
 const businessOverviewPresenter = (businessDetails, page) => {
   const customers = businessDetails?.customers ?? []
@@ -22,7 +23,7 @@ const businessOverviewPresenter = (businessDetails, page) => {
     sbi: businessDetails?.sbi || '',
     businessName: businessDetails?.businessName || '',
     hasCustomers: totalCustomers > 0,
-    customers: formatCustomers(pagedCustomers),
+    customers: formatCustomersToRows(pagedCustomers),
     pagination,
     breadcrumbs: [
       {
@@ -120,9 +121,7 @@ const formatCustomer = (customer) => ({
   crn: customer?.crn ?? ''
 })
 
-const formatCustomers = (customers = []) => {
-  return customers.map(formatCustomer)
-}
+  return { rows }
 
 export {
   businessOverviewPresenter

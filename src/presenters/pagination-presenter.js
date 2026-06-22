@@ -128,7 +128,6 @@ const paginationPresenter = (numberOfRecords, pageNumber, path, numberOfShownIte
   return { component, currentPageNumber, numberOfPages, showingMessage, startItem, endItem, paginationTotal }
 }
 
-
 /**
  * Creates the pagination component object with items and previous/next links
  */

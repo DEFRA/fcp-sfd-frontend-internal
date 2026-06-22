@@ -12,102 +12,102 @@ const [getCustomerOverview] = customerOverviewRoutes
 
 // Mocks
 vi.mock('../../../../src/services/overview/fetch-customer-overview-details-service.js', () => ({
-	fetchCustomerOverviewDetailsService: vi.fn()
+  fetchCustomerOverviewDetailsService: vi.fn()
 }))
 
 vi.mock('../../../../src/presenters/overview/customer-overview-presenter.js', () => ({
-	customerOverviewPresenter: vi.fn()
+  customerOverviewPresenter: vi.fn()
 }))
 
 describe('customer overview routes', () => {
-	let request
-	let h
+  let request
+  let h
 
-	beforeEach(() => {
-		vi.clearAllMocks()
+  beforeEach(() => {
+    vi.clearAllMocks()
 
-		request = {
-			query: {
-				page: '2'
-			},
-			params: {
-				crn: '1234567890'
-			},
-			auth: {
-				credentials: {
-					email: 'test@example.com'
-				}
-			}
-		}
+    request = {
+      query: {
+        page: '2'
+      },
+      params: {
+        crn: '1234567890'
+      },
+      auth: {
+        credentials: {
+          email: 'test@example.com'
+        }
+      }
+    }
 
-		h = {
-			view: vi.fn()
-		}
-	})
+    h = {
+      view: vi.fn()
+    }
+  })
 
-	describe('GET /customer-overview/{crn}', () => {
-		test('should have the correct method and path configured', () => {
-			expect(getCustomerOverview.method).toBe('GET')
-			expect(getCustomerOverview.path).toBe('/customer-overview/{crn}')
-		})
+  describe('GET /customer-overview/{crn}', () => {
+    test('should have the correct method and path configured', () => {
+      expect(getCustomerOverview.method).toBe('GET')
+      expect(getCustomerOverview.path).toBe('/customer-overview/{crn}')
+    })
 
-		describe('when auth credentials contain an email', () => {
-			const customerDetails = {
-				info: {
-					crn: '1234567890',
-					customerName: 'Jane Smith'
-				},
-				businesses: []
-			}
-			const pageData = {
-				customerName: 'Jane Smith',
-				crn: '1234567890',
-				hasBusinesses: false,
-				businesses: { rows: [] }
-			}
+    describe('when auth credentials contain an email', () => {
+      const customerDetails = {
+        info: {
+          crn: '1234567890',
+          customerName: 'Jane Smith'
+        },
+        businesses: []
+      }
+      const pageData = {
+        customerName: 'Jane Smith',
+        crn: '1234567890',
+        hasBusinesses: false,
+        businesses: { rows: [] }
+      }
 
-			beforeEach(() => {
-				fetchCustomerOverviewDetailsService.mockResolvedValue(customerDetails)
-				customerOverviewPresenter.mockReturnValue(pageData)
-			})
+      beforeEach(() => {
+        fetchCustomerOverviewDetailsService.mockResolvedValue(customerDetails)
+        customerOverviewPresenter.mockReturnValue(pageData)
+      })
 
-			test('it fetches details, presents them and renders the customer overview page', async () => {
-				await getCustomerOverview.handler(request, h)
+      test('it fetches details, presents them and renders the customer overview page', async () => {
+        await getCustomerOverview.handler(request, h)
 
-				expect(fetchCustomerOverviewDetailsService).toHaveBeenCalledWith('1234567890', 'test@example.com')
-				expect(customerOverviewPresenter).toHaveBeenCalledWith(customerDetails, '2')
-				expect(h.view).toHaveBeenCalledWith('overview/customer-overview', pageData)
-			})
-		})
+        expect(fetchCustomerOverviewDetailsService).toHaveBeenCalledWith('1234567890', 'test@example.com')
+        expect(customerOverviewPresenter).toHaveBeenCalledWith(customerDetails, '2')
+        expect(h.view).toHaveBeenCalledWith('overview/customer-overview', pageData)
+      })
+    })
 
-		describe('when auth credentials have no email', () => {
-			const customerDetails = {
-				info: {
-					crn: '1234567890',
-					customerName: 'Jane Smith'
-				},
-				businesses: []
-			}
-			const pageData = {
-				customerName: 'Jane Smith',
-				crn: '1234567890',
-				hasBusinesses: false,
-				businesses: { rows: [] }
-			}
+    describe('when auth credentials have no email', () => {
+      const customerDetails = {
+        info: {
+          crn: '1234567890',
+          customerName: 'Jane Smith'
+        },
+        businesses: []
+      }
+      const pageData = {
+        customerName: 'Jane Smith',
+        crn: '1234567890',
+        hasBusinesses: false,
+        businesses: { rows: [] }
+      }
 
-			beforeEach(() => {
-				request.auth = { credentials: undefined }
-				fetchCustomerOverviewDetailsService.mockResolvedValue(customerDetails)
-				customerOverviewPresenter.mockReturnValue(pageData)
-			})
+      beforeEach(() => {
+        request.auth = { credentials: undefined }
+        fetchCustomerOverviewDetailsService.mockResolvedValue(customerDetails)
+        customerOverviewPresenter.mockReturnValue(pageData)
+      })
 
-			test('it passes undefined email to the service and still renders the page', async () => {
-				await getCustomerOverview.handler(request, h)
+      test('it passes undefined email to the service and still renders the page', async () => {
+        await getCustomerOverview.handler(request, h)
 
-				expect(fetchCustomerOverviewDetailsService).toHaveBeenCalledWith('1234567890', undefined)
-				expect(customerOverviewPresenter).toHaveBeenCalledWith(customerDetails, '2')
-				expect(h.view).toHaveBeenCalledWith('overview/customer-overview', pageData)
-			})
-		})
-	})
+        expect(fetchCustomerOverviewDetailsService).toHaveBeenCalledWith('1234567890', undefined)
+        expect(customerOverviewPresenter).toHaveBeenCalledWith(customerDetails, '2')
+        expect(h.view).toHaveBeenCalledWith('overview/customer-overview', pageData)
+      })
+    })
+  })
 })

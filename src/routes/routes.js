@@ -11,6 +11,7 @@ import { searchSbiRoutes } from './search/search-sbi-routes.js'
 import { searchCrnRoutes } from './search/search-crn-routes.js'
 import { changeSearchCriteriaRoutes } from './search/change-search-criteria-routes.js'
 import { customerOverviewRoutes } from './overview/customer-overview-routes.js'
+import { businessOverviewRoutes } from './overview/business-overview-routes.js'
 
 export const routes = [
   health,
@@ -25,5 +26,6 @@ export const routes = [
   ...searchSbiRoutes,
   ...searchCrnRoutes,
   ...changeSearchCriteriaRoutes,
-  ...customerOverviewRoutes
+  ...customerOverviewRoutes,
+  ...businessOverviewRoutes
 ]

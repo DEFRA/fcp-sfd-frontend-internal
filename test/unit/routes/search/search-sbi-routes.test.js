@@ -172,7 +172,8 @@ describe('search sbi routes', () => {
               text: 'SBI must be 9 digits'
             }
           },
-          showClear: true
+          showClear: true,
+          clearSearchLink: '/search-sbi'
         })
         expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()

@@ -41,7 +41,8 @@ describe('customer overview routes', () => {
     }
 
     h = {
-      view: vi.fn()
+      view: vi.fn(),
+      redirect: vi.fn().mockReturnValue({ takeover: vi.fn().mockReturnThis() })
     }
   })
 
@@ -107,6 +108,49 @@ describe('customer overview routes', () => {
         expect(fetchCustomerOverviewDetailsService).toHaveBeenCalledWith('1234567890', undefined)
         expect(customerOverviewPresenter).toHaveBeenCalledWith(customerDetails, '2')
         expect(h.view).toHaveBeenCalledWith('overview/customer-overview', pageData)
+      })
+    })
+
+    describe('when the crn fails validation', () => {
+      beforeEach(() => {
+        request.params.crn = 'invalid-crn'
+      })
+
+      test('it redirects to the search-crn page', async () => {
+        await getCustomerOverview.handler(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
+      })
+
+      test('it does not call the service, presenter or render a view', async () => {
+        await getCustomerOverview.handler(request, h)
+
+        expect(fetchCustomerOverviewDetailsService).not.toHaveBeenCalled()
+        expect(customerOverviewPresenter).not.toHaveBeenCalled()
+        expect(h.view).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('when fetchCustomerOverviewDetailsService throws', () => {
+      const serviceError = new Error('Failed to retrieve customer details')
+
+      beforeEach(() => {
+        fetchCustomerOverviewDetailsService.mockRejectedValue(serviceError)
+      })
+
+      test('it throws the error from the service', async () => {
+        const handler = getCustomerOverview.handler(request, h)
+
+        await expect(handler).rejects.toThrow('Failed to retrieve customer details')
+      })
+
+      test('the presenter and view are not called', async () => {
+        const handler = getCustomerOverview.handler(request, h)
+
+        await expect(handler).rejects.toThrow()
+
+        expect(customerOverviewPresenter).not.toHaveBeenCalled()
+        expect(h.view).not.toHaveBeenCalled()
       })
     })
   })

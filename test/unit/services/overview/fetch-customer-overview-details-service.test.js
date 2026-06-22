@@ -1,5 +1,6 @@
 // Test framework dependencies
 import { describe, test, expect, beforeEach, vi } from 'vitest'
+import Boom from '@hapi/boom'
 
 // Things we need to mock
 import { customerDetailsOverview } from '../../../../src/dal/queries/overview/customer-details-overview.js'
@@ -77,8 +78,8 @@ describe('fetchCustomerOverviewDetailsService', () => {
       })
     })
 
-    test('should throw a generic error', async () => {
-      await expect(fetchCustomerOverviewDetailsService(crn, email)).rejects.toThrowError('Failed to retrieve customer details')
+    test('should throw Boom.notFound error', async () => {
+      await expect(fetchCustomerOverviewDetailsService(crn, email)).rejects.toThrow(Boom.notFound('Customer not found'))
 
       expect(mockMapCustomerOverviewDetails).not.toHaveBeenCalled()
     })

@@ -25,13 +25,17 @@ vi.mock('undici', () => {
   }
 })
 
-function MockHttpsProxyAgent (url) {
-  this.url = url
-}
+vi.mock('https-proxy-agent', () => {
+  class MockHttpsProxyAgent {
+    constructor (url) {
+      this.url = url
+    }
+  }
 
-vi.mock('https-proxy-agent', () => ({
-  HttpsProxyAgent: vi.fn(MockHttpsProxyAgent)
-}))
+  return {
+    HttpsProxyAgent: MockHttpsProxyAgent
+  }
+})
 
 global.fetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: true })))
 

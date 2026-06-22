@@ -30,15 +30,16 @@ vi.mock('ioredis', () => ({
 const mockCatboxRedisInstance = { start: vi.fn(), stop: vi.fn() }
 const mockCatboxMemoryInstance = { start: vi.fn(), stop: vi.fn() }
 
-function MockCatboxRedis () { return mockCatboxRedisInstance }
-function MockCatboxMemory () { return mockCatboxMemoryInstance }
-
 vi.mock('@hapi/catbox-redis', () => ({
-  Engine: vi.fn(MockCatboxRedis)
+  Engine: class MockCatboxRedis {
+    constructor () { return mockCatboxRedisInstance }
+  }
 }))
 
 vi.mock('@hapi/catbox-memory', () => ({
-  Engine: vi.fn(MockCatboxMemory)
+  Engine: class MockCatboxMemory {
+    constructor () { return mockCatboxMemoryInstance }
+  }
 }))
 
 vi.mock('../../../../src/utils/caching/redis-client.js', () => ({

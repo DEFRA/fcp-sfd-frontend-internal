@@ -22,7 +22,7 @@ const businessOverviewPresenter = (businessDetails, page) => {
     sbi: businessDetails?.sbi || '',
     businessName: businessDetails?.businessName || '',
     hasCustomers: totalCustomers > 0,
-    customers: formatCustomersToRows(pagedCustomers),
+    customers: formatCustomers(pagedCustomers),
     pagination,
     breadcrumbs: [
       {
@@ -114,6 +114,7 @@ const paginateCustomers = (customers, currentPage) => {
 
   return customers.slice(startIndex, endIndex)
 }
+
 const formatCustomer = (customer) => ({
   fullName: buildName(customer?.firstName, customer?.lastName),
   crn: customer?.crn ?? ''

@@ -21,7 +21,7 @@ const customerOverviewPresenter = (customerDetails, page) => {
     customerName: customerDetails?.info?.customerName || '',
     crn: customerDetails?.info?.crn || '',
     hasBusinesses: totalBusinesses > 0,
-    businesses: formatBusinessesToRows(pagedBusinesses),
+    businesses: formatBusinesses(pagedBusinesses),
     pagination,
     breadcrumbs: [
       {

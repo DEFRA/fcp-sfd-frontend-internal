@@ -5,7 +5,6 @@
 
 import { paginationPresenter } from '../pagination-presenter.js'
 import { BUSINESS_OVERVIEW_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
-import { htmlEscape } from '../../utils/html-escape.js'
 
 const businessOverviewPresenter = (businessDetails, page) => {
   const customers = businessDetails?.customers ?? []
@@ -115,13 +114,14 @@ const paginateCustomers = (customers, currentPage) => {
 
   return customers.slice(startIndex, endIndex)
 }
-
 const formatCustomer = (customer) => ({
   fullName: buildName(customer?.firstName, customer?.lastName),
   crn: customer?.crn ?? ''
 })
 
-  return { rows }
+const formatCustomers = (customers = []) => {
+  return customers.map(formatCustomer)
+}
 
 export {
   businessOverviewPresenter

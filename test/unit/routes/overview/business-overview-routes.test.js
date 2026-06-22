@@ -116,12 +116,16 @@ describe('business overview routes', () => {
         fetchBusinessOverviewDetailsService.mockRejectedValue(serviceError)
       })
 
-      test('the error propagates out of the handler', async () => {
-        await expect(getBusinessOverview.handler(request, h)).rejects.toThrow('Failed to retrieve business details')
+      test('it throws the error from the service', async () => {
+        const handler = getBusinessOverview.handler(request, h)
+
+        await expect(handler).rejects.toThrow('Failed to retrieve business details')
       })
 
       test('the presenter and view are not called', async () => {
-        await expect(getBusinessOverview.handler(request, h)).rejects.toThrow()
+        const handler = getBusinessOverview.handler(request, h)
+
+        await expect(handler).rejects.toThrow()
 
         expect(businessOverviewPresenter).not.toHaveBeenCalled()
         expect(h.view).not.toHaveBeenCalled()

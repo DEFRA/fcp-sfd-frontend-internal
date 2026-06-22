@@ -130,5 +130,28 @@ describe('customer overview routes', () => {
         expect(h.view).not.toHaveBeenCalled()
       })
     })
+
+    describe('when fetchCustomerOverviewDetailsService throws', () => {
+      const serviceError = new Error('Failed to retrieve customer details')
+
+      beforeEach(() => {
+        fetchCustomerOverviewDetailsService.mockRejectedValue(serviceError)
+      })
+
+      test('it throws the error from the service', async () => {
+        const handler = getCustomerOverview.handler(request, h)
+
+        await expect(handler).rejects.toThrow('Failed to retrieve customer details')
+      })
+
+      test('the presenter and view are not called', async () => {
+        const handler = getCustomerOverview.handler(request, h)
+
+        await expect(handler).rejects.toThrow()
+
+        expect(customerOverviewPresenter).not.toHaveBeenCalled()
+        expect(h.view).not.toHaveBeenCalled()
+      })
+    })
   })
 })

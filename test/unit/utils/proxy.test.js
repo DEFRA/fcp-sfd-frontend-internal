@@ -13,27 +13,17 @@ vi.mock('../../../src/utils/logger.js', () => {
   }
 })
 
-vi.mock('undici', () => {
-  class MockProxyAgent {
-    constructor (options) {
-      this.options = options
-    }
-  }
-
-  return {
-    ProxyAgent: MockProxyAgent
-  }
-})
-
-vi.mock('https-proxy-agent', () => {
-  const mockHttpsProxyAgent = vi.fn().mockImplementation((url) => {
-    return { url }
+vi.mock('undici', () => ({
+  ProxyAgent: vi.fn(function (options) {
+    this.options = options
   })
+}))
 
-  return {
-    HttpsProxyAgent: mockHttpsProxyAgent
-  }
-})
+vi.mock('https-proxy-agent', () => ({
+  HttpsProxyAgent: vi.fn(function (url) {
+    this.url = url
+  })
+}))
 
 global.fetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: true })))
 

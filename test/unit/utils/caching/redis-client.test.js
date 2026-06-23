@@ -26,8 +26,12 @@ vi.mock('../../../../src/utils/logger.js', () => ({
 }))
 
 vi.mock('ioredis', () => ({
-  Redis: vi.fn((config) => new MockRedis(config)),
-  Cluster: vi.fn((nodes, options) => new MockCluster(nodes, options))
+  Redis: vi.fn(function (config) {
+    return new MockRedis(config)
+  }),
+  Cluster: vi.fn(function (nodes, options) {
+    return new MockCluster(nodes, options)
+  })
 }))
 
 describe('buildRedisClient', () => {

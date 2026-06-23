@@ -25,19 +25,24 @@
   <div class="govuk-grid-row govuk-!-margin-top-5">
     <div class="govuk-grid-column-two-thirds">
       {% if hasBusinesses %}
+        {% set businessRows = [] %}
+        {% for business in businesses %}
+          {% set nameHtml %}<a href="/business/{{ business.sbi }}" class="govuk-link govuk-link--no-visited-state">{{ business.name }}</a>{% endset %}
+          {% set businessRows = (businessRows.push([
+            { html: nameHtml },
+            { text: business.sbi }
+          ]), businessRows) %}
+        {% endfor %}
+
         {{ govukTable({
           caption: "Businesses linked to this customer",
           captionClasses: "govuk-table__caption--m",
           firstCellIsHeader: true,
           head: [
-            {
-              text: "Business name"
-            },
-            {
-              text: "Single business identifier (SBI)"
-            }
+            { text: "Business name" },
+            { text: "Single business identifier (SBI)" }
           ],
-          rows: businesses.rows
+          rows: businessRows
         }) }}
 
       {% if pagination.numberOfPages > 1 %}

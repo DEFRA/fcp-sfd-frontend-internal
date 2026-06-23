@@ -45,7 +45,7 @@ describe('customerOverviewPresenter', () => {
         },
         breadcrumbs: [
           {
-            text: 'Search results',
+            text: 'Search for another customer',
             href: '/search-crn'
           }
         ]
@@ -164,7 +164,7 @@ describe('customerOverviewPresenter', () => {
 
       expect(result.breadcrumbs).toEqual([
         {
-          text: 'Search results',
+          text: 'Search for another customer',
           href: '/search-crn'
         }
       ])

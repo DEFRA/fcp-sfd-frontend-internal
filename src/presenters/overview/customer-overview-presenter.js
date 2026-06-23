@@ -25,7 +25,7 @@ const customerOverviewPresenter = (customerDetails, page) => {
     pagination,
     breadcrumbs: [
       {
-        text: 'Search results',
+        text: 'Search for another customer',
         href: '/search-crn'
       }
     ]

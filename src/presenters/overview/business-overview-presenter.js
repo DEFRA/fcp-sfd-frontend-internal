@@ -26,7 +26,7 @@ const businessOverviewPresenter = (businessDetails, page) => {
     pagination,
     breadcrumbs: [
       {
-        text: 'Search results',
+        text: 'Search for another business',
         href: '/search-sbi'
       }
     ]

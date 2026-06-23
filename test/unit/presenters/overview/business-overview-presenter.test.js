@@ -46,7 +46,7 @@ describe('businessOverviewPresenter', () => {
         },
         breadcrumbs: [
           {
-            text: 'Search results',
+            text: 'Search for another business',
             href: '/search-sbi'
           }
         ]
@@ -166,7 +166,7 @@ describe('businessOverviewPresenter', () => {
 
       expect(result.breadcrumbs).toEqual([
         {
-          text: 'Search results',
+          text: 'Search for another business',
           href: '/search-sbi'
         }
       ])

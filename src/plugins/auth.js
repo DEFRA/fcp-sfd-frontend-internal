@@ -10,8 +10,6 @@ export const auth = {
     register: async (server) => {
       const oidcConfig = await getOidcConfig()
 
-      console.log('OIDC Config:', oidcConfig)
-
       // Bell is a third-party plugin that provides a common interface for OAuth 2.0 authentication
       // Used to authenticate users with Entra and a pre-requisite for the Cookie authentication strategy
       // Also used for changing organisations and signing out

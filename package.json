@@ -83,7 +83,7 @@
   "devDependencies": {
     "@types/convict": "6.1.6",
     "@types/hapi__catbox-memory": "6.0.2",
-    "@types/node": "25.9.3",
+    "@types/node": "26.0.0",
     "@types/nunjucks": "3.2.6",
     "@types/webpack-assets-manifest": "5.1.4",
     "@vitest/coverage-v8": "4.1.9",

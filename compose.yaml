@@ -26,7 +26,7 @@ services:
       DAL_EMAIL_HEADER: ${DAL_EMAIL_HEADER:-}
 
   upstream-mock:
-    image: defradigital/fcp-dal-upstream-mock:0.81.0
+    image: defradigital/fcp-dal-upstream-mock:0.87.0
     environment:
       MOCK_LOG_LEVEL: info
       MOCK_SERVER_COLLECTION: all
@@ -40,7 +40,7 @@ services:
       retries: 5
 
   fcp-dal-api:
-    image: defradigital/fcp-dal-api:2.8.0
+    image: defradigital/fcp-dal-api:2.10.2
     depends_on:
       upstream-mock:
         condition: service_healthy

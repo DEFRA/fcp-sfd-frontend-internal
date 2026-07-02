@@ -6,7 +6,7 @@ import { fetchBusinessOverviewDetailsService } from '../../../../src/services/ov
 import { businessOverviewPresenter } from '../../../../src/presenters/overview/business-overview-presenter.js'
 
 // Thing under test
-import { businessOverviewRoutes } from '../../../../src/routes/overview/business-overview-routes.js'
+import { businessOverviewRoutes } from '../../../../src/routes/overview/business-routes.js'
 
 const [getBusinessOverview] = businessOverviewRoutes
 
@@ -46,10 +46,10 @@ describe('business overview routes', () => {
     }
   })
 
-  describe('GET /business-overview/{sbi}', () => {
+  describe('GET /business/{sbi}', () => {
     test('should have the correct method and path configured', () => {
       expect(getBusinessOverview.method).toBe('GET')
-      expect(getBusinessOverview.path).toBe('/business-overview/{sbi}')
+      expect(getBusinessOverview.path).toBe('/business/{sbi}')
     })
 
     describe('when auth credentials contain an email', () => {

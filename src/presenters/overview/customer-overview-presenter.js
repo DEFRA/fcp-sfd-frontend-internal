@@ -1,10 +1,10 @@
 /**
- * Formats data ready for presenting in the `/customer-overview/{crn}` page
+ * Formats data ready for presenting in the `/customer/{crn}` page
  * @module customerOverviewPresenter
  */
 
 import { paginationPresenter } from '../pagination-presenter.js'
-import { CUSTOMER_OVERVIEW_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
+import { CUSTOMER_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 
 const customerOverviewPresenter = (customerDetails, page) => {
   const businesses = customerDetails?.businesses ?? []
@@ -13,7 +13,7 @@ const customerOverviewPresenter = (customerDetails, page) => {
   const requestedPageNumber = normalisePageNumber(page)
   const currentPage = clampPageNumber(requestedPageNumber, totalBusinesses)
   const pagedBusinesses = paginateBusinesses(sortedBusinesses, currentPage)
-  const routeURL = `/customer-overview/${customerDetails?.info?.crn}`
+  const routeURL = `/customer/${customerDetails?.info?.crn}`
 
   const pagination = paginationPresenter(totalBusinesses, currentPage, routeURL, pagedBusinesses.length, 'businesses')
 

@@ -4,7 +4,7 @@ import { schemas } from '@defra/fcp-sfd-frontend-engine'
 
 const getCustomerOverview = {
   method: 'GET',
-  path: '/customer-overview/{crn}',
+  path: '/customer/{crn}',
   handler: async (request, h) => {
     const { query: { page }, params, auth } = request
     const { crn } = params

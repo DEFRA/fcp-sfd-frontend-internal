@@ -24,6 +24,8 @@ const signInOidc = {
     // If the user is not authenticated, redirect to the home page
     // This should only occur if the user tries to access the sign-in page directly and not part of the sign-in flow
     // eg if the user has bookmarked the Entra sign-in page or they have signed out and tried to go back in the browser
+    console.log('request.auth:', request.auth)
+    console.log('HELLLOOOOO')
     if (!request.auth.isAuthenticated) {
       return h.view('unauthorised')
     }
@@ -34,11 +36,16 @@ const signInOidc = {
 
     const { sessionId, roles } = profile
 
+    console.log('🪵 | roles:', roles)
+    console.log('🪵 | sessionId:', sessionId)
+
     // TEMPORARY CODE FOR TESTING PURPOSES ONLY - REMOVE WHEN DAL TEST EMAIL FEATURE IS NO LONGER NEEDED
     // Check if DAL test email feature is enabled
     if (config.get('featureToggle.useDalTestEmail')) {
       profile.email = config.get('dalConfig.emailHeader')
     }
+
+    console.log('profile email:', profile.email)
 
     // Store token and all useful data in the session cache
     await request.server.app.cache.set(sessionId, {

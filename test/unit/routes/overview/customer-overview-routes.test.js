@@ -6,7 +6,7 @@ import { fetchCustomerOverviewDetailsService } from '../../../../src/services/ov
 import { customerOverviewPresenter } from '../../../../src/presenters/overview/customer-overview-presenter.js'
 
 // Thing under test
-import { customerOverviewRoutes } from '../../../../src/routes/overview/customer-overview-routes.js'
+import { customerOverviewRoutes } from '../../../../src/routes/overview/customer-routes.js'
 
 const [getCustomerOverview] = customerOverviewRoutes
 
@@ -46,10 +46,10 @@ describe('customer overview routes', () => {
     }
   })
 
-  describe('GET /customer-overview/{crn}', () => {
+  describe('GET /customer/{crn}', () => {
     test('should have the correct method and path configured', () => {
       expect(getCustomerOverview.method).toBe('GET')
-      expect(getCustomerOverview.path).toBe('/customer-overview/{crn}')
+      expect(getCustomerOverview.path).toBe('/customer/{crn}')
     })
 
     describe('when auth credentials contain an email', () => {

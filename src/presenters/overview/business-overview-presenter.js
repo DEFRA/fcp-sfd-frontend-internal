@@ -1,10 +1,10 @@
 /**
- * Formats data ready for presenting in the `/business-overview/{sbi}` page
+ * Formats data ready for presenting in the `/business/{sbi}` page
  * @module businessOverviewPresenter
  */
 
 import { paginationPresenter } from '../pagination-presenter.js'
-import { BUSINESS_OVERVIEW_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
+import { BUSINESS_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 
 const businessOverviewPresenter = (businessDetails, page) => {
   const customers = businessDetails?.customers ?? []
@@ -13,7 +13,7 @@ const businessOverviewPresenter = (businessDetails, page) => {
   const requestedPageNumber = normalisePageNumber(page)
   const currentPage = clampPageNumber(requestedPageNumber, totalCustomers)
   const pagedCustomers = paginateCustomers(sortedCustomers, currentPage)
-  const routeURL = `/business-overview/${businessDetails?.sbi}`
+  const routeURL = `/business/${businessDetails?.sbi}`
 
   const pagination = paginationPresenter(totalCustomers, currentPage, routeURL, pagedCustomers.length, 'customers')
 

@@ -10,8 +10,8 @@ import { footerRoutes } from './footer/footer-routes.js'
 import { searchSbiRoutes } from './search/search-sbi-routes.js'
 import { searchCrnRoutes } from './search/search-crn-routes.js'
 import { changeSearchCriteriaRoutes } from './search/change-search-criteria-routes.js'
-import { customerOverviewRoutes } from './overview/customer-overview-routes.js'
-import { businessOverviewRoutes } from './overview/business-overview-routes.js'
+import { customerOverviewRoutes } from './overview/customer-routes.js'
+import { businessOverviewRoutes } from './overview/business-routes.js'
 import { businessDetailsRoutes } from './business/business-details-routes.js'
 
 export const routes = [

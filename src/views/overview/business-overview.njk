@@ -27,19 +27,24 @@
   <div class="govuk-grid-row govuk-!-margin-top-5">
     <div class="govuk-grid-column-two-thirds">
       {% if hasCustomers %}
+        {% set customerRows = [] %}
+        {% for customer in customers %}
+          {% set nameHtml %}<a href="/customer/{{ customer.crn }}" class="govuk-link govuk-link--no-visited-state">{{ customer.fullName }}</a>{% endset %}
+          {% set customerRows = (customerRows.push([
+            { html: nameHtml },
+            { text: customer.crn }
+          ]), customerRows) %}
+        {% endfor %}
+
         {{ govukTable({
           caption: "Customers linked to this business",
           captionClasses: "govuk-table__caption--m",
           firstCellIsHeader: true,
           head: [
-            {
-              text: "Customer name"
-            },
-            {
-              text: "Customer reference number (CRN)"
-            }
+            { text: "Customer name" },
+            { text: "Customer reference number (CRN)" }
           ],
-          rows: customers.rows
+          rows: customerRows
         }) }}
 
         {% if pagination.numberOfPages > 1 %}

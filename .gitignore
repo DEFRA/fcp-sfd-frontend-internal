@@ -11,3 +11,8 @@ coverage
 .eslintcache
 .env
 .public
+.github/prompts
+.github/skills
+.github/agents
+CLAUDE.local.md
+.claude/settings.local.json

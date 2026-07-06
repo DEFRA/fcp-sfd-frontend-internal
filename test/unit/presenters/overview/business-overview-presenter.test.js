@@ -31,22 +31,11 @@ describe('businessOverviewPresenter', () => {
         sbi: '106705779',
         businessName: 'Herberts Lawn Mowing',
         hasCustomers: true,
-        customers: {
-          rows: [
-            [
-              { html: '<a href="/customer/1100000001" class="govuk-link govuk-link--no-visited-state">Alice Smith</a>' },
-              { text: '1100000001' }
-            ],
-            [
-              { html: '<a href="/customer/1100000002" class="govuk-link govuk-link--no-visited-state">Bob Jones</a>' },
-              { text: '1100000002' }
-            ],
-            [
-              { html: '<a href="/customer/1100000003" class="govuk-link govuk-link--no-visited-state">Charlie Brown</a>' },
-              { text: '1100000003' }
-            ]
-          ]
-        },
+        customers: [
+          { fullName: 'Alice Smith', crn: '1100000001' },
+          { fullName: 'Bob Jones', crn: '1100000002' },
+          { fullName: 'Charlie Brown', crn: '1100000003' }
+        ],
         pagination: {
           currentPageNumber: 1,
           numberOfPages: 1,
@@ -57,7 +46,7 @@ describe('businessOverviewPresenter', () => {
         },
         breadcrumbs: [
           {
-            text: 'Search results',
+            text: 'Search for another business',
             href: '/search-sbi'
           }
         ]
@@ -124,19 +113,10 @@ describe('businessOverviewPresenter', () => {
       test('it should return customers sorted alphabetically by full name (A to Z)', () => {
         const result = businessOverviewPresenter(data, page)
 
-        expect(result.customers.rows).toEqual([
-          [
-            { html: '<a href="/customer/1100000001" class="govuk-link govuk-link--no-visited-state">Alice Smith</a>' },
-            { text: '1100000001' }
-          ],
-          [
-            { html: '<a href="/customer/1100000002" class="govuk-link govuk-link--no-visited-state">Bob Jones</a>' },
-            { text: '1100000002' }
-          ],
-          [
-            { html: '<a href="/customer/1100000003" class="govuk-link govuk-link--no-visited-state">Charlie Brown</a>' },
-            { text: '1100000003' }
-          ]
+        expect(result.customers).toEqual([
+          { fullName: 'Alice Smith', crn: '1100000001' },
+          { fullName: 'Bob Jones', crn: '1100000002' },
+          { fullName: 'Charlie Brown', crn: '1100000003' }
         ])
       })
 
@@ -148,15 +128,9 @@ describe('businessOverviewPresenter', () => {
 
         const result = businessOverviewPresenter(data, page)
 
-        expect(result.customers.rows).toEqual([
-          [
-            { html: '<a href="/customer/1100000002" class="govuk-link govuk-link--no-visited-state">Apple Grower</a>' },
-            { text: '1100000002' }
-          ],
-          [
-            { html: '<a href="/customer/1100000001" class="govuk-link govuk-link--no-visited-state">zebra Farmer</a>' },
-            { text: '1100000001' }
-          ]
+        expect(result.customers).toEqual([
+          { fullName: 'Apple Grower', crn: '1100000002' },
+          { fullName: 'zebra Farmer', crn: '1100000001' }
         ])
       })
     })
@@ -166,10 +140,10 @@ describe('businessOverviewPresenter', () => {
         data.customers = []
       })
 
-      test('it should return an empty rows array', () => {
+      test('it should return an empty customers array', () => {
         const result = businessOverviewPresenter(data, page)
 
-        expect(result.customers).toEqual({ rows: [] })
+        expect(result.customers).toEqual([])
       })
     })
 
@@ -181,38 +155,7 @@ describe('businessOverviewPresenter', () => {
       test('it should fall back to empty strings in the row', () => {
         const result = businessOverviewPresenter(data, page)
 
-        expect(result.customers.rows[0]).toEqual([
-          { html: '<a href="/customer/" class="govuk-link govuk-link--no-visited-state"></a>' },
-          { text: '' }
-        ])
-      })
-    })
-
-    describe('when a customer name contains special HTML characters', () => {
-      test('it should escape HTML special characters in the customer name', () => {
-        data.customers = [
-          { crn: '1100000001', firstName: 'Tom & Jerry <script>alert("xss")</script>', lastName: 'Farmer' }
-        ]
-
-        const result = businessOverviewPresenter(data, page)
-
-        expect(result.customers.rows[0]).toEqual([
-          { html: '<a href="/customer/1100000001" class="govuk-link govuk-link--no-visited-state">Tom &amp; Jerry &lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt; Farmer</a>' },
-          { text: '1100000001' }
-        ])
-      })
-
-      test('it should escape single quotes in the customer name', () => {
-        data.customers = [
-          { crn: '1100000001', firstName: "O'Malley", lastName: "O'Brien" }
-        ]
-
-        const result = businessOverviewPresenter(data, page)
-
-        expect(result.customers.rows[0]).toEqual([
-          { html: '<a href="/customer/1100000001" class="govuk-link govuk-link--no-visited-state">O&#39;Malley O&#39;Brien</a>' },
-          { text: '1100000001' }
-        ])
+        expect(result.customers[0]).toEqual({ fullName: '', crn: '' })
       })
     })
   })
@@ -223,7 +166,7 @@ describe('businessOverviewPresenter', () => {
 
       expect(result.breadcrumbs).toEqual([
         {
-          text: 'Search results',
+          text: 'Search for another business',
           href: '/search-sbi'
         }
       ])

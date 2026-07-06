@@ -1,11 +1,10 @@
 /**
- * Formats data ready for presenting in the `/customer-overview/{crn}` page
+ * Formats data ready for presenting in the `/customer/{crn}` page
  * @module customerOverviewPresenter
  */
 
 import { paginationPresenter } from '../pagination-presenter.js'
-import { CUSTOMER_OVERVIEW_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
-import { htmlEscape } from '../../utils/html-escape.js'
+import { CUSTOMER_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 
 const customerOverviewPresenter = (customerDetails, page) => {
   const businesses = customerDetails?.businesses ?? []
@@ -14,7 +13,7 @@ const customerOverviewPresenter = (customerDetails, page) => {
   const requestedPageNumber = normalisePageNumber(page)
   const currentPage = clampPageNumber(requestedPageNumber, totalBusinesses)
   const pagedBusinesses = paginateBusinesses(sortedBusinesses, currentPage)
-  const routeURL = `/customer-overview/${customerDetails?.info?.crn}`
+  const routeURL = `/customer/${customerDetails?.info?.crn}`
 
   const pagination = paginationPresenter(totalBusinesses, currentPage, routeURL, pagedBusinesses.length, 'businesses')
 
@@ -22,11 +21,11 @@ const customerOverviewPresenter = (customerDetails, page) => {
     customerName: customerDetails?.info?.customerName || '',
     crn: customerDetails?.info?.crn || '',
     hasBusinesses: totalBusinesses > 0,
-    businesses: formatBusinessesToRows(pagedBusinesses),
+    businesses: formatBusinesses(pagedBusinesses),
     pagination,
     breadcrumbs: [
       {
-        text: 'Search results',
+        text: 'Search for another customer',
         href: '/search-crn'
       }
     ]
@@ -107,17 +106,13 @@ const paginateBusinesses = (businesses, currentPage) => {
   return businesses.slice(startIndex, endIndex)
 }
 
-const formatBusinessesToRows = (businesses = []) => {
-  const rows = businesses.map((business) => [
-    {
-      html: `<a href="/business/${htmlEscape(business?.sbi ?? '')}" class="govuk-link govuk-link--no-visited-state">${htmlEscape(business?.name ?? '')}</a>`
-    },
-    {
-      text: business?.sbi ?? ''
-    }
-  ])
+const formatBusiness = (business) => ({
+  name: business?.name ?? '',
+  sbi: business?.sbi ?? ''
+})
 
-  return { rows }
+const formatBusinesses = (businesses = []) => {
+  return businesses.map(formatBusiness)
 }
 
 export {

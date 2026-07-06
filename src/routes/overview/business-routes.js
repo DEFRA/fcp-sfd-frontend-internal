@@ -4,7 +4,7 @@ import { schemas } from '@defra/fcp-sfd-frontend-engine'
 
 const getBusinessOverview = {
   method: 'GET',
-  path: '/business-overview/{sbi}',
+  path: '/business/{sbi}',
   handler: async (request, h) => {
     const { query: { page }, params, auth } = request
     const { sbi } = params

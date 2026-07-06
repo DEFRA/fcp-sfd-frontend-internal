@@ -1,11 +1,10 @@
 /**
- * Formats data ready for presenting in the `/business-overview/{sbi}` page
+ * Formats data ready for presenting in the `/business/{sbi}` page
  * @module businessOverviewPresenter
  */
 
 import { paginationPresenter } from '../pagination-presenter.js'
-import { BUSINESS_OVERVIEW_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
-import { htmlEscape } from '../../utils/html-escape.js'
+import { BUSINESS_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 
 const businessOverviewPresenter = (businessDetails, page) => {
   const customers = businessDetails?.customers ?? []
@@ -14,7 +13,7 @@ const businessOverviewPresenter = (businessDetails, page) => {
   const requestedPageNumber = normalisePageNumber(page)
   const currentPage = clampPageNumber(requestedPageNumber, totalCustomers)
   const pagedCustomers = paginateCustomers(sortedCustomers, currentPage)
-  const routeURL = `/business-overview/${businessDetails?.sbi}`
+  const routeURL = `/business/${businessDetails?.sbi}`
 
   const pagination = paginationPresenter(totalCustomers, currentPage, routeURL, pagedCustomers.length, 'customers')
 
@@ -23,11 +22,11 @@ const businessOverviewPresenter = (businessDetails, page) => {
     sbi: businessDetails?.sbi || '',
     businessName: businessDetails?.businessName || '',
     hasCustomers: totalCustomers > 0,
-    customers: formatCustomersToRows(pagedCustomers),
+    customers: formatCustomers(pagedCustomers),
     pagination,
     breadcrumbs: [
       {
-        text: 'Search results',
+        text: 'Search for another business',
         href: '/search-sbi'
       }
     ]
@@ -116,17 +115,13 @@ const paginateCustomers = (customers, currentPage) => {
   return customers.slice(startIndex, endIndex)
 }
 
-const formatCustomersToRows = (customers = []) => {
-  const rows = customers.map((customer) => [
-    {
-      html: `<a href="/customer/${htmlEscape(customer?.crn ?? '')}" class="govuk-link govuk-link--no-visited-state">${htmlEscape(buildName(customer?.firstName, customer?.lastName))}</a>`
-    },
-    {
-      text: customer?.crn ?? ''
-    }
-  ])
+const formatCustomer = (customer) => ({
+  fullName: buildName(customer?.firstName, customer?.lastName),
+  crn: customer?.crn ?? ''
+})
 
-  return { rows }
+const formatCustomers = (customers = []) => {
+  return customers.map(formatCustomer)
 }
 
 export {

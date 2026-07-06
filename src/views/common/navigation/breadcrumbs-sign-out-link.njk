@@ -2,7 +2,7 @@
   <div class="sub-header-container govuk-!-padding-top-3 govuk-clearfix">
 
     {% if auth.isAuthenticated %}
-      <div class="login-nav login-nav-aligned{% if params.loginNavClasses %} {{ params.loginNavClasses }}{% endif %}">
+      <div class="login-nav login-nav-aligned govuk-!-margin-top-0{% if params.loginNavClasses %} {{ params.loginNavClasses }}{% endif %}">
         <ul class="login-nav__list">
           <li class="login-nav__list-item">
             <a
@@ -17,7 +17,7 @@
     {% endif %}
 
     {% if params.breadcrumbs and (params.breadcrumbs | length) %}
-      <div class="govuk-breadcrumbs" style="display: inline-block">
+      <div class="govuk-breadcrumbs govuk-!-margin-top-0" style="display: inline-block">
         <ol class="govuk-breadcrumbs__list">
           {% for item in params.breadcrumbs %}
             <li class="govuk-breadcrumbs__list-item">

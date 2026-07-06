@@ -11,12 +11,17 @@ const businessDetailsPresenter = (data, sbi) => {
   return {
     pageTitle: 'View business details',
     metaDescription: 'View business details.',
-    businessNameHeader: data.info.businessName ?? null,
     sbi,
-    backLink: {
-      backLink: true,
-      href: `/business-overview/${sbi}`
-    },
+    breadcrumbs: [
+      {
+        text: 'Search results',
+        href: `/search-sbi?sbi=${sbi}`
+      },
+      {
+        text: formatOverviewBreadcrumb(data.info.businessName, sbi),
+        href: `/business/${sbi}`
+      }
+    ],
     businessName: {
       value: data.info.businessName || 'Not added',
       action: getActionText(data.info.businessName),
@@ -70,6 +75,10 @@ const formatAddress = (businessAddress) => {
 
 const getActionText = (value) => {
   return value ? 'Change' : 'Add'
+}
+
+const formatOverviewBreadcrumb = (businessName, sbi) => {
+  return businessName ? `${businessName} (SBI: ${sbi})` : `SBI: ${sbi}`
 }
 
 const formatCph = (countyParishHoldings) => {

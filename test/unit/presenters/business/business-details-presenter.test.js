@@ -48,10 +48,20 @@ describe('businessDetailsPresenter', () => {
     expect(result.sbi).toBe(sbi)
   })
 
-  test('returns a back link pointing to the business overview page', () => {
+  test('returns breadcrumbs for search results and the business overview', () => {
     const result = businessDetailsPresenter(data, sbi)
 
-    expect(result.backLink).toEqual({ backLink: true, href: `/business-overview/${sbi}` })
+    expect(result.breadcrumbs).toEqual([
+      { text: 'Search results', href: `/search-sbi?sbi=${sbi}` },
+      { text: `Herberts Lawn Mowing (SBI: ${sbi})`, href: `/business/${sbi}` }
+    ])
+  })
+
+  test('falls back to just the SBI in the overview breadcrumb when the business name is absent', () => {
+    data.info.businessName = null
+    const result = businessDetailsPresenter(data, sbi)
+
+    expect(result.breadcrumbs[1]).toEqual({ text: `SBI: ${sbi}`, href: `/business/${sbi}` })
   })
 
   describe('businessName', () => {

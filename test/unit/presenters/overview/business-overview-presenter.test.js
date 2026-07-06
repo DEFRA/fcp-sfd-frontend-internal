@@ -46,8 +46,8 @@ describe('businessOverviewPresenter', () => {
         },
         breadcrumbs: [
           {
-            text: 'Search for another business',
-            href: '/search-sbi'
+            text: 'Search results',
+            href: '/search-sbi?sbi=106705779'
           }
         ]
       })
@@ -161,13 +161,13 @@ describe('businessOverviewPresenter', () => {
   })
 
   describe('the "breadcrumbs" property', () => {
-    test('it should always return the static search results breadcrumb', () => {
+    test('it should always return the search results breadcrumb with the SBI as a query param', () => {
       const result = businessOverviewPresenter(data, page)
 
       expect(result.breadcrumbs).toEqual([
         {
-          text: 'Search for another business',
-          href: '/search-sbi'
+          text: 'Search results',
+          href: '/search-sbi?sbi=106705779'
         }
       ])
     })

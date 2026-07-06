@@ -1,12 +1,10 @@
 {% extends 'common/layout.njk' %}
 
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "common/sub-header/macro.njk" import subHeader %}
-{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+{% from "common/navigation/breadcrumbs-sign-out-link.njk" import appBreadcrumbsSignOutLink with context %}
 
 {% block beforeContent %}
-  {{ subHeader(businessName=businessNameHeader, sbi=sbi) }}
-  {{ appBackSignOutLink(backLink) }}
+  {{ appBreadcrumbsSignOutLink({ breadcrumbs: breadcrumbs }) }}
 {% endblock %}
 
 {% block content %}

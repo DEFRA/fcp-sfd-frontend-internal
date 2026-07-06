@@ -7,6 +7,7 @@ export const businessDetailsBySbi = `
       traderNumber
       vendorNumber
       address {
+        pafOrganisationName
         buildingNumberRange
         buildingName
         flatName

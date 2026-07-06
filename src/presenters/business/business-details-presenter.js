@@ -5,8 +5,13 @@
 
 import { formatDisplayAddress } from '../base-presenter.js'
 
+const CHANGE_LINK = '#'
+
 const businessDetailsPresenter = (data, sbi) => {
-  const countyParishHoldingNumbers = formatCph(data.info.countyParishHoldingNumbers)
+  const { info, address, contact } = data
+  const countyParishHoldingNumbers = formatCph(info.countyParishHoldingNumbers)
+  const addressLines = formatAddress(address)
+  const hasAddress = addressLines.length > 0
 
   return {
     pageTitle: 'View business details',
@@ -22,46 +27,21 @@ const businessDetailsPresenter = (data, sbi) => {
         href: `/business/${sbi}`
       }
     ],
-    businessName: {
-      value: data.info.businessName || 'Not added',
-      action: getActionText(data.info.businessName),
-      changeLink: '#'
-    },
+    businessName: createEditableValueField(info.businessName, 'Not added'),
     businessAddress: {
-      value: formatAddress(data.address),
-      action: getActionText(data.address?.lookup?.uprn || data.address?.manual?.line1),
-      changeLink: '#'
+      value: hasAddress ? addressLines : 'Not added',
+      action: getActionText(hasAddress),
+      changeLink: CHANGE_LINK
     },
-    businessTelephone: {
-      telephone: data.contact.landline || 'Not added',
-      mobile: data.contact.mobile || 'Not added',
-      action: getActionText(data.contact.landline || data.contact.mobile),
-      changeLink: '#'
-    },
-    businessEmail: {
-      value: data.contact.email || 'Not added',
-      action: getActionText(data.contact.email),
-      changeLink: '#'
-    },
-    vatNumber: {
-      value: data.info.vat || 'No number added',
-      action: getActionText(data.info.vat),
-      changeLink: '#'
-    },
-    tradeNumber: data.info.traderNumber ?? null,
-    vendorRegistrationNumber: data.info.vendorNumber ?? null,
+    businessTelephone: createEditableTelephoneField(contact.landline, contact.mobile),
+    businessEmail: createEditableValueField(contact.email, 'Not added'),
+    vatNumber: createEditableValueField(info.vat, 'No number added'),
+    tradeNumber: info.traderNumber ?? null,
+    vendorRegistrationNumber: info.vendorNumber ?? null,
     countyParishHoldingNumbers,
     countyParishHoldingNumbersText: `County Parish Holding (CPH) number${countyParishHoldingNumbers.length > 1 ? 's' : ''}`,
-    businessLegalStatus: {
-      value: data.info.legalStatus ?? 'Not added',
-      action: getActionText(data.info.legalStatus),
-      changeLink: '#'
-    },
-    businessType: {
-      value: data.info.type ?? 'Not added',
-      action: getActionText(data.info.type),
-      changeLink: '#'
-    }
+    businessLegalStatus: createEditableValueField(info.legalStatus, 'Not added'),
+    businessType: createEditableValueField(info.type, 'Not added')
   }
 }
 
@@ -70,7 +50,26 @@ const formatAddress = (businessAddress) => {
     return formatDisplayAddress(businessAddress)
   }
 
-  return 'Not added'
+  return []
+}
+
+const createEditableValueField = (value, emptyValueText) => {
+  return {
+    value: value || emptyValueText,
+    action: getActionText(value),
+    changeLink: CHANGE_LINK
+  }
+}
+
+const createEditableTelephoneField = (landline, mobile) => {
+  const hasTelephone = Boolean(landline || mobile)
+
+  return {
+    telephone: landline || 'Not added',
+    mobile: mobile || 'Not added',
+    action: getActionText(hasTelephone),
+    changeLink: CHANGE_LINK
+  }
 }
 
 const getActionText = (value) => {

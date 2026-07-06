@@ -8,23 +8,38 @@
 
 import { mappers } from '@defra/fcp-sfd-frontend-engine'
 
-export const mapBusinessDetails = (value) => {
+const asNullable = (value) => value ?? null
+
+const mapBusinessInfo = (business) => {
+  const info = business.info ?? {}
+
   return {
-    info: {
-      sbi: value.business.sbi,
-      businessName: value.business.info.name ?? null,
-      vat: value.business.info.vat ?? null,
-      traderNumber: value.business.info.traderNumber ?? null,
-      vendorNumber: value.business.info.vendorNumber ?? null,
-      legalStatus: value.business.info.legalStatus?.type ?? null,
-      type: value.business.info.type?.type ?? null,
-      countyParishHoldingNumbers: value.business.countyParishHoldings ?? []
-    },
-    address: mappers.address(value.business.info.address),
-    contact: {
-      email: value.business.info.email?.address ?? null,
-      landline: value.business.info.phone?.landline ?? null,
-      mobile: value.business.info.phone?.mobile ?? null
-    }
+    sbi: business.sbi,
+    businessName: asNullable(info.name),
+    vat: asNullable(info.vat),
+    traderNumber: asNullable(info.traderNumber),
+    vendorNumber: asNullable(info.vendorNumber),
+    legalStatus: asNullable(info.legalStatus?.type),
+    type: asNullable(info.type?.type),
+    countyParishHoldingNumbers: business.countyParishHoldings ?? []
+  }
+}
+
+const mapBusinessContact = (businessInfo) => {
+  return {
+    email: asNullable(businessInfo.email?.address),
+    landline: asNullable(businessInfo.phone?.landline),
+    mobile: asNullable(businessInfo.phone?.mobile)
+  }
+}
+
+export const mapBusinessDetails = (value) => {
+  const business = value.business
+  const businessInfo = business.info ?? {}
+
+  return {
+    info: mapBusinessInfo(business),
+    address: mappers.address(businessInfo.address),
+    contact: mapBusinessContact(businessInfo)
   }
 }

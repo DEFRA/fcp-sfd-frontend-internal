@@ -2,6 +2,41 @@
  * Base presenter for formatting data for display
  */
 
+const getAddressParts = (address) => {
+  const lookup = address.lookup || {}
+  const manual = address.manual || {}
+  const city = address.city || ''
+  const country = address.country || ''
+
+  if (lookup.uprn) {
+    const buildingAndStreet = [lookup.buildingNumberRange, lookup.street]
+      .filter(Boolean)
+      .join(' ')
+
+    return [
+      lookup.pafOrganisationName,
+      lookup.flatName,
+      lookup.buildingName,
+      buildingAndStreet,
+      lookup.doubleDependentLocality,
+      lookup.dependentLocality,
+      city,
+      lookup.county,
+      country
+    ]
+  }
+
+  return [
+    manual.line1,
+    manual.line2,
+    manual.line3,
+    city,
+    manual.line4, // County
+    manual.line5,
+    country
+  ]
+}
+
 /**
  * Formats an address object into a comma-separated address string and a separate postcode.
  *
@@ -19,43 +54,8 @@ export const formatAddressLines = (address) => {
     return { addressLines: '', postcode: '' }
   }
 
-  const lookup = address.lookup || {}
-  const manual = address.manual || {}
   const postcode = address.postcode || ''
-  const country = address.country || ''
-  const city = address.city || ''
-
-  let lines = []
-
-  if (lookup.uprn) {
-    // The user selected an address from the lookup tool
-    const buildingAndStreet = [lookup.buildingNumberRange, lookup.street]
-      .filter(Boolean)
-      .join(' ')
-
-    lines = [
-      lookup.pafOrganisationName,
-      lookup.flatName,
-      lookup.buildingName,
-      buildingAndStreet,
-      lookup.doubleDependentLocality,
-      lookup.dependentLocality,
-      city,
-      lookup.county,
-      country
-    ]
-  } else {
-    // The user typed their address in manually
-    lines = [
-      manual.line1,
-      manual.line2,
-      manual.line3,
-      city,
-      manual.line4, // County
-      manual.line5,
-      country
-    ]
-  }
+  const lines = getAddressParts(address)
 
   return {
     addressLines: lines.filter(Boolean).join(', '),
@@ -78,43 +78,8 @@ export const formatDisplayAddress = (address) => {
     return []
   }
 
-  const lookup = address.lookup || {}
-  const manual = address.manual || {}
   const postcode = address.postcode || ''
-  const country = address.country || ''
-  const city = address.city || ''
-
-  let lines = []
-
-  if (lookup.uprn) {
-    const buildingAndStreet = [lookup.buildingNumberRange, lookup.street]
-      .filter(Boolean)
-      .join(' ')
-
-    lines = [
-      lookup.pafOrganisationName,
-      lookup.flatName,
-      lookup.buildingName,
-      buildingAndStreet,
-      lookup.doubleDependentLocality,
-      lookup.dependentLocality,
-      city,
-      lookup.county,
-      country,
-      postcode
-    ]
-  } else {
-    lines = [
-      manual.line1,
-      manual.line2,
-      manual.line3,
-      city,
-      manual.line4,
-      manual.line5,
-      country,
-      postcode
-    ]
-  }
+  const lines = [...getAddressParts(address), postcode]
 
   return lines.filter(Boolean)
 }

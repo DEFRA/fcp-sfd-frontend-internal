@@ -2,7 +2,7 @@
 import { describe, test, expect, beforeEach } from 'vitest'
 
 // Thing under test
-import { formatAddressLines } from '../../../src/presenters/base-presenter.js'
+import { formatAddressLines, formatDisplayAddress } from '../../../src/presenters/base-presenter.js'
 
 describe('basePresenter', () => {
   describe('#formatAddressLines', () => {
@@ -65,6 +65,33 @@ describe('basePresenter', () => {
         expect(result).toEqual({
           addressLines: 'Flat 1, The Farm House, 12 Farm Lane, Rural Area, West Fields, Exeter, Devon, England',
           postcode: 'EX1 1AA'
+        })
+      })
+
+      describe('#formatDisplayAddress', () => {
+        test('returns an array that includes postcode for lookup addresses', () => {
+          const address = {
+            lookup: {
+              buildingNumberRange: '10',
+              street: 'Main Street',
+              uprn: '300000000001'
+            },
+            manual: {},
+            city: 'Bristol',
+            postcode: 'BS1 1AA',
+            country: 'England'
+          }
+
+          expect(formatDisplayAddress(address)).toEqual([
+            '10 Main Street',
+            'Bristol',
+            'England',
+            'BS1 1AA'
+          ])
+        })
+
+        test('returns an empty array when address is absent', () => {
+          expect(formatDisplayAddress(null)).toEqual([])
         })
       })
     })

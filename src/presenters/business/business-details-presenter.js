@@ -3,19 +3,19 @@
  * @module businessDetailsPresenter
  */
 
-import { formatDisplayAddress } from '../base-presenter.js'
+import { presenters } from '@defra/fcp-sfd-frontend-engine'
 
 const CHANGE_LINK = '#'
 
 const businessDetailsPresenter = (data, sbi) => {
   const { info, address, contact } = data
-  const countyParishHoldingNumbers = formatCph(info.countyParishHoldingNumbers)
-  const addressLines = formatAddress(address)
+  const countyParishHoldingNumbers = presenters.formatCph(info.countyParishHoldingNumbers)
+  const addressLines = presenters.formatBusinessAddress(address)
   const hasAddress = addressLines.length > 0
 
   return {
-    pageTitle: 'View business details',
-    metaDescription: 'View business details.',
+    pageTitle: 'View and update your business details',
+    metaDescription: 'View and update your business details.',
     sbi,
     breadcrumbs: [
       {
@@ -30,7 +30,7 @@ const businessDetailsPresenter = (data, sbi) => {
     businessName: createEditableValueField(info.businessName, 'Not added'),
     businessAddress: {
       value: hasAddress ? addressLines : 'Not added',
-      action: getActionText(hasAddress),
+      action: presenters.getActionText(hasAddress),
       changeLink: CHANGE_LINK
     },
     businessTelephone: createEditableTelephoneField(contact.landline, contact.mobile),
@@ -39,24 +39,16 @@ const businessDetailsPresenter = (data, sbi) => {
     tradeNumber: info.traderNumber ?? null,
     vendorRegistrationNumber: info.vendorNumber ?? null,
     countyParishHoldingNumbers,
-    countyParishHoldingNumbersText: `County Parish Holding (CPH) number${countyParishHoldingNumbers.length > 1 ? 's' : ''}`,
+    countyParishHoldingNumbersText: presenters.formatCphText(countyParishHoldingNumbers.length),
     businessLegalStatus: createEditableValueField(info.legalStatus, 'Not added'),
     businessType: createEditableValueField(info.type, 'Not added')
   }
 }
 
-const formatAddress = (businessAddress) => {
-  if (businessAddress?.lookup?.uprn || businessAddress?.manual?.line1) {
-    return formatDisplayAddress(businessAddress)
-  }
-
-  return []
-}
-
 const createEditableValueField = (value, emptyValueText) => {
   return {
     value: value || emptyValueText,
-    action: getActionText(value),
+    action: presenters.getActionText(value),
     changeLink: CHANGE_LINK
   }
 }
@@ -67,23 +59,13 @@ const createEditableTelephoneField = (landline, mobile) => {
   return {
     telephone: landline || 'Not added',
     mobile: mobile || 'Not added',
-    action: getActionText(hasTelephone),
+    action: presenters.getActionText(hasTelephone),
     changeLink: CHANGE_LINK
   }
 }
 
-const getActionText = (value) => {
-  return value ? 'Change' : 'Add'
-}
-
 const formatOverviewBreadcrumb = (businessName, sbi) => {
   return businessName ? `${businessName} (SBI: ${sbi})` : `SBI: ${sbi}`
-}
-
-const formatCph = (countyParishHoldings) => {
-  return (countyParishHoldings || [])
-    .filter((cph) => cph?.cphNumber)
-    .map((cph) => cph.cphNumber)
 }
 
 export {

@@ -47,7 +47,7 @@ describe('business details routes', () => {
 
     describe('when sbi is valid and service returns data', () => {
       const businessDetails = { info: { businessName: 'Herberts Lawn Mowing' } }
-      const pageData = { pageTitle: 'View business details' }
+      const pageData = { pageTitle: 'View and update your business details' }
 
       beforeEach(() => {
         fetchBusinessDetailsService.mockResolvedValue(businessDetails)

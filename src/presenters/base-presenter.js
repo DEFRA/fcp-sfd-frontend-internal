@@ -62,24 +62,3 @@ export const formatAddressLines = (address) => {
     postcode: postcode || ''
   }
 }
-
-/**
- * Formats an address object into an array of display lines suitable for
- * iterating in a template (one <div> per line).
- *
- * Returns an empty array when the address is absent or has no content.
- *
- * @param {Object} address - The address object from the mapped DAL response
- *
- * @returns {string[]}
- */
-export const formatDisplayAddress = (address) => {
-  if (!address) {
-    return []
-  }
-
-  const postcode = address.postcode || ''
-  const lines = [...getAddressParts(address), postcode]
-
-  return lines.filter(Boolean)
-}

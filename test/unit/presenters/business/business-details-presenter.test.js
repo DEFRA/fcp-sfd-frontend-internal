@@ -39,7 +39,7 @@ describe('businessDetailsPresenter', () => {
   test('returns correct pageTitle', () => {
     const result = businessDetailsPresenter(data, sbi)
 
-    expect(result.pageTitle).toBe('View business details')
+    expect(result.pageTitle).toBe('View and update your business details')
   })
 
   test('returns the sbi', () => {

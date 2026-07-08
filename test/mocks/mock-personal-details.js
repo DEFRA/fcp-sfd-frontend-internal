@@ -1,10 +1,16 @@
-const dalData = {
+/**
+ * Test-only stub for personal details (dalData, mappedData). Same shape as
+ * mapPersonalDetails from the DAL response; used by unit tests and mappers.
+ *
+ * @module mockPersonalDetails
+ */
+
+const getDalData = () => ({
   customer: {
     crn: '123456890',
     info: {
       dateOfBirth: '1990-01-01',
       name: {
-        title: 'Mr',
         first: 'John',
         middle: 'M',
         last: 'Doe'
@@ -33,27 +39,38 @@ const dalData = {
       }
     }
   }
-}
+})
 
-const mappedData = {
+const getMappedData = () => ({
   crn: '123456890',
   info: {
-    dateOfBirth: '1990-01-01',
+    userName: 'John Doe',
     fullName: {
-      title: 'Mr',
       first: 'John',
       last: 'Doe',
       middle: 'M'
+    },
+    fullNameJoined: 'John M Doe',
+    dateOfBirth: {
+      full: '1990-01-01',
+      day: '01',
+      month: '01',
+      year: '1990'
     }
   },
   address: {
+    city: 'DARLINGTON',
+    country: 'United Kingdom',
     lookup: {
-      flatName: 'THE COACH HOUSE',
       buildingName: 'STOCKWELL HALL',
       buildingNumberRange: '7',
+      county: 'Dorset',
+      dependentLocality: undefined,
+      doubleDependentLocality: undefined,
+      flatName: 'THE COACH HOUSE',
+      pafOrganisationName: undefined,
       street: 'HAREWOOD AVENUE',
-      city: 'DARLINGTON',
-      county: 'Dorset'
+      uprn: undefined
     },
     manual: {
       line1: '76 Robinswood Road',
@@ -62,17 +79,16 @@ const mappedData = {
       line4: null,
       line5: null
     },
-    postcode: 'CO9 3LS',
-    country: 'United Kingdom'
+    postcode: 'CO9 3LS'
   },
   contact: {
     email: 'test@example.com',
     telephone: '01234567890',
     mobile: null
   }
-}
+})
 
 export {
-  dalData,
-  mappedData
+  getDalData,
+  getMappedData
 }

@@ -23,11 +23,14 @@ describe('personalDetailsPresenter', () => {
   let hasValidPersonalDetails = true
   let sectionsNeedingUpdate = []
 
-  beforeEach(async () => {
+  beforeEach(() => {
     vi.clearAllMocks()
 
     // Default: interrupter OFF
-    config.get.mockReturnValue(true)
+    config.get.mockReturnValue(false)
+
+    hasValidPersonalDetails = true
+    sectionsNeedingUpdate = []
 
     data = getMappedData()
 

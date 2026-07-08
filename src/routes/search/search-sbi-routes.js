@@ -12,11 +12,18 @@ const getSearchSbi = {
   method: 'GET',
   path: SEARCH_SBI_PATH,
   handler: async (request, h) => {
-    const searchState = request.yar.get(SEARCH_SBI_SESSION_KEY)
+    const sessionState = request.yar.get(SEARCH_SBI_SESSION_KEY)
 
     // Requests sent to the /search page might be either to just show the search page or to view search results,
     // so we need to check whether this is just an initial request to display the page or whether it is a request for a
-    // page of results
+    // page of results. The SBI can arrive via session (after a POST) or via query string (e.g. "Search results" link).
+    const sbiFromQuery = request.query?.sbi?.trim() ?? ''
+    const { value } = sbiFromQuery
+      ? schemas.business.sbi.validate({ sbi: sbiFromQuery })
+      : { value: null }
+
+    const searchState = sessionState ?? (value ? { sbi: value.sbi } : null)
+
     if (!searchState) {
       return h.view(SEARCH_SBI_VIEW)
     }

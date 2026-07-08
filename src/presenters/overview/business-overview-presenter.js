@@ -21,13 +21,14 @@ const businessOverviewPresenter = (businessDetails, page) => {
     pageTitle: 'Business overview',
     sbi: businessDetails?.sbi || '',
     businessName: businessDetails?.businessName || '',
+    businessDetailsLink: `/business/${businessDetails?.sbi}/details`,
     hasCustomers: totalCustomers > 0,
     customers: formatCustomers(pagedCustomers),
     pagination,
     breadcrumbs: [
       {
-        text: 'Search for another business',
-        href: '/search-sbi'
+        text: 'Search results',
+        href: `/search-sbi?sbi=${businessDetails?.sbi}`
       }
     ]
   }

@@ -63,6 +63,7 @@ describe('search sbi routes', () => {
           email: 'test@example.com'
         }
       },
+      query: {},
       payload: {
         sbi: '106705779'
       }
@@ -93,6 +94,41 @@ describe('search sbi routes', () => {
         expect(fetchSbiSearchDetailsService).not.toHaveBeenCalled()
         expect(searchSbiPresenter).not.toHaveBeenCalled()
         expect(request.yar.clear).not.toHaveBeenCalled()
+      })
+
+      describe('when a valid SBI is provided as a query param', () => {
+        const details = { info: { businessName: 'Herberts Lawn Mowing' } }
+        const pageData = { resultText: '1 result for "106705779"' }
+
+        beforeEach(() => {
+          request.query = { sbi: '106705779' }
+          mockValidate.mockReturnValue({ value: { sbi: '106705779' } })
+          fetchSbiSearchDetailsService.mockResolvedValue(details)
+          searchSbiPresenter.mockReturnValue(pageData)
+        })
+
+        test('it fetches details, presents them and clears session state', async () => {
+          await getSearchSbi.handler(request, h)
+
+          expect(fetchSbiSearchDetailsService).toHaveBeenCalledWith('106705779', 'test@example.com')
+          expect(searchSbiPresenter).toHaveBeenCalledWith(details, '106705779')
+          expect(request.yar.clear).toHaveBeenCalledWith('searchSbi')
+          expect(h.view).toHaveBeenCalledWith('search/search-sbi', pageData)
+        })
+      })
+
+      describe('when an invalid SBI is provided as a query param', () => {
+        beforeEach(() => {
+          request.query = { sbi: 'not-an-sbi' }
+          mockValidate.mockReturnValue({ error: { details: [] } })
+        })
+
+        test('it renders the search page with no page data', async () => {
+          await getSearchSbi.handler(request, h)
+
+          expect(h.view).toHaveBeenCalledWith('search/search-sbi')
+          expect(fetchSbiSearchDetailsService).not.toHaveBeenCalled()
+        })
       })
     })
 

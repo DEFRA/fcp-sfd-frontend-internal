@@ -1,11 +1,18 @@
-export const businessDetailsBySbi = `
+export const businessDetailsQuery = `
   query Business($sbi: ID!) {
   business(sbi: $sbi) {
     sbi
     info {
       name
+      vat
       traderNumber
       vendorNumber
+      legalStatus {
+        type
+      }
+      type {
+        type
+      }
       address {
         pafOrganisationName
         buildingNumberRange
@@ -25,6 +32,16 @@ export const businessDetailsBySbi = `
         line5
         uprn
       }
+      email {
+        address
+      }
+      phone {
+        mobile
+        landline
+      }
+    }
+    countyParishHoldings {
+      cphNumber
     }
   }
 }

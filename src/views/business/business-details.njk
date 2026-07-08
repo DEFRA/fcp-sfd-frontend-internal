@@ -1,0 +1,265 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "common/navigation/breadcrumbs-sign-out-link.njk" import appBreadcrumbsSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appBreadcrumbsSignOutLink({ breadcrumbs: breadcrumbs }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      {{ pageTitle }}
+    </h1>
+
+    {% set displayBusinessName %}
+      {% if businessName.value === 'Not added' %}
+        <div><span class="govuk-hint display-inline">Not added</span></div>
+      {% else %}
+        <div>{{ businessName.value }}</div>
+      {% endif %}
+    {% endset %}
+
+    {% set displayBusinessEmail %}
+      {% if businessEmail.value === 'Not added' %}
+        <div><span class="govuk-hint display-inline">Not added</span></div>
+      {% else %}
+        <div>{{ businessEmail.value }}</div>
+      {% endif %}
+    {% endset %}
+
+    {% set formattedAddress %}
+      {% if businessAddress.value === 'Not added' %}
+        <div><span class="govuk-hint display-inline">Not added</span></div>
+      {% else %}
+        {% for addressLine in businessAddress.value %}
+          <div>{{ addressLine }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endset %}
+
+    {% set formattedCph %}
+      {% for cphNumber in countyParishHoldingNumbers %}
+        <div>{{ cphNumber }}</div>
+      {% endfor %}
+    {% endset %}
+
+    {% set displayBusinessTelephone %}
+      <div>
+        Telephone:
+        {% if businessTelephone.telephone === 'Not added' %}
+          <span class="govuk-hint display-inline">{{ businessTelephone.telephone }}</span>
+        {% else %}
+          <span>{{ businessTelephone.telephone }}</span>
+        {% endif %}
+      </div>
+      <div>
+        Mobile:
+        {% if businessTelephone.mobile === 'Not added' %}
+          <span class="govuk-hint display-inline">{{ businessTelephone.mobile }}</span>
+        {% else %}
+          <span>{{ businessTelephone.mobile }}</span>
+        {% endif %}
+      </div>
+    {% endset %}
+
+    {% set displayVatNumber %}
+      {% if vatNumber.value === 'No number added' %}
+        <span class="govuk-hint display-inline">{{ vatNumber.value }}</span>
+      {% else %}
+        <span>{{ vatNumber.value }}</span>
+      {% endif %}
+    {% endset %}
+
+    <h2 class="govuk-heading-m">
+      Business contact details
+    </h2>
+
+    {% set businessNameActions = {
+      items: [
+        {
+          href: businessName.changeLink,
+          text: businessName.action,
+          visuallyHiddenText: "Business name",
+          classes: "govuk-link--no-visited-state"
+        }
+      ]
+    } %}
+
+    {% set businessAddressActions = {
+      items: [
+        {
+          href: businessAddress.changeLink,
+          text: businessAddress.action,
+          visuallyHiddenText: "Business address",
+          classes: "govuk-link--no-visited-state"
+        }
+      ]
+    } %}
+
+    {% set businessTelephoneActions = {
+      items: [
+        {
+          href: businessTelephone.changeLink,
+          text: businessTelephone.action,
+          visuallyHiddenText: "Business telephone numbers",
+          classes: "govuk-link--no-visited-state"
+        }
+      ]
+    } %}
+
+    {% set businessEmailActions = {
+      items: [
+        {
+          href: businessEmail.changeLink,
+          text: businessEmail.action,
+          visuallyHiddenText: "Business email address",
+          classes: "govuk-link--no-visited-state"
+        }
+      ]
+    } %}
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { text: "Business name" },
+          value: { html: displayBusinessName },
+          actions: businessNameActions
+        },
+        {
+          key: { text: "Business address" },
+          value: { html: formattedAddress },
+          actions: businessAddressActions
+        },
+        {
+          key: { text: "Business phone numbers" },
+          value: { html: displayBusinessTelephone },
+          actions: businessTelephoneActions
+        },
+        {
+          key: { text: "Business email address" },
+          value: { html: displayBusinessEmail },
+          actions: businessEmailActions
+        }
+      ]
+    }) }}
+
+    <h2 class="govuk-heading-m">
+      Reference numbers
+    </h2>
+
+    {% set vatNumberActions = {
+      items: [
+        {
+          href: vatNumber.changeLink,
+          text: vatNumber.action,
+          visuallyHiddenText: "VAT registration number",
+          classes: "govuk-link--no-visited-state"
+        }
+      ]
+    } %}
+
+    {% set referenceRows = [
+      {
+        key: { text: "Single business identifier (SBI)" },
+        value: { text: sbi },
+        actions: { items: [] }
+      },
+      {
+        key: { text: "VAT registration number" },
+        value: { html: displayVatNumber },
+        actions: vatNumberActions
+      }
+    ] %}
+
+    {% if tradeNumber and tradeNumber | length %}
+      {% set _ = referenceRows.push({
+          key: { text: "Trader number" },
+          value: { html: tradeNumber }
+        })
+      %}
+    {% endif %}
+
+    {% if vendorRegistrationNumber and vendorRegistrationNumber | length %}
+      {% set _ = referenceRows.push({
+          key: { text: "Vendor registration number" },
+          value: { html: vendorRegistrationNumber }
+        })
+      %}
+    {% endif %}
+
+    {% if countyParishHoldingNumbers and countyParishHoldingNumbers | length %}
+      {% set _ = referenceRows.push({
+          key: { text: countyParishHoldingNumbersText },
+          value: { html: formattedCph }
+        })
+      %}
+    {% endif %}
+
+    {{ govukSummaryList({ rows: referenceRows }) }}
+
+    <h2 class="govuk-heading-m">
+      Additional details
+    </h2>
+
+    {% set businessLegalStatusDisplay %}
+      {% if businessLegalStatus.value === 'Not added' %}
+        <span class="govuk-hint display-inline">{{ businessLegalStatus.value }}</span>
+      {% else %}
+        <span>{{ businessLegalStatus.value }}</span>
+      {% endif %}
+    {% endset %}
+
+    {% set businessTypeDisplay %}
+      {% if businessType.value === 'Not added' %}
+        <span class="govuk-hint display-inline">{{ businessType.value }}</span>
+      {% else %}
+        <span>{{ businessType.value }}</span>
+      {% endif %}
+    {% endset %}
+
+    {% set businessLegalStatusActions = {
+      items: [
+        {
+          href: businessLegalStatus.changeLink,
+          text: businessLegalStatus.action,
+          visuallyHiddenText: "Business legal status",
+          classes: "govuk-link--no-visited-state"
+        }
+      ]
+    } %}
+
+    {% set businessTypeActions = {
+      items: [
+        {
+          href: businessType.changeLink,
+          text: businessType.action,
+          visuallyHiddenText: "Business type",
+          classes: "govuk-link--no-visited-state"
+        }
+      ]
+    } %}
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { text: "Business legal status" },
+          value: { html: businessLegalStatusDisplay },
+          actions: businessLegalStatusActions
+        },
+        {
+          key: { text: "Business type" },
+          value: { html: businessTypeDisplay },
+          actions: businessTypeActions
+        }
+      ]
+    }) }}
+
+  </div>
+  </div>
+</div>
+{% endblock %}

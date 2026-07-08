@@ -5,6 +5,7 @@
  * @module fetchPersonalDetailsService
  */
 
+import Boom from '@hapi/boom'
 import { getDalConnector } from '../dal/connector.js'
 import { personalDetailsQuery } from '../dal/queries/personal-details.js'
 import { mapPersonalDetails } from '../mappers/personal-details-mapper.js'
@@ -19,7 +20,7 @@ const fetchPersonalDetailsService = async (crn, email) => {
     return mappedResponse
   }
 
-  throw new Error('Customer personal details not found')
+  throw Boom.notFound('Customer personal details not found')
 }
 
 export {

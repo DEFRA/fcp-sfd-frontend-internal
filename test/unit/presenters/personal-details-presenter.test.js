@@ -40,8 +40,6 @@ describe('personalDetailsPresenter', () => {
   describe('when provided with personal details data', () => {
     test('it correctly presents the data', () => {
       const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
-      console.log('🚀 ~ result:', result)
-
       expect(result).toEqual({
         breadcrumbs: [
           {

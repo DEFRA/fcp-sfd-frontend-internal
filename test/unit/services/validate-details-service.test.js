@@ -147,20 +147,20 @@ describe('validateDetailsService', () => {
 
   describe('when neither telephone nor mobile is provided', () => {
     beforeEach(() => {
-      // Test the mapErrorsToSections function's behavior with phone fields
-      // The service maps phone errors to the 'phone' section
-      mappedDetails.personalTelephone = null
-      mappedDetails.personalMobile = null
+      delete mappedDetails.personalTelephone
+      delete mappedDetails.personalMobile
     })
 
-    test('it tracks phone validation in the error map', () => {
-      // When both phone fields are missing, the errorFieldToSectionMap includes them
-      // and they would map to 'phone' section
-      // This test verifies the structure is set up correctly
-      const result = validateDetailsService(schemasToValidate, mappedDetails)
+    test('it maps missing phone details to the phone section', () => {
+      const phoneSchema = Joi.object({
+        personalTelephone: Joi.string().allow(null),
+        personalMobile: Joi.string().allow(null)
+      }).or('personalTelephone', 'personalMobile')
 
-      // Since we have valid data for the schemas, the result should be valid
-      expect(result).toBeDefined()
+      const result = validateDetailsService([phoneSchema], mappedDetails)
+
+      expect(result.isValid).toBe(false)
+      expect(result.sectionsNeedingUpdate).toContain('phone')
     })
   })
 

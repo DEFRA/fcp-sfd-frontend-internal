@@ -23,19 +23,23 @@ const getDalData = () => ({
         address: 'test@example.com'
       },
       address: {
+        pafOrganisationName: 'Acme Corp',
         flatName: 'THE COACH HOUSE',
         buildingName: 'STOCKWELL HALL',
         buildingNumberRange: '7',
         street: 'HAREWOOD AVENUE',
         city: 'DARLINGTON',
         county: 'Dorset',
+        dependentLocality: 'ELLICOMBE',
+        doubleDependentLocality: 'WOODTHORPE',
         line1: '76 Robinswood Road',
         line2: 'UPPER CHUTE',
         line3: 'Child Okeford',
         line4: null,
         line5: null,
         postalCode: 'CO9 3LS',
-        country: 'United Kingdom'
+        country: 'United Kingdom',
+        uprn: '12345'
       }
     }
   }
@@ -59,18 +63,16 @@ const getMappedData = () => ({
     }
   },
   address: {
-    city: 'DARLINGTON',
-    country: 'United Kingdom',
     lookup: {
+      pafOrganisationName: 'Acme Corp',
+      flatName: 'THE COACH HOUSE',
       buildingName: 'STOCKWELL HALL',
       buildingNumberRange: '7',
-      county: 'Dorset',
-      dependentLocality: undefined,
-      doubleDependentLocality: undefined,
-      flatName: 'THE COACH HOUSE',
-      pafOrganisationName: undefined,
+      dependentLocality: 'ELLICOMBE',
+      doubleDependentLocality: 'WOODTHORPE',
       street: 'HAREWOOD AVENUE',
-      uprn: undefined
+      county: 'Dorset',
+      uprn: '12345'
     },
     manual: {
       line1: '76 Robinswood Road',
@@ -79,7 +81,9 @@ const getMappedData = () => ({
       line4: null,
       line5: null
     },
-    postcode: 'CO9 3LS'
+    city: 'DARLINGTON',
+    postcode: 'CO9 3LS',
+    country: 'United Kingdom'
   },
   contact: {
     email: 'test@example.com',

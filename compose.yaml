@@ -24,6 +24,8 @@ services:
       ENTRA_SIGN_OUT_REDIRECT_URL: http://localhost:3006/auth/sign-out-oidc
       USE_DAL_TEST_EMAIL: ${USE_DAL_TEST_EMAIL:-false}
       DAL_EMAIL_HEADER: ${DAL_EMAIL_HEADER:-}
+      PERSONAL_DETAILS_INTERRUPTER_ENABLED: ${PERSONAL_DETAILS_INTERRUPTER_ENABLED:-false}
+      BUSINESS_DETAILS_INTERRUPTER_ENABLED: ${BUSINESS_DETAILS_INTERRUPTER_ENABLED:-false}
 
   upstream-mock:
     image: defradigital/fcp-dal-upstream-mock:0.81.0

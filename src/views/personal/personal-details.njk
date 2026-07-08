@@ -1,0 +1,188 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "common/navigation/breadcrumbs-sign-out-link.njk" import appBreadcrumbsSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appBreadcrumbsSignOutLink({ breadcrumbs: breadcrumbs }) }}
+{% endblock %}
+
+{% block content %}
+<main class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        {# Notification banner #}
+        {% if notification %}
+          {% if notification.html %}
+            {{ govukNotificationBanner({
+              type: "success",
+              titleText: notification.title,
+              html: notification.html
+            })}}
+          {% else %}
+            {{ govukNotificationBanner({
+              type: "success",
+              titleText: notification.title,
+              text: notification.text
+            })}}
+          {% endif %}
+        {% endif %}
+
+      <span class="govuk-caption-l text-wrap-no-hyphen">{{userName}}</span>
+
+      <h1 class="govuk-heading-l">
+        {{ pageTitle }}
+      </h1>
+
+      {% set displayDOB %}
+        {% if dob.fullDateOfBirth === 'Not added' %}
+          <div><span class="govuk-hint display-inline">Not added</span></div>
+        {% else %}
+          <div>{{ dob.fullDateOfBirth }}</div>
+        {% endif %}
+      {% endset %}
+
+      {% set formattedAddress %}
+        {% if personalAddress.address === 'Not added'%}
+          <div><span class="govuk-hint display-inline">Not added</span></div>
+        {% else %}
+          {% for addressLine in personalAddress.address %}
+            <div>{{addressLine}}</div>
+          {% endfor %}
+        {% endif %}
+      {% endset %}
+
+      {% set displayPersonalTelephone %}
+        <div>
+          Telephone:
+          {% if personalTelephone.telephone === 'Not added' %}
+            <span class="govuk-hint display-inline">{{ personalTelephone.telephone }}</span>
+          {% else %}
+            <span>{{ personalTelephone.telephone }}</span>
+          {% endif %}
+        </div>
+        <div>
+          Mobile:
+          {% if personalTelephone.mobile === 'Not added' %}
+            <span class="govuk-hint display-inline">{{ personalTelephone.mobile }}</span>
+          {% else %}
+            <span>{{ personalTelephone.mobile }}</span>
+          {% endif %}
+        </div>
+      {% endset %}
+
+      {% set displayPersonalEmail %}
+        {% if personalEmail.email === 'Not added' %}
+          <div><span class="govuk-hint display-inline">Not added</span></div>
+        {% else %}
+          <div>{{ personalEmail.email }}</div>
+        {% endif %}
+      {% endset %}
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Full name"
+            },
+            value: {
+              text: personalName.fullName
+            },
+            actions: {
+              items: [
+                {
+                  href: personalName.changeLink,
+                  text: personalName.action,
+                  visuallyHiddenText: "Full name",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Date of birth"
+            },
+            value: {
+              html: displayDOB
+            },
+            actions: {
+              items: [
+                {
+                  href: dob.changeLink,
+                  text: dob.action,
+                  visuallyHiddenText: "date of birth",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Customer reference number"
+            },
+            value: {
+              text: crn
+            }
+          },
+          {
+            key: {
+              text: "Personal address"
+            },
+            value: {
+              html: formattedAddress
+            },
+            actions: {
+              items: [
+                {
+                  href: personalAddress.changeLink,
+                  text: personalAddress.action,
+                  visuallyHiddenText: "personal address",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Personal phone numbers"
+            },
+            value: {
+              html: displayPersonalTelephone
+            },
+            actions: {
+              items: [
+                {
+                  href: personalTelephone.changeLink,
+                  text: personalTelephone.action,
+                  visuallyHiddenText: "personal phone numbers",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Personal email address"
+            },
+            value: {
+              html: displayPersonalEmail
+            },
+            actions: {
+              items: [
+                {
+                  href: personalEmail.changeLink,
+                  text: personalEmail.action,
+                  visuallyHiddenText: "personal email address",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+    </div>
+  </div>
+</main>
+{% endblock %}

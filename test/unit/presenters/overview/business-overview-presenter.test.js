@@ -30,6 +30,7 @@ describe('businessOverviewPresenter', () => {
         pageTitle: 'Business overview',
         sbi: '106705779',
         businessName: 'Herberts Lawn Mowing',
+        businessDetailsLink: '/business/106705779/details',
         hasCustomers: true,
         customers: [
           { fullName: 'Alice Smith', crn: '1100000001' },
@@ -156,6 +157,26 @@ describe('businessOverviewPresenter', () => {
         const result = businessOverviewPresenter(data, page)
 
         expect(result.customers[0]).toEqual({ fullName: '', crn: '' })
+      })
+    })
+  })
+
+  describe('the "businessDetailsLink" property', () => {
+    test('it should return a link to the business details page using the SBI', () => {
+      const result = businessOverviewPresenter(data, page)
+
+      expect(result.businessDetailsLink).toEqual('/business/106705779/details')
+    })
+
+    describe('when the sbi property is missing', () => {
+      beforeEach(() => {
+        delete data.sbi
+      })
+
+      test('it should return a link with undefined in the path', () => {
+        const result = businessOverviewPresenter(data, page)
+
+        expect(result.businessDetailsLink).toEqual('/business/undefined/details')
       })
     })
   })

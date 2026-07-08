@@ -21,6 +21,7 @@ const businessOverviewPresenter = (businessDetails, page) => {
     pageTitle: 'Business overview',
     sbi: businessDetails?.sbi || '',
     businessName: businessDetails?.businessName || '',
+    businessDetailsLink: `/business/${businessDetails?.sbi}/details`,
     hasCustomers: totalCustomers > 0,
     customers: formatCustomers(pagedCustomers),
     pagination,

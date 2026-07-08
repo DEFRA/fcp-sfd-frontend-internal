@@ -29,6 +29,7 @@ describe('customerOverviewPresenter', () => {
 
       expect(result).toEqual({
         customerName: 'Jane Smith',
+        personalDetailsLink: '/customer/1234567890/details',
         crn: '1234567890',
         hasBusinesses: true,
         businesses: [
@@ -77,6 +78,12 @@ describe('customerOverviewPresenter', () => {
         const result = customerOverviewPresenter(data, page)
 
         expect(result.crn).toEqual('')
+      })
+
+      test('it should return personalDetailsLink as /search-crn', () => {
+        const result = customerOverviewPresenter(data, page)
+
+        expect(result.personalDetailsLink).toEqual('/search-crn')
       })
     })
   })

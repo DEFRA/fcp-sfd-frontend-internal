@@ -14,7 +14,7 @@ const getCustomerDetails = {
     const { error } = schemas.customer.crn.validate({ crn })
 
     if (error) {
-      return h.redirect('/search-crn').takeover()
+      return h.redirect('/search-crn')
     }
 
     const email = auth.credentials?.email

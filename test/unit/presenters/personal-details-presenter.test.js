@@ -50,7 +50,7 @@ describe('personalDetailsPresenter', () => {
             href: '/search-crn'
           },
           {
-            text: `${data.info.fullNameJoined}(CRN: ${data.crn})`,
+            text: `${data.info.fullNameJoined} (CRN: ${data.crn})`,
             href: `/customer/${data.crn}`
           }
         ],
@@ -122,7 +122,7 @@ describe('personalDetailsPresenter', () => {
             href: '/search-crn'
           },
           {
-            text: `${data.info.fullNameJoined}(CRN: ${data.crn})`,
+            text: `${data.info.fullNameJoined} (CRN: ${data.crn})`,
             href: `/customer/${data.crn}`
           }
         ])

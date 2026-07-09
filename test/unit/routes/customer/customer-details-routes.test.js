@@ -104,7 +104,7 @@ describe('customer details', () => {
     describe('when the crn fails validation', () => {
       beforeEach(() => {
         h = {
-          redirect: vi.fn().mockReturnValue({ takeover: vi.fn().mockReturnThis() }),
+          redirect: vi.fn().mockReturnValue({}),
           view: vi.fn()
         }
 

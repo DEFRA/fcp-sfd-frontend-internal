@@ -50,7 +50,7 @@ describe('personalDetailsPresenter', () => {
             href: '/search-crn'
           },
           {
-            text: `${data.info.fullNameJoined} (CRN: ${data.crn})`,
+            text: `${data.info.userName} (CRN: ${data.crn})`,
             href: `/customer/${data.crn}`
           }
         ],
@@ -112,7 +112,7 @@ describe('personalDetailsPresenter', () => {
   })
 
   describe('the "breadcrumbs" property', () => {
-    describe('when both fullNameJoined and CRN exist', () => {
+    describe('when both userName and CRN exist', () => {
       test('it should return both breadcrumbs', () => {
         const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
@@ -122,16 +122,16 @@ describe('personalDetailsPresenter', () => {
             href: '/search-crn'
           },
           {
-            text: `${data.info.fullNameJoined} (CRN: ${data.crn})`,
+            text: `${data.info.userName} (CRN: ${data.crn})`,
             href: `/customer/${data.crn}`
           }
         ])
       })
     })
 
-    describe('when fullNameJoined is missing', () => {
+    describe('when userName is missing', () => {
       test('it should return only the Search results breadcrumb', () => {
-        data.info.fullNameJoined = null
+        data.info.userName = null
         const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
         expect(result.breadcrumbs).toEqual([

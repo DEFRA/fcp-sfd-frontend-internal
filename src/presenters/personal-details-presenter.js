@@ -126,9 +126,9 @@ const buildBreadcrumbs = (data) => {
     }
   ]
 
-  if (data.info?.fullNameJoined && data.crn) {
+  if (data.info?.userName && data.crn) {
     breadcrumbs.push({
-      text: `${data.info.fullNameJoined} (CRN: ${data.crn})`,
+      text: `${data.info.userName} (CRN: ${data.crn})`,
       href: `/customer/${data.crn}`
     })
   }

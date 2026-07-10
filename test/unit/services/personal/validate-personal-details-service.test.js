@@ -5,7 +5,7 @@ import { describe, test, expect, beforeEach } from 'vitest'
 import { validatePersonalDetailsService } from '../../../../src/services/personal/validate-personal-details-service.js'
 
 // Test helpers
-import { personalDetailsMapped } from '../../constants/personal-details-mapped.js'
+import { personalDetailsMapped } from '../../../mocks/personal-details-mapped.js'
 
 describe('validatePersonalDetailsService', () => {
   let personalDetails

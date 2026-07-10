@@ -1,0 +1,11 @@
+# Test environment with local frontend engine
+# NOTE: The fcp-sfd-frontend-engine repo must be pre-built before running.
+# Run `npx tsup` (or use the Watch Engine task) in the engine repo first,
+# otherwise the mounted dist/ volume will be empty and the app will fail to start.
+services:
+  fcp-sfd-frontend-internal:
+    command: npm run test
+    volumes:
+      - ./nodemon.link-engine.json:/home/node/nodemon.link-engine.json
+      - ../fcp-sfd-frontend-engine/dist:/home/node/node_modules/@defra/fcp-sfd-frontend-engine/dist
+      - ../fcp-sfd-frontend-engine/package.json:/home/node/node_modules/@defra/fcp-sfd-frontend-engine/package.json

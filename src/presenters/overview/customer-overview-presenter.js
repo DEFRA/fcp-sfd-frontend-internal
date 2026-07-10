@@ -19,6 +19,7 @@ const customerOverviewPresenter = (customerDetails, page) => {
 
   return {
     customerName: customerDetails?.info?.customerName || '',
+    personalDetailsLink: customerDetails?.info?.crn ? `/customer/${customerDetails.info.crn}/details` : '/search-crn',
     crn: customerDetails?.info?.crn || '',
     hasBusinesses: totalBusinesses > 0,
     businesses: formatBusinesses(pagedBusinesses),

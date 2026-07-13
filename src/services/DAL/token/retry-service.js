@@ -1,6 +1,6 @@
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { drop } from '../../../utils/caching/drop.js'
 import { DAL_TOKEN } from '../../../constants/cache-keys.js'
-import { UNAUTHORIZED } from '../../../constants/status-codes.js'
 
 /**
  * Retries an asynchronous function multiple times if it fails
@@ -15,7 +15,7 @@ const retry = async (fn, retriesLeft = 3, interval = 1000, exponential = true) =
   try {
     return (await fn())
   } catch (err) {
-    if (err.isBoom && err.output.statusCode === UNAUTHORIZED) {
+    if (err.isBoom && err.output.statusCode === constants.statusCodes.UNAUTHORIZED) {
       await drop(DAL_TOKEN)
     }
     if (retriesLeft > 0) {

@@ -1,7 +1,6 @@
-import { utils } from '@defra/fcp-sfd-frontend-engine'
+import { utils, constants } from '@defra/fcp-sfd-frontend-engine'
 
 import { searchCriteriaSchema } from '../../schemas/search/search-criteria-schema.js'
-import { BAD_REQUEST } from '../../constants/status-codes.js'
 
 const CHANGE_SEARCH_CRITERIA_PATH = '/change-search-criteria'
 const CHANGE_SEARCH_CRITERIA_VIEW = 'search/change-search-criteria'
@@ -29,7 +28,7 @@ const postChangeSearchCriteria = {
       failAction: async (_request, h, err) => {
         const errors = utils.formatValidationErrors(err.details || [])
 
-        return h.view(CHANGE_SEARCH_CRITERIA_VIEW, { errors }).code(BAD_REQUEST).takeover()
+        return h.view(CHANGE_SEARCH_CRITERIA_VIEW, { errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
       }
     },
     handler: async (request, h) => {

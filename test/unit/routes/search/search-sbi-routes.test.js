@@ -6,7 +6,7 @@ import { fetchSbiSearchDetailsService } from '../../../../src/services/search/fe
 import { searchSbiPresenter } from '../../../../src/presenters/search/search-sbi-presenter.js'
 
 // Test helpers
-import { BAD_REQUEST } from '../../../../src/constants/status-codes.js'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 // Thing under test
 import { searchSbiRoutes } from '../../../../src/routes/search/search-sbi-routes.js'
@@ -17,18 +17,22 @@ const { mockValidate, mockFormatValidationErrors } = vi.hoisted(() => ({
   mockFormatValidationErrors: vi.fn()
 }))
 
-vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
-  schemas: {
-    business: {
-      sbi: {
-        validate: mockValidate
+vi.mock('@defra/fcp-sfd-frontend-engine', async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    schemas: {
+      business: {
+        sbi: {
+          validate: mockValidate
+        }
       }
+    },
+    utils: {
+      formatValidationErrors: mockFormatValidationErrors
     }
-  },
-  utils: {
-    formatValidationErrors: mockFormatValidationErrors
   }
-}))
+})
 
 // Mocks
 vi.mock('../../../../src/services/search/fetch-sbi-search-details-service.js', () => ({
@@ -211,7 +215,7 @@ describe('search sbi routes', () => {
           showClear: true,
           clearSearchLink: '/search-sbi'
         })
-        expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
+        expect(responseStub.code).toHaveBeenCalledWith(constants.statusCodes.BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()
         expect(request.yar.set).not.toHaveBeenCalled()
       })

@@ -1,5 +1,5 @@
 import { vi, beforeEach, describe, test, expect } from 'vitest'
-import { constants as httpConstants } from 'node:http2'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 let staticAssetRoutes
 let config
@@ -63,7 +63,7 @@ describe('Static asset routes', () => {
       const result = faviconRoute.handler(null, mockH)
 
       expect(mockH.response).toHaveBeenCalled()
-      expect(mockResponse.code).toHaveBeenCalledWith(httpConstants.HTTP_STATUS_NO_CONTENT)
+      expect(mockResponse.code).toHaveBeenCalledWith(constants.statusCodes.NO_CONTENT)
       expect(mockResponse.type).toHaveBeenCalledWith('image/x-icon')
       expect(result).toBe(mockResponse)
     })

@@ -1,4 +1,4 @@
-import { constants as httpConstants } from 'node:http2'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { config } from '../config/index.js'
 
 export const staticAssetRoutes = [
@@ -15,7 +15,7 @@ export const staticAssetRoutes = [
     handler (_request, h) {
       return h
         .response()
-        .code(httpConstants.HTTP_STATUS_NO_CONTENT)
+        .code(constants.statusCodes.NO_CONTENT)
         .type('image/x-icon')
     }
   },

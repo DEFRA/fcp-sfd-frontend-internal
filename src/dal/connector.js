@@ -16,7 +16,7 @@
  * @module dalConnector
  */
 
-import { constants as httpConstants } from 'node:http2'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { createLogger } from '../utils/logger.js'
 import { config } from '../config/index.js'
 import { formatDalResponse, handleDalResponse } from './dal-response.js'
@@ -40,7 +40,7 @@ const handleDalFailure = (err) => {
   logger.error(err, 'Error connecting to DAL')
 
   return formatDalResponse({
-    statusCode: httpConstants.HTTP_STATUS_INTERNAL_SERVER_ERROR,
+    statusCode: constants.statusCodes.INTERNAL_SERVER_ERROR,
     errors: [err]
   })
 }

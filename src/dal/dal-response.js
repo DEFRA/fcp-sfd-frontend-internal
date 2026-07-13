@@ -3,13 +3,13 @@
  * Responses from the DAL (success or error) pass through here
  * so the rest of the app always gets the same { data, statusCode, errors } shape.
  */
-import { constants as httpConstants } from 'node:http2'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 // Default contract expected by services and tests.
 const formatDalResponse = ({
   data = null,
   errors = null,
-  statusCode = httpConstants.HTTP_STATUS_OK
+  statusCode = constants.statusCodes.OK
 }) => {
   return {
     data,
@@ -23,7 +23,7 @@ const mapDalErrors = (responseErrors) => {
   return responseErrors.map(err => {
     const ext = err.extensions
     const parsedMessage = ext?.parsedBody?.message
-    const statusCode = ext?.parsedBody?.statusCode || ext?.response?.status || httpConstants.HTTP_STATUS_BAD_REQUEST
+    const statusCode = ext?.parsedBody?.statusCode || ext?.response?.status || constants.statusCodes.BAD_REQUEST
 
     return {
       message: parsedMessage ? `${err.message}: ${parsedMessage}` : err.message,

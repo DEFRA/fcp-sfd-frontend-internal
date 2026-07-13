@@ -1,5 +1,5 @@
 import { vi, beforeEach, describe, test, expect } from 'vitest'
-import { constants as httpConstants } from 'node:http2'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { health } from '../../../src/routes/health-routes.js'
 
 const mockResponse = {
@@ -25,7 +25,7 @@ describe('Health endpoint', () => {
 
     expect(mockH.response).toHaveBeenCalledWith({ message: 'success' })
 
-    expect(mockResponse.code).toHaveBeenCalledWith(httpConstants.HTTP_STATUS_OK)
+    expect(mockResponse.code).toHaveBeenCalledWith(constants.statusCodes.OK)
 
     expect(result).toBe(mockResponse)
   })

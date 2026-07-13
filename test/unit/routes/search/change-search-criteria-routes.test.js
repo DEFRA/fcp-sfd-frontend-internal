@@ -2,7 +2,7 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 
 // Test helpers
-import { BAD_REQUEST } from '../../../../src/constants/status-codes.js'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 // Thing under test
 import { changeSearchCriteriaRoutes } from '../../../../src/routes/search/change-search-criteria-routes.js'
@@ -75,7 +75,7 @@ describe('change search criteria routes', () => {
             }
           }
         })
-        expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
+        expect(responseStub.code).toHaveBeenCalledWith(constants.statusCodes.BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()
       })
 
@@ -85,7 +85,7 @@ describe('change search criteria routes', () => {
         expect(h.view).toHaveBeenCalledWith('search/change-search-criteria', {
           errors: {}
         })
-        expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
+        expect(responseStub.code).toHaveBeenCalledWith(constants.statusCodes.BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()
       })
     })

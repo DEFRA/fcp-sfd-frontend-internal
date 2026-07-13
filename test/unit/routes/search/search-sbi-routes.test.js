@@ -6,7 +6,7 @@ import { fetchSbiSearchDetailsService } from '../../../../src/services/search/fe
 import { searchSbiPresenter } from '../../../../src/presenters/search/search-sbi-presenter.js'
 
 // Test helpers
-import { BAD_REQUEST } from '../../../../src/constants/status-codes.js'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 // Thing under test
 import { searchSbiRoutes } from '../../../../src/routes/search/search-sbi-routes.js'
@@ -211,7 +211,7 @@ describe('search sbi routes', () => {
           showClear: true,
           clearSearchLink: '/search-sbi'
         })
-        expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
+        expect(responseStub.code).toHaveBeenCalledWith(constants.statusCodes.BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()
         expect(request.yar.set).not.toHaveBeenCalled()
       })

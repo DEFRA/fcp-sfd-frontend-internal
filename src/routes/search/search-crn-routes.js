@@ -1,7 +1,6 @@
-import { schemas, utils } from '@defra/fcp-sfd-frontend-engine'
+import { schemas, utils, constants } from '@defra/fcp-sfd-frontend-engine'
 
 import { fetchCrnSearchDetailsService } from '../../services/search/fetch-crn-search-details-service.js'
-import { BAD_REQUEST } from '../../constants/status-codes.js'
 import { searchCrnPresenter } from '../../presenters/search/search-crn-presenter.js'
 
 const SEARCH_CRN_PATH = '/search-crn'
@@ -50,7 +49,7 @@ const postSearchCrn = {
       const errors = utils.formatValidationErrors(validation.error.details || [])
       const pageData = { ...payload, errors, showClear: true, clearSearchLink: '/search-crn' }
 
-      return h.view(SEARCH_CRN_VIEW, pageData).code(BAD_REQUEST).takeover()
+      return h.view(SEARCH_CRN_VIEW, pageData).code(constants.statusCodes.BAD_REQUEST).takeover()
     }
 
     const { crn } = validation.value

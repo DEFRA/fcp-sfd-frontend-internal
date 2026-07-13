@@ -6,7 +6,7 @@ import { fetchCrnSearchDetailsService } from '../../../../src/services/search/fe
 import { searchCrnPresenter } from '../../../../src/presenters/search/search-crn-presenter.js'
 
 // Test helpers
-import { BAD_REQUEST } from '../../../../src/constants/status-codes.js'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 // Thing under test
 import { searchCrnRoutes } from '../../../../src/routes/search/search-crn-routes.js'
@@ -175,7 +175,7 @@ describe('search crn routes', () => {
           showClear: true,
           clearSearchLink: '/search-crn'
         })
-        expect(responseStub.code).toHaveBeenCalledWith(BAD_REQUEST)
+        expect(responseStub.code).toHaveBeenCalledWith(constants.statusCodes.BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()
         expect(request.yar.set).not.toHaveBeenCalled()
       })

@@ -1,7 +1,6 @@
-import { schemas, utils } from '@defra/fcp-sfd-frontend-engine'
+import { schemas, utils, constants } from '@defra/fcp-sfd-frontend-engine'
 
 import { fetchSbiSearchDetailsService } from '../../services/search/fetch-sbi-search-details-service.js'
-import { BAD_REQUEST } from '../../constants/status-codes.js'
 import { searchSbiPresenter } from '../../presenters/search/search-sbi-presenter.js'
 
 const SEARCH_SBI_PATH = '/search-sbi'
@@ -57,7 +56,7 @@ const postSearchSbi = {
       const errors = utils.formatValidationErrors(validation.error.details || [])
       const pageData = { ...payload, errors, showClear: true, clearSearchLink: '/search-sbi' }
 
-      return h.view(SEARCH_SBI_VIEW, pageData).code(BAD_REQUEST).takeover()
+      return h.view(SEARCH_SBI_VIEW, pageData).code(constants.statusCodes.BAD_REQUEST).takeover()
     }
 
     const { sbi } = validation.value

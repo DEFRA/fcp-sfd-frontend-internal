@@ -29,6 +29,9 @@ updates:
         applies-to: security-updates
         patterns:
           - "*"
+        exclude-patterns:
+          - "govuk-frontend"
+          - "graphql"
       build:
         applies-to: version-updates
         patterns:
@@ -67,6 +70,9 @@ updates:
         dependency-type: "production"
         patterns:
           - "*"
+        exclude-patterns:
+          - "govuk-frontend"
+          - "graphql"
       npm-development:
         applies-to: version-updates
         dependency-type: "development"

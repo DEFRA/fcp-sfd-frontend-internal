@@ -17,18 +17,22 @@ const { mockValidate, mockFormatValidationErrors } = vi.hoisted(() => ({
   mockFormatValidationErrors: vi.fn()
 }))
 
-vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
-  schemas: {
-    customer: {
-      crn: {
-        validate: mockValidate
+vi.mock('@defra/fcp-sfd-frontend-engine', async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    schemas: {
+      customer: {
+        crn: {
+          validate: mockValidate
+        }
       }
+    },
+    utils: {
+      formatValidationErrors: mockFormatValidationErrors
     }
-  },
-  utils: {
-    formatValidationErrors: mockFormatValidationErrors
   }
-}))
+})
 
 // Mocks
 vi.mock('../../../../src/services/search/fetch-crn-search-details-service.js', () => ({

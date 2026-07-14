@@ -112,7 +112,7 @@ describe('headers', () => {
 
   test('should override cache headers for non-index pages', async () => {
     const response = await server.inject({
-      url: '/home',
+      url: '/search-sbi',
       auth: {
         strategy: 'session',
         credentials: {

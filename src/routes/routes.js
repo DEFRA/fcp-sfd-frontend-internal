@@ -1,7 +1,7 @@
 import { errors } from './errors/error-routes.js'
 import { health } from './health-routes.js'
 import { auth } from './auth-routes.js'
-import { homeRoutes } from './home-routes.js'
+import { index } from './index-routes.js'
 import { dalExampleRoutes } from './dal-example-routes.js'
 import { staticAssetRoutes } from './static-assets-routes.js'
 import { cookies } from './footer/cookies-routes.js'
@@ -17,7 +17,7 @@ import { businessDetailsRoutes } from './business/business-details-routes.js'
 
 export const routes = [
   health,
-  ...homeRoutes,
+  index,
   ...dalExampleRoutes,
   ...auth,
   cookies,

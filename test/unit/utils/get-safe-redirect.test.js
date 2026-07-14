@@ -8,25 +8,25 @@ describe('getSafeRedirect', () => {
     expect(result).toBe(redirect)
   })
 
-  test('should return "/home" if redirect is not a local route', () => {
+  test('should return "/search-sbi" if redirect is not a local route', () => {
     const redirect = 'https://an.unsafe-location.com'
     const result = getSafeRedirect(redirect)
-    expect(result).toBe('/home')
+    expect(result).toBe('/search-sbi')
   })
 
-  test('should return "/home" if redirect is a domain name only', () => {
+  test('should return "/search-sbi" if redirect is a domain name only', () => {
     const redirect = 'an.unsafe-location.com'
     const result = getSafeRedirect(redirect)
-    expect(result).toBe('/home')
+    expect(result).toBe('/search-sbi')
   })
 
-  test('should return "/home" if redirect is undefined', () => {
+  test('should return "/search-sbi" if redirect is undefined', () => {
     const result = getSafeRedirect(undefined)
-    expect(result).toBe('/home')
+    expect(result).toBe('/search-sbi')
   })
 
-  test('should return "/home" if redirect is null', () => {
+  test('should return "/search-sbi" if redirect is null', () => {
     const result = getSafeRedirect(null)
-    expect(result).toBe('/home')
+    expect(result).toBe('/search-sbi')
   })
 })

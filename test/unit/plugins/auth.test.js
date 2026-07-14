@@ -121,7 +121,7 @@ describe('auth', () => {
 
       beforeEach(() => {
         vi.clearAllMocks()
-        mockGetSafeRedirect.mockReturnValue('/home')
+        mockGetSafeRedirect.mockReturnValue('/search-sbi')
         request = {
           query: {},
           yar: {
@@ -143,7 +143,7 @@ describe('auth', () => {
       test('should set safe redirect path in session if redirect query param is present', () => {
         request.query.redirect = '/redirect'
         location(request)
-        expect(request.yar.set).toHaveBeenCalledWith('redirect', '/home')
+        expect(request.yar.set).toHaveBeenCalledWith('redirect', '/search-sbi')
       })
     })
 
@@ -278,7 +278,7 @@ describe('auth', () => {
       const redirectTo = getCookieOptions().redirectTo
       const request = {
         url: {
-          pathname: '/home',
+          pathname: '/search-sbi',
           search: '?query=string'
         }
       }
@@ -288,7 +288,7 @@ describe('auth', () => {
       })
 
       test('should include redirect param in redirection to intended path', () => {
-        expect(redirectTo(request)).toContain('redirect=/home?query=string')
+        expect(redirectTo(request)).toContain('redirect=/search-sbi?query=string')
       })
     })
 

@@ -28,7 +28,7 @@ services:
       BUSINESS_DETAILS_INTERRUPTER_ENABLED: ${BUSINESS_DETAILS_INTERRUPTER_ENABLED:-false}
 
   upstream-mock:
-    image: defradigital/fcp-dal-upstream-mock:0.90.0
+    image: defradigital/fcp-dal-upstream-mock:0.93.0
     environment:
       MOCK_LOG_LEVEL: info
       MOCK_SERVER_COLLECTION: all

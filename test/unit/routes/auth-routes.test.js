@@ -20,7 +20,16 @@ vi.mock('../../../src/utils/get-safe-redirect.js', () => ({
   getSafeRedirect: vi.fn()
 }))
 
-const { auth } = await import('../../../src/routes/auth-routes.js')
+vi.mock('../../../src/config/index.js', () => ({
+  config: {
+    get: vi.fn((key) => {
+      if (key === 'featureToggle.useFederatedCredentials') return false
+      return null
+    })
+  }
+}))
+
+const { clientSecretRoutes: auth } = await import('../../../src/routes/auth/client-secret-routes.js')
 
 let route
 

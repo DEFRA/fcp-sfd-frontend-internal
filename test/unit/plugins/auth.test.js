@@ -49,7 +49,8 @@ const token = {
 
 const refreshToken = 'ENTRA-ID-REFRESH-TOKEN'
 
-const { auth, getBellOptions, getCookieOptions } = await import('../../../src/plugins/auth.js')
+const { auth } = await import('../../../src/plugins/auth/index.js')
+const { getBellOptions, getCookieOptions } = await import('../../../src/plugins/auth/strategies/client-secret.js')
 
 describe('auth', () => {
   beforeEach(() => {

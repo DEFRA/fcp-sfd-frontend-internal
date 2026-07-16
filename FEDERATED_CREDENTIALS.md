@@ -236,7 +236,7 @@ USE_FEDERATED_CREDENTIALS=true ENTRA_FEDERATED_AUDIENCE=sfd-internal ENTRA_FEDER
 
 ### "Failed to import WebIdentityTokenProvider from @defra/hapi-auth-oidc"
 **Cause**: Package not installed or import error
-**Fix**: 
+**Fix**:
 - Run `npm install`
 - Check package.json has `@defra/hapi-auth-oidc`
 - Check node_modules directory is correct

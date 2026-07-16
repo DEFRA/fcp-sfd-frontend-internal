@@ -19,6 +19,7 @@ services:
       DAL_TENANT_ID: ${DAL_TENANT_ID}
       ENTRA_WELL_KNOWN_URL: https://login.microsoftonline.com/${ENTRA_TENANT_ID}/v2.0/.well-known/openid-configuration
       ENTRA_CLIENT_ID: ${ENTRA_CLIENT_ID}
+      ENTRA_TENANT_ID: ${ENTRA_TENANT_ID}
       ENTRA_CLIENT_SECRET: ${ENTRA_CLIENT_SECRET}
       ENTRA_REDIRECT_URL: http://localhost:3006/auth/sign-in-oidc
       ENTRA_SIGN_OUT_REDIRECT_URL: http://localhost:3006/auth/sign-out-oidc

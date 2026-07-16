@@ -22,7 +22,7 @@ export const entraConfig = {
       env: 'ENTRA_CLIENT_ID'
     },
     clientSecret: {
-      doc: 'The Entra client secret (used with client credentials auth)',
+      doc: 'The Entra client secret (retained for rollback; unused when federated credentials are active)',
       format: String,
       nullable: true,
       default: null,
@@ -50,14 +50,14 @@ export const entraConfig = {
     },
     federatedCredentials: {
       audience: {
-        doc: 'Audience for federated credentials token',
+        doc: 'Audience value presented to AWS STS when requesting the web identity token.',
         format: String,
         nullable: true,
         default: null,
         env: 'ENTRA_FEDERATED_AUDIENCE'
       },
-      mock: {
-        doc: 'Use mock provider for federated credentials (local development)',
+      enableMocking: {
+        doc: 'Use MockProvider instead of WebIdentityTokenProvider (local development only).',
         format: Boolean,
         default: false,
         env: 'ENTRA_FEDERATED_MOCK'

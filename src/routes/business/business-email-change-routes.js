@@ -2,7 +2,6 @@ import { utils, schemas, constants } from '@defra/fcp-sfd-frontend-engine'
 import { fetchBusinessChangeService } from '../../services/business/fetch-business-change-service.js'
 import { businessEmailChangePresenter } from '../../presenters/business/business-email-change-presenter.js'
 import { setSessionData } from '../../utils/session/set-session-data.js'
-import { AMEND_PERMISSIONS } from '../../constants/scope/business-details.js'
 
 const getBusinessEmailChange = {
   method: 'GET',

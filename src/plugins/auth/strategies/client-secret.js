@@ -16,6 +16,7 @@ import Jwt from '@hapi/jwt'
 import { getOidcConfig } from '../../../auth/get-oidc-config.js'
 import { refreshTokens } from '../../../auth/refresh-tokens.js'
 import { getSafeRedirect } from '../../../utils/get-safe-redirect.js'
+import { getCookieOptions } from '../get-cookie-options.js'
 import { config } from '../../../config/index.js'
 
 async function registerClientSecretStrategy (server) {
@@ -29,7 +30,7 @@ async function registerClientSecretStrategy (server) {
   // Cookie is a built-in authentication strategy for hapi.js that authenticates users based on a session cookie
   // Used for all non-Entra routes
   // Lax policy required to allow redirection after Entra sign out
-  server.auth.strategy('session', 'cookie', getCookieOptions())
+  server.auth.strategy('session', 'cookie', getCookieOptions(validateToken))
 
   // Set the default authentication strategy to session
   // All routes will require authentication unless explicitly set to 'entra' or `auth: false`
@@ -67,23 +68,6 @@ function getBellOptions (oidcConfig) {
         response_mode: 'query'
       }
     }
-  }
-}
-
-function getCookieOptions () {
-  const sessionCookieSecure = config.get('server.session.cookie.secure')
-
-  return {
-    cookie: {
-      password: config.get('server.session.cookie.password'),
-      path: '/',
-      isSecure: sessionCookieSecure,
-      isSameSite: 'Lax'
-    },
-    redirectTo: function (request) {
-      return `/auth/sign-in?redirect=${request.url.pathname}${request.url.search}`
-    },
-    validate: async (request, session) => validateToken(request, session)
   }
 }
 
@@ -128,4 +112,4 @@ async function validateToken (request, session) {
   return { isValid: true, credentials: userSession }
 }
 
-export { registerClientSecretStrategy, getBellOptions, getCookieOptions }
+export { registerClientSecretStrategy, getBellOptions }

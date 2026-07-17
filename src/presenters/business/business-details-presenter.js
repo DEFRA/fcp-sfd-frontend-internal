@@ -4,6 +4,7 @@
  */
 
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
+import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
 
 const CHANGE_LINK = '#'
 
@@ -34,7 +35,11 @@ const businessDetailsPresenter = (data, sbi) => {
       changeLink: CHANGE_LINK
     },
     businessTelephone: createEditableTelephoneField(contact.landline, contact.mobile),
-    businessEmail: createEditableValueField(contact.email, 'Not added'),
+    businessEmail: {
+      value: contact.email || 'Not added',
+      action: presenters.getActionText(contact.email),
+      changeLink: BUSINESS_CHANGE_LINKS.businessEmail
+    },
     vatNumber: createEditableValueField(info.vat, 'No number added'),
     tradeNumber: info.traderNumber ?? null,
     vendorRegistrationNumber: info.vendorNumber ?? null,

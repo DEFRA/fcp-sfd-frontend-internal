@@ -1,3 +1,17 @@
+/**
+ * Authentication strategies configuration for the Hapi server.
+ *
+ * This file sets up two authentication methods:
+ * 1. Entra (Azure AD) OAuth 2.0 - logs users in via the corporate identity provider
+ * 2. Session cookie - keeps users logged in across requests
+ *
+ * When a user visits the app, they're redirected to Entra to sign in. After login,
+ * their credentials are stored in a session cookie and a server-side cache. On each request,
+ * we validate their JWT token and refresh it if needed to keep them logged in.
+ *
+ * This is the glue between user identity and the rest of the app.
+ */
+
 import Jwt from '@hapi/jwt'
 import { getOidcConfig } from '../../../auth/get-oidc-config.js'
 import { refreshTokens } from '../../../auth/refresh-tokens.js'
@@ -7,8 +21,18 @@ import { config } from '../../../config/index.js'
 async function registerClientSecretStrategy (server) {
   const oidcConfig = await getOidcConfig()
 
+  // Bell is a third-party plugin that provides a common interface for OAuth 2.0 authentication
+  // Used to authenticate users with Entra and a pre-requisite for the Cookie authentication strategy
+  // Also used for changing organisations and signing out
   server.auth.strategy('entra', 'bell', getBellOptions(oidcConfig))
+
+  // Cookie is a built-in authentication strategy for hapi.js that authenticates users based on a session cookie
+  // Used for all non-Entra routes
+  // Lax policy required to allow redirection after Entra sign out
   server.auth.strategy('session', 'cookie', getCookieOptions())
+
+  // Set the default authentication strategy to session
+  // All routes will require authentication unless explicitly set to 'entra' or `auth: false`
   server.auth.default('session')
 }
 
@@ -66,6 +90,9 @@ function getCookieOptions () {
 function getProfile (credentials, _params, _get) {
   const payload = Jwt.token.decode(credentials.token).decoded.payload
 
+  // Map all JWT properties to the credentials object so it can be stored in the session
+  // Add some additional properties to the profile object for convenience
+
   credentials.profile = {
     ...payload,
     sessionId: payload.sid,
@@ -76,10 +103,12 @@ function getProfile (credentials, _params, _get) {
 async function validateToken (request, session) {
   const userSession = await request.server.app.cache.get(session.sessionId)
 
+  // If session does not exist, return an invalid session
   if (!userSession) {
     return { isValid: false }
   }
 
+  // Verify Entra token has not expired
   try {
     const decoded = Jwt.token.decode(userSession.token)
     Jwt.token.verifyTime(decoded)
@@ -94,6 +123,8 @@ async function validateToken (request, session) {
     await request.server.app.cache.set(session.sessionId, userSession)
   }
 
+  // Set the user's details on the request object and allow the request to continue
+  // Depending on the service, additional checks can be performed here before returning `isValid: true`
   return { isValid: true, credentials: userSession }
 }
 

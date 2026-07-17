@@ -14,6 +14,8 @@ import { customerOverviewRoutes } from './overview/customer-routes.js'
 import { businessOverviewRoutes } from './overview/business-routes.js'
 import { customerDetailsRoutes } from './customer/customer-details-routes.js'
 import { businessDetailsRoutes } from './business/business-details-routes.js'
+import { businessEmailChangeRoutes } from './business/business-email-change-routes.js'
+import { businessEmailCheckRoutes } from './business/business-email-check-routes.js'
 
 export const routes = [
   health,
@@ -31,5 +33,7 @@ export const routes = [
   ...customerOverviewRoutes,
   ...businessOverviewRoutes,
   ...customerDetailsRoutes,
-  ...businessDetailsRoutes
+  ...businessDetailsRoutes,
+  ...businessEmailChangeRoutes,
+  ...businessEmailCheckRoutes
 ]

@@ -3,7 +3,17 @@ import { vi, describe, test, expect, beforeAll, afterAll } from 'vitest'
 
 // Thing under test
 import { getDalConnector } from '../../../../src/dal/connector.js'
-import { exampleQuery } from '../../../../src/dal/queries/example-query.js'
+const testQuery = `
+  query TestQuery($sbi: ID!, $crn: ID!) {
+    business(sbi: $sbi) {
+      sbi
+      organisationId
+      customer(crn: $crn) {
+        crn
+      }
+    }
+  }
+`
 
 // Setup
 import '../../../mocks/setup-server-mocks.js'
@@ -43,7 +53,7 @@ describe('DAL (data access layer) connector integration', () => {
   describe('when DAL responds successfully', () => {
     test('should return data without errors and status 200', async () => {
       const result = await dalConnector.query(
-        exampleQuery,
+        testQuery,
         {
           sbi,
           crn
@@ -65,7 +75,7 @@ describe('DAL (data access layer) connector integration', () => {
         config.set('dalConfig.endpoint', invalidDalEndpoint)
 
         const result = await dalConnector.query(
-          exampleQuery,
+          testQuery,
           { sbi },
           email
         )
@@ -105,7 +115,7 @@ describe('DAL (data access layer) connector integration', () => {
   describe('when required query variables are missing', () => {
     test('should return 400 error', async () => {
       const result = await dalConnector.query(
-        exampleQuery,
+        testQuery,
         {},
         email
       )

@@ -78,7 +78,7 @@ describe('personalDetailsPresenter', () => {
         personalName: {
           fullName: 'John M Doe',
           action: 'Change',
-          changeLink: '/account-name-change'
+          changeLink: `/customer/${data.crn}/account-name-change`
         },
         dob: {
           fullDateOfBirth: '1 January 1990',
@@ -385,7 +385,7 @@ describe('personalDetailsPresenter', () => {
       test('all change links should point to their standard change link', () => {
         const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-        expect(result.personalName.changeLink).toBe('/account-name-change')
+        expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/account-name-change`)
         expect(result.personalAddress.changeLink).toBe('/account-address-change')
         expect(result.personalTelephone.changeLink).toBe('/account-phone-numbers-change')
         expect(result.personalEmail.changeLink).toBe('/account-email-change')
@@ -403,7 +403,7 @@ describe('personalDetailsPresenter', () => {
         test('all change links should point to their standard change link', () => {
           const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-          expect(result.personalName.changeLink).toBe('/account-name-change')
+          expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/account-name-change`)
           expect(result.personalAddress.changeLink).toBe('/account-address-change')
           expect(result.personalTelephone.changeLink).toBe('/account-phone-numbers-change')
           expect(result.personalEmail.changeLink).toBe('/account-email-change')
@@ -420,7 +420,7 @@ describe('personalDetailsPresenter', () => {
         test('all links except the name points to the interrupter journey', () => {
           const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-          expect(result.personalName.changeLink).toBe('/account-name-change')
+          expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/account-name-change`)
           expect(result.personalAddress.changeLink).toBe('/personal-fix?source=address')
           expect(result.personalTelephone.changeLink).toBe('/personal-fix?source=phone')
           expect(result.personalEmail.changeLink).toBe('/personal-fix?source=email')

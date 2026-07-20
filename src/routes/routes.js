@@ -12,6 +12,8 @@ import { changeSearchCriteriaRoutes } from './search/change-search-criteria-rout
 import { customerOverviewRoutes } from './overview/customer-routes.js'
 import { businessOverviewRoutes } from './overview/business-routes.js'
 import { customerDetailsRoutes } from './customer/customer-details-routes.js'
+import { personalNameChangeRoutes } from './customer/personal-name-change-routes.js'
+import { personalNameCheckRoutes } from './customer/personal-name-check-routes.js'
 import { businessDetailsRoutes } from './business/business-details-routes.js'
 
 export const routes = [
@@ -29,5 +31,7 @@ export const routes = [
   ...customerOverviewRoutes,
   ...businessOverviewRoutes,
   ...customerDetailsRoutes,
+  ...personalNameChangeRoutes,
+  ...personalNameCheckRoutes,
   ...businessDetailsRoutes
 ]

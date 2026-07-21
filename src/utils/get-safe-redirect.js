@@ -1,6 +1,6 @@
 export const getSafeRedirect = (redirect) => {
   if (!redirect?.startsWith('/')) {
-    return '/home'
+    return '/search-sbi'
   }
   return redirect
 }

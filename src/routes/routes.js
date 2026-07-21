@@ -1,8 +1,13 @@
 import { errors } from './errors/error-routes.js'
 import { health } from './health-routes.js'
+<<<<<<< HEAD
 import { auth } from './auth/index.js'
 import { homeRoutes } from './home-routes.js'
 import { dalExampleRoutes } from './dal-example-routes.js'
+=======
+import { auth } from './auth-routes.js'
+import { index } from './index-routes.js'
+>>>>>>> origin/main
 import { staticAssetRoutes } from './static-assets-routes.js'
 import { cookies } from './footer/cookies-routes.js'
 import { signedOut } from './signed-out-routes.js'
@@ -17,8 +22,7 @@ import { businessDetailsRoutes } from './business/business-details-routes.js'
 
 export const routes = [
   health,
-  ...homeRoutes,
-  ...dalExampleRoutes,
+  index,
   ...auth,
   cookies,
   signedOut,

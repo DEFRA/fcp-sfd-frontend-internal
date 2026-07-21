@@ -265,4 +265,170 @@ describe('client-secret strategy', () => {
       })
     })
   })
+<<<<<<< HEAD:test/unit/plugins/auth/strategies/client-secret.test.js
+=======
+
+  describe('getCookieOptions', () => {
+    test('should return an object', () => {
+      expect(getCookieOptions()).toBeInstanceOf(Object)
+    })
+
+    test('should return a cookie object', () => {
+      expect(getCookieOptions().cookie).toBeInstanceOf(Object)
+    })
+
+    test('should return a redirectTo function', () => {
+      expect(getCookieOptions().redirectTo).toBeInstanceOf(Function)
+    })
+
+    test('should return a validate function', () => {
+      expect(getCookieOptions().validate).toBeInstanceOf(Function)
+    })
+
+    describe('cookie', () => {
+      test('should set cookie password from config', () => {
+        expect(getCookieOptions().cookie.password).toBe('mockPassword')
+      })
+
+      test('should set cookie path to root', () => {
+        expect(getCookieOptions().cookie.path).toBe('/')
+      })
+
+      test('should set isSecure from config', () => {
+        expect(getCookieOptions().cookie.isSecure).toBe(true)
+      })
+
+      test('should set isSameSite to Lax', () => {
+        expect(getCookieOptions().cookie.isSameSite).toBe('Lax')
+      })
+    })
+
+    describe('redirectTo', () => {
+      const redirectTo = getCookieOptions().redirectTo
+      const request = {
+        url: {
+          pathname: '/search-sbi',
+          search: '?query=string'
+        }
+      }
+
+      test('should redirect to sign-in route', () => {
+        expect(redirectTo(request).startsWith('/auth/sign-in')).toBe(true)
+      })
+
+      test('should include redirect param in redirection to intended path', () => {
+        expect(redirectTo(request)).toContain('redirect=/search-sbi?query=string')
+      })
+    })
+
+    describe('validate', () => {
+      const validate = getCookieOptions().validate
+      const mockCacheGet = vi.fn()
+      const mockCacheSet = vi.fn()
+      const request = {
+        server: {
+          app: {
+            cache: {
+              get: mockCacheGet,
+              set: mockCacheSet
+            }
+          }
+        }
+      }
+      const session = {
+        sessionId: 'session-id',
+        refreshToken
+      }
+
+      let userSession
+
+      beforeEach(() => {
+        vi.clearAllMocks()
+        const encodedToken = Jwt.token.generate(token, { key: privateKey, algorithm: 'RS256' })
+        session.token = encodedToken
+
+        userSession = {
+          token: encodedToken,
+          refreshToken
+        }
+
+        mockRefreshTokens.mockResolvedValue({
+          access_token: encodedToken,
+          refresh_token: refreshToken
+        })
+
+        mockCacheGet.mockResolvedValue(userSession)
+      })
+
+      test('should return an object', async () => {
+        const result = await validate(request, session)
+        expect(result).toBeInstanceOf(Object)
+      })
+
+      test('should get session from cache', async () => {
+        await validate(request, session)
+        expect(mockCacheGet).toHaveBeenCalledWith(session.sessionId)
+      })
+
+      test('should decode token from session', async () => {
+        await validate(request, session)
+        expect(jwtDecodeSpy).toHaveBeenCalledWith(session.token)
+      })
+
+      test('should verify token time', async () => {
+        await validate(request, session)
+        expect(jwtVerifyTimeSpy).toHaveBeenCalled()
+      })
+
+      test('should return valid state if session exists and token is valid', async () => {
+        const result = await validate(request, session)
+        expect(result.isValid).toBe(true)
+      })
+
+      test('should add credentials as session data to request if session exists and token is valid', async () => {
+        const result = await validate(request, session)
+        expect(result.credentials).toEqual(userSession)
+      })
+
+      test('should return invalid state if session does not exist', async () => {
+        mockCacheGet.mockResolvedValue(null)
+        const result = await validate(request, session)
+        expect(result.isValid).toBe(false)
+      })
+
+      test('should return invalid state if token has expired and refresh tokens are disabled', async () => {
+        jwtVerifyTimeSpy.mockImplementationOnce(() => {
+          throw new Error('Token has expired')
+        })
+        mockConfigGet.mockReturnValueOnce(false)
+        const result = await validate(request, session)
+        expect(result.isValid).toBe(false)
+      })
+
+      test('should refresh tokens if token is has expired and refresh tokens are enabled', async () => {
+        jwtVerifyTimeSpy.mockImplementationOnce(() => {
+          throw new Error('Token has expired')
+        })
+        await validate(request, session)
+        expect(mockRefreshTokens).toHaveBeenCalledWith(refreshToken)
+      })
+
+      test('should overwrite session data in cache if tokens are refreshed', async () => {
+        jwtVerifyTimeSpy.mockImplementationOnce(() => {
+          throw new Error('Token has expired')
+        })
+        await validate(request, session)
+        expect(mockCacheSet).toHaveBeenCalledWith(session.sessionId, userSession)
+      })
+
+      test('should return valid state if tokens are refreshed', async () => {
+        jwtVerifyTimeSpy.mockImplementationOnce(() => {
+          throw new Error('Token has expired')
+        })
+        const result = await validate(request, session)
+        expect(result.isValid).toBe(true)
+      })
+    })
+  })
+>>>>>>> origin/main:test/unit/plugins/auth.test.js
 })

@@ -1,5 +1,5 @@
 /*
- * Formats data ready for presenting in the personal name change page
+ * Formats data ready for presenting in the `/customer/{CRN}/details/account-name-change` page
  * @module personalNameChangePresenter
  */
 

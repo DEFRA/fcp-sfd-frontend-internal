@@ -23,7 +23,7 @@ const updateBusinessEmailChangeService = async (yar, credentials) => {
 
   const variables = { input: { email: { address: businessDetails.changeBusinessEmail }, sbi: businessDetails.info.sbi } }
 
-  await updateDalService(updateBusinessEmailMutation, variables, credentials.sessionId)
+  await updateDalService(updateBusinessEmailMutation, variables, credentials.email)
 
   yar.clear('businessDetailsUpdate')
 

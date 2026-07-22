@@ -21,10 +21,16 @@ describe('businessEmailChangePresenter', () => {
     expect(result.metaDescription).toBe('Update the email address for your business.')
   })
 
-  test('builds the back link from the sbi', () => {
+  test('builds the back link from the referrer when it is a valid url', () => {
+    const result = businessEmailChangePresenter(data, undefined, 'https://example.com/business/106705779/details')
+
+    expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/details' })
+  })
+
+  test('falls back to the sbi details page when there is no referrer', () => {
     const result = businessEmailChangePresenter(data)
 
-    expect(result.backLink).toEqual({ href: '/business/106705779/details' })
+    expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/details' })
   })
 
   test('uses the current business email when no change or payload exists', () => {

@@ -33,7 +33,8 @@ describe('business email check routes', () => {
 
     request = {
       yar: { get: vi.fn().mockReturnValue({ sbi: '106705779' }) },
-      auth: { credentials: { email: 'test.user@defra.gov.uk' } }
+      auth: { credentials: { email: 'test.user@defra.gov.uk' } },
+      info: { referrer: 'https://example.com/business-email-change' }
     }
 
     h = {
@@ -60,7 +61,7 @@ describe('business email check routes', () => {
       await getBusinessEmailCheck.handler(request, h)
 
       expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessEmail')
-      expect(businessEmailCheckPresenter).toHaveBeenCalledWith(businessEmailChange)
+      expect(businessEmailCheckPresenter).toHaveBeenCalledWith(businessEmailChange, request.info.referrer)
       expect(h.view).toHaveBeenCalledWith('business/business-email-check', pageData)
     })
   })

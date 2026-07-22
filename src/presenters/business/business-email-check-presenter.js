@@ -3,9 +3,14 @@
  * @module businessEmailCheckPresenter
  */
 
-const businessEmailCheckPresenter = (data) => {
+import { resolveBackLink } from '../base-presenter.js'
+
+const businessEmailCheckPresenter = (data, referrer) => {
   return {
-    backLink: { href: '/business-email-change' },
+    backLink: {
+      backLink: true,
+      href: resolveBackLink(referrer, '/business-email-change')
+    },
     changeLink: '/business-email-change',
     pageTitle: 'Check your business email address is correct before submitting',
     metaDescription: 'Check the email address for your business is correct.',

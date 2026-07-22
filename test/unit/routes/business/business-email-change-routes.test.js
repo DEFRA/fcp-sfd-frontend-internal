@@ -34,7 +34,8 @@ describe('business email change routes', () => {
     request = {
       yar: { get: vi.fn(), set: vi.fn() },
       auth: { credentials: { email: 'test.user@defra.gov.uk' } },
-      payload: { businessEmail: 'new@example.com' }
+      payload: { businessEmail: 'new@example.com' },
+      info: { referrer: 'https://example.com/business/106705779/details' }
     }
 
     h = {
@@ -61,8 +62,26 @@ describe('business email change routes', () => {
       await getBusinessEmailChange.handler(request, h)
 
       expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessEmail')
-      expect(businessEmailChangePresenter).toHaveBeenCalledWith(businessDetails)
+      expect(businessEmailChangePresenter).toHaveBeenCalledWith(businessDetails, undefined, request.info.referrer)
       expect(h.view).toHaveBeenCalledWith('business/business-email-change', pageData)
+    })
+  })
+
+  describe('POST /business-email-change validation failAction', () => {
+    const businessDetails = { info: { sbi: '106705779' } }
+    const pageData = { pageTitle: 'What is your business email address?' }
+
+    beforeEach(() => {
+      fetchBusinessChangeService.mockResolvedValue(businessDetails)
+      businessEmailChangePresenter.mockReturnValue(pageData)
+    })
+
+    test('re-fetches details and re-presents the page with the submitted email and referrer', async () => {
+      const err = { details: [] }
+
+      await postBusinessEmailChange.options.validate.failAction(request, h, err)
+
+      expect(businessEmailChangePresenter).toHaveBeenCalledWith(businessDetails, 'new@example.com', request.info.referrer)
     })
   })
 

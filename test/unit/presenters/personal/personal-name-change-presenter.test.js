@@ -169,4 +169,22 @@ describe('personalNameChangePresenter', () => {
       })
     })
   })
+
+  describe('the "backLink" property', () => {
+    describe('when a crn is provided', () => {
+      test('it should link to the customer details page', () => {
+        const result = personalNameChangePresenter(data, undefined, crn)
+
+        expect(result.backLink).toEqual({ href: '/customer/1234567890/details' })
+      })
+    })
+
+    describe('when a crn is not provided', () => {
+      test('it should link to the search-crn page', () => {
+        const result = personalNameChangePresenter(data, undefined, undefined)
+
+        expect(result.backLink).toEqual({ href: '/search-crn' })
+      })
+    })
+  })
 })

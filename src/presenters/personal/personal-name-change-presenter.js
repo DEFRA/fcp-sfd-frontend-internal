@@ -5,7 +5,7 @@
 
 const personalNameChangePresenter = (data, payload, crn) => {
   return {
-    backLink: { href: `/customer/${crn}/details` },
+    backLink: { href: crn ? `/customer/${crn}/details` : '/search-crn' },
     pageTitle: 'What is your full name?',
     metaDescription: 'Update the full name for your personal account.',
     userName: data.info.userName ?? null,

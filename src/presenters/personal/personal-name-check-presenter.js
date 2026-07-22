@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the personal name check page
+ * Formats data ready for presenting in the `/customer/{CRN}/details/account-name-check` page
  * @module personalNameCheckPresenter
  */
 

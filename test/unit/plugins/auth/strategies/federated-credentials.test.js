@@ -135,7 +135,7 @@ describe('federated-credentials strategy', () => {
         loginCallbackUri: '/auth/callback',
         responseMode: 'query',
         externalBaseUrl: 'mockRedirectUrl',
-        defaultPostLoginUri: '/search-sbi'
+        defaultPostLoginUri: 'mockRedirectUrl/search-sbi'
       })
     })
 

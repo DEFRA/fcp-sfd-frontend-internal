@@ -51,6 +51,7 @@ function buildAuthProvider () {
 async function registerFederatedStrategy (server) {
   const clientId = config.get('entra.clientId')
   const sessionCookieSecure = config.get('server.session.cookie.secure')
+  const externalBaseUrl = config.get('entra.redirectUrl')
 
   await server.register({
     plugin: hapiAuthOidcPlugin,
@@ -62,8 +63,8 @@ async function registerFederatedStrategy (server) {
         scope: `${clientId}/.default offline_access`,
         loginCallbackUri: '/auth/callback',
         responseMode: 'query',
-        externalBaseUrl: config.get('entra.redirectUrl'),
-        defaultPostLoginUri: '/search-sbi'
+        externalBaseUrl,
+        defaultPostLoginUri: `${externalBaseUrl}/search-sbi`
       },
       cookieOptions: {
         password: config.get('server.session.cookie.password'),

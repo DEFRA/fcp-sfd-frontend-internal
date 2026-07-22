@@ -47,7 +47,7 @@ const validateBusinessDetailsService = (businessDetails) => {
   }
 }
 
-const getSchemasToValidate = (hasUprn) => {
+const getSchemasToValidate = (_hasUprn) => {
   const schemasToRun = [
     schemas.business.details.email
   ]

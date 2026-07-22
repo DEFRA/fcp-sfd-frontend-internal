@@ -47,7 +47,7 @@ const validateBusinessDetailsService = (businessDetails) => {
   }
 }
 
-const getSchemasToValidate = (_hasUprn) => {
+const getSchemasToValidate = (hasUprn) => {
   const schemasToRun = [
     schemas.business.details.email
   ]
@@ -61,7 +61,7 @@ const getSchemasToValidate = (_hasUprn) => {
  * The flat shape mirrors the validation schema and avoids duplicating
  * nested schemas. Address fields are only included when no UPRN is present.
  */
-const mapBusinessDetails = (businessDetails, hasUprn) => {
+const mapBusinessDetails = (businessDetails, _hasUprn) => {
   const flatBusinessDetails = {
     businessEmail: businessDetails.contact?.email ?? '',
   }

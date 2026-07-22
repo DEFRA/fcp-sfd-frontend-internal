@@ -12,8 +12,8 @@ import { fetchBusinessDetailsService } from './fetch-business-details-service.js
  * @param {string|string[]} fields - The input field(s) the user has updated that we want to fetch (if exists)
  */
 const fetchBusinessChangeService = async (yar, credentials, fields) => {
-  const businessDetails = await fetchBusinessDetailsService(credentials)
   const sessionData = yar.get('businessDetailsUpdate') || {}
+  const businessDetails = await fetchBusinessDetailsService(sessionData.sbi, credentials.email)
 
   // Normalize to array
   const fieldsToCheck = Array.isArray(fields) ? fields : [fields]

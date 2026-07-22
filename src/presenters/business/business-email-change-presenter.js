@@ -5,10 +5,10 @@
 
 const businessEmailChangePresenter = (data, payload) => {
   return {
-    backLink: { href: '/business-details' },
+    backLink: { href: `/business/${data.info.sbi}/details` },
     pageTitle: 'What is your business email address?',
     metaDescription: 'Update the email address for your business.',
-    userName: data.customer.userName ?? null,
+    userName: data.customer?.userName ?? null,
     businessEmail: payload ?? data.changeBusinessEmail ?? data.contact.email,
     businessName: data.info.businessName ?? null,
     sbi: data.info.sbi ?? null

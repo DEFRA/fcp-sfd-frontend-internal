@@ -19,9 +19,10 @@ const postBusinessEmailCheck = {
   path: '/business-email-check',
   handler: async (request, h) => {
     const { yar, auth } = request
+    const { sbi } = yar.get('businessDetailsUpdate') || {}
     await updateBusinessEmailChangeService(yar, auth.credentials)
 
-    return h.redirect('/business-details')
+    return h.redirect(`/business/${sbi}/details`)
   }
 }
 

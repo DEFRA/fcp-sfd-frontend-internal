@@ -30,6 +30,9 @@ describe('business details routes', () => {
       params: { sbi: '106705779' },
       auth: {
         credentials: { email: 'test.user@defra.gov.uk' }
+      },
+      yar: {
+        set: vi.fn()
       }
     }
 
@@ -61,6 +64,12 @@ describe('business details routes', () => {
         expect(businessDetailsPresenter).toHaveBeenCalledWith(businessDetails, '106705779')
         expect(h.view).toHaveBeenCalledWith('business/business-details', pageData)
       })
+
+      test('persists the sbi in session for downstream change journeys', async () => {
+        await getBusinessDetails.handler(request, h)
+
+        expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
+      })
     })
 
     describe('when auth credentials have no email', () => {
@@ -69,7 +78,6 @@ describe('business details routes', () => {
         fetchBusinessDetailsService.mockResolvedValue({})
         businessDetailsPresenter.mockReturnValue({})
       })
-
       test('passes undefined email to the service and still renders the page', async () => {
         await getBusinessDetails.handler(request, h)
 

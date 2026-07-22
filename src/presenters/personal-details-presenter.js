@@ -75,10 +75,10 @@ const getActionText = (value) => {
 const formatChangeLinks = (crn, hasValidPersonalDetails, sectionsNeedingUpdate = []) => {
   const CHANGE_LINKS = {
     name: `/customer/${crn}/account-name-change`,
-    address: '/account-address-change',
-    phone: '/account-phone-numbers-change',
-    email: '/account-email-change',
-    dob: '/account-date-of-birth-change'
+    address: `/customer/${crn}/account-address-change`,
+    phone: `/customer/${crn}/account-phone-numbers-change`,
+    email: `/customer/${crn}/account-email-change`,
+    dob: `/customer/${crn}/account-date-of-birth-change`
   }
 
   const personalDetailsInterrupterEnabled = config.get('featureToggle.personalDetailsInterrupterEnabled')

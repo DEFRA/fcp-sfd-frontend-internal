@@ -112,4 +112,4 @@ async function validateToken (request, session) {
   return { isValid: true, credentials: userSession }
 }
 
-export { registerClientSecretStrategy, getBellOptions }
+export { registerClientSecretStrategy, getBellOptions, validateToken }

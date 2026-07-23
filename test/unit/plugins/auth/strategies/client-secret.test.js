@@ -5,6 +5,7 @@ import Jwt from '@hapi/jwt'
 
 // Mocks
 const jwtDecodeSpy = vi.spyOn(Jwt.token, 'decode')
+const jwtVerifyTimeSpy = vi.spyOn(Jwt.token, 'verifyTime')
 
 const mockConfigGet = vi.fn()
 vi.mock('../../../../../src/config/index.js', () => ({
@@ -45,7 +46,7 @@ const token = {
 }
 
 // Thing under test
-const { registerClientSecretStrategy, getBellOptions } = await import('../../../../../src/plugins/auth/strategies/client-secret.js')
+const { registerClientSecretStrategy, getBellOptions, validateToken } = await import('../../../../../src/plugins/auth/strategies/client-secret.js')
 
 describe('client-secret strategy', () => {
   beforeEach(() => {
@@ -262,6 +263,172 @@ describe('client-secret strategy', () => {
           profile(credentials)
           expect(credentials.profile.sessionId).toBe(token.sid)
         })
+      })
+    })
+  })
+
+  describe('validateToken', () => {
+    let request
+    let session
+    let userSession
+    let encodedToken
+
+    beforeEach(() => {
+      vi.clearAllMocks()
+      mockConfigGet.mockImplementation((key) => {
+        switch (key) {
+          case 'entra.refreshTokens':
+            return true
+          default:
+            return 'defaultConfigValue'
+        }
+      })
+
+      encodedToken = Jwt.token.generate(token, { key: privateKey, algorithm: 'RS256' })
+      userSession = {
+        token: encodedToken,
+        refreshToken: 'refresh-token-123'
+      }
+
+      session = {
+        sessionId: 'session-id-123'
+      }
+
+      request = {
+        server: {
+          app: {
+            cache: {
+              get: vi.fn().mockResolvedValue(userSession),
+              set: vi.fn().mockResolvedValue(undefined)
+            }
+          },
+          logger: {
+            info: vi.fn()
+          }
+        }
+      }
+    })
+
+    test('should be a function', () => {
+      expect(validateToken).toBeInstanceOf(Function)
+    })
+
+    describe('when session does not exist in cache', () => {
+      beforeEach(() => {
+        request.server.app.cache.get.mockResolvedValue(null)
+      })
+
+      test('should return invalid session', async () => {
+        const result = await validateToken(request, session)
+        expect(result).toEqual({ isValid: false })
+      })
+
+      test('should fetch session from cache', async () => {
+        await validateToken(request, session)
+        expect(request.server.app.cache.get).toHaveBeenCalledWith(session.sessionId)
+      })
+    })
+
+    describe('when session exists and token is valid', () => {
+      beforeEach(() => {
+        jwtVerifyTimeSpy.mockImplementation(() => {})
+      })
+
+      test('should return valid session with credentials', async () => {
+        const result = await validateToken(request, session)
+        expect(result).toEqual({ isValid: true, credentials: userSession })
+      })
+
+      test('should decode the token', async () => {
+        await validateToken(request, session)
+        expect(jwtDecodeSpy).toHaveBeenCalledWith(userSession.token)
+      })
+
+      test('should verify token time', async () => {
+        await validateToken(request, session)
+        expect(jwtVerifyTimeSpy).toHaveBeenCalled()
+      })
+
+      test('should not refresh tokens', async () => {
+        await validateToken(request, session)
+        expect(mockRefreshTokens).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('when token verification fails and refresh tokens is disabled', () => {
+      beforeEach(() => {
+        mockConfigGet.mockImplementation((key) => {
+          if (key === 'entra.refreshTokens') return false
+          return 'defaultConfigValue'
+        })
+        jwtVerifyTimeSpy.mockImplementation(() => {
+          throw new Error('Token expired')
+        })
+      })
+
+      test('should log the error', async () => {
+        await validateToken(request, session)
+        expect(request.server.logger.info).toHaveBeenCalledWith('Token expired')
+      })
+
+      test('should return invalid session', async () => {
+        const result = await validateToken(request, session)
+        expect(result).toEqual({ isValid: false })
+      })
+
+      test('should not attempt to refresh tokens', async () => {
+        await validateToken(request, session)
+        expect(mockRefreshTokens).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('when token verification fails and refresh tokens is enabled', () => {
+      const newToken = 'new-access-token'
+      const newRefreshToken = 'new-refresh-token'
+
+      beforeEach(() => {
+        mockConfigGet.mockImplementation((key) => {
+          if (key === 'entra.refreshTokens') return true
+          return 'defaultConfigValue'
+        })
+        jwtVerifyTimeSpy.mockImplementation(() => {
+          throw new Error('Token expired')
+        })
+        mockRefreshTokens.mockResolvedValue({
+          access_token: newToken,
+          refresh_token: newRefreshToken
+        })
+      })
+
+      test('should call refreshTokens with refresh token', async () => {
+        await validateToken(request, session)
+        expect(mockRefreshTokens).toHaveBeenCalledWith('refresh-token-123')
+      })
+
+      test('should update session token', async () => {
+        await validateToken(request, session)
+        expect(userSession.token).toBe(newToken)
+      })
+
+      test('should update session refresh token', async () => {
+        await validateToken(request, session)
+        expect(userSession.refreshToken).toBe(newRefreshToken)
+      })
+
+      test('should persist updated session to cache', async () => {
+        await validateToken(request, session)
+        expect(request.server.app.cache.set).toHaveBeenCalledWith(
+          session.sessionId,
+          expect.objectContaining({
+            token: newToken,
+            refreshToken: newRefreshToken
+          })
+        )
+      })
+
+      test('should return valid session with updated credentials', async () => {
+        const result = await validateToken(request, session)
+        expect(result).toEqual({ isValid: true, credentials: userSession })
       })
     })
   })

@@ -17,6 +17,12 @@ export const featureToggleConfig = {
       format: Boolean,
       default: false,
       env: 'BUSINESS_DETAILS_INTERRUPTER_ENABLED'
+    },
+    useFederatedCredentials: {
+      doc: 'Enables federated credentials for Entra authentication',
+      format: Boolean,
+      default: false,
+      env: 'USE_FEDERATED_CREDENTIALS'
     }
   }
 }

@@ -1,7 +1,7 @@
-import { getSignOutUrl } from '../auth/get-sign-out-url.js'
-import { validateState } from '../auth/state.js'
-import { verifyToken } from '../auth/verify-token.js'
-import { config } from '../config/index.js'
+import { getSignOutUrl } from '../../auth/get-sign-out-url.js'
+import { validateState } from '../../auth/state.js'
+import { verifyToken } from '../../auth/verify-token.js'
+import { config } from '../../config/index.js'
 
 const signIn = {
   method: 'GET',
@@ -54,7 +54,6 @@ const signInOidc = {
 
     request.yar.clear('redirect')
 
-    // Redirect to the search sbi page
     return h.redirect('/search-sbi')
   }
 }
@@ -85,7 +84,6 @@ const signOutOidc = {
     if (request.auth.isAuthenticated) {
       validateState(request, request.query.state)
       if (request.auth.credentials?.sessionId) {
-        // Clear the session cache
         await request.server.app.cache.drop(request.auth.credentials.sessionId)
       }
       request.cookieAuth.clear()
@@ -94,7 +92,7 @@ const signOutOidc = {
   }
 }
 
-export const auth = [
+export const clientSecretRoutes = [
   signIn,
   signInOidc,
   signOut,

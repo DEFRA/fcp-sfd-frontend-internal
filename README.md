@@ -25,7 +25,113 @@ npm install
 
 Check out [.env.example](/.env.example) for details of the required things you'll need in your `.env` file. Contact the SFD dev team if you are unsure of the values you need to use.
 
-## Running the application
+## Authentication
+
+This service supports two authentication methods for Entra ID integration:
+
+### Legacy: Client Secret (OAuth 2.0)
+
+The default authentication method uses a client secret for Entra ID integration. Configuration:
+
+```env
+ENTRA_TENANT_ID=<your-tenant-id>
+ENTRA_CLIENT_ID=<your-client-id>
+ENTRA_CLIENT_SECRET=<your-client-secret>
+ENTRA_WELL_KNOWN_URL=<well-known-url>
+ENTRA_REDIRECT_URL=<redirect-url>
+ENTRA_SIGN_OUT_REDIRECT_URL=<sign-out-url>
+USE_FEDERATED_CREDENTIALS=false
+```
+
+### Modern: Federated Credentials (Workload Identity)
+
+For deployments on the Core Delivery Platform (CDP), federated credentials eliminate the need to store and rotate client secrets. This method uses AWS STS Web Identity tokens for secure, short-lived authentication.
+
+#### Prerequisites
+
+1. Entra ID Application Registration must have a federated credential configured
+2. Service must be running on CDP (AWS STS Web Identity tokens are auto-provisioned)
+3. Environment must have the `CDP_JWT_ISSUER` variable set by the platform
+
+#### Setup
+
+1. Enable federated credentials via feature toggle:
+   ```env
+   USE_FEDERATED_CREDENTIALS=true
+   ```
+
+2. Configure the federated credential audience (should match the value configured in Entra):
+   ```env
+   ENTRA_FEDERATED_AUDIENCE=<audience-value>
+   ```
+
+3. Optionally use mock provider for local development:
+   ```env
+   ENTRA_FEDERATED_MOCK=true
+   ```
+
+4. (Development only) Allow insecure HTTP for OIDC discovery:
+   ```env
+   ENTRA_OIDC_USE_HTTP=true
+   ```
+   The service fetches security configuration from Azure's OIDC discovery endpoint when starting up. By default, it requires HTTPS (secure). For local development, this setting allows HTTP (insecure) connections instead. This is only needed if your local mock server or development environment runs on HTTP. **Never set this to `true` in production** — production deployments must always use HTTPS.
+
+#### Example Configuration
+
+Development (with mock):
+```env
+USE_FEDERATED_CREDENTIALS=true
+# (no ENTRA_FEDERATED_ENABLED flag; USE_FEDERATED_CREDENTIALS controls the auth mode)
+ENTRA_FEDERATED_AUDIENCE=sfd-internal
+ENTRA_FEDERATED_MOCK=true
+ENTRA_CLIENT_ID=<your-client-id>
+ENTRA_TENANT_ID=<your-tenant-id>
+ENTRA_WELL_KNOWN_URL=<well-known-url>
+ENTRA_OIDC_USE_HTTP=true
+```
+
+Production (on CDP):
+```env
+USE_FEDERATED_CREDENTIALS=true
+ENTRA_FEDERATED_ENABLED=true
+ENTRA_FEDERATED_AUDIENCE=sfd-internal
+ENTRA_CLIENT_ID=<your-client-id>
+ENTRA_TENANT_ID=<your-tenant-id>
+ENTRA_WELL_KNOWN_URL=<well-known-url>
+```
+
+#### How It Works
+
+1. Service requests a short-lived JWT from AWS STS Web Identity endpoint
+2. JWT is presented to Entra ID as a `client_assertion`
+3. Entra validates JWT signature and grants an access token
+4. Service uses access token for downstream API calls
+5. Tokens are automatically refreshed before expiry
+
+No client secrets are stored, rotated, or distributed.
+
+#### Migration from Client Secrets
+
+To migrate from client secrets to federated credentials:
+
+1. Ensure Entra Application Registration has federated credentials configured for all environments
+2. Deploy new code with `USE_FEDERATED_CREDENTIALS=false` (existing flow continues to work)
+3. In a lower environment, set `USE_FEDERATED_CREDENTIALS=true` and `ENTRA_FEDERATED_AUDIENCE=<audience>`
+4. Verify authentication works in lower environment
+5. Gradually roll out through higher environments
+6. Once confident, keep `USE_FEDERATED_CREDENTIALS=true` in all environments
+7. Optionally request deletion of client secrets from Entra (after rollback safety window)
+
+#### Rollback
+
+If issues occur after enabling federated credentials:
+
+1. Set `USE_FEDERATED_CREDENTIALS=false`
+2. Deploy
+3. Service automatically falls back to client secret authentication
+4. Existing client secrets must remain configured for fallback to work
+
+
 
 You can either run this service independently or alternatively run the [fcp-sfd-core](https://github.com/DEFRA/fcp-sfd-core) repository for local development if you need to run more services simultaneously.
 

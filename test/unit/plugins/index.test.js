@@ -3,7 +3,7 @@ import headersPlugin from '../../../src/plugins/headers.js'
 import errors from '../../../src/plugins/errors.js'
 import { session } from '../../../src/plugins/session.js'
 import { csp } from '../../../src/plugins/content-security-policy.js'
-import { auth } from '../../../src/plugins/auth.js'
+import { auth } from '../../../src/plugins/auth/index.js'
 import { plugins } from '../../../src/plugins/index.js'
 import { router } from '../../../src/plugins/router.js'
 

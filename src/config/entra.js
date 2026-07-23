@@ -1,5 +1,12 @@
 export const entraConfig = {
   entra: {
+    tenantId: {
+      doc: 'Azure AD tenant ID',
+      format: String,
+      nullable: true,
+      default: null,
+      env: 'ENTRA_TENANT_ID'
+    },
     wellKnownUrl: {
       doc: 'The Entra well known URL',
       format: String,
@@ -15,7 +22,7 @@ export const entraConfig = {
       env: 'ENTRA_CLIENT_ID'
     },
     clientSecret: {
-      doc: 'The Entra client secret',
+      doc: 'The Entra client secret (retained for rollback; unused when federated credentials are active)',
       format: String,
       nullable: true,
       default: null,
@@ -40,6 +47,21 @@ export const entraConfig = {
       format: Boolean,
       default: true,
       env: 'ENTRA_REFRESH_TOKENS'
+    },
+    federatedCredentials: {
+      audience: {
+        doc: 'Audience value presented to AWS STS when requesting the web identity token.',
+        format: String,
+        nullable: true,
+        default: null,
+        env: 'ENTRA_FEDERATED_AUDIENCE'
+      },
+      enableMocking: {
+        doc: 'Use MockProvider instead of WebIdentityTokenProvider (local development only).',
+        format: Boolean,
+        default: false,
+        env: 'ENTRA_FEDERATED_MOCK'
+      }
     }
   }
 }

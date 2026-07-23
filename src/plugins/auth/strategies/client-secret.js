@@ -1,30 +1,40 @@
+/**
+ * Authentication strategies configuration for the Hapi server.
+ *
+ * This file sets up two authentication methods:
+ * 1. Entra (Azure AD) OAuth 2.0 - logs users in via the corporate identity provider
+ * 2. Session cookie - keeps users logged in across requests
+ *
+ * When a user visits the app, they're redirected to Entra to sign in. After login,
+ * their credentials are stored in a session cookie and a server-side cache. On each request,
+ * we validate their JWT token and refresh it if needed to keep them logged in.
+ *
+ * This is the glue between user identity and the rest of the app.
+ */
+
 import Jwt from '@hapi/jwt'
-import { getOidcConfig } from '../auth/get-oidc-config.js'
-import { refreshTokens } from '../auth/refresh-tokens.js'
-import { getSafeRedirect } from '../utils/get-safe-redirect.js'
-import { config } from '../config/index.js'
+import { getOidcConfig } from '../../../auth/get-oidc-config.js'
+import { refreshTokens } from '../../../auth/refresh-tokens.js'
+import { getSafeRedirect } from '../../../utils/get-safe-redirect.js'
+import { getCookieOptions } from '../get-cookie-options.js'
+import { config } from '../../../config/index.js'
 
-export const auth = {
-  plugin: {
-    name: 'auth',
-    register: async (server) => {
-      const oidcConfig = await getOidcConfig()
+async function registerClientSecretStrategy (server) {
+  const oidcConfig = await getOidcConfig()
 
-      // Bell is a third-party plugin that provides a common interface for OAuth 2.0 authentication
-      // Used to authenticate users with Entra and a pre-requisite for the Cookie authentication strategy
-      // Also used for changing organisations and signing out
-      server.auth.strategy('entra', 'bell', getBellOptions(oidcConfig))
+  // Bell is a third-party plugin that provides a common interface for OAuth 2.0 authentication
+  // Used to authenticate users with Entra and a pre-requisite for the Cookie authentication strategy
+  // Also used for changing organisations and signing out
+  server.auth.strategy('entra', 'bell', getBellOptions(oidcConfig))
 
-      // Cookie is a built-in authentication strategy for hapi.js that authenticates users based on a session cookie
-      // Used for all non-Entra routes
-      // Lax policy required to allow redirection after Entra sign out
-      server.auth.strategy('session', 'cookie', getCookieOptions())
+  // Cookie is a built-in authentication strategy for hapi.js that authenticates users based on a session cookie
+  // Used for all non-Entra routes
+  // Lax policy required to allow redirection after Entra sign out
+  server.auth.strategy('session', 'cookie', getCookieOptions(validateToken))
 
-      // Set the default authentication strategy to session
-      // All routes will require authentication unless explicitly set to 'entra' or `auth: false`
-      server.auth.default('session')
-    }
-  }
+  // Set the default authentication strategy to session
+  // All routes will require authentication unless explicitly set to 'entra' or `auth: false`
+  server.auth.default('session')
 }
 
 function getBellOptions (oidcConfig) {
@@ -46,9 +56,7 @@ function getBellOptions (oidcConfig) {
     isSecure: sessionCookieSecure,
     forceHttps: sessionCookieSecure,
     location: function (request) {
-      // If request includes a redirect query parameter, store it in the session to allow redirection after authentication
       if (request.query.redirect) {
-        // Ensure redirect is a relative path to prevent redirect attacks
         const safeRedirect = getSafeRedirect(request.query.redirect)
         request.yar.set('redirect', safeRedirect)
       }
@@ -63,28 +71,12 @@ function getBellOptions (oidcConfig) {
   }
 }
 
-function getCookieOptions () {
-  const sessionCookieSecure = config.get('server.session.cookie.secure')
-
-  return {
-    cookie: {
-      password: config.get('server.session.cookie.password'),
-      path: '/',
-      isSecure: sessionCookieSecure,
-      isSameSite: 'Lax'
-    },
-    redirectTo: function (request) {
-      return `/auth/sign-in?redirect=${request.url.pathname}${request.url.search}`
-    },
-    validate: async (request, session) => validateToken(request, session)
-  }
-}
-
 function getProfile (credentials, _params, _get) {
   const payload = Jwt.token.decode(credentials.token).decoded.payload
 
   // Map all JWT properties to the credentials object so it can be stored in the session
   // Add some additional properties to the profile object for convenience
+
   credentials.profile = {
     ...payload,
     sessionId: payload.sid,
@@ -120,4 +112,4 @@ async function validateToken (request, session) {
   return { isValid: true, credentials: userSession }
 }
 
-export { getBellOptions, getCookieOptions }
+export { registerClientSecretStrategy, getBellOptions, validateToken }

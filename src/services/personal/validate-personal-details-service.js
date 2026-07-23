@@ -45,7 +45,7 @@ const validatePersonalDetailsService = (personalDetails) => {
   }
 }
 
-const getSchemasToValidate = (_hasUprn) => {
+const getSchemasToValidate = (hasUprn) => {
   const schemasToValidate = [
     schemas.personal.name,
     schemas.personal.dob,

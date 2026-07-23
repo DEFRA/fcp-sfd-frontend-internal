@@ -34,10 +34,9 @@ import { schemas } from '@defra/fcp-sfd-frontend-engine'
 import { validateDetailsService } from '../validate-details-service.js'
 
 const validateBusinessDetailsService = (businessDetails) => {
-  const hasUprn = Boolean(businessDetails.address?.lookup?.uprn)
-  const mappedBusinessDetails = mapBusinessDetails(businessDetails, hasUprn)
+  const mappedBusinessDetails = mapBusinessDetails(businessDetails)
 
-  const schemasToValidate = getSchemasToValidate(hasUprn)
+  const schemasToValidate = getSchemasToValidate()
 
   const { isValid: hasValidBusinessDetails, sectionsNeedingUpdate } = validateDetailsService(schemasToValidate, mappedBusinessDetails)
 
@@ -47,7 +46,7 @@ const validateBusinessDetailsService = (businessDetails) => {
   }
 }
 
-const getSchemasToValidate = (hasUprn) => {
+const getSchemasToValidate = () => {
   const schemasToRun = [
     schemas.business.details.email
   ]
@@ -61,9 +60,9 @@ const getSchemasToValidate = (hasUprn) => {
  * The flat shape mirrors the validation schema and avoids duplicating
  * nested schemas. Address fields are only included when no UPRN is present.
  */
-const mapBusinessDetails = (businessDetails, _hasUprn) => {
+const mapBusinessDetails = (businessDetails) => {
   const flatBusinessDetails = {
-    businessEmail: businessDetails.contact?.email ?? '',
+    businessEmail: businessDetails.contact?.email ?? ''
   }
 
   return flatBusinessDetails

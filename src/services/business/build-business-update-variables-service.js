@@ -18,9 +18,6 @@ const buildBusinessUpdateVariablesService = (businessDetails) => {
   return variables
 }
 
-const nullIfUndefined = (value) => value ?? null
-
-
 const buildEmailInput = (sbi, businessDetails) => {
   return {
     sbi,

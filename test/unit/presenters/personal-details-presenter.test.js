@@ -73,28 +73,28 @@ describe('personalDetailsPresenter', () => {
             'United Kingdom'
           ],
           action: 'Change',
-          changeLink: '/account-address-change'
+          changeLink: `/customer/${data.crn}/account-address-change`
         },
         personalName: {
           fullName: 'John M Doe',
           action: 'Change',
-          changeLink: '/account-name-change'
+          changeLink: `/customer/${data.crn}/account-name-change`
         },
         dob: {
           fullDateOfBirth: '1 January 1990',
           action: 'Change',
-          changeLink: '/account-date-of-birth-change'
+          changeLink: `/customer/${data.crn}/account-date-of-birth-change`
         },
         personalTelephone: {
           telephone: data.contact.telephone,
           mobile: 'Not added',
           action: 'Change',
-          changeLink: '/account-phone-numbers-change'
+          changeLink: `/customer/${data.crn}/account-phone-numbers-change`
         },
         personalEmail: {
           email: data.contact.email,
           action: 'Change',
-          changeLink: '/account-email-change'
+          changeLink: `/customer/${data.crn}/account-email-change`
         }
       })
     })
@@ -385,11 +385,11 @@ describe('personalDetailsPresenter', () => {
       test('all change links should point to their standard change link', () => {
         const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-        expect(result.personalName.changeLink).toBe('/account-name-change')
-        expect(result.personalAddress.changeLink).toBe('/account-address-change')
-        expect(result.personalTelephone.changeLink).toBe('/account-phone-numbers-change')
-        expect(result.personalEmail.changeLink).toBe('/account-email-change')
-        expect(result.dob.changeLink).toBe('/account-date-of-birth-change')
+        expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/account-name-change`)
+        expect(result.personalAddress.changeLink).toBe(`/customer/${data.crn}/account-address-change`)
+        expect(result.personalTelephone.changeLink).toBe(`/customer/${data.crn}/account-phone-numbers-change`)
+        expect(result.personalEmail.changeLink).toBe(`/customer/${data.crn}/account-email-change`)
+        expect(result.dob.changeLink).toBe(`/customer/${data.crn}/account-date-of-birth-change`)
       })
     })
 
@@ -403,11 +403,11 @@ describe('personalDetailsPresenter', () => {
         test('all change links should point to their standard change link', () => {
           const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-          expect(result.personalName.changeLink).toBe('/account-name-change')
-          expect(result.personalAddress.changeLink).toBe('/account-address-change')
-          expect(result.personalTelephone.changeLink).toBe('/account-phone-numbers-change')
-          expect(result.personalEmail.changeLink).toBe('/account-email-change')
-          expect(result.dob.changeLink).toBe('/account-date-of-birth-change')
+          expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/account-name-change`)
+          expect(result.personalAddress.changeLink).toBe(`/customer/${data.crn}/account-address-change`)
+          expect(result.personalTelephone.changeLink).toBe(`/customer/${data.crn}/account-phone-numbers-change`)
+          expect(result.personalEmail.changeLink).toBe(`/customer/${data.crn}/account-email-change`)
+          expect(result.dob.changeLink).toBe(`/customer/${data.crn}/account-date-of-birth-change`)
         })
       })
 
@@ -420,7 +420,7 @@ describe('personalDetailsPresenter', () => {
         test('all links except the name points to the interrupter journey', () => {
           const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-          expect(result.personalName.changeLink).toBe('/account-name-change')
+          expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/account-name-change`)
           expect(result.personalAddress.changeLink).toBe('/personal-fix?source=address')
           expect(result.personalTelephone.changeLink).toBe('/personal-fix?source=phone')
           expect(result.personalEmail.changeLink).toBe('/personal-fix?source=email')
@@ -438,7 +438,7 @@ describe('personalDetailsPresenter', () => {
           const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
           expect(result.personalName.changeLink).toBe('/personal-fix?source=name')
-          expect(result.personalAddress.changeLink).toBe('/account-address-change')
+          expect(result.personalAddress.changeLink).toBe(`/customer/${data.crn}/account-address-change`)
           expect(result.personalTelephone.changeLink).toBe('/personal-fix?source=phone')
           expect(result.personalEmail.changeLink).toBe('/personal-fix?source=email')
           expect(result.dob.changeLink).toBe('/personal-fix?source=dob')
@@ -456,7 +456,7 @@ describe('personalDetailsPresenter', () => {
 
           expect(result.personalName.changeLink).toBe('/personal-fix?source=name')
           expect(result.personalAddress.changeLink).toBe('/personal-fix?source=address')
-          expect(result.personalTelephone.changeLink).toBe('/account-phone-numbers-change')
+          expect(result.personalTelephone.changeLink).toBe(`/customer/${data.crn}/account-phone-numbers-change`)
           expect(result.personalEmail.changeLink).toBe('/personal-fix?source=email')
           expect(result.dob.changeLink).toBe('/personal-fix?source=dob')
         })
@@ -474,7 +474,7 @@ describe('personalDetailsPresenter', () => {
           expect(result.personalName.changeLink).toBe('/personal-fix?source=name')
           expect(result.personalAddress.changeLink).toBe('/personal-fix?source=address')
           expect(result.personalTelephone.changeLink).toBe('/personal-fix?source=phone')
-          expect(result.personalEmail.changeLink).toBe('/account-email-change')
+          expect(result.personalEmail.changeLink).toBe(`/customer/${data.crn}/account-email-change`)
           expect(result.dob.changeLink).toBe('/personal-fix?source=dob')
         })
       })
@@ -492,7 +492,7 @@ describe('personalDetailsPresenter', () => {
           expect(result.personalAddress.changeLink).toBe('/personal-fix?source=address')
           expect(result.personalTelephone.changeLink).toBe('/personal-fix?source=phone')
           expect(result.personalEmail.changeLink).toBe('/personal-fix?source=email')
-          expect(result.dob.changeLink).toBe('/account-date-of-birth-change')
+          expect(result.dob.changeLink).toBe(`/customer/${data.crn}/account-date-of-birth-change`)
         })
       })
 

@@ -52,7 +52,8 @@ describe('customer details', () => {
           },
           yar: {
             get: vi.fn(),
-            set: vi.fn()
+            set: vi.fn(),
+            clear: vi.fn()
           }
         }
 
@@ -76,6 +77,12 @@ describe('customer details', () => {
         expect(validatePersonalDetailsService).toHaveBeenCalledWith(personalDetails)
         expect(personalDetailsPresenter).toHaveBeenCalledWith(personalDetails, request.yar, true, [])
         expect(h.view).toHaveBeenCalledWith('personal/personal-details.njk', pageData)
+      })
+
+      test('it clears any pending personal details update from the session', async () => {
+        await getCustomerDetails.handler(request, h)
+
+        expect(request.yar.clear).toHaveBeenCalledWith('personalDetailsUpdate')
       })
 
       test('it passes validation results to the presenter when sections need updating', async () => {

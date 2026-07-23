@@ -1,0 +1,74 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}
+{% endblock %}
+
+{% block content %}
+  {% if errors %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors | toErrorList
+    }) }}
+  {% endif %}
+
+<div class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" novalidate>
+        <input type="hidden" name="crumb" value="{{ crumb }}">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+              {{ pageTitle }}
+            </h1>
+          </legend>
+
+          {{ govukInput({
+            label: {
+              text: "First name"
+            },
+            id: "first",
+            name: "first",
+            value: first,
+            errorMessage: errors.first and {
+              text: errors.first.text
+            }
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Middle names"
+            },
+            id: "middle",
+            name: "middle",
+            value: middle,
+            errorMessage: errors.middle and {
+              text: errors.middle.text
+            }
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Last name"
+            },
+            id: "last",
+            name: "last",
+            value: last,
+            errorMessage: errors.last and {
+              text: errors.last.text
+            }
+          }) }}
+        </fieldset>
+
+        {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

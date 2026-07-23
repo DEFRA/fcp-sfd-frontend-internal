@@ -5,7 +5,7 @@
 
 import moment from 'moment'
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
-import { config } from '../config/index.js'
+import { config } from '../../config/index.js'
 
 const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNeedingUpdate) => {
   const changeLinks = formatChangeLinks(data.crn, hasValidPersonalDetails, sectionsNeedingUpdate)

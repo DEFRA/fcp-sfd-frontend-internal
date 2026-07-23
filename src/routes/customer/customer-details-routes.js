@@ -1,7 +1,7 @@
 import { schemas } from '@defra/fcp-sfd-frontend-engine'
 
 import { fetchPersonalDetailsService } from '../../services/fetch-personal-details-service.js'
-import { personalDetailsPresenter } from '../../presenters/personal-details-presenter.js'
+import { personalDetailsPresenter } from '../../presenters/personal/personal-details-presenter.js'
 import { validatePersonalDetailsService } from '../../services/personal/validate-personal-details-service.js'
 
 const getCustomerDetails = {

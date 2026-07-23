@@ -1,0 +1,50 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" novalidate>
+        <input type="hidden" name="crumb" value="{{ crumb }}">
+        <span class="govuk-caption-l text-wrap-no-hyphen">{{ userName }}</span>
+        <h1 class="govuk-heading-l">
+          {{ pageTitle }}
+        </h1>
+
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Personal email address"
+              },
+              value: {
+                text: personalEmail
+              },
+              actions: {
+                items: [
+                  {
+                    href: changeLink,
+                    text: "Change",
+                    visuallyHiddenText: "personal email address",
+                    classes: "govuk-link--no-visited-state"
+                  }
+                ]
+              }
+            }
+          ]
+        }) }}
+
+        {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

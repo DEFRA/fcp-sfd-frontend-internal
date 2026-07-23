@@ -14,6 +14,8 @@ import { businessOverviewRoutes } from './overview/business-routes.js'
 import { customerDetailsRoutes } from './customer/customer-details-routes.js'
 import { personalNameChangeRoutes } from './customer/personal-name-change-routes.js'
 import { personalNameCheckRoutes } from './customer/personal-name-check-routes.js'
+import { personalEmailChangeRoutes } from './customer/personal-email-change-routes.js'
+import { personalEmailCheckRoutes } from './customer/personal-email-check-routes.js'
 import { businessDetailsRoutes } from './business/business-details-routes.js'
 
 export const routes = [
@@ -33,5 +35,7 @@ export const routes = [
   ...customerDetailsRoutes,
   ...personalNameChangeRoutes,
   ...personalNameCheckRoutes,
+  ...personalEmailChangeRoutes,
+  ...personalEmailCheckRoutes,
   ...businessDetailsRoutes
 ]

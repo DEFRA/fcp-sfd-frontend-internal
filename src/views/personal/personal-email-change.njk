@@ -1,0 +1,51 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}
+{% endblock %}
+
+{% block content %}
+  {% if errors %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: errors.personalEmail.text,
+          href: "#personal-email"
+        }
+      ]
+    }) }}
+  {% endif %}
+
+<div class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" novalidate>
+        <input type="hidden" name="crumb" value="{{ crumb }}">
+        <span class="govuk-caption-l text-wrap-no-hyphen">{{ userName }}</span>
+        {{ govukInput({
+          label: {
+            text: pageTitle,
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          classes: "govuk-input--width-20",
+          id: "personal-email",
+          name: "personalEmail",
+          value: personalEmail,
+          errorMessage: errors.personalEmail and {
+            text: errors.personalEmail.text
+          }
+        }) }}
+
+        {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

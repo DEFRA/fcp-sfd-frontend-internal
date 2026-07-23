@@ -15,8 +15,6 @@ const getBusinessDetails = {
       return h.redirect('/search-sbi').takeover()
     }
 
-    // Persist the SBI so change journeys (e.g. /business-email-change) can
-    // resolve the business without an SBI in their URL
     yar.set('businessDetailsUpdate', { sbi })
 
     const email = auth.credentials?.email

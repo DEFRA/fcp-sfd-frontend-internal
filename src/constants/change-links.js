@@ -1,3 +1,3 @@
 export const BUSINESS_CHANGE_LINKS = {
-  businessEmail: '/business-email-change'
+  businessEmail: (sbi) => `/business/${sbi}/business-email-change`
 }

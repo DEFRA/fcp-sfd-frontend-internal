@@ -19,14 +19,14 @@ describe('businessEmailCheckPresenter', () => {
 
     expect(result.pageTitle).toBe('Check your business email address is correct before submitting')
     expect(result.metaDescription).toBe('Check the email address for your business is correct.')
-    expect(result.backLink).toEqual({ backLink: true, href: '/business-email-change' })
-    expect(result.changeLink).toBe('/business-email-change')
+    expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/business-email-change' })
+    expect(result.changeLink).toBe('/business/106705779/business-email-change')
   })
 
   test('builds the back link from the referrer when it is a valid url', () => {
-    const result = businessEmailCheckPresenter(data, 'https://example.com/business-email-change')
+    const result = businessEmailCheckPresenter(data, 'https://example.com/business/106705779/business-email-change')
 
-    expect(result.backLink).toEqual({ backLink: true, href: '/business-email-change' })
+    expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/business-email-change' })
   })
 
   test('uses the in-progress change email when present', () => {

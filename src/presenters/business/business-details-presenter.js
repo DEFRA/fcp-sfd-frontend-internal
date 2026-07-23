@@ -38,7 +38,7 @@ const businessDetailsPresenter = (data, sbi) => {
     businessEmail: {
       value: contact.email || 'Not added',
       action: presenters.getActionText(contact.email),
-      changeLink: BUSINESS_CHANGE_LINKS.businessEmail
+      changeLink: BUSINESS_CHANGE_LINKS.businessEmail(sbi)
     },
     vatNumber: createEditableValueField(info.vat, 'No number added'),
     tradeNumber: info.traderNumber ?? null,

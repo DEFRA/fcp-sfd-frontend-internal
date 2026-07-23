@@ -2,13 +2,22 @@ import { utils, schemas, constants } from '@defra/fcp-sfd-frontend-engine'
 import { fetchBusinessChangeService } from '../../services/business/fetch-business-change-service.js'
 import { businessEmailChangePresenter } from '../../presenters/business/business-email-change-presenter.js'
 import { setSessionData } from '../../utils/session/set-session-data.js'
-import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
 
 const getBusinessEmailChange = {
   method: 'GET',
-  path: BUSINESS_CHANGE_LINKS.businessEmail,
+  path: '/business/{sbi}/business-email-change',
   handler: async (request, h) => {
-    const { yar, auth, info } = request
+    const { params, yar, auth, info } = request
+    const { sbi } = params
+
+    const { error } = schemas.business.sbi.validate({ sbi })
+
+    if (error) {
+      return h.redirect('/search-sbi').takeover()
+    }
+
+    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
+
     const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessEmail')
     const pageData = businessEmailChangePresenter(businessDetails, undefined, info.referrer)
 
@@ -18,7 +27,7 @@ const getBusinessEmailChange = {
 
 const postBusinessEmailChange = {
   method: 'POST',
-  path: BUSINESS_CHANGE_LINKS.businessEmail,
+  path: '/business/{sbi}/business-email-change',
   options: {
     validate: {
       payload: schemas.business.details.email,
@@ -36,9 +45,11 @@ const postBusinessEmailChange = {
       }
     },
     handler: async (request, h) => {
+      const { sbi } = request.params
+
       setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessEmail', request.payload.businessEmail)
 
-      return h.redirect('/business-email-check')
+      return h.redirect(`/business/${sbi}/business-email-check`)
     }
   }
 }

@@ -32,18 +32,19 @@ describe('business email check routes', () => {
     vi.clearAllMocks()
 
     request = {
-      yar: { get: vi.fn().mockReturnValue({ sbi: '106705779' }) },
+      params: { sbi: '106705779' },
+      yar: { get: vi.fn().mockReturnValue({ sbi: '106705779' }), set: vi.fn() },
       auth: { credentials: { email: 'test.user@defra.gov.uk' } },
-      info: { referrer: 'https://example.com/business-email-change' }
+      info: { referrer: 'https://example.com/business/106705779/business-email-change' }
     }
 
     h = {
       view: vi.fn(),
-      redirect: vi.fn()
+      redirect: vi.fn().mockReturnValue({ takeover: vi.fn() })
     }
   })
 
-  describe('GET /business-email-check', () => {
+  describe('GET /business/{sbi}/business-email-check', () => {
     const businessEmailChange = { info: { sbi: '106705779' } }
     const pageData = { pageTitle: 'Check your business email address is correct before submitting' }
 
@@ -54,7 +55,7 @@ describe('business email check routes', () => {
 
     test('should have the correct method and path configured', () => {
       expect(getBusinessEmailCheck.method).toBe('GET')
-      expect(getBusinessEmailCheck.path).toBe('/business-email-check')
+      expect(getBusinessEmailCheck.path).toBe('/business/{sbi}/business-email-check')
     })
 
     test('fetches the business change details, presents them and renders the page', async () => {
@@ -64,12 +65,26 @@ describe('business email check routes', () => {
       expect(businessEmailCheckPresenter).toHaveBeenCalledWith(businessEmailChange, request.info.referrer)
       expect(h.view).toHaveBeenCalledWith('business/business-email-check', pageData)
     })
+
+    test('redirects to search-sbi when sbi is invalid', async () => {
+      request.params.sbi = 'invalid'
+
+      await getBusinessEmailCheck.handler(request, h)
+
+      expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+    })
+
+    test('persists the sbi in session', async () => {
+      await getBusinessEmailCheck.handler(request, h)
+
+      expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
+    })
   })
 
-  describe('POST /business-email-check', () => {
+  describe('POST /business/{sbi}/business-email-check', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessEmailCheck.method).toBe('POST')
-      expect(postBusinessEmailCheck.path).toBe('/business-email-check')
+      expect(postBusinessEmailCheck.path).toBe('/business/{sbi}/business-email-check')
     })
 
     test('updates the email and redirects to the business details page for the sbi', async () => {
@@ -77,12 +92,6 @@ describe('business email check routes', () => {
 
       expect(updateBusinessEmailChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials)
       expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
-    })
-
-    test('reads the sbi from session before it is cleared by the update', async () => {
-      await postBusinessEmailCheck.handler(request, h)
-
-      expect(request.yar.get).toHaveBeenCalledWith('businessDetailsUpdate')
     })
   })
 })

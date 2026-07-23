@@ -14,8 +14,8 @@ vi.mock('../../../../src/services/DAL/update-dal-service.js', () => ({
   updateDalService: mockUpdateDalService
 }))
 
-vi.mock('../../../../src/dal/mutations/business/update-business-email.js', () => ({
-  updateBusinessEmailMutation: 'update-business-email-mutation'
+vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
+  mutations: { updateBusinessEmail: 'update-business-email-mutation' }
 }))
 
 vi.mock('../../../../src/utils/notifications/flash-notification.js', () => ({

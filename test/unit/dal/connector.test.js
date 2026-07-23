@@ -4,8 +4,7 @@ import { vi, describe, test, expect, beforeEach, afterEach } from 'vitest'
 // Thing under test
 import { initDalConnector, getDalConnector } from '../../../src/dal/connector.js'
 
-// Test helpers
-import { exampleQuery } from '../../../src/dal/queries/example-query.js'
+const testQuery = 'query { __typename }'
 
 vi.mock('../../../src/config/index.js', () => ({
   config: {
@@ -57,7 +56,7 @@ describe('DAL (data access layer) connector', () => {
     test('should return data and status without errors', async () => {
       mockSuccessfulDalResponse()
 
-      const result = await dalConnector.query(exampleQuery, { sbi: 123456789 })
+      const result = await dalConnector.query(testQuery, { sbi: 123456789 })
 
       expect(result.data).toBeDefined()
       expect(result.data.business.name).toBe('Test Business')
@@ -87,7 +86,7 @@ describe('DAL (data access layer) connector', () => {
         })
       })
 
-      const result = await dalConnector.query(exampleQuery, { sbi: 123456789 })
+      const result = await dalConnector.query(testQuery, { sbi: 123456789 })
 
       expect(result.data).toBeNull()
       expect(result.errors).toBeDefined()
@@ -101,7 +100,7 @@ describe('DAL (data access layer) connector', () => {
     test('returns a formatted error response', async () => {
       global.fetch = vi.fn().mockRejectedValue(new Error('Network error'))
 
-      const result = await dalConnector.query(exampleQuery, { sbi: 123456789 })
+      const result = await dalConnector.query(testQuery, { sbi: 123456789 })
 
       expect(result.data).toBeNull()
       expect(result.statusCode).toBe(500)

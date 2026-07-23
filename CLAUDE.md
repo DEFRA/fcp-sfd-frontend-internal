@@ -16,6 +16,8 @@ Frontend service for the Single Front Door (SFD) on DEFRA's Future Farming and C
 - `npm run lint` — Run neostandard (via eslint) + stylelint
 - `npm run lint:fix` — Auto-fix neostandard issues
 - `npm run docker:dev` — Run with DAL, upstream-mock, Redis, Mongo, and Entra ID stub
+- `npm run docker:test` — Run full test suite in Docker against a real DAL and upstream-mock (use this for integration tests that require live dependencies)
+- `npm run docker:test:watch` — Same as above but in watch mode
 - `docker compose build` — Rebuild Docker image
 
 ## Architecture

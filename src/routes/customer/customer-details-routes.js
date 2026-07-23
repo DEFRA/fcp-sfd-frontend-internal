@@ -17,6 +17,8 @@ const getCustomerDetails = {
       return h.redirect('/search-crn')
     }
 
+    yar.clear('personalDetailsUpdate')
+
     const email = auth.credentials?.email
     const personalDetails = await fetchPersonalDetailsService(crn, email)
     const { hasValidPersonalDetails, sectionsNeedingUpdate } = validatePersonalDetailsService(personalDetails)

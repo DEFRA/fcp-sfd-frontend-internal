@@ -2,7 +2,6 @@ import { errors } from './errors/error-routes.js'
 import { health } from './health-routes.js'
 import { auth } from './auth-routes.js'
 import { index } from './index-routes.js'
-import { dalExampleRoutes } from './dal-example-routes.js'
 import { staticAssetRoutes } from './static-assets-routes.js'
 import { cookies } from './footer/cookies-routes.js'
 import { signedOut } from './signed-out-routes.js'
@@ -13,6 +12,8 @@ import { changeSearchCriteriaRoutes } from './search/change-search-criteria-rout
 import { customerOverviewRoutes } from './overview/customer-routes.js'
 import { businessOverviewRoutes } from './overview/business-routes.js'
 import { customerDetailsRoutes } from './customer/customer-details-routes.js'
+import { personalNameChangeRoutes } from './customer/personal-name-change-routes.js'
+import { personalNameCheckRoutes } from './customer/personal-name-check-routes.js'
 import { businessDetailsRoutes } from './business/business-details-routes.js'
 import { businessEmailChangeRoutes } from './business/business-email-change-routes.js'
 import { businessEmailCheckRoutes } from './business/business-email-check-routes.js'
@@ -20,7 +21,6 @@ import { businessEmailCheckRoutes } from './business/business-email-check-routes
 export const routes = [
   health,
   index,
-  ...dalExampleRoutes,
   ...auth,
   cookies,
   signedOut,
@@ -33,6 +33,8 @@ export const routes = [
   ...customerOverviewRoutes,
   ...businessOverviewRoutes,
   ...customerDetailsRoutes,
+  ...personalNameChangeRoutes,
+  ...personalNameCheckRoutes,
   ...businessDetailsRoutes,
   ...businessEmailChangeRoutes,
   ...businessEmailCheckRoutes

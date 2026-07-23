@@ -1,6 +1,6 @@
 /**
 * Formats data ready for presenting in the `/business-email-change` page
-* @module businessEmailEnterPresenter
+* @module businessEmailChangePresenter
 */
 
 import { resolveBackLink } from '../base-presenter.js'

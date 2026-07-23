@@ -7,8 +7,8 @@
 import { fetchBusinessDetailsService } from './fetch-business-details-service.js'
 
 const fetchBusinessFixService = async (credentials, sessionData = {}) => {
-  const { orderedSectionsToFix, businessFixUpdates, source } = sessionData
-  const businessDetails = await fetchBusinessDetailsService(credentials)
+  const { orderedSectionsToFix, businessFixUpdates, source, sbi } = sessionData
+  const businessDetails = await fetchBusinessDetailsService(sbi, credentials.email)
 
   const updatedBusinessDetails = {
     source,

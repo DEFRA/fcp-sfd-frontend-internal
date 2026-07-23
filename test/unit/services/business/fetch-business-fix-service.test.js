@@ -24,19 +24,21 @@ describe('fetchBusinessFixService', () => {
     mockFetchBusinessDetailsService.mockResolvedValue(businessDetails)
   })
 
+  const sbi = '107183280'
+
   test('fetches the live business details and overlays the session context', async () => {
-    const sessionData = { orderedSectionsToFix: ['email'], source: 'business-details' }
+    const sessionData = { orderedSectionsToFix: ['email'], source: 'business-details', sbi }
 
     const result = await fetchBusinessFixService(credentials, sessionData)
 
-    expect(mockFetchBusinessDetailsService).toHaveBeenCalledWith(credentials)
+    expect(mockFetchBusinessDetailsService).toHaveBeenCalledWith(sbi, credentials.email)
     expect(result.source).toBe('business-details')
     expect(result.orderedSectionsToFix).toEqual(['email'])
     expect(result.info).toEqual(businessDetails.info)
   })
 
   test('returns the details unchanged when there are no in-progress fixes', async () => {
-    const sessionData = { orderedSectionsToFix: ['email'], source: 'business-details' }
+    const sessionData = { orderedSectionsToFix: ['email'], source: 'business-details', sbi }
 
     const result = await fetchBusinessFixService(credentials, sessionData)
 
@@ -47,7 +49,8 @@ describe('fetchBusinessFixService', () => {
     const sessionData = {
       orderedSectionsToFix: ['email'],
       source: 'business-details',
-      businessFixUpdates: { email: { businessEmail: 'new@example.com' } }
+      businessFixUpdates: { email: { businessEmail: 'new@example.com' } },
+      sbi
     }
 
     const result = await fetchBusinessFixService(credentials, sessionData)
@@ -59,7 +62,8 @@ describe('fetchBusinessFixService', () => {
     const sessionData = {
       orderedSectionsToFix: ['email'],
       source: 'business-details',
-      businessFixUpdates: {}
+      businessFixUpdates: {},
+      sbi
     }
 
     const result = await fetchBusinessFixService(credentials, sessionData)
@@ -70,7 +74,7 @@ describe('fetchBusinessFixService', () => {
   test('defaults to empty session data when none is provided', async () => {
     const result = await fetchBusinessFixService(credentials)
 
-    expect(mockFetchBusinessDetailsService).toHaveBeenCalledWith(credentials)
+    expect(mockFetchBusinessDetailsService).toHaveBeenCalledWith(undefined, credentials.email)
     expect(result.orderedSectionsToFix).toBeUndefined()
     expect(result.changeBusinessEmail).toBeUndefined()
   })

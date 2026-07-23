@@ -2,10 +2,11 @@ import { utils, schemas, constants } from '@defra/fcp-sfd-frontend-engine'
 import { fetchBusinessChangeService } from '../../services/business/fetch-business-change-service.js'
 import { businessEmailChangePresenter } from '../../presenters/business/business-email-change-presenter.js'
 import { setSessionData } from '../../utils/session/set-session-data.js'
+import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
 
 const getBusinessEmailChange = {
   method: 'GET',
-  path: '/business-email-change',
+  path: BUSINESS_CHANGE_LINKS.businessEmail,
   handler: async (request, h) => {
     const { yar, auth, info } = request
     const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessEmail')
@@ -17,7 +18,7 @@ const getBusinessEmailChange = {
 
 const postBusinessEmailChange = {
   method: 'POST',
-  path: '/business-email-change',
+  path: BUSINESS_CHANGE_LINKS.businessEmail,
   options: {
     validate: {
       payload: schemas.business.details.email,

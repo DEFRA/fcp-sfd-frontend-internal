@@ -20,7 +20,7 @@
  * @returns {object} - The updated session data object
  */
 const setSessionData = (yar, key, value, data) => {
-  const sessionData = yar.get(key)
+  const sessionData = yar.get(key) || {}
 
   sessionData[value] = data
 

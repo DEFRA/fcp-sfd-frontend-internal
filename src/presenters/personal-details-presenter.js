@@ -8,7 +8,7 @@ import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { config } from '../config/index.js'
 
 const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNeedingUpdate) => {
-  const changeLinks = formatChangeLinks(hasValidPersonalDetails, sectionsNeedingUpdate)
+  const changeLinks = formatChangeLinks(data.crn, hasValidPersonalDetails, sectionsNeedingUpdate)
   const { action: dobAction, formattedDob } = formatDob(data.info.dateOfBirth.full)
 
   return {
@@ -72,13 +72,13 @@ const getActionText = (value) => {
  * - If only one section needs updating, its normal change link is used
  * - Otherwise, all links point to the personal details fix journey
  */
-const formatChangeLinks = (hasValidPersonalDetails, sectionsNeedingUpdate = []) => {
+const formatChangeLinks = (crn, hasValidPersonalDetails, sectionsNeedingUpdate = []) => {
   const CHANGE_LINKS = {
-    name: '/account-name-change',
-    address: '/account-address-change',
-    phone: '/account-phone-numbers-change',
-    email: '/account-email-change',
-    dob: '/account-date-of-birth-change'
+    name: `/customer/${crn}/account-name-change`,
+    address: `/customer/${crn}/account-address-change`,
+    phone: `/customer/${crn}/account-phone-numbers-change`,
+    email: `/customer/${crn}/account-email-change`,
+    dob: `/customer/${crn}/account-date-of-birth-change`
   }
 
   const personalDetailsInterrupterEnabled = config.get('featureToggle.personalDetailsInterrupterEnabled')

@@ -45,7 +45,6 @@
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
-    "@azure/identity": "4.13.1",
     "@defra/fcp-sfd-frontend-engine": "0.10.0",
     "@defra/hapi-auth-oidc": "0.5.6",
     "@defra/hapi-tracing": "1.30.0",

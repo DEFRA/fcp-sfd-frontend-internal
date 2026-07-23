@@ -28,7 +28,10 @@ const callback = {
     const refreshToken = tokens.refresh_token
 
     const decoded = Jwt.token.decode(token).decoded.payload
-    const sessionId = decoded.sid
+    const sessionId = decoded?.sid
+    if (!sessionId) {
+      return h.view('unauthorised')
+    }
     const roles = decoded.roles
 
     const profile = {

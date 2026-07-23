@@ -112,9 +112,9 @@ Configuration is validated at startup via convict schema (`src/config/entra.js`)
 
 ### Key Files
 
-**Abstraction Layer:**
-- `src/auth/credential-provider-factory.js` - Factory for creating credential providers based on feature toggle
-
+**Feature toggle & wiring:**
+- `src/plugins/auth/index.js` - Registers the appropriate auth strategy based on `USE_FEDERATED_CREDENTIALS`
+- `src/routes/auth/index.js` - Exposes the appropriate auth routes based on the same toggle
 **Configuration:**
 - `src/config/entra.js` - Full Entra and federated credential config schema
 

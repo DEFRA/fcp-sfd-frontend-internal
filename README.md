@@ -81,7 +81,7 @@ For deployments on the Core Delivery Platform (CDP), federated credentials elimi
 Development (with mock):
 ```env
 USE_FEDERATED_CREDENTIALS=true
-ENTRA_FEDERATED_ENABLED=true
+# (no ENTRA_FEDERATED_ENABLED flag; USE_FEDERATED_CREDENTIALS controls the auth mode)
 ENTRA_FEDERATED_AUDIENCE=sfd-internal
 ENTRA_FEDERATED_MOCK=true
 ENTRA_CLIENT_ID=<your-client-id>

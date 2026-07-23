@@ -45,6 +45,7 @@ describe('auth routes - federated credentials strategy', () => {
     if (server) {
       await server.stop()
     }
+    vi.unstubAllEnvs()
   })
 
   describe('GET /auth/sign-in', () => {
@@ -57,7 +58,8 @@ describe('auth routes - federated credentials strategy', () => {
         url: path
       })
       // The federated strategy triggers login with hapi-auth-oidc
-      expect(response).toBeDefined()
+      expect(response.statusCode).not.toBe(404)
+      expect(response.statusCode).not.toBe(500)
     })
   })
 

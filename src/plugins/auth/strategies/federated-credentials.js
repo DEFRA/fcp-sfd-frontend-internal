@@ -69,7 +69,7 @@ async function registerFederatedStrategy (server) {
       cookieOptions: {
         password: config.get('server.session.cookie.password'),
         isSecure: sessionCookieSecure,
-        isSameSite: 'None'
+        isSameSite: sessionCookieSecure ? 'None' : 'Lax'
       }
     }
   })

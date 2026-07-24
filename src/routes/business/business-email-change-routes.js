@@ -47,6 +47,12 @@ const postBusinessEmailChange = {
     handler: async (request, h) => {
       const { sbi } = request.params
 
+      const { error } = schemas.business.sbi.validate({ sbi })
+
+      if (error) {
+        return h.redirect('/search-sbi').takeover()
+      }
+
       setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessEmail', request.payload.businessEmail)
 
       return h.redirect(`/business/${sbi}/business-email-check`)

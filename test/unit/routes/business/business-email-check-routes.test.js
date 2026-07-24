@@ -93,5 +93,14 @@ describe('business email check routes', () => {
       expect(updateBusinessEmailChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials)
       expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
     })
+
+    test('redirects to search-sbi and does not update the email when sbi is invalid', async () => {
+      request.params.sbi = 'invalid'
+
+      await postBusinessEmailCheck.handler(request, h)
+
+      expect(updateBusinessEmailChangeService).not.toHaveBeenCalled()
+      expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+    })
   })
 })

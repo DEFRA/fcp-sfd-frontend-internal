@@ -15,6 +15,10 @@ const getBusinessDetails = {
       return h.redirect('/search-sbi').takeover()
     }
 
+    // This is the journey entry point, so reset businessDetailsUpdate to { sbi }
+    // to clear any stale in-progress edits. Sub-pages (e.g. business-email-change)
+    // deliberately spread existing session data instead, to preserve in-progress
+    // changes if the user revisits or refreshes. Keep this reset as-is.
     yar.set('businessDetailsUpdate', { sbi })
 
     const email = auth.credentials?.email

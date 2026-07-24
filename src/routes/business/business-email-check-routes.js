@@ -32,6 +32,12 @@ const postBusinessEmailCheck = {
     const { params, yar, auth } = request
     const { sbi } = params
 
+    const { error } = schemas.business.sbi.validate({ sbi })
+
+    if (error) {
+      return h.redirect('/search-sbi').takeover()
+    }
+
     await updateBusinessEmailChangeService(yar, auth.credentials)
 
     return h.redirect(`/business/${sbi}/details`)

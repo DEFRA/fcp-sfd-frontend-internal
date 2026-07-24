@@ -5,6 +5,8 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
 
+{% block pageTitle %}{{ "Error: " if errors }}{{ pageTitle }} | {{ serviceName }}{% endblock %}
+
 {% block beforeContent %}
   {{ appBackSignOutLink(backLink)}}
 {% endblock %}
@@ -21,22 +23,23 @@
   <div class="govuk-grid-column-two-thirds">
     <form method="post" novalidate>
       <input type="hidden" name="crumb" value="{{ crumb }}">
-      <div class="govuk-form-group">
-        {{ govukInput({
-          label: {
-            text: pageTitle,
-            classes: "govuk-label--l",
-            isPageHeading: true
-          },
-          classes: "govuk-input--width-20",
-          id: "businessEmail",
-          name: "businessEmail",
-          value: businessEmail,
-          errorMessage: errors.businessEmail and {
-            text: errors.businessEmail.text
-          }
-        }) }}
-      </div>
+      {{ govukInput({
+        label: {
+          text: pageTitle,
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        classes: "govuk-input--width-20",
+        id: "businessEmail",
+        name: "businessEmail",
+        type: "email",
+        autocomplete: "email",
+        spellcheck: false,
+        value: businessEmail,
+        errorMessage: errors.businessEmail and {
+          text: errors.businessEmail.text
+        }
+      }) }}
 
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
     </form>

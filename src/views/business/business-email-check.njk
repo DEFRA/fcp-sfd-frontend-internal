@@ -13,34 +13,32 @@
   <div class="govuk-grid-column-two-thirds">
     <form method="post" novalidate>
       <input type="hidden" name="crumb" value="{{ crumb }}">
-      <div class="govuk-form-group">
-        <h1 class="govuk-heading-l">
-          {{ pageTitle }}
-        </h1>
+      <h1 class="govuk-heading-l">
+        {{ pageTitle }}
+      </h1>
 
-        {{ govukSummaryList({
-          rows: [
-            {
-              key: {
-                text: "Business email address"
-              },
-              value: {
-                text: businessEmail
-              },
-              actions: {
-                items: [
-                  {
-                    href: changeLink,
-                    text: "Change",
-                    visuallyHiddenText: "business email",
-                    classes: "govuk-link--no-visited-state"
-                  }
-                ]
-              }
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Business email address"
+            },
+            value: {
+              text: businessEmail
+            },
+            actions: {
+              items: [
+                {
+                  href: changeLink,
+                  text: "Change",
+                  visuallyHiddenText: "business email",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
             }
-          ]
-        }) }}
-      </div>
+          }
+        ]
+      }) }}
 
       {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
     </form>

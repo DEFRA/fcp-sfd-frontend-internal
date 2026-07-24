@@ -5,8 +5,6 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
 
-{% block pageTitle %}{{ "Error: " if errors }}{{ pageTitle }} | {{ serviceName }}{% endblock %}
-
 {% block beforeContent %}
   {{ appBackSignOutLink(backLink)}}
 {% endblock %}

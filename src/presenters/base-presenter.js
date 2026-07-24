@@ -2,6 +2,33 @@
  * Base presenter for formatting data for display
  */
 
+/**
+ * Resolves the href for a dynamic "Back" link.
+ *
+ * Uses the referring page when it is a same-origin, relative path so the user
+ * returns to wherever they actually came from. Falls back to a fixed journey
+ * URL when there is no referrer, or it's off-site/unparsable (e.g. a direct visit,
+ * bookmark, or a browser that doesn't send one).
+ *
+ * @param {string} referrer - The request's referrer header (`request.info.referrer`)
+ * @param {string} fallbackHref - The href to use when the referrer can't be used
+ *
+ * @returns {string} The href to use for the back link
+ */
+export const resolveBackLink = (referrer, fallbackHref) => {
+  try {
+    const { protocol, pathname, search } = new URL(referrer)
+
+    if (protocol !== 'http:' && protocol !== 'https:') {
+      return fallbackHref
+    }
+
+    return `${pathname}${search}`
+  } catch {
+    return fallbackHref
+  }
+}
+
 const getAddressParts = (address) => {
   const lookup = address.lookup || {}
   const manual = address.manual || {}

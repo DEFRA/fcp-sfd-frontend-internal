@@ -2,9 +2,35 @@
 import { describe, test, expect, beforeEach } from 'vitest'
 
 // Thing under test
-import { formatAddressLines } from '../../../src/presenters/base-presenter.js'
+import { formatAddressLines, resolveBackLink } from '../../../src/presenters/base-presenter.js'
 
 describe('basePresenter', () => {
+  describe('#resolveBackLink', () => {
+    test('returns the path and query of a valid http(s) referrer', () => {
+      const result = resolveBackLink('https://example.com/business/106705779/details?tab=contact', '/fallback')
+
+      expect(result).toBe('/business/106705779/details?tab=contact')
+    })
+
+    test('falls back when there is no referrer', () => {
+      const result = resolveBackLink(undefined, '/fallback')
+
+      expect(result).toBe('/fallback')
+    })
+
+    test('falls back when the referrer is not a valid URL', () => {
+      const result = resolveBackLink('not-a-url', '/fallback')
+
+      expect(result).toBe('/fallback')
+    })
+
+    test('falls back when the referrer is not http(s), e.g. javascript:', () => {
+      const result = resolveBackLink('javascript:alert(1)', '/fallback')
+
+      expect(result).toBe('/fallback')
+    })
+  })
+
   describe('#formatAddressLines', () => {
     let address
 

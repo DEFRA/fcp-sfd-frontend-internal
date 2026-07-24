@@ -127,7 +127,7 @@ describe('businessDetailsPresenter', () => {
 
       expect(result.businessEmail.value).toBe('test@example.com')
       expect(result.businessEmail.action).toBe('Change')
-      expect(result.businessEmail.changeLink).toBe('#')
+      expect(result.businessEmail.changeLink).toBe('/business/106705779/business-email-change')
     })
 
     test('returns "Not added" and "Add" action when email is absent', () => {

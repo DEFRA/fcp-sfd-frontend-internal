@@ -1,3 +1,8 @@
+/**
+ * Formats data ready for presenting in the `business-email-change` page
+ * @module businessEmailChangePresenter
+ */
+
 import { resolveBackLink } from '../base-presenter.js'
 import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
 

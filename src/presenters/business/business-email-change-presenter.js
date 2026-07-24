@@ -6,10 +6,12 @@
 import { resolveBackLink } from '../base-presenter.js'
 
 const businessEmailChangePresenter = (data, payload, referrer) => {
+  const fallbackHref = data.info?.sbi ? `/business/${data.info.sbi}/details` : '/search-sbi'
+
   return {
     backLink: {
       backLink: true,
-      href: resolveBackLink(referrer, `/business/${data.info.sbi}/details`)
+      href: resolveBackLink(referrer, fallbackHref)
     },
     pageTitle: 'What is your business email address?',
     metaDescription: 'Update the email address for your business.',

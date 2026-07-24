@@ -6,61 +6,117 @@ import { businessEmailCheckPresenter } from '../../../../src/presenters/business
 
 describe('businessEmailCheckPresenter', () => {
   let data
+  let referrer
 
   beforeEach(() => {
     data = {
       info: { sbi: '106705779', businessName: 'Herberts Lawn Mowing' },
       contact: { email: 'test@example.com' }
     }
+    referrer = undefined
   })
 
-  test('returns the page metadata and links', () => {
-    const result = businessEmailCheckPresenter(data)
+  describe('when provided with business email check data', () => {
+    test('it correctly presents the data', () => {
+      const result = businessEmailCheckPresenter(data, referrer)
 
-    expect(result.pageTitle).toBe('Check your business email address is correct before submitting')
-    expect(result.metaDescription).toBe('Check the email address for your business is correct.')
-    expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/business-email-change' })
-    expect(result.changeLink).toBe('/business/106705779/business-email-change')
+      expect(result).toEqual({
+        backLink: { backLink: true, href: '/business/106705779/business-email-change' },
+        changeLink: '/business/106705779/business-email-change',
+        pageTitle: 'Check your business email address is correct before submitting',
+        metaDescription: 'Check the email address for your business is correct.',
+        userName: null,
+        businessEmail: 'test@example.com',
+        businessName: 'Herberts Lawn Mowing',
+        sbi: '106705779'
+      })
+    })
   })
 
-  test('builds the back link from the referrer when it is a valid url', () => {
-    const result = businessEmailCheckPresenter(data, 'https://example.com/business/106705779/business-email-change')
+  describe('the "backLink" property', () => {
+    describe('when the referrer is a valid url', () => {
+      beforeEach(() => {
+        referrer = 'https://example.com/business/106705779/business-email-change'
+      })
 
-    expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/business-email-change' })
+      test('it builds the back link from the referrer', () => {
+        const result = businessEmailCheckPresenter(data, referrer)
+
+        expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/business-email-change' })
+      })
+    })
+
+    describe('when there is no referrer', () => {
+      test('it falls back to the business email change page', () => {
+        const result = businessEmailCheckPresenter(data, referrer)
+
+        expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/business-email-change' })
+      })
+    })
+
+    describe('when there is no referrer and the sbi is missing', () => {
+      beforeEach(() => {
+        delete data.info.sbi
+      })
+
+      test('it falls back to the search page', () => {
+        const result = businessEmailCheckPresenter(data, referrer)
+
+        expect(result.backLink).toEqual({ backLink: true, href: '/search-sbi' })
+      })
+    })
   })
 
-  test('uses the in-progress change email when present', () => {
-    data.changeBusinessEmail = 'changed@example.com'
+  describe('the "businessEmail" property', () => {
+    describe('when there is an in-progress change', () => {
+      beforeEach(() => {
+        data.changeBusinessEmail = 'changed@example.com'
+      })
 
-    const result = businessEmailCheckPresenter(data)
+      test('it uses the in-progress change email', () => {
+        const result = businessEmailCheckPresenter(data, referrer)
 
-    expect(result.businessEmail).toBe('changed@example.com')
+        expect(result.businessEmail).toBe('changed@example.com')
+      })
+    })
+
+    describe('when there is no in-progress change', () => {
+      test('it falls back to the current business email', () => {
+        const result = businessEmailCheckPresenter(data, referrer)
+
+        expect(result.businessEmail).toBe('test@example.com')
+      })
+    })
   })
 
-  test('falls back to the current business email', () => {
-    const result = businessEmailCheckPresenter(data)
+  describe('the "userName" property', () => {
+    describe('when a customer is present', () => {
+      beforeEach(() => {
+        data.customer = { userName: 'Jane Doe' }
+      })
 
-    expect(result.businessEmail).toBe('test@example.com')
+      test('it returns the userName', () => {
+        const result = businessEmailCheckPresenter(data, referrer)
+
+        expect(result.userName).toBe('Jane Doe')
+      })
+    })
+
+    describe('when there is no customer', () => {
+      test('it defaults the userName to null', () => {
+        const result = businessEmailCheckPresenter(data, referrer)
+
+        expect(result.userName).toBeNull()
+      })
+    })
   })
 
-  test('returns the userName when a customer is present', () => {
-    data.customer = { userName: 'Jane Doe' }
+  describe('the "businessName" and "sbi" properties', () => {
+    test('it exposes the business name and sbi', () => {
+      const result = businessEmailCheckPresenter(data, referrer)
 
-    const result = businessEmailCheckPresenter(data)
-
-    expect(result.userName).toBe('Jane Doe')
-  })
-
-  test('defaults userName to null when there is no customer', () => {
-    const result = businessEmailCheckPresenter(data)
-
-    expect(result.userName).toBeNull()
-  })
-
-  test('exposes the business name and sbi', () => {
-    const result = businessEmailCheckPresenter(data)
-
-    expect(result.businessName).toBe('Herberts Lawn Mowing')
-    expect(result.sbi).toBe('106705779')
+      expect(result.businessName).toBe('Herberts Lawn Mowing')
+      expect(result.sbi).toBe('106705779')
+    })
   })
 })

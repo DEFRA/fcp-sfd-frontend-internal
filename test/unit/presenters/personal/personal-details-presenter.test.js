@@ -2,16 +2,16 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 
 // Thing under test
-import { personalDetailsPresenter } from '../../../src/presenters/personal-details-presenter.js'
+import { personalDetailsPresenter } from '../../../../src/presenters/personal/personal-details-presenter.js'
 
 // Mock data
-import { getMappedData } from '../../mocks/mock-personal-details.js'
+import { getMappedData } from '../../../mocks/mock-personal-details.js'
 
 // Mock dependencies
-import { config } from '../../../src/config/index.js'
+import { config } from '../../../../src/config/index.js'
 
 // Mock imports
-vi.mock('../../../src/config/index.js', () => ({
+vi.mock('../../../../src/config/index.js', () => ({
   config: {
     get: vi.fn()
   }

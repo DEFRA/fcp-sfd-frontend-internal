@@ -4,7 +4,7 @@ import { describe, test, expect, vi, beforeEach } from 'vitest'
 // Mocks
 import { fetchPersonalDetailsService } from '../../../../src/services/fetch-personal-details-service.js'
 import { validatePersonalDetailsService } from '../../../../src/services/personal/validate-personal-details-service.js'
-import { personalDetailsPresenter } from '../../../../src/presenters/personal-details-presenter.js'
+import { personalDetailsPresenter } from '../../../../src/presenters/personal/personal-details-presenter.js'
 
 // Thing under test
 import { customerDetailsRoutes } from '../../../../src/routes/customer/customer-details-routes.js'
@@ -16,7 +16,7 @@ vi.mock('../../../../src/services/fetch-personal-details-service.js', () => ({
   fetchPersonalDetailsService: vi.fn()
 }))
 
-vi.mock('../../../../src/presenters/personal-details-presenter.js', () => ({
+vi.mock('../../../../src/presenters/personal/personal-details-presenter.js', () => ({
   personalDetailsPresenter: vi.fn()
 }))
 

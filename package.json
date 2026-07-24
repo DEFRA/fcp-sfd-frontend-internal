@@ -45,7 +45,7 @@
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
-    "@defra/fcp-sfd-frontend-engine": "0.10.0",
+    "@defra/fcp-sfd-frontend-engine": "0.12.0",
     "@defra/hapi-tracing": "1.30.0",
     "@elastic/ecs-pino-format": "1.5.0",
     "@hapi/bell": "13.1.0",

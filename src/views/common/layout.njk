@@ -41,11 +41,11 @@
 {% endblock %}
 
 {% block pageTitle %}
-    {% if pageTitle %}
-    {{ pageTitle }} | {{ serviceName }}
-  {% else %}
-    {{ serviceName }}
-  {% endif %}
+  {%- if pageTitle -%}
+    {{ "Error: " if errors }}{{ pageTitle }} | {{ serviceName }}
+  {%- else -%}
+    {{ "Error: " if errors }}{{ serviceName }}
+  {%- endif -%}
 {% endblock %}
 
 {% block content %}{% endblock %}

@@ -1,3 +1,8 @@
+/**
+ * Formats data ready for presenting in the `business-email-change` page
+ * @module businessEmailChangePresenter
+ */
+
 import { resolveBackLink } from '../base-presenter.js'
 
 const businessEmailChangePresenter = (data, payload, referrer) => {

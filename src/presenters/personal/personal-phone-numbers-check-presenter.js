@@ -4,8 +4,6 @@
  */
 
 const personalPhoneNumbersCheckPresenter = (personalDetails, crn) => {
-  // Fall back to the saved phone numbers when there is no pending change in the session (for
-  // example when the user reaches this page via the browser back button after submitting).
   const phoneNumbers = personalDetails.changePersonalPhoneNumbers ?? {
     personalTelephone: personalDetails.contact.telephone,
     personalMobile: personalDetails.contact.mobile

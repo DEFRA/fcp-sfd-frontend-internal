@@ -15,7 +15,13 @@ vi.mock('../../../../src/services/DAL/update-dal-service.js', () => ({
 }))
 
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
-  mutations: { updateBusinessEmail: 'update-business-email-mutation' }
+  mutations: { updateBusinessEmail: 'update-business-email-mutation' },
+  utils: {
+    buildUpdateBusinessEmailVariables: (email, sbi) => ({ input: { email: { address: email }, sbi } })
+  },
+  constants: {
+    successMessages: { BUSINESS_EMAIL_ADDRESS: 'You have updated your business email address' }
+  }
 }))
 
 vi.mock('../../../../src/utils/notifications/flash-notification.js', () => ({

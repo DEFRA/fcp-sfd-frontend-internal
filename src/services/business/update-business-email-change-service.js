@@ -9,7 +9,7 @@
  * @module updateBusinessEmailChangeService
  */
 
-import { mutations } from '@defra/fcp-sfd-frontend-engine'
+import { mutations, utils, constants } from '@defra/fcp-sfd-frontend-engine'
 
 import { updateDalService } from '../DAL/update-dal-service.js'
 import { fetchBusinessChangeService } from './fetch-business-change-service.js'
@@ -22,13 +22,13 @@ const updateBusinessEmailChangeService = async (yar, credentials) => {
     return
   }
 
-  const variables = { input: { email: { address: businessDetails.changeBusinessEmail }, sbi: businessDetails.info.sbi } }
+  const variables = utils.buildUpdateBusinessEmailVariables(businessDetails.changeBusinessEmail, businessDetails.info.sbi)
 
   await updateDalService(mutations.updateBusinessEmail, variables, credentials.email)
 
   yar.clear('businessDetailsUpdate')
 
-  flashNotification(yar, 'Success', 'You have updated your business email address')
+  flashNotification(yar, 'Success', constants.successMessages.BUSINESS_EMAIL_ADDRESS)
 }
 
 export {

@@ -1,0 +1,72 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}
+{% endblock %}
+
+{% block content %}
+  {% if errors %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors | toErrorList
+    }) }}
+  {% endif %}
+
+<div class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" novalidate>
+        <input type="hidden" name="crumb" value="{{ crumb }}">
+
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+              {{ pageTitle }}
+            </h1>
+          </legend>
+          <div class="govuk-hint">
+            Enter at least one phone number
+          </div>
+
+          {{ govukInput({
+            label: {
+              text: "Personal telephone number"
+            },
+            classes: "govuk-input--width-20",
+            type: "tel",
+            id: "personalTelephone",
+            name: "personalTelephone",
+            value: personalTelephone,
+            autocomplete: "personal-telephone",
+            errorMessage: errors.personalTelephone and {
+              text: errors.personalTelephone.text
+            }
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Personal mobile phone number"
+            },
+            classes: "govuk-input--width-20",
+            type: "tel",
+            id: "personalMobile",
+            name: "personalMobile",
+            value: personalMobile,
+            autocomplete: "personal-mobile",
+            errorMessage: errors.personalMobile and {
+              text: errors.personalMobile.text
+            }
+          }) }}
+        </fieldset>
+
+        {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

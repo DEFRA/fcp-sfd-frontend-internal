@@ -23,13 +23,13 @@
       <form method="post" novalidate>
         <input type="hidden" name="crumb" value="{{ crumb }}">
 
-        <fieldset class="govuk-fieldset">
+        <fieldset class="govuk-fieldset" aria-describedby="account-phone-numbers-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <h1 class="govuk-fieldset__heading">
               {{ pageTitle }}
             </h1>
           </legend>
-          <div class="govuk-hint">
+          <div class="govuk-hint" id="account-phone-numbers-hint">
             Enter at least one phone number
           </div>
 
@@ -42,7 +42,7 @@
             id: "personalTelephone",
             name: "personalTelephone",
             value: personalTelephone,
-            autocomplete: "personal-telephone",
+            autocomplete: "off",
             errorMessage: errors.personalTelephone and {
               text: errors.personalTelephone.text
             }
@@ -57,7 +57,7 @@
             id: "personalMobile",
             name: "personalMobile",
             value: personalMobile,
-            autocomplete: "personal-mobile",
+            autocomplete: "off",
             errorMessage: errors.personalMobile and {
               text: errors.personalMobile.text
             }

@@ -17,7 +17,7 @@ const getBusinessNameChange = {
       return invalidSbiRedirect
     }
 
-    yar.set('businessDetailsUpdate', { ...(yar.get('businessDetailsUpdate') || {}), sbi })
+    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
     const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessName')
     const pageData = businessNameChangePresenter(businessDetails, undefined, info.referrer)
@@ -56,7 +56,9 @@ const postBusinessNameChange = {
 
       setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessName', request.payload.businessName)
 
-      return h.redirect(`/business/${sbi}/business-name-check`)
+      // Redirect to the business details page as an interim destination. Part 2 adds the
+      // `/business/{sbi}/business-name-check` route and this will be pointed at it then.
+      return h.redirect(`/business/${sbi}/details`)
     }
   }
 }

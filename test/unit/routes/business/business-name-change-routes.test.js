@@ -106,11 +106,11 @@ describe('business name change routes', () => {
       expect(postBusinessNameChange.path).toBe('/business/{sbi}/business-name-change')
     })
 
-    test('stores the submitted name in session and redirects to the check page', async () => {
+    test('stores the submitted name in session and redirects to the business details page', async () => {
       await postBusinessNameChange.options.handler(request, h)
 
       expect(setSessionData).toHaveBeenCalledWith(request.yar, 'businessDetailsUpdate', 'changeBusinessName', 'New Farm Ltd')
-      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-name-check')
+      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
     })
 
     test('redirects to search-sbi and does not store the name when sbi is invalid', async () => {

@@ -21,6 +21,7 @@ import { personalPhoneNumbersCheckRoutes } from './customer/personal-phone-numbe
 import { businessDetailsRoutes } from './business/business-details-routes.js'
 import { businessEmailChangeRoutes } from './business/business-email-change-routes.js'
 import { businessEmailCheckRoutes } from './business/business-email-check-routes.js'
+import { businessNameChangeRoutes } from './business/business-name-change-routes.js'
 
 export const routes = [
   health,
@@ -45,5 +46,6 @@ export const routes = [
   ...personalPhoneNumbersCheckRoutes,
   ...businessDetailsRoutes,
   ...businessEmailChangeRoutes,
-  ...businessEmailCheckRoutes
+  ...businessEmailCheckRoutes,
+  ...businessNameChangeRoutes
 ]

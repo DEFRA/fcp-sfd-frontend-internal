@@ -16,7 +16,7 @@ const getBusinessNameChange = {
       return h.redirect('/search-sbi').takeover()
     }
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
+    yar.set('businessDetailsUpdate', { ...(yar.get('businessDetailsUpdate') || {}), sbi })
 
     const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessName')
     const pageData = businessNameChangePresenter(businessDetails, undefined, info.referrer)

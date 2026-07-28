@@ -1,13 +1,15 @@
 import { schemas } from '@defra/fcp-sfd-frontend-engine'
 
 export const validateSbi = {
-  method: async (request, h) => {
-    const { sbi } = request.params
-    const { error } = schemas.business.sbi.validate({ sbi })
+  method: (request, h) => {
+    const sbiInput = request.params?.sbi ?? ''
+    const validation = schemas.business.sbi.validate({ sbi: sbiInput })
 
-    if (error) {
+    if (validation.error) {
       return h.redirect('/search-sbi').takeover()
     }
+
+    request.params.sbi = validation.value.sbi
 
     return h.continue
   }

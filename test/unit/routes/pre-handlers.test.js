@@ -1,15 +1,38 @@
 // Test framework dependencies
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 
+// Things we need to mock
+import { schemas } from '@defra/fcp-sfd-frontend-engine'
+
 // Things under test
 import { validateSbi, validateCrn } from '../../../src/routes/pre-handlers.js'
 
+// Mocks
+vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
+  schemas: {
+    business: {
+      sbi: {
+        validate: vi.fn()
+      }
+    },
+    customer: {
+      crn: {
+        validate: vi.fn()
+      }
+    }
+  }
+}))
+
 describe('pre-handlers', () => {
   let h
+  let takeoverMock
 
   beforeEach(() => {
+    vi.clearAllMocks()
+
+    takeoverMock = vi.fn()
     h = {
-      redirect: vi.fn(),
+      redirect: vi.fn().mockReturnValue({ takeover: takeoverMock }),
       continue: {}
     }
   })
@@ -24,6 +47,10 @@ describe('pre-handlers', () => {
     })
 
     describe('when SBI is valid', () => {
+      beforeEach(() => {
+        schemas.business.sbi.validate.mockReturnValue({ error: null })
+      })
+
       test('it should allow the request to continue', async () => {
         const result = await validateSbi.method(request, h)
 
@@ -40,22 +67,19 @@ describe('pre-handlers', () => {
     })
 
     describe('when SBI is invalid', () => {
-      test('it should redirect to search-sbi', async () => {
-        request.params.sbi = 'invalid-sbi'
-        const takeoverStub = vi.fn()
-        h.redirect.mockReturnValue({ takeover: takeoverStub })
+      beforeEach(() => {
+        schemas.business.sbi.validate.mockReturnValue({ error: { message: 'Invalid SBI' } })
+      })
 
+      test('it should redirect to search-sbi', async () => {
         await validateSbi.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
-        expect(takeoverStub).toHaveBeenCalled()
+        expect(takeoverMock).toHaveBeenCalled()
       })
 
       test('it should redirect for empty SBI', async () => {
         request.params.sbi = ''
-        const takeoverStub = vi.fn()
-        h.redirect.mockReturnValue({ takeover: takeoverStub })
-
         await validateSbi.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
@@ -63,9 +87,6 @@ describe('pre-handlers', () => {
 
       test('it should redirect for SBI with incorrect length', async () => {
         request.params.sbi = '12345'
-        const takeoverStub = vi.fn()
-        h.redirect.mockReturnValue({ takeover: takeoverStub })
-
         await validateSbi.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
@@ -83,6 +104,10 @@ describe('pre-handlers', () => {
     })
 
     describe('when CRN is valid', () => {
+      beforeEach(() => {
+        schemas.customer.crn.validate.mockReturnValue({ error: null })
+      })
+
       test('it should allow the request to continue', async () => {
         const result = await validateCrn.method(request, h)
 
@@ -99,22 +124,19 @@ describe('pre-handlers', () => {
     })
 
     describe('when CRN is invalid', () => {
-      test('it should redirect to search-crn', async () => {
-        request.params.crn = 'invalid-crn'
-        const takeoverStub = vi.fn()
-        h.redirect.mockReturnValue({ takeover: takeoverStub })
+      beforeEach(() => {
+        schemas.customer.crn.validate.mockReturnValue({ error: { message: 'Invalid CRN' } })
+      })
 
+      test('it should redirect to search-crn', async () => {
         await validateCrn.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-crn')
-        expect(takeoverStub).toHaveBeenCalled()
+        expect(takeoverMock).toHaveBeenCalled()
       })
 
       test('it should redirect for empty CRN', async () => {
         request.params.crn = ''
-        const takeoverStub = vi.fn()
-        h.redirect.mockReturnValue({ takeover: takeoverStub })
-
         await validateCrn.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-crn')
@@ -122,9 +144,6 @@ describe('pre-handlers', () => {
 
       test('it should redirect for CRN with incorrect length', async () => {
         request.params.crn = '12345'
-        const takeoverStub = vi.fn()
-        h.redirect.mockReturnValue({ takeover: takeoverStub })
-
         await validateCrn.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-crn')

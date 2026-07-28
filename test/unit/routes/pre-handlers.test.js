@@ -48,7 +48,7 @@ describe('pre-handlers', () => {
 
     describe('when SBI is valid', () => {
       beforeEach(() => {
-        schemas.business.sbi.validate.mockReturnValue({ error: null })
+        schemas.business.sbi.validate.mockReturnValue({ error: null, value: { sbi: request.params.sbi } })
       })
 
       test('it should allow the request to continue', async () => {
@@ -105,7 +105,7 @@ describe('pre-handlers', () => {
 
     describe('when CRN is valid', () => {
       beforeEach(() => {
-        schemas.customer.crn.validate.mockReturnValue({ error: null })
+        schemas.customer.crn.validate.mockReturnValue({ error: null, value: { crn: request.params.crn } })
       })
 
       test('it should allow the request to continue', async () => {

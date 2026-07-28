@@ -17,12 +17,14 @@ export const validateSbi = {
 
 export const validateCrn = {
   method: async (request, h) => {
-    const { crn } = request.params
-    const { error } = schemas.customer.crn.validate({ crn })
+    const crnInput = request.params?.crn ?? ''
+    const validation = schemas.customer.crn.validate({ crn: crnInput })
 
-    if (error) {
+    if (validation.error) {
       return h.redirect('/search-crn').takeover()
     }
+
+    request.params.crn = validation.value.crn
 
     return h.continue
   }

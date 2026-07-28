@@ -1,6 +1,7 @@
 {% extends 'common/layout.njk' %}
 
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "common/navigation/breadcrumbs-sign-out-link.njk" import appBreadcrumbsSignOutLink with context %}
 
 {% block beforeContent %}
@@ -11,6 +12,23 @@
 <div class="govuk-main-wrapper">
   <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+
+    {# Notification banner #}
+    {% if notification %}
+      {% if notification.html %}
+        {{ govukNotificationBanner({
+          type: "success",
+          titleText: notification.title,
+          html: notification.html
+        })}}
+      {% else %}
+        {{ govukNotificationBanner({
+          type: "success",
+          titleText: notification.title,
+          text: notification.text
+        })}}
+      {% endif %}
+    {% endif %}
 
     <h1 class="govuk-heading-l">
       {{ pageTitle }}

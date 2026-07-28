@@ -32,7 +32,8 @@ describe('business details routes', () => {
         credentials: { email: 'test.user@defra.gov.uk' }
       },
       yar: {
-        set: vi.fn()
+        set: vi.fn(),
+        flash: vi.fn().mockReturnValue([])
       }
     }
 
@@ -61,7 +62,7 @@ describe('business details routes', () => {
         await getBusinessDetails.handler(request, h)
 
         expect(fetchBusinessDetailsService).toHaveBeenCalledWith('106705779', 'test.user@defra.gov.uk')
-        expect(businessDetailsPresenter).toHaveBeenCalledWith(businessDetails, '106705779')
+        expect(businessDetailsPresenter).toHaveBeenCalledWith(businessDetails, '106705779', request.yar)
         expect(h.view).toHaveBeenCalledWith('business/business-details', pageData)
       })
 

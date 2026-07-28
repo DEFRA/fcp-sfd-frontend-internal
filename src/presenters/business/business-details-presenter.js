@@ -8,13 +8,14 @@ import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
 
 const CHANGE_LINK = '#'
 
-const businessDetailsPresenter = (data, sbi) => {
+const businessDetailsPresenter = (data, sbi, yar) => {
   const { info, address, contact } = data
   const countyParishHoldingNumbers = presenters.formatCph(info.countyParishHoldingNumbers)
   const addressLines = presenters.formatBusinessAddress(address)
   const hasAddress = addressLines.length > 0
 
   return {
+    notification: yar ? yar.flash('notification')[0] : null,
     pageTitle: 'View and update your business details',
     metaDescription: 'View and update your business details.',
     sbi,

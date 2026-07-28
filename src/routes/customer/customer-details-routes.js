@@ -1,21 +1,17 @@
-import { schemas } from '@defra/fcp-sfd-frontend-engine'
-
 import { fetchPersonalDetailsService } from '../../services/fetch-personal-details-service.js'
 import { personalDetailsPresenter } from '../../presenters/personal/personal-details-presenter.js'
 import { validatePersonalDetailsService } from '../../services/personal/validate-personal-details-service.js'
+import { validateCrn } from '../pre-handlers.js'
 
 const getCustomerDetails = {
   method: 'GET',
   path: '/customer/{crn}/details',
+  options: {
+    pre: [validateCrn]
+  },
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
-
-    const { error } = schemas.customer.crn.validate({ crn })
-
-    if (error) {
-      return h.redirect('/search-crn')
-    }
 
     yar.clear('personalDetailsUpdate')
 

@@ -1,0 +1,136 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+{% from "common/sub-header/macro.njk" import subHeader %}
+
+{% block beforeContent %}
+  {{ subHeader(userName=userName) }}
+  {{ appBackSignOutLink(backLink) }}
+{% endblock %}
+
+
+{% block content %}
+  {% if errors %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors | toErrorList
+    }) }}
+  {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" novalidate>
+      <input type="hidden" name="crumb" value="{{ crumb }}">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h1 class="govuk-fieldset__heading">
+            {{ pageTitle }}
+          </h1>
+        </legend>
+
+        {{ govukInput({
+          label: {
+            text: "Address line 1"
+          },
+          hint: {
+            text: "Include flat and floor numbers, where appropriate"
+          },
+          id: "address1",
+          name: "address1",
+          value: address.address1,
+          autocomplete: "address1",
+          errorMessage: errors.address1 and {
+            text: errors.address1.text
+          }
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Address line 2 (optional)"
+          },
+          id: "address2",
+          name: "address2",
+          value: address.address2,
+          autocomplete: "address2",
+          errorMessage: errors.address2 and {
+            text: errors.address2.text
+          }
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Address line 3 (optional)"
+          },
+          id: "address3",
+          name: "address3",
+          value: address.address3,
+          autocomplete: "address3",
+          errorMessage: errors.address3 and {
+            text: errors.address3.text
+          }
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Town or city"
+          },
+          classes: "govuk-!-width-two-thirds",
+          id: "city",
+          name: "city",
+          value: address.city,
+          autocomplete: "address-level2",
+          errorMessage: errors.city and {
+            text: errors.city.text
+          }
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "County (optional)"
+          },
+          classes: "govuk-!-width-two-thirds",
+          id: "county",
+          name: "county",
+          value: address.county,
+          errorMessage: errors.county and {
+            text: errors.county.text
+          }
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Postal code or zip code"
+          },
+          classes: "govuk-input--width-10",
+          id: "postcode",
+          name: "postcode",
+          value: address.postcode,
+          autocomplete: "postal-code",
+          errorMessage: errors.postcode and {
+            text: errors.postcode.text
+          }
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Country"
+          },
+          classes: "govuk-!-width-two-thirds",
+          id: "country",
+          name: "country",
+          value: address.country,
+          autocomplete: "country-name",
+          errorMessage: errors.country and {
+            text: errors.country.text
+          }
+        }) }}
+      </fieldset>
+
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

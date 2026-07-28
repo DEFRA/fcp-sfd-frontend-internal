@@ -14,10 +14,12 @@ import { businessOverviewRoutes } from './overview/business-routes.js'
 import { customerDetailsRoutes } from './customer/customer-details-routes.js'
 import { personalNameChangeRoutes } from './customer/personal-name-change-routes.js'
 import { personalNameCheckRoutes } from './customer/personal-name-check-routes.js'
-import { personalEmailChangeRoutes } from './customer/personal-email-change-routes.js'
-import { personalEmailCheckRoutes } from './customer/personal-email-check-routes.js'
+import { personalDobChangeRoutes } from './customer/personal-dob-change-routes.js'
+import { personalDobCheckRoutes } from './customer/personal-dob-check-routes.js'
 import { personalPhoneNumbersChangeRoutes } from './customer/personal-phone-numbers-change-routes.js'
 import { personalPhoneNumbersCheckRoutes } from './customer/personal-phone-numbers-check-routes.js'
+import { personalEmailChangeRoutes } from './customer/personal-email-change-routes.js'
+import { personalEmailCheckRoutes } from './customer/personal-email-check-routes.js'
 import { businessDetailsRoutes } from './business/business-details-routes.js'
 import { businessEmailChangeRoutes } from './business/business-email-change-routes.js'
 import { businessEmailCheckRoutes } from './business/business-email-check-routes.js'
@@ -43,6 +45,8 @@ export const routes = [
   ...personalEmailCheckRoutes,
   ...personalPhoneNumbersChangeRoutes,
   ...personalPhoneNumbersCheckRoutes,
+  ...personalDobChangeRoutes,
+  ...personalDobCheckRoutes,
   ...businessDetailsRoutes,
   ...businessEmailChangeRoutes,
   ...businessEmailCheckRoutes

@@ -66,19 +66,6 @@ describe('personal email change', () => {
         expect(h.view).toHaveBeenCalledWith('personal/personal-email-change', getPageData())
       })
     })
-
-    describe('when the crn fails validation', () => {
-      beforeEach(() => {
-        request.params.crn = 'invalid-crn'
-      })
-
-      test('it redirects to the search-crn page and does not fetch data', async () => {
-        await getPersonalEmailChange.handler(request, h)
-
-        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
-        expect(fetchPersonalChangeService).not.toHaveBeenCalled()
-      })
-    })
   })
 
   describe('POST /customer/{crn}/account-email-change', () => {

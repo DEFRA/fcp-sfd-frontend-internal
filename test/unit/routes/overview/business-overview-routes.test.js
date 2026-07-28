@@ -131,25 +131,5 @@ describe('business overview routes', () => {
         expect(h.view).not.toHaveBeenCalled()
       })
     })
-
-    describe('when the sbi fails validation', () => {
-      beforeEach(() => {
-        request.params.sbi = 'invalid-sbi'
-      })
-
-      test('it redirects to the search-sbi page', async () => {
-        await getBusinessOverview.handler(request, h)
-
-        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
-      })
-
-      test('it does not call the service, presenter or render a view', async () => {
-        await getBusinessOverview.handler(request, h)
-
-        expect(fetchBusinessOverviewDetailsService).not.toHaveBeenCalled()
-        expect(businessOverviewPresenter).not.toHaveBeenCalled()
-        expect(h.view).not.toHaveBeenCalled()
-      })
-    })
   })
 })

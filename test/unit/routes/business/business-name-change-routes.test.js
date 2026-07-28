@@ -41,7 +41,7 @@ describe('business name change routes', () => {
 
     h = {
       view: vi.fn().mockReturnValue({ code: vi.fn().mockReturnValue({ takeover: vi.fn() }) }),
-      redirect: vi.fn().mockReturnValue({ takeover: vi.fn() })
+      redirect: vi.fn().mockReturnValue({ takeover: vi.fn().mockReturnValue('search-sbi-redirect') })
     }
   })
 

@@ -2,6 +2,7 @@ import { utils, schemas, constants } from '@defra/fcp-sfd-frontend-engine'
 import { fetchBusinessChangeService } from '../../services/business/fetch-business-change-service.js'
 import { businessNameChangePresenter } from '../../presenters/business/business-name-change-presenter.js'
 import { setSessionData } from '../../utils/session/set-session-data.js'
+import { validateSbi } from '../../utils/validate-sbi.js'
 
 const getBusinessNameChange = {
   method: 'GET',
@@ -10,10 +11,10 @@ const getBusinessNameChange = {
     const { params, yar, auth, info } = request
     const { sbi } = params
 
-    const { error } = schemas.business.sbi.validate({ sbi })
+    const invalidSbiRedirect = validateSbi(sbi, h)
 
-    if (error) {
-      return h.redirect('/search-sbi').takeover()
+    if (invalidSbiRedirect) {
+      return invalidSbiRedirect
     }
 
     yar.set('businessDetailsUpdate', { ...(yar.get('businessDetailsUpdate') || {}), sbi })
@@ -47,10 +48,10 @@ const postBusinessNameChange = {
     handler: async (request, h) => {
       const { sbi } = request.params
 
-      const { error } = schemas.business.sbi.validate({ sbi })
+      const invalidSbiRedirect = validateSbi(sbi, h)
 
-      if (error) {
-        return h.redirect('/search-sbi').takeover()
+      if (invalidSbiRedirect) {
+        return invalidSbiRedirect
       }
 
       setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessName', request.payload.businessName)

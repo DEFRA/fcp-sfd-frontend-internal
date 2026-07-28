@@ -1,5 +1,5 @@
 // Test framework dependencies
-import { describe, test, expect, beforeEach } from 'vitest'
+import { describe, test, expect, beforeEach, vi } from 'vitest'
 
 // Thing under test
 import { businessDetailsPresenter } from '../../../../src/presenters/business/business-details-presenter.js'
@@ -46,6 +46,33 @@ describe('businessDetailsPresenter', () => {
     const result = businessDetailsPresenter(data, sbi)
 
     expect(result.sbi).toBe(sbi)
+  })
+
+  describe('the "notification" property', () => {
+    test('returns the flash notification when yar has one', () => {
+      const yar = {
+        flash: vi.fn().mockReturnValue([{ title: 'Success', text: 'You have updated your business email address' }])
+      }
+
+      const result = businessDetailsPresenter(data, sbi, yar)
+
+      expect(yar.flash).toHaveBeenCalledWith('notification')
+      expect(result.notification).toEqual({ title: 'Success', text: 'You have updated your business email address' })
+    })
+
+    test('returns undefined when yar has no flash notification', () => {
+      const yar = { flash: vi.fn().mockReturnValue([]) }
+
+      const result = businessDetailsPresenter(data, sbi, yar)
+
+      expect(result.notification).toBeUndefined()
+    })
+
+    test('returns null when yar is not provided', () => {
+      const result = businessDetailsPresenter(data, sbi)
+
+      expect(result.notification).toBeNull()
+    })
   })
 
   test('returns breadcrumbs for search results and the business overview', () => {

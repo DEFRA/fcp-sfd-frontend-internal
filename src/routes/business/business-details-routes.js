@@ -23,7 +23,7 @@ const getBusinessDetails = {
 
     const email = auth.credentials?.email
     const businessDetails = await fetchBusinessDetailsService(sbi, email)
-    const pageData = businessDetailsPresenter(businessDetails, sbi)
+    const pageData = businessDetailsPresenter(businessDetails, sbi, yar)
 
     return h.view('business/business-details', pageData)
   }

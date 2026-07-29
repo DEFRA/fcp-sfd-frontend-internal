@@ -29,7 +29,11 @@ const businessDetailsPresenter = (data, sbi, yar) => {
         href: `/business/${sbi}`
       }
     ],
-    businessName: createEditableValueField(info.businessName, 'Not added'),
+    businessName: {
+      value: info.businessName || 'Not added',
+      action: presenters.getActionText(info.businessName),
+      changeLink: BUSINESS_CHANGE_LINKS.businessName(sbi)
+    },
     businessAddress: {
       value: hasAddress ? addressLines : 'Not added',
       action: presenters.getActionText(hasAddress),

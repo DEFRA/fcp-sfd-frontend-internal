@@ -1,21 +1,17 @@
-import { schemas } from '@defra/fcp-sfd-frontend-engine'
-
 import { personalDobCheckPresenter } from '../../presenters/personal/personal-dob-check-presenter.js'
 import { fetchPersonalChangeService } from '../../services/personal/fetch-personal-change-service.js'
 import { updatePersonalDobChangeService } from '../../services/personal/update-personal-dob-change-service.js'
+import { validateCrn } from '../pre-handlers.js'
 
 const getPersonalDobCheck = {
   method: 'GET',
   path: '/customer/{crn}/account-date-of-birth-check',
+  options: {
+    pre: [validateCrn]
+  },
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
-
-    const { error } = schemas.customer.crn.validate({ crn })
-
-    if (error) {
-      return h.redirect('/search-crn')
-    }
 
     const email = auth.credentials?.email
     const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalDob')
@@ -28,6 +24,9 @@ const getPersonalDobCheck = {
 const postPersonalDobCheck = {
   method: 'POST',
   path: '/customer/{crn}/account-date-of-birth-check',
+  options: {
+    pre: [validateCrn]
+  },
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params

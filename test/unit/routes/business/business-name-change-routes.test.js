@@ -1,6 +1,9 @@
 // Test framework dependencies
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 
+// Engine constants used by the route under test
+import { constants } from '@defra/fcp-sfd-frontend-engine'
+
 // Things we need to mock
 import { fetchBusinessChangeService } from '../../../../src/services/business/fetch-business-change-service.js'
 import { businessNameChangePresenter } from '../../../../src/presenters/business/business-name-change-presenter.js'
@@ -106,6 +109,22 @@ describe('business name change routes', () => {
       await postBusinessNameChange.options.validate.failAction(request, h, err)
 
       expect(businessNameChangePresenter).toHaveBeenCalledWith(businessDetails, 'New Farm Ltd', request.info.referrer)
+    })
+
+    test('formats the validation errors and merges them into the page data with a 400 status', async () => {
+      const err = {
+        details: [
+          { message: 'Enter your business name', path: ['businessName'], type: 'string.empty' }
+        ]
+      }
+
+      await postBusinessNameChange.options.validate.failAction(request, h, err)
+
+      expect(h.view).toHaveBeenCalledWith('business/business-name-change', {
+        ...pageData,
+        errors: { businessName: { text: 'Enter your business name' } }
+      })
+      expect(h.view().code).toHaveBeenCalledWith(constants.statusCodes.BAD_REQUEST)
     })
   })
 

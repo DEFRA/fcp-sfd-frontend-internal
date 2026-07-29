@@ -57,13 +57,6 @@ describe('pre-handlers', () => {
         expect(result).toBe(h.continue)
         expect(h.redirect).not.toHaveBeenCalled()
       })
-
-      test('it should accept a valid numeric SBI', async () => {
-        request.params.sbi = '987654321'
-        const result = await validateSbi.method(request, h)
-
-        expect(result).toBe(h.continue)
-      })
     })
 
     describe('when SBI is invalid', () => {
@@ -91,6 +84,20 @@ describe('pre-handlers', () => {
 
         expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
       })
+
+      test('it should redirect when params.sbi is undefined', async () => {
+        request.params.sbi = undefined
+        await validateSbi.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+      })
+
+      test('it should redirect when params object is missing entirely', async () => {
+        request.params = undefined
+        await validateSbi.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+      })
     })
   })
 
@@ -113,13 +120,6 @@ describe('pre-handlers', () => {
 
         expect(result).toBe(h.continue)
         expect(h.redirect).not.toHaveBeenCalled()
-      })
-
-      test('it should accept a valid numeric CRN', async () => {
-        request.params.crn = '9876543210'
-        const result = await validateCrn.method(request, h)
-
-        expect(result).toBe(h.continue)
       })
     })
 
@@ -144,6 +144,20 @@ describe('pre-handlers', () => {
 
       test('it should redirect for CRN with incorrect length', async () => {
         request.params.crn = '12345'
+        await validateCrn.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
+      })
+
+      test('it should redirect when params.crn is undefined', async () => {
+        request.params.crn = undefined
+        await validateCrn.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
+      })
+
+      test('it should redirect when params object is missing entirely', async () => {
+        request.params = undefined
         await validateCrn.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-crn')

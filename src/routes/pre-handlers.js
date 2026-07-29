@@ -9,6 +9,8 @@ export const validateSbi = {
       return h.redirect('/search-sbi').takeover()
     }
 
+    // Mutate params with the Joi-coerced value to ensure downstream handlers
+    // work with the normalised input
     request.params.sbi = validation.value.sbi
 
     return h.continue
@@ -16,7 +18,7 @@ export const validateSbi = {
 }
 
 export const validateCrn = {
-  method: async (request, h) => {
+  method: (request, h) => {
     const crnInput = request.params?.crn ?? ''
     const validation = schemas.customer.crn.validate({ crn: crnInput })
 
@@ -24,6 +26,8 @@ export const validateCrn = {
       return h.redirect('/search-crn').takeover()
     }
 
+    // Mutate params with the Joi-coerced value to ensure downstream handlers
+    // work with the normalised input
     request.params.crn = validation.value.crn
 
     return h.continue

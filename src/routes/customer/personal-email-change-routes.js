@@ -3,19 +3,17 @@ import { schemas, utils, constants } from '@defra/fcp-sfd-frontend-engine'
 import { personalEmailChangePresenter } from '../../presenters/personal/personal-email-change-presenter.js'
 import { fetchPersonalChangeService } from '../../services/personal/fetch-personal-change-service.js'
 import { setSessionData } from '../../utils/session/set-session-data.js'
+import { validateCrn } from '../pre-handlers.js'
 
 const getPersonalEmailChange = {
   method: 'GET',
   path: '/customer/{crn}/account-email-change',
+  options: {
+    pre: [validateCrn]
+  },
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
-
-    const { error } = schemas.customer.crn.validate({ crn })
-
-    if (error) {
-      return h.redirect('/search-crn')
-    }
 
     const email = auth.credentials?.email
     const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalEmail')
@@ -29,6 +27,7 @@ const postPersonalEmailChange = {
   method: 'POST',
   path: '/customer/{crn}/account-email-change',
   options: {
+    pre: [validateCrn],
     validate: {
       payload: schemas.personal.email,
       options: { abortEarly: false },

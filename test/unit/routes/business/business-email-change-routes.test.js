@@ -67,14 +67,6 @@ describe('business email change routes', () => {
       expect(h.view).toHaveBeenCalledWith('business/business-email-change', pageData)
     })
 
-    test('redirects to search-sbi when sbi is invalid', async () => {
-      request.params.sbi = 'invalid'
-
-      await getBusinessEmailChange.handler(request, h)
-
-      expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
-    })
-
     test('persists the sbi in session', async () => {
       await getBusinessEmailChange.handler(request, h)
 
@@ -111,15 +103,6 @@ describe('business email change routes', () => {
 
       expect(setSessionData).toHaveBeenCalledWith(request.yar, 'businessDetailsUpdate', 'changeBusinessEmail', 'new@example.com')
       expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-email-check')
-    })
-
-    test('redirects to search-sbi and does not store the email when sbi is invalid', async () => {
-      request.params.sbi = 'invalid'
-
-      await postBusinessEmailChange.options.handler(request, h)
-
-      expect(setSessionData).not.toHaveBeenCalled()
-      expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
     })
   })
 })

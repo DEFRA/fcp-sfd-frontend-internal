@@ -107,45 +107,6 @@ describe('customer details', () => {
         expect(h.view).not.toHaveBeenCalled()
       })
     })
-
-    describe('when the crn fails validation', () => {
-      beforeEach(() => {
-        h = {
-          redirect: vi.fn().mockReturnValue({}),
-          view: vi.fn()
-        }
-
-        request = {
-          params: {
-            crn: 'invalid-crn'
-          },
-          auth: {
-            credentials: {
-              email: 'test@example.com'
-            }
-          },
-          yar: {
-            get: vi.fn(),
-            set: vi.fn()
-          }
-        }
-      })
-
-      test('it redirects to the search-crn page', async () => {
-        await getCustomerDetails.handler(request, h)
-
-        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
-      })
-
-      test('it does not call the service, validator, presenter or render a view', async () => {
-        await getCustomerDetails.handler(request, h)
-
-        expect(fetchPersonalDetailsService).not.toHaveBeenCalled()
-        expect(validatePersonalDetailsService).not.toHaveBeenCalled()
-        expect(personalDetailsPresenter).not.toHaveBeenCalled()
-        expect(h.view).not.toHaveBeenCalled()
-      })
-    })
   })
 })
 

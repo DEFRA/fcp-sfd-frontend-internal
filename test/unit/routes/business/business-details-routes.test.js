@@ -86,19 +86,6 @@ describe('business details routes', () => {
       })
     })
 
-    describe('when the sbi fails schema validation', () => {
-      beforeEach(() => {
-        request.params.sbi = 'not-a-valid-sbi'
-      })
-
-      test('redirects to /search-sbi', async () => {
-        await getBusinessDetails.handler(request, h)
-
-        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
-        expect(fetchBusinessDetailsService).not.toHaveBeenCalled()
-      })
-    })
-
     describe('when fetchBusinessDetailsService throws', () => {
       beforeEach(() => {
         fetchBusinessDetailsService.mockRejectedValue(new Error('Business not found'))

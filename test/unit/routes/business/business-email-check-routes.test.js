@@ -66,14 +66,6 @@ describe('business email check routes', () => {
       expect(h.view).toHaveBeenCalledWith('business/business-email-check', pageData)
     })
 
-    test('redirects to search-sbi when sbi is invalid', async () => {
-      request.params.sbi = 'invalid'
-
-      await getBusinessEmailCheck.handler(request, h)
-
-      expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
-    })
-
     test('persists the sbi in session', async () => {
       await getBusinessEmailCheck.handler(request, h)
 
@@ -92,15 +84,6 @@ describe('business email check routes', () => {
 
       expect(updateBusinessEmailChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials)
       expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
-    })
-
-    test('redirects to search-sbi and does not update the email when sbi is invalid', async () => {
-      request.params.sbi = 'invalid'
-
-      await postBusinessEmailCheck.handler(request, h)
-
-      expect(updateBusinessEmailChangeService).not.toHaveBeenCalled()
-      expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
     })
   })
 })

@@ -97,7 +97,7 @@ describe('businessDetailsPresenter', () => {
 
       expect(result.businessName.value).toBe('Herberts Lawn Mowing')
       expect(result.businessName.action).toBe('Change')
-      expect(result.businessName.changeLink).toBe('#')
+      expect(result.businessName.changeLink).toBe('/business/106705779/business-name-change')
     })
 
     test('returns "Not added" and "Add" action when business name is absent', () => {

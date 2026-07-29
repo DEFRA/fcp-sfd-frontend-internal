@@ -32,6 +32,8 @@ const postBusinessNameCheck = {
     const { params, yar, auth } = request
     const { sbi } = params
 
+    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
+
     await updateBusinessNameChangeService(yar, auth.credentials)
 
     return h.redirect(`/business/${sbi}/details`)

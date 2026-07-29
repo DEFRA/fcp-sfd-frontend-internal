@@ -48,9 +48,7 @@ const postBusinessNameChange = {
 
       setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessName', request.payload.businessName)
 
-      // Redirect to the business details page as an interim destination. Part 2 adds the
-      // `/business/{sbi}/business-name-check` route and this will be pointed at it then.
-      return h.redirect(`/business/${sbi}/details`)
+      return h.redirect(`/business/${sbi}/business-name-check`)
     }
   }
 }

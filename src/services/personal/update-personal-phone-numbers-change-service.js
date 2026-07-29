@@ -18,8 +18,6 @@ import { updateDalService } from '../DAL/update-dal-service.js'
 const updatePersonalPhoneNumbersChangeService = async (yar, crn, email) => {
   const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalPhoneNumbers')
 
-  console.log('[DEBUG] personalDetails from DAL:', JSON.stringify(personalDetails, null, 2))
-
   if (!personalDetails.changePersonalPhoneNumbers) {
     return
   }
@@ -33,8 +31,6 @@ const updatePersonalPhoneNumbersChangeService = async (yar, crn, email) => {
       crn: personalDetails.crn
     }
   }
-
-  console.log('[DEBUG] mutation variables payload:', JSON.stringify(variables, null, 2))
 
   await updateDalService(mutations.updateCustomerPhone, variables, email)
 

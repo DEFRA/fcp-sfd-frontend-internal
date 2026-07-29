@@ -9,7 +9,7 @@ const getPersonalDobChange = {
   method: 'GET',
   path: '/customer/{crn}/account-date-of-birth-change',
   options: {
-    pre: [validateCrn],
+    pre: [validateCrn]
   },
   handler: async (request, h) => {
     const { params, auth, yar } = request

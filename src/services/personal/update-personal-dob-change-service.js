@@ -24,12 +24,11 @@ const updatePersonalDobChangeService = async (yar, crn, email) => {
   }
 
   const { day, month, year } = personalDetails.changePersonalDob
-  const personalDob = new Date([`${month}/${day}/${year}`])
-  moment.locale('en-ca')
+  const personalDob = new Date(`${month}/${day}/${year}`)
 
   const variables = {
     input: {
-      dateOfBirth: moment(personalDob).format('L'),
+      dateOfBirth: moment(personalDob).format('YYYY-MM-DD'),
       crn: personalDetails.crn
     }
   }

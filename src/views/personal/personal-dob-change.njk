@@ -10,73 +10,75 @@
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    {% if errors %}
-      {% set dateError =
-        errors.day
-        or errors.month
-        or errors.year
-      %}
+  {% if errors %}
+    {% set dateError =
+      errors.day
+      or errors.month
+      or errors.year
+    %}
 
-      {% if errors.day %}
-        {% set dayErrorClass = " govuk-input--error" %}
-      {% endif %}
-      {% if errors.month %}
-        {% set monthErrorClass = " govuk-input--error" %}
-      {% endif %}
-      {% if errors.year %}
-        {% set yearErrorClass = " govuk-input--error" %}
-      {% endif %}
-
-      {{ govukErrorSummary({
-          titleText: "There is a problem",
-          errorList: errors | toErrorList
-      }) }}
+    {% if errors.day %}
+      {% set dayErrorClass = " govuk-input--error" %}
+    {% endif %}
+    {% if errors.month %}
+      {% set monthErrorClass = " govuk-input--error" %}
+    {% endif %}
+    {% if errors.year %}
+      {% set yearErrorClass = " govuk-input--error" %}
     {% endif %}
 
-    <form method="post" novalidate>
-      <input type="hidden" name="crumb" value="{{ crumb }}">
-      <div class="govuk-form-group">
-        {{ govukDateInput({
-          id: "dob",
-          fieldset: {
-            legend: {
-              text: pageTitle,
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
-            }
-          },
-          errorMessage: dateError and {
-            text: dateError.text
-          },
-          hint: {
-            text: hint
-          },
-          items: [
-            {
-              classes: "govuk-input--width-2 " + dayErrorClass,
-              name: "day",
-              value: day,
-              id: 'day'
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors | toErrorList
+    }) }}
+  {% endif %}
+
+<div class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" novalidate>
+        <input type="hidden" name="crumb" value="{{ crumb }}">
+        <div class="govuk-form-group">
+          {{ govukDateInput({
+            id: "dob",
+            fieldset: {
+              legend: {
+                text: pageTitle,
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--l"
+              }
             },
-            {
-              classes: "govuk-input--width-2 " + monthErrorClass,
-              name: "month",
-              value: month,
-              id: 'month'
+            errorMessage: dateError and {
+              text: dateError.text
             },
-            {
-              classes: "govuk-input--width-4 " + yearErrorClass,
-              name: "year",
-              value: year,
-              id: 'year'
-            }
-          ]
-        }) }}
-      </div>
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
+            hint: {
+              text: hint
+            },
+            items: [
+              {
+                classes: "govuk-input--width-2 " + dayErrorClass,
+                name: "day",
+                value: day,
+                id: 'day'
+              },
+              {
+                classes: "govuk-input--width-2 " + monthErrorClass,
+                name: "month",
+                value: month,
+                id: 'month'
+              },
+              {
+                classes: "govuk-input--width-4 " + yearErrorClass,
+                name: "year",
+                value: year,
+                id: 'year'
+              }
+            ]
+          }) }}
+        </div>
+        {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+      </form>
+    </div>
   </div>
 </div>
 {% endblock %}

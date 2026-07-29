@@ -132,5 +132,20 @@ describe('businessNameChangePresenter', () => {
       expect(result.businessName).toBe('Herberts Lawn Mowing')
       expect(result.sbi).toBe('106705779')
     })
+
+    describe('when the "info" object is missing', () => {
+      beforeEach(() => {
+        data = {}
+      })
+
+      test('it defaults businessName and sbi to null and falls back to the search page', () => {
+        const result = businessNameChangePresenter(data, payload, referrer)
+
+        expect(result.businessName).toBeNull()
+        expect(result.sbi).toBeNull()
+        expect(result.changeBusinessName).toBeUndefined()
+        expect(result.backLink).toEqual({ backLink: true, href: '/search-sbi' })
+      })
+    })
   })
 })

@@ -6,6 +6,9 @@ import { fetchBusinessChangeService } from '../../../../src/services/business/fe
 import { businessNameChangePresenter } from '../../../../src/presenters/business/business-name-change-presenter.js'
 import { setSessionData } from '../../../../src/utils/session/set-session-data.js'
 
+// Shared pre-handler used to guard the SBI
+import { validateSbi } from '../../../../src/routes/pre-handlers.js'
+
 // Thing under test
 import { businessNameChangeRoutes } from '../../../../src/routes/business/business-name-change-routes.js'
 
@@ -41,7 +44,7 @@ describe('business name change routes', () => {
 
     h = {
       view: vi.fn().mockReturnValue({ code: vi.fn().mockReturnValue({ takeover: vi.fn() }) }),
-      redirect: vi.fn().mockReturnValue({ takeover: vi.fn().mockReturnValue('search-sbi-redirect') })
+      redirect: vi.fn().mockReturnValue({ takeover: vi.fn() })
     }
   })
 
@@ -59,6 +62,10 @@ describe('business name change routes', () => {
       expect(getBusinessNameChange.path).toBe('/business/{sbi}/business-name-change')
     })
 
+    test('guards the route with the shared validateSbi pre-handler', () => {
+      expect(getBusinessNameChange.options.pre).toContain(validateSbi)
+    })
+
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessNameChange.handler(request, h)
 
@@ -67,18 +74,20 @@ describe('business name change routes', () => {
       expect(h.view).toHaveBeenCalledWith('business/business-name-change', pageData)
     })
 
-    test('redirects to search-sbi when sbi is invalid', async () => {
-      request.params.sbi = 'invalid'
-
-      await getBusinessNameChange.handler(request, h)
-
-      expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
-    })
-
     test('persists the sbi in session', async () => {
       await getBusinessNameChange.handler(request, h)
 
       expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
+    })
+
+    describe('when fetchBusinessChangeService throws', () => {
+      beforeEach(() => {
+        fetchBusinessChangeService.mockRejectedValue(new Error('Business not found'))
+      })
+
+      test('throws the error from the service', async () => {
+        await expect(getBusinessNameChange.handler(request, h)).rejects.toThrow('Business not found')
+      })
     })
   })
 
@@ -106,20 +115,15 @@ describe('business name change routes', () => {
       expect(postBusinessNameChange.path).toBe('/business/{sbi}/business-name-change')
     })
 
+    test('guards the route with the shared validateSbi pre-handler', () => {
+      expect(postBusinessNameChange.options.pre).toContain(validateSbi)
+    })
+
     test('stores the submitted name in session and redirects to the business details page', async () => {
       await postBusinessNameChange.options.handler(request, h)
 
       expect(setSessionData).toHaveBeenCalledWith(request.yar, 'businessDetailsUpdate', 'changeBusinessName', 'New Farm Ltd')
       expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
-    })
-
-    test('redirects to search-sbi and does not store the name when sbi is invalid', async () => {
-      request.params.sbi = 'invalid'
-
-      await postBusinessNameChange.options.handler(request, h)
-
-      expect(setSessionData).not.toHaveBeenCalled()
-      expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
     })
   })
 })

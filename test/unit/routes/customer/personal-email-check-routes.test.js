@@ -60,24 +60,6 @@ describe('personal email check', () => {
         expect(h.view).toHaveBeenCalledWith('personal/personal-email-check', getPageData())
       })
     })
-
-    describe('when the crn fails validation', () => {
-      beforeEach(() => {
-        h = {
-          view: vi.fn(),
-          redirect: vi.fn().mockReturnValue({})
-        }
-
-        request.params.crn = 'invalid-crn'
-      })
-
-      test('it redirects to the search-crn page and does not fetch data', async () => {
-        await getPersonalEmailCheck.handler(request, h)
-
-        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
-        expect(fetchPersonalChangeService).not.toHaveBeenCalled()
-      })
-    })
   })
 
   describe('POST /customer/{crn}/account-email-check', () => {

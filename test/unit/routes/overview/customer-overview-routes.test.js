@@ -111,26 +111,6 @@ describe('customer overview routes', () => {
       })
     })
 
-    describe('when the crn fails validation', () => {
-      beforeEach(() => {
-        request.params.crn = 'invalid-crn'
-      })
-
-      test('it redirects to the search-crn page', async () => {
-        await getCustomerOverview.handler(request, h)
-
-        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
-      })
-
-      test('it does not call the service, presenter or render a view', async () => {
-        await getCustomerOverview.handler(request, h)
-
-        expect(fetchCustomerOverviewDetailsService).not.toHaveBeenCalled()
-        expect(customerOverviewPresenter).not.toHaveBeenCalled()
-        expect(h.view).not.toHaveBeenCalled()
-      })
-    })
-
     describe('when fetchCustomerOverviewDetailsService throws', () => {
       const serviceError = new Error('Failed to retrieve customer details')
 

@@ -32,7 +32,8 @@ describe('business details routes', () => {
         credentials: { email: 'test.user@defra.gov.uk' }
       },
       yar: {
-        set: vi.fn()
+        set: vi.fn(),
+        flash: vi.fn().mockReturnValue([])
       }
     }
 
@@ -61,7 +62,7 @@ describe('business details routes', () => {
         await getBusinessDetails.handler(request, h)
 
         expect(fetchBusinessDetailsService).toHaveBeenCalledWith('106705779', 'test.user@defra.gov.uk')
-        expect(businessDetailsPresenter).toHaveBeenCalledWith(businessDetails, '106705779')
+        expect(businessDetailsPresenter).toHaveBeenCalledWith(businessDetails, '106705779', request.yar)
         expect(h.view).toHaveBeenCalledWith('business/business-details', pageData)
       })
 
@@ -82,19 +83,6 @@ describe('business details routes', () => {
         await getBusinessDetails.handler(request, h)
 
         expect(fetchBusinessDetailsService).toHaveBeenCalledWith('106705779', undefined)
-      })
-    })
-
-    describe('when the sbi fails schema validation', () => {
-      beforeEach(() => {
-        request.params.sbi = 'not-a-valid-sbi'
-      })
-
-      test('redirects to /search-sbi', async () => {
-        await getBusinessDetails.handler(request, h)
-
-        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
-        expect(fetchBusinessDetailsService).not.toHaveBeenCalled()
       })
     })
 

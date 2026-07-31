@@ -22,8 +22,8 @@ import { businessDetailsRoutes } from './business/business-details-routes.js'
 import { businessEmailChangeRoutes } from './business/business-email-change-routes.js'
 import { businessEmailCheckRoutes } from './business/business-email-check-routes.js'
 import { businessNameChangeRoutes } from './business/business-name-change-routes.js'
-import { businessNameCheckRoutes } from './business/business-name-check-routes.js',
-import { businessPhoneNumbersChangeRoutes } from './business/business-phone-numbers-change-route.js'
+import { businessNameCheckRoutes } from './business/business-name-check-routes.js'
+import { businessPhoneNumbersChangeRoutes } from './business/business-phone-numbers-change-routes.js'
 
 export const routes = [
   health,

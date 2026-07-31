@@ -58,7 +58,7 @@ const postBusinessPhoneNumbersChange = {
   }
 }
 
-export const businessEmailChangeRoutes = [
+export const businessPhoneNumbersChangeRoutes = [
   getBusinessPhoneNumbersChange,
   postBusinessPhoneNumbersChange
 ]

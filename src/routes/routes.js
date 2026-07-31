@@ -19,6 +19,14 @@ import { personalEmailCheckRoutes } from './customer/personal-email-check-routes
 import { businessDetailsRoutes } from './business/business-details-routes.js'
 import { businessEmailChangeRoutes } from './business/business-email-change-routes.js'
 import { businessEmailCheckRoutes } from './business/business-email-check-routes.js'
+import { personalAddressChangeRoutes } from './customer/personal-address-change-routes.js'
+import { personalAddressCheckRoutes } from './customer/personal-address-check-routes.js'
+import { personalAddressEnterRoutes } from './customer/personal-address-enter-routes.js'
+import { personalAddressSelectRoutes } from './customer/personal-address-select-routes.js'
+import { businessAddressChangeRoutes } from './business/business-address-change-routes.js'
+import { businessAddressCheckRoutes } from './business/business-address-check-routes.js'
+import { businessAddressEnterRoutes } from './business/business-address-enter-routes.js'
+import { businessAddressSelectRoutes } from './business/business-address-select-routes.js'
 
 export const routes = [
   health,
@@ -41,5 +49,13 @@ export const routes = [
   ...personalEmailCheckRoutes,
   ...businessDetailsRoutes,
   ...businessEmailChangeRoutes,
-  ...businessEmailCheckRoutes
+  ...businessEmailCheckRoutes,
+  ...personalAddressChangeRoutes,
+  ...personalAddressCheckRoutes,
+  ...personalAddressEnterRoutes,
+  ...personalAddressSelectRoutes,
+  ...businessAddressChangeRoutes,
+  ...businessAddressCheckRoutes,
+  ...businessAddressEnterRoutes,
+  ...businessAddressSelectRoutes
 ]

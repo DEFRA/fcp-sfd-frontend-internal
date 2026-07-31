@@ -12,6 +12,12 @@ const getPersonalAddressChange = {
     const { yar, auth, params } = request
     const { crn } = params
 
+    const { error } = schemas.customer.crn.validate({ crn })
+
+    if (error) {
+      return h.redirect('/search-crn')
+    }
+
     const email = auth.credentials?.email
     const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalPostcode')
     const pageData = personalAddressChangePresenter(personalDetails)
@@ -28,21 +34,25 @@ const postPersonalAddressChange = {
       payload: schemas.osPlaces.ukPostcode,
       options: { abortEarly: false },
       failAction: async (request, h, err) => {
-        const { yar, auth, payload } = request
-        const pageData = await personalAddressChangeErrorService(yar, auth.credentials, payload.postcode, err.details)
+        const { yar, auth, payload, params } = request
+        const { crn } = params
+        const email = auth.credentials?.email
+        const pageData = await personalAddressChangeErrorService(yar, crn, email, payload.postcode, err.details)
 
         return h.view('personal/personal-address-change', pageData).code(constants.statusCodes.BAD_REQUEST).takeover()
       }
     }
   },
   handler: async (request, h) => {
-    const { yar, auth, payload } = request
+    const { yar, auth, payload, params } = request
+    const { crn } = params
+    const email = auth.credentials?.email
 
     setSessionData(yar, 'personalDetailsUpdate', 'changePersonalPostcode', payload)
     const addresses = await addressLookupService(payload.postcode, yar, 'personal')
 
     if (addresses.error) {
-      const pageData = await personalAddressChangeErrorService(yar, auth.credentials, payload.postcode, addresses.error)
+      const pageData = await personalAddressChangeErrorService(yar, crn, email, payload.postcode, addresses.error)
 
       return h.view('personal/personal-address-change', pageData).code(constants.statusCodes.BAD_REQUEST).takeover()
     }

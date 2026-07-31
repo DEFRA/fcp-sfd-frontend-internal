@@ -1,6 +1,5 @@
 import { constants } from 'node:http2'
 import { vi, beforeAll, afterAll, describe, test, expect } from 'vitest'
-import { SCOPE } from '../../../../../src/constants/scope/business-details.js'
 import '../../../../mocks/setup-server-mocks.js'
 
 const {
@@ -20,7 +19,7 @@ const { createServer } = await import('../../../../../src/server.js')
 describe('business phone numbers change route', () => {
   const sbi = '106705779'
   const path = `/business/${sbi}/business-phone-numbers-change`
-  const credentials = { sessionId: 'session-id', scope: SCOPE }
+  const credentials = { sessionId: 'session-id' }
   let server
 
   beforeAll(async () => {

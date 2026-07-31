@@ -53,7 +53,7 @@ const postBusinessPhoneNumbersChange = {
 
       setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessPhoneNumbers', request.payload)
 
-      return h.redirect(`/business/${sbi}/business-phone-numbers-check`)
+      return h.redirect(`/business/${sbi}/details`)
     }
   }
 }

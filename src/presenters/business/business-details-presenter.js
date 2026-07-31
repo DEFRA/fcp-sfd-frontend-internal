@@ -68,17 +68,6 @@ const createEditableValueField = (value, emptyValueText) => {
   }
 }
 
-const createEditableTelephoneField = (landline, mobile) => {
-  const hasTelephone = Boolean(landline || mobile)
-
-  return {
-    telephone: landline || 'Not added',
-    mobile: mobile || 'Not added',
-    action: presenters.getActionText(hasTelephone),
-    changeLink: CHANGE_LINK
-  }
-}
-
 const formatOverviewBreadcrumb = (businessName, sbi) => {
   return businessName ? `${businessName} (SBI: ${sbi})` : `SBI: ${sbi}`
 }

@@ -34,7 +34,7 @@ const postBusinessPhoneNumbersChange = {
         abortEarly: false
       },
       failAction: async (request, h, err) => {
-        const { yar, auth, payload, info } = request
+        const { yar, auth, payload } = request
 
         const errors = utils.formatValidationErrors(err.details || [])
         const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessPhoneNumbers')

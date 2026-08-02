@@ -7,12 +7,6 @@ import { personalAddressCheckPresenter } from '../../../../src/presenters/person
 // Mocks
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
   presenters: {
-    addressBackLink: vi.fn((postcodeLookup, type) => {
-      return postcodeLookup ? 'account-address-select' : 'account-address-enter'
-    }),
-    addressChangeLink: vi.fn((postcodeLookup, type) => {
-      return postcodeLookup ? 'account-address-select' : 'account-address-enter'
-    }),
     formatDisplayAddress: vi.fn((addr) => {
       if (!addr) return []
       return Object.values(addr).filter(Boolean)

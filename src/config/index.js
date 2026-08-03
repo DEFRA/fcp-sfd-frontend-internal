@@ -5,6 +5,7 @@ import { redisConfig } from './redis.js'
 import { entraConfig } from './entra.js'
 import { dalConfig } from './dal.js'
 import { featureToggleConfig } from './feature-toggle.js'
+import { osPlacesConfig } from './os-places.js'
 
 const config = convict({
   ...serverConfig,
@@ -12,7 +13,8 @@ const config = convict({
   ...redisConfig,
   ...entraConfig,
   ...dalConfig,
-  ...featureToggleConfig
+  ...featureToggleConfig,
+  ...osPlacesConfig
 })
 
 config.validate({ allowed: 'strict' })

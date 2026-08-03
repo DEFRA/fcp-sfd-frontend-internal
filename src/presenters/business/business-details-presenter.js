@@ -37,7 +37,7 @@ const businessDetailsPresenter = (data, sbi, yar) => {
     businessAddress: {
       value: hasAddress ? addressLines : 'Not added',
       action: presenters.getActionText(hasAddress),
-      changeLink: CHANGE_LINK
+      changeLink: BUSINESS_CHANGE_LINKS.businessAddress(sbi)
     },
     businessTelephone: createEditableTelephoneField(contact.landline, contact.mobile),
     businessEmail: {

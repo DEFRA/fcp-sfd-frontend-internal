@@ -85,7 +85,7 @@ describe('personal address enter', () => {
     beforeEach(() => {
       request.payload = {
         address1: '123 Test Street',
-        town: 'London',
+        city: 'London',
         postcode: 'SW1A 1AA'
       }
       fetchPersonalChangeService.mockResolvedValue(getMockData())
@@ -157,12 +157,12 @@ const getMockData = () => ({
   info: { userName: 'John Doe' },
   changePersonalAddress: {
     address1: '123 Test Street',
-    town: 'London',
+    city: 'London',
     postcode: 'SW1A 1AA'
   },
   address: {
     address1: '456 Another Street',
-    town: 'Manchester',
+    city: 'Manchester',
     postcode: 'M1 1AA'
   }
 })

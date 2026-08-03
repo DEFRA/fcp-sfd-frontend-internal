@@ -37,7 +37,7 @@ const postPersonalAddressEnter = {
         const email = auth.credentials?.email
         const errors = utils.formatValidationErrors(err.details || [])
         const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalAddress')
-        const pageData = personalAddressEnterPresenter(personalDetails, payload, request.info.referrer)
+        const pageData = personalAddressEnterPresenter(personalDetails, payload)
 
         return h.view('personal/personal-address-enter', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
       }

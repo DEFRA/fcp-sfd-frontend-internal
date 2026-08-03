@@ -142,6 +142,21 @@ describe('personal address select', () => {
       })
     })
 
+    describe('and required session data is missing', () => {
+      beforeEach(() => {
+        fetchPersonalChangeService.mockResolvedValue({
+          changePersonalAddresses: null
+        })
+        request.payload = { addresses: '1001123 Test Street' }
+      })
+
+      test('it treats empty array as no match and redirects to address select', async () => {
+        await postPersonalAddressSelect.options.handler(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/customer/1234567890/account-address-select')
+      })
+    })
+
     describe('and the validation fails', () => {
       test('it fetches personal details and returns error response', async () => {
         const validationError = {

@@ -46,9 +46,8 @@ const updatePersonalAddressChangeService = async (yar, crn, email) => {
  *    - `postalCode`
  *    - `country`
  *
- * For manual addresses, the address lines are mapped from the user input
- * into the DAL structure, with `county` stored in `line4`. The `city`
- * remains in the `city` field and `line5` is unused.
+ * For manual addresses, the mapping into the DAL address shape is delegated to
+ * `services.buildManualAddress(change)` (from `@defra/fcp-sfd-frontend-engine`).
  *
  * Optional fields are normalized so that any `undefined` values are
  * converted to `null` before being sent to the DAL.

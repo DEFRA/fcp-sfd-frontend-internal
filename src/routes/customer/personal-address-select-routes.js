@@ -55,7 +55,7 @@ const postPersonalAddressSelect = {
 
       const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalAddresses')
 
-      const selectedAddress = personalDetails.changePersonalAddresses.find((address) => {
+      const selectedAddress = (personalDetails.changePersonalAddresses ?? []).find((address) => {
         // Concatenate UPRN and displayAddress to create a unique identifier.
         // Multiple addresses can share the same UPRN (e.g., multiple units in a building),
         // so UPRN alone is not unique. Using both properties ensures each address is truly distinct.

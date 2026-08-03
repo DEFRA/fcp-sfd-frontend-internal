@@ -28,8 +28,8 @@
             </h1>
           </legend>
           <div class="govuk-form-group govuk-body">
-            <span class="govuk-!-margin-bottom govuk-!-font-weight-bold">UK postcode</span>
-            <div class="govuk-!-margin-bottom-">{{postcode}}</div>
+            <span class="govuk-!-margin-bottom-1 govuk-!-font-weight-bold">UK postcode</span>
+            <div class="govuk-!-margin-bottom-1">{{postcode}}</div>
             <a href="{{ postcodeChangeLink }}" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">postcode</span></a>
           </div>
 
@@ -43,7 +43,7 @@
           }) }}
         </fieldset>
 
-        <p class="govuk-body"><a href="{{ manualAddressLink }}" class="govuk-link govuk-link--no-visited-state">Enter address manually</a></p>
+        <p class="govuk-body govuk-!-margin-bottom-6"><a href="{{ manualAddressLink }}" class="govuk-link govuk-link--no-visited-state">Enter address manually</a></p>
 
         {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
       </form>

@@ -25,6 +25,10 @@ import { businessNameChangeRoutes } from './business/business-name-change-routes
 import { businessNameCheckRoutes } from './business/business-name-check-routes.js'
 import { businessPhoneNumbersChangeRoutes } from './business/business-phone-numbers-change-routes.js'
 import { businessPhoneNumbersCheckRoutes } from './business/business-phone-numbers-check-routes.js'
+import { personalAddressEnterRoutes } from './customer/personal-address-enter-routes.js'
+import { personalAddressSelectRoutes } from './customer/personal-address-select-routes.js'
+import { personalAddressCheckRoutes } from './customer/personal-address-check-routes.js'
+import { personalAddressChangeRoutes } from './customer/personal-address-change-routes.js'
 
 export const routes = [
   health,
@@ -54,4 +58,8 @@ export const routes = [
   ...businessNameCheckRoutes,
   ...businessPhoneNumbersChangeRoutes,
   ...businessPhoneNumbersCheckRoutes
+  ...personalAddressEnterRoutes,
+  ...personalAddressSelectRoutes,
+  ...personalAddressCheckRoutes,
+  ...personalAddressChangeRoutes
 ]

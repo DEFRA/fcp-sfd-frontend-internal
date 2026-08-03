@@ -55,7 +55,7 @@ export const routes = [
   ...businessEmailCheckRoutes,
   ...businessNameChangeRoutes,
   ...businessNameCheckRoutes,
-  ...businessPhoneNumbersChangeRoutes
+  ...businessPhoneNumbersChangeRoutes,
   ...personalAddressEnterRoutes,
   ...personalAddressSelectRoutes,
   ...personalAddressCheckRoutes,

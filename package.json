@@ -45,7 +45,7 @@
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
-    "@defra/fcp-sfd-frontend-engine": "0.20.0",
+    "@defra/fcp-sfd-frontend-engine": "0.22.0",
     "@defra/hapi-tracing": "1.30.0",
     "@elastic/ecs-pino-format": "1.5.0",
     "@hapi/bell": "13.1.0",
@@ -74,7 +74,6 @@
     "hapi-pulse": "3.0.1",
     "https-proxy-agent": "9.0.0",
     "ioredis": "5.10.1",
-    "moment": "2.30.1",
     "nunjucks": "3.2.4",
     "pino": "10.3.1",
     "pino-pretty": "13.1.3",

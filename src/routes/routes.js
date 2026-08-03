@@ -23,6 +23,7 @@ import { businessEmailChangeRoutes } from './business/business-email-change-rout
 import { businessEmailCheckRoutes } from './business/business-email-check-routes.js'
 import { businessNameChangeRoutes } from './business/business-name-change-routes.js'
 import { businessNameCheckRoutes } from './business/business-name-check-routes.js'
+import { businessPhoneNumbersChangeRoutes } from './business/business-phone-numbers-change-routes.js'
 import { personalAddressEnterRoutes } from './customer/personal-address-enter-routes.js'
 import { personalAddressSelectRoutes } from './customer/personal-address-select-routes.js'
 import { personalAddressCheckRoutes } from './customer/personal-address-check-routes.js'
@@ -54,6 +55,7 @@ export const routes = [
   ...businessEmailCheckRoutes,
   ...businessNameChangeRoutes,
   ...businessNameCheckRoutes,
+  ...businessPhoneNumbersChangeRoutes,
   ...personalAddressEnterRoutes,
   ...personalAddressSelectRoutes,
   ...personalAddressCheckRoutes,

@@ -83,7 +83,7 @@ describe('business phone numbers change route', () => {
       expect(response.statusCode).toBe(HTTP_STATUS_FORBIDDEN)
     })
 
-    test('redirects to the business details page when both numbers are provided', async () => {
+    test('redirects to the business phone numbers check page when both numbers are provided', async () => {
       const { crumbValue, cookie } = await getCrumb()
 
       const response = await server.inject({
@@ -95,10 +95,10 @@ describe('business phone numbers change route', () => {
       })
 
       expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
-      expect(response.headers.location).toBe(`/business/${sbi}/details`)
+      expect(response.headers.location).toBe(`/business/${sbi}/business-phone-numbers-check`)
     })
 
-    test('redirects to the business details page when only the mobile is provided', async () => {
+    test('redirects to the business phone numbers check page when only the mobile is provided', async () => {
       const { crumbValue, cookie } = await getCrumb()
 
       const response = await server.inject({
@@ -110,10 +110,10 @@ describe('business phone numbers change route', () => {
       })
 
       expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
-      expect(response.headers.location).toBe(`/business/${sbi}/details`)
+      expect(response.headers.location).toBe(`/business/${sbi}/business-phone-numbers-check`)
     })
 
-    test('redirects to the business details page when only the telephone is provided', async () => {
+    test('redirects to the business phone numbers check page when only the telephone is provided', async () => {
       const { crumbValue, cookie } = await getCrumb()
 
       const response = await server.inject({
@@ -125,7 +125,7 @@ describe('business phone numbers change route', () => {
       })
 
       expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
-      expect(response.headers.location).toBe(`/business/${sbi}/details`)
+      expect(response.headers.location).toBe(`/business/${sbi}/business-phone-numbers-check`)
     })
 
     test('re-renders the view with errors when neither number is provided', async () => {

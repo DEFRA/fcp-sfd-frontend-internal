@@ -1,202 +1,223 @@
 // Test framework dependencies
-import { describe, test, expect, vi } from 'vitest'
+import { describe, test, expect, beforeEach } from 'vitest'
 
 // Thing under test
 import { personalAddressCheckPresenter } from '../../../../src/presenters/personal/personal-address-check-presenter.js'
 
-// Mocks
-vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
-  presenters: {
-    formatDisplayAddress: vi.fn((addr) => {
-      if (!addr) return []
-      return Object.values(addr).filter(Boolean)
-    })
-  }
-}))
-
 describe('personalAddressCheckPresenter', () => {
-  describe('when given valid data with postcode lookup address', () => {
+  let data
+
+  beforeEach(() => {
+    data = {
+      crn: '1234567890',
+      address: {
+        lookup: {
+          pafOrganisationName: null,
+          buildingNumberRange: null,
+          flatName: null,
+          buildingName: null,
+          dependentLocality: null,
+          doubleDependentLocality: null,
+          street: null,
+          county: null,
+          uprn: null
+        },
+        manual: {
+          line1: '10 Skirbeck Way',
+          line2: 'Lonely Lane',
+          line3: null,
+          line4: 'Somerset',
+          line5: null
+        },
+        city: 'Maidstone',
+        postcode: 'SK22 1DL',
+        country: 'United Kingdom'
+      }
+    }
+  })
+
+  describe('when provided with personal address check data', () => {
     test('it correctly presents the data', () => {
-      const personalDetails = {
-        crn: '1234567890',
-        changePersonalAddress: {
-          uprn: '123456',
-          line1: '10 Downing Street',
-          city: 'London',
-          postalCode: 'SW1A 1AA',
-          postcodeLookup: true
-        },
-        address: {
-          line1: '10 Downing Street',
-          city: 'London',
-          postalCode: 'SW1A 1AA'
-        }
-      }
-
-      const result = personalAddressCheckPresenter(personalDetails)
-
-      expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/account-address-select' },
-        changeLink: '/customer/1234567890/account-address-select',
-        pageTitle: 'Check your personal address is correct before submitting',
-        metaDescription: 'Check the address for your personal account is correct.',
-        address: expect.any(Array)
-      })
-    })
-
-    test('it correctly presents the data with manually entered address', () => {
-      const personalDetails = {
-        crn: '1234567890',
-        changePersonalAddress: {
-          line1: '10 Downing Street',
-          city: 'London',
-          postalCode: 'SW1A 1AA'
-        },
-        address: {
-          line1: '10 Downing Street',
-          city: 'London',
-          postalCode: 'SW1A 1AA'
-        }
-      }
-
-      const result = personalAddressCheckPresenter(personalDetails)
+      const result = personalAddressCheckPresenter(data)
 
       expect(result).toEqual({
         backLink: { href: '/customer/1234567890/account-address-enter' },
         changeLink: '/customer/1234567890/account-address-enter',
         pageTitle: 'Check your personal address is correct before submitting',
         metaDescription: 'Check the address for your personal account is correct.',
-        address: expect.any(Array)
+        address: [
+          '10 Skirbeck Way',
+          'Lonely Lane',
+          'Maidstone',
+          'Somerset',
+          'SK22 1DL',
+          'United Kingdom'
+        ]
       })
     })
   })
 
-  describe('when there is no pending changePersonalAddress', () => {
-    test('it uses the original address from DAL', () => {
-      const personalDetails = {
-        crn: '1234567890',
-        address: {
-          line1: '10 Downing Street',
-          city: 'London',
-          postalCode: 'SW1A 1AA'
+  describe('the "address" property', () => {
+    describe('when provided with a changePersonalAddress thats entered manually', () => {
+      beforeEach(() => {
+        data.changePersonalAddress = {
+          postcodeLookup: false,
+          line1: 'A different address',
+          city: 'Maidstone',
+          county: 'A new county',
+          postcode: 'BA123 ABC',
+          country: 'United Kingdom'
         }
-      }
+      })
 
-      const result = personalAddressCheckPresenter(personalDetails)
+      test('it should return the changed address as the address', () => {
+        const result = personalAddressCheckPresenter(data)
 
-      expect(result.address).toEqual(['10 Downing Street', 'London', 'SW1A 1AA'])
+        expect(result.address).toEqual([
+          'A different address',
+          'Maidstone',
+          'A new county',
+          'BA123 ABC',
+          'United Kingdom'
+        ])
+      })
     })
-  })
 
-  describe('formatAddress with postcode lookup', () => {
-    test('it filters out falsy values and removes uprn, displayAddress, postcodeLookup', () => {
-      const personalDetails = {
-        crn: '1234567890',
-        changePersonalAddress: {
-          uprn: '123456',
-          displayAddress: '10 Downing Street, London SW1A 1AA',
+    describe('when provided with a changePersonalAddress thats entered from the postcode lookup', () => {
+      beforeEach(() => {
+        data.changePersonalAddress = {
           postcodeLookup: true,
-          line1: '10 Downing Street',
-          line2: null,
-          line3: undefined,
-          city: 'London',
-          postalCode: 'SW1A 1AA',
-          country: 'England'
-        },
-        address: {}
-      }
+          uprn: '100000111111',
+          displayAddress: 'Flat 3, Fake Court, 18, Maple Road, Westfield, Bristol, BS1 4AB',
+          line1: 'A newer address',
+          city: 'Maidstone nowhere',
+          county: 'A new county',
+          postcode: 'BA12 CBA',
+          country: 'United Kingdom'
+        }
+      })
 
-      const result = personalAddressCheckPresenter(personalDetails)
+      test('it should return the changed address as the address', () => {
+        const result = personalAddressCheckPresenter(data)
 
-      expect(result.address).not.toContain('123456')
-      expect(result.address).not.toContain('10 Downing Street, London SW1A 1AA')
-      expect(result.address).not.toContain(true)
-      expect(result.address).toContain('10 Downing Street')
-      expect(result.address).toContain('London')
+        expect(result.address).toEqual([
+          'A newer address',
+          'Maidstone nowhere',
+          'A new county',
+          'BA12 CBA',
+          'United Kingdom'
+        ])
+      })
     })
-  })
 
-  describe('formatAddress with manual address', () => {
-    test('it filters out all falsy values', () => {
-      const personalDetails = {
-        crn: '1234567890',
-        changePersonalAddress: {
-          line1: '10 Downing Street',
-          line2: null,
-          line3: undefined,
-          line4: '',
-          city: 'London',
-          postalCode: 'SW1A 1AA'
-        },
-        address: {}
-      }
+    describe('when there is no pending change in the session', () => {
+      describe('and the mapped personal address was selected from the postcode lookup', () => {
+        beforeEach(() => {
+          data.address = {
+            lookup: {
+              pafOrganisationName: null,
+              buildingNumberRange: '18',
+              flatName: 'Flat 3',
+              buildingName: 'Fake Court',
+              dependentLocality: null,
+              doubleDependentLocality: null,
+              street: 'Maple Road',
+              county: 'Bristol',
+              uprn: '100000111111'
+            },
+            manual: {
+              line1: null,
+              line2: null,
+              line3: null,
+              line4: null,
+              line5: null
+            },
+            city: 'Westfield',
+            postcode: 'BS1 4AB',
+            country: 'United Kingdom'
+          }
+        })
 
-      const result = personalAddressCheckPresenter(personalDetails)
+        test('it formats the nested DAL address as a flat array of strings', () => {
+          const result = personalAddressCheckPresenter(data)
 
-      expect(result.address).toEqual(['10 Downing Street', 'London', 'SW1A 1AA'])
+          expect(result.address).toEqual([
+            'Flat 3',
+            'Fake Court',
+            '18 Maple Road',
+            'Westfield',
+            'Bristol',
+            'BS1 4AB',
+            'United Kingdom'
+          ])
+        })
+
+        test('it does not render any address line as "[object Object]"', () => {
+          const result = personalAddressCheckPresenter(data)
+
+          expect(result.address.every((line) => typeof line === 'string')).toBe(true)
+        })
+      })
     })
   })
 
   describe('the "backLink" property', () => {
-    test('it uses addressBackLink helper from engine for postcode lookup', () => {
-      const personalDetails = {
-        crn: '1111111111',
-        changePersonalAddress: {
-          postcodeLookup: true,
-          line1: '10 Downing Street'
+    describe('when postcode lookup is true', () => {
+      beforeEach(() => {
+        data.changePersonalAddress = {
+          postcodeLookup: true
         }
-      }
+      })
 
-      const result = personalAddressCheckPresenter(personalDetails)
+      test('it should return backLink with account-address-select', () => {
+        const result = personalAddressCheckPresenter(data)
 
-      expect(result.backLink.href).toBe('/customer/1111111111/account-address-select')
+        expect(result.backLink).toEqual({ href: '/customer/1234567890/account-address-select' })
+      })
     })
 
-    test('it uses addressBackLink helper from engine for manual address', () => {
-      const personalDetails = {
-        crn: '2222222222',
-        changePersonalAddress: {
-          line1: '10 Downing Street'
+    describe('when postcode lookup is false', () => {
+      beforeEach(() => {
+        data.changePersonalAddress = {
+          postcodeLookup: false
         }
-      }
+      })
 
-      const result = personalAddressCheckPresenter(personalDetails)
+      test('it should return backLink with account-address-enter', () => {
+        const result = personalAddressCheckPresenter(data)
 
-      expect(result.backLink.href).toBe('/customer/2222222222/account-address-enter')
+        expect(result.backLink).toEqual({ href: '/customer/1234567890/account-address-enter' })
+      })
     })
   })
 
   describe('the "changeLink" property', () => {
-    test('it directs to the appropriate change page based on address type', () => {
-      const personalDetails = {
-        crn: '3333333333',
-        changePersonalAddress: {
-          postcodeLookup: true,
-          line1: '10 Downing Street'
+    describe('when postcode lookup is true', () => {
+      beforeEach(() => {
+        data.changePersonalAddress = {
+          postcodeLookup: true
         }
-      }
+      })
 
-      const result = personalAddressCheckPresenter(personalDetails)
+      test('it should return changeLink with account-address-select', () => {
+        const result = personalAddressCheckPresenter(data)
 
-      expect(result.changeLink).toBe('/customer/3333333333/account-address-select')
-    })
-  })
-
-  describe('page title and meta description', () => {
-    test('it has correct page title', () => {
-      const personalDetails = { crn: '1234567890' }
-
-      const result = personalAddressCheckPresenter(personalDetails)
-
-      expect(result.pageTitle).toBe('Check your personal address is correct before submitting')
+        expect(result.changeLink).toEqual('/customer/1234567890/account-address-select')
+      })
     })
 
-    test('it has correct meta description', () => {
-      const personalDetails = { crn: '1234567890' }
+    describe('when postcode lookup is false', () => {
+      beforeEach(() => {
+        data.changePersonalAddress = {
+          postcodeLookup: false
+        }
+      })
 
-      const result = personalAddressCheckPresenter(personalDetails)
+      test('it should return changeLink with account-address-enter', () => {
+        const result = personalAddressCheckPresenter(data)
 
-      expect(result.metaDescription).toBe('Check the address for your personal account is correct.')
+        expect(result.changeLink).toEqual('/customer/1234567890/account-address-enter')
+      })
     })
   })
 })

@@ -60,7 +60,6 @@ describe('personal date of birth check', () => {
         expect(h.view).toHaveBeenCalledWith('personal/personal-dob-check', getPageData())
       })
     })
-
   })
 
   describe('POST /customer/{crn}/account-date-of-birth-check', () => {

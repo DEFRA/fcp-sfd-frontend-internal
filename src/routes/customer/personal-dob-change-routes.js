@@ -30,7 +30,9 @@ const postPersonalDobChange = {
     pre: [validateCrn],
     validate: {
       payload: schemas.personal.dob,
-      options: { abortEarly: false },
+      options: {
+        abortEarly: false
+      },
       failAction: async (request, h, err) => {
         const { params, auth, yar, payload } = request
         const { crn } = params

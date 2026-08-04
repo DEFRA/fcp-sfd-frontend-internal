@@ -3,7 +3,6 @@
  * @module personalDetailsPresenter
  */
 
-import moment from 'moment'
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { config } from '../../config/index.js'
 
@@ -105,14 +104,15 @@ const formatDob = (dob) => {
     return { formattedDob: 'Not added', action: 'Add' }
   }
 
-  const dobMoment = moment(dob)
+  const date = new Date(dob)
 
-  if (!dobMoment.isValid() || dobMoment.isAfter(moment(), 'day')) {
+  // getTime() returns NaN for invalid dates
+  if (Number.isNaN(date.getTime()) || date > new Date()) {
     return { formattedDob: 'Not added', action: 'Add' }
   }
 
   return {
-    formattedDob: dobMoment.format('D MMMM YYYY'),
+    formattedDob: presenters.formatLongDate(date),
     action: 'Change'
   }
 }

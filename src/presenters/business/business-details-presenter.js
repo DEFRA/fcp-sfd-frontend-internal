@@ -37,9 +37,14 @@ const businessDetailsPresenter = (data, sbi, yar) => {
     businessAddress: {
       value: hasAddress ? addressLines : 'Not added',
       action: presenters.getActionText(hasAddress),
-      changeLink: CHANGE_LINK
+      changeLink: BUSINESS_CHANGE_LINKS.businessAddress(sbi)
     },
-    businessTelephone: createEditableTelephoneField(contact.landline, contact.mobile),
+    businessTelephone: {
+      telephone: data.contact.landline || 'Not added',
+      mobile: data.contact.mobile || 'Not added',
+      action: presenters.getActionText(data.contact.landline || data.contact.mobile),
+      changeLink: BUSINESS_CHANGE_LINKS.businessTelephone(sbi)
+    },
     businessEmail: {
       value: contact.email || 'Not added',
       action: presenters.getActionText(contact.email),
@@ -59,17 +64,6 @@ const createEditableValueField = (value, emptyValueText) => {
   return {
     value: value || emptyValueText,
     action: presenters.getActionText(value),
-    changeLink: CHANGE_LINK
-  }
-}
-
-const createEditableTelephoneField = (landline, mobile) => {
-  const hasTelephone = Boolean(landline || mobile)
-
-  return {
-    telephone: landline || 'Not added',
-    mobile: mobile || 'Not added',
-    action: presenters.getActionText(hasTelephone),
     changeLink: CHANGE_LINK
   }
 }

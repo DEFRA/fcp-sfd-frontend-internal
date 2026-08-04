@@ -115,7 +115,7 @@ describe('businessDetailsPresenter', () => {
 
       expect(Array.isArray(result.businessAddress.value)).toBe(true)
       expect(result.businessAddress.action).toBe('Change')
-      expect(result.businessAddress.changeLink).toBe('#')
+      expect(result.businessAddress.changeLink).toBe(`/business/${sbi}/business-address-change`)
     })
 
     test('returns "Not added" and "Add" action when address has no content', () => {
@@ -134,7 +134,7 @@ describe('businessDetailsPresenter', () => {
       expect(result.businessTelephone.telephone).toBe('01234567890')
       expect(result.businessTelephone.mobile).toBe('07700900000')
       expect(result.businessTelephone.action).toBe('Change')
-      expect(result.businessTelephone.changeLink).toBe('#')
+      expect(result.businessTelephone.changeLink).toBe('/business/106705779/business-phone-numbers-change')
     })
 
     test('returns "Not added" placeholders and "Add" action when both are absent', () => {

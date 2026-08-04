@@ -2,14 +2,16 @@
 import { describe, test, expect, beforeEach } from 'vitest'
 
 // Thing under test
-import { personalAddressCheckPresenter } from '../../../../src/presenters/personal/personal-address-check-presenter.js'
+import { businessAddressCheckPresenter } from '../../../../src/presenters/business/business-address-check-presenter.js'
 
-describe('personalAddressCheckPresenter', () => {
+describe('businessAddressCheckPresenter', () => {
   let data
 
   beforeEach(() => {
     data = {
-      crn: '1234567890',
+      info: {
+        sbi: '123456789'
+      },
       address: {
         lookup: {
           pafOrganisationName: null,
@@ -36,15 +38,15 @@ describe('personalAddressCheckPresenter', () => {
     }
   })
 
-  describe('when provided with personal address check data', () => {
+  describe('when provided with business address check data', () => {
     test('it correctly presents the data', () => {
-      const result = personalAddressCheckPresenter(data)
+      const result = businessAddressCheckPresenter(data)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/account-address-enter' },
-        changeLink: '/customer/1234567890/account-address-enter',
-        pageTitle: 'Check your personal address is correct before submitting',
-        metaDescription: 'Check the address for your personal account is correct.',
+        backLink: { href: '/business/123456789/business-address-enter' },
+        changeLink: '/business/123456789/business-address-enter',
+        pageTitle: 'Check your business address is correct before submitting',
+        metaDescription: 'Check the address for your business is correct.',
         address: [
           '10 Skirbeck Way',
           'Lonely Lane',
@@ -58,11 +60,11 @@ describe('personalAddressCheckPresenter', () => {
   })
 
   describe('the "address" property', () => {
-    describe('when provided with a changePersonalAddress thats entered manually', () => {
+    describe('when provided with a changeBusinessAddress thats entered manually', () => {
       beforeEach(() => {
-        data.changePersonalAddress = {
+        data.changeBusinessAddress = {
           postcodeLookup: false,
-          line1: 'A different address',
+          address1: 'A different address',
           city: 'Maidstone',
           county: 'A new county',
           postcode: 'BA123 ABC',
@@ -71,7 +73,7 @@ describe('personalAddressCheckPresenter', () => {
       })
 
       test('it should return the changed address as the address', () => {
-        const result = personalAddressCheckPresenter(data)
+        const result = businessAddressCheckPresenter(data)
 
         expect(result.address).toEqual([
           'A different address',
@@ -83,13 +85,13 @@ describe('personalAddressCheckPresenter', () => {
       })
     })
 
-    describe('when provided with a changePersonalAddress thats entered from the postcode lookup', () => {
+    describe('when provided with a changeBusinessAddress thats entered from the postcode lookup', () => {
       beforeEach(() => {
-        data.changePersonalAddress = {
+        data.changeBusinessAddress = {
           postcodeLookup: true,
           uprn: '100000111111',
           displayAddress: 'Flat 3, Fake Court, 18, Maple Road, Westfield, Bristol, BS1 4AB',
-          line1: 'A newer address',
+          address1: 'A newer address',
           city: 'Maidstone nowhere',
           county: 'A new county',
           postcode: 'BA12 CBA',
@@ -98,7 +100,7 @@ describe('personalAddressCheckPresenter', () => {
       })
 
       test('it should return the changed address as the address', () => {
-        const result = personalAddressCheckPresenter(data)
+        const result = businessAddressCheckPresenter(data)
 
         expect(result.address).toEqual([
           'A newer address',
@@ -111,7 +113,7 @@ describe('personalAddressCheckPresenter', () => {
     })
 
     describe('when there is no pending change in the session', () => {
-      describe('and the mapped personal address was selected from the postcode lookup', () => {
+      describe('and the mapped business address was selected from the postcode lookup', () => {
         beforeEach(() => {
           data.address = {
             lookup: {
@@ -139,7 +141,7 @@ describe('personalAddressCheckPresenter', () => {
         })
 
         test('it formats the nested DAL address as a flat array of strings', () => {
-          const result = personalAddressCheckPresenter(data)
+          const result = businessAddressCheckPresenter(data)
 
           expect(result.address).toEqual([
             'Flat 3',
@@ -153,7 +155,7 @@ describe('personalAddressCheckPresenter', () => {
         })
 
         test('it does not render any address line as "[object Object]"', () => {
-          const result = personalAddressCheckPresenter(data)
+          const result = businessAddressCheckPresenter(data)
 
           expect(result.address.every((line) => typeof line === 'string')).toBe(true)
         })
@@ -164,29 +166,29 @@ describe('personalAddressCheckPresenter', () => {
   describe('the "backLink" property', () => {
     describe('when postcode lookup is true', () => {
       beforeEach(() => {
-        data.changePersonalAddress = {
+        data.changeBusinessAddress = {
           postcodeLookup: true
         }
       })
 
-      test('it should return backLink with account-address-select', () => {
-        const result = personalAddressCheckPresenter(data)
+      test('it should return backLink with business-address-select', () => {
+        const result = businessAddressCheckPresenter(data)
 
-        expect(result.backLink).toEqual({ href: '/customer/1234567890/account-address-select' })
+        expect(result.backLink).toEqual({ href: '/business/123456789/business-address-select' })
       })
     })
 
     describe('when postcode lookup is false', () => {
       beforeEach(() => {
-        data.changePersonalAddress = {
+        data.changeBusinessAddress = {
           postcodeLookup: false
         }
       })
 
-      test('it should return backLink with account-address-enter', () => {
-        const result = personalAddressCheckPresenter(data)
+      test('it should return backLink with business-address-enter', () => {
+        const result = businessAddressCheckPresenter(data)
 
-        expect(result.backLink).toEqual({ href: '/customer/1234567890/account-address-enter' })
+        expect(result.backLink).toEqual({ href: '/business/123456789/business-address-enter' })
       })
     })
   })
@@ -194,29 +196,29 @@ describe('personalAddressCheckPresenter', () => {
   describe('the "changeLink" property', () => {
     describe('when postcode lookup is true', () => {
       beforeEach(() => {
-        data.changePersonalAddress = {
+        data.changeBusinessAddress = {
           postcodeLookup: true
         }
       })
 
-      test('it should return changeLink with account-address-select', () => {
-        const result = personalAddressCheckPresenter(data)
+      test('it should return changeLink with business-address-select', () => {
+        const result = businessAddressCheckPresenter(data)
 
-        expect(result.changeLink).toEqual('/customer/1234567890/account-address-select')
+        expect(result.changeLink).toEqual('/business/123456789/business-address-select')
       })
     })
 
     describe('when postcode lookup is false', () => {
       beforeEach(() => {
-        data.changePersonalAddress = {
+        data.changeBusinessAddress = {
           postcodeLookup: false
         }
       })
 
-      test('it should return changeLink with account-address-enter', () => {
-        const result = personalAddressCheckPresenter(data)
+      test('it should return changeLink with business-address-enter', () => {
+        const result = businessAddressCheckPresenter(data)
 
-        expect(result.changeLink).toEqual('/customer/1234567890/account-address-enter')
+        expect(result.changeLink).toEqual('/business/123456789/business-address-enter')
       })
     })
   })

@@ -115,7 +115,7 @@ describe('businessDetailsPresenter', () => {
 
       expect(Array.isArray(result.businessAddress.value)).toBe(true)
       expect(result.businessAddress.action).toBe('Change')
-      expect(result.businessAddress.changeLink).toBe('#')
+      expect(result.businessAddress.changeLink).toBe(`/business/${sbi}/business-address-change`)
     })
 
     test('returns "Not added" and "Add" action when address has no content', () => {

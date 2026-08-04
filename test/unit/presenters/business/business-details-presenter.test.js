@@ -134,7 +134,7 @@ describe('businessDetailsPresenter', () => {
       expect(result.businessTelephone.telephone).toBe('01234567890')
       expect(result.businessTelephone.mobile).toBe('07700900000')
       expect(result.businessTelephone.action).toBe('Change')
-      expect(result.businessTelephone.changeLink).toBe('#')
+      expect(result.businessTelephone.changeLink).toBe('/business/106705779/business-phone-numbers-change')
     })
 
     test('returns "Not added" placeholders and "Add" action when both are absent', () => {

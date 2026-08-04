@@ -27,6 +27,8 @@ import { businessAddressChangeRoutes } from './business/business-address-change-
 import { businessAddressSelectRoutes } from './business/business-address-select-routes.js'
 import { businessAddressEnterRoutes } from './business/business-address-enter-routes.js'
 import { businessAddressCheckRoutes } from './business/business-address-check-routes.js'
+import { businessPhoneNumbersChangeRoutes } from './business/business-phone-numbers-change-routes.js'
+import { businessPhoneNumbersCheckRoutes } from './business/business-phone-numbers-check-routes.js'
 import { personalAddressEnterRoutes } from './customer/personal-address-enter-routes.js'
 import { personalAddressSelectRoutes } from './customer/personal-address-select-routes.js'
 import { personalAddressCheckRoutes } from './customer/personal-address-check-routes.js'
@@ -62,6 +64,8 @@ export const routes = [
   ...businessAddressSelectRoutes,
   ...businessAddressEnterRoutes,
   ...businessAddressCheckRoutes,
+  ...businessPhoneNumbersChangeRoutes,
+  ...businessPhoneNumbersCheckRoutes,
   ...personalAddressEnterRoutes,
   ...personalAddressSelectRoutes,
   ...personalAddressCheckRoutes,

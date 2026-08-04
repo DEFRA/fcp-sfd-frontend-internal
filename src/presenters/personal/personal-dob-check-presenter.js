@@ -3,12 +3,15 @@
  * @module personalDobCheckPresenter
  */
 
-import moment from 'moment'
+import { presenters } from '@defra/fcp-sfd-frontend-engine'
 
 const personalDobCheckPresenter = (personalDetails, crn) => {
-  const dob = personalDetails.changePersonalDob ?? personalDetails.info.dateOfBirth
-  const { day, month, year } = dob
-  const personalDob = new Date(`${month}/${day}/${year}`)
+  // should this live in the engine?
+  const { day, month, year } = personalDetails.changePersonalDob ?? personalDetails.info.dateOfBirth
+  // new Date() needs the format YYYY-MM-DD with leading zeros e.g. '1990-04-05' not '1990-4-5'
+  const personalDob = new Date(
+    `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+  )
 
   return {
     backLink: { href: `/customer/${crn}/account-date-of-birth-change` },
@@ -16,7 +19,7 @@ const personalDobCheckPresenter = (personalDetails, crn) => {
     metaDescription: 'Check the date of birth for your personal account is correct.',
     userName: personalDetails.info.userName ?? null,
     changeLink: `/customer/${crn}/account-date-of-birth-change`,
-    dateOfBirth: moment(personalDob).format('D MMMM YYYY')
+    dateOfBirth: presenters.formatLongDate(personalDob)
   }
 }
 

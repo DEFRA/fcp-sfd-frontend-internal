@@ -84,7 +84,7 @@ describe('business address select', () => {
       test('it redirects back to address-change', async () => {
         await getBusinessAddressSelect.handler(request, h)
 
-        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/address-change')
+        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-address-change')
       })
     })
 

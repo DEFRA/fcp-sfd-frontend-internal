@@ -27,7 +27,7 @@ const updatePersonalDobChangeService = async (yar, crn, email) => {
   const variables = {
     input: {
       // DAL expects dateOfBirth as YYYY-MM-DD e.g. '1990-04-05' not '1990-4-5'
-      dateOfBirth: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
+      dateOfBirth: `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
       crn
     }
   }

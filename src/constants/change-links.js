@@ -7,5 +7,6 @@ export const BUSINESS_CHANGE_LINKS = {
 
 export const PERSONAL_CHANGE_LINKS = {
   personalEmail: (crn) => `/customer/${crn}/account-email-change`,
-  personalName: (crn) => `/customer/${crn}/account-name-change`
+  personalName: (crn) => `/customer/${crn}/account-name-change`,
+  personalAddress: (crn) => `/customer/${crn}/account-address-change`
 }

@@ -9,7 +9,7 @@
  * @module updatePersonalDobChangeService
  */
 
-import { constants, mutations } from '@defra/fcp-sfd-frontend-engine'
+import { mutations } from '@defra/fcp-sfd-frontend-engine'
 
 import { fetchPersonalChangeService } from './fetch-personal-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'

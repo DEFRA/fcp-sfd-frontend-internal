@@ -13,7 +13,7 @@ const personalDobCheckPresenter = (personalDetails, crn) => {
   )
 
   return {
-    backLink: { href: `/customer/${crn}/account-date-of-birth-check` },
+    backLink: { href: `/customer/${crn}/account-date-of-birth-change` },
     pageTitle: 'Check your date of birth is correct before submitting',
     metaDescription: 'Check the date of birth for your personal account is correct.',
     userName: personalDetails.info.userName ?? null,

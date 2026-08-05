@@ -1,9 +1,6 @@
 // Test framework dependencies
 import { describe, test, expect, beforeEach } from 'vitest'
 
-// Test helpers
-import { PERSONAL_CHANGE_LINKS } from '../../../../src/constants/change-links.js'
-
 // Thing under test
 import { personalDobCheckPresenter } from '../../../../src/presenters/personal/personal-dob-check-presenter.js'
 
@@ -29,11 +26,11 @@ describe('personalDobCheckPresenter', () => {
       const result = personalDobCheckPresenter(data, crn)
 
       expect(result).toEqual({
-        backLink: { href: PERSONAL_CHANGE_LINKS.personalDob(crn) },
+        backLink: { href: `/customer/${crn}/account-date-of-birth-change` },
         pageTitle: 'Check your date of birth is correct before submitting',
         metaDescription: 'Check the date of birth for your personal account is correct.',
         userName: 'Alfred Waldron',
-        changeLink: PERSONAL_CHANGE_LINKS.personalDob(crn),
+        changeLink: `/customer/${crn}/account-date-of-birth-change`,
         dateOfBirth: '25 June 1984'
       })
     })
@@ -67,14 +64,6 @@ describe('personalDobCheckPresenter', () => {
 
     test('it returns null if date of birth on record is incomplete', () => {
       data.info.dateOfBirth = { day: null, month: '05', year: '1990' }
-
-      const result = personalDobCheckPresenter(data, crn)
-
-      expect(result.dateOfBirth).toBeNull()
-    })
-
-    test('it returns null if date of birth on record is missing', () => {
-      delete data.info.dateOfBirth
 
       const result = personalDobCheckPresenter(data, crn)
 

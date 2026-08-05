@@ -22,8 +22,15 @@ const updatePersonalDobChangeService = async (yar, crn, email) => {
     return
   }
 
-  const variables = utils.buildUpdatePersonalDobVariables(personalDetails.changePersonalDob, personalDetails.crn)
+  const { day, month, year } = personalDetails.changePersonalDob
 
+  const variables = {
+    input: {
+      // DAL expects dateOfBirth as YYYY-MM-DD e.g. '1990-04-05' not '1990-4-5'
+      dateOfBirth: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
+      crn: personalDetails.crn
+    }
+  }
   await updateDalService(mutations.updateCustomerDob, variables, email)
 
   yar.clear('personalDetailsUpdate')

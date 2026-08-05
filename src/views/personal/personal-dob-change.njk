@@ -10,23 +10,13 @@
 {% endblock %}
 
 {% block content %}
-  {% if errors %}
-    {% set dateError =
-      errors.day
-      or errors.month
-      or errors.year
-    %}
+  {% set dobErrors = errors or {} %}
+  {% set dateError = dobErrors.day or dobErrors.month or dobErrors.year %}
+  {% set dayInputClasses = "govuk-input--width-2" + (" govuk-input--error" if dobErrors.day else "") %}
+  {% set monthInputClasses = "govuk-input--width-2" + (" govuk-input--error" if dobErrors.month else "") %}
+  {% set yearInputClasses = "govuk-input--width-4" + (" govuk-input--error" if dobErrors.year else "") %}
 
-    {% if errors.day %}
-      {% set dayErrorClass = " govuk-input--error" %}
-    {% endif %}
-    {% if errors.month %}
-      {% set monthErrorClass = " govuk-input--error" %}
-    {% endif %}
-    {% if errors.year %}
-      {% set yearErrorClass = " govuk-input--error" %}
-    {% endif %}
-
+  {% if dateError %}
     {{ govukErrorSummary({
         titleText: "There is a problem",
         errorList: errors | toErrorList
@@ -56,19 +46,19 @@
             },
             items: [
               {
-                classes: "govuk-input--width-2 " + dayErrorClass,
+                classes: dayInputClasses,
                 name: "day",
                 value: day,
                 id: 'day'
               },
               {
-                classes: "govuk-input--width-2 " + monthErrorClass,
+                classes: monthInputClasses,
                 name: "month",
                 value: month,
                 id: 'month'
               },
               {
-                classes: "govuk-input--width-4 " + yearErrorClass,
+                classes: yearInputClasses,
                 name: "year",
                 value: year,
                 id: 'year'

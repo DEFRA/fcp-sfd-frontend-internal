@@ -1,6 +1,9 @@
 // Test framework dependencies
 import { describe, test, expect, beforeEach } from 'vitest'
 
+// Test helpers
+import { PERSONAL_CHANGE_LINKS } from '../../../../src/constants/change-links.js'
+
 // Thing under test
 import { personalDobCheckPresenter } from '../../../../src/presenters/personal/personal-dob-check-presenter.js'
 
@@ -26,11 +29,11 @@ describe('personalDobCheckPresenter', () => {
       const result = personalDobCheckPresenter(data, crn)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/account-date-of-birth-change' },
+        backLink: { href: PERSONAL_CHANGE_LINKS.personalDob(crn) },
         pageTitle: 'Check your date of birth is correct before submitting',
         metaDescription: 'Check the date of birth for your personal account is correct.',
         userName: 'Alfred Waldron',
-        changeLink: '/customer/1234567890/account-date-of-birth-change',
+        changeLink: PERSONAL_CHANGE_LINKS.personalDob(crn),
         dateOfBirth: '25 June 1984'
       })
     })

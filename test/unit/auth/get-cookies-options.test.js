@@ -75,7 +75,7 @@ describe('getCookieOptions', () => {
     })
 
     test('should include redirect param in redirection to intended path', () => {
-      expect(redirectTo(request)).toContain('redirect=/search-sbi?query=string')
+      expect(redirectTo(request)).toContain('redirect=%2Fsearch-sbi%3Fquery%3Dstring')
     })
   })
 

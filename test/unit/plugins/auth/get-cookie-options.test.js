@@ -76,8 +76,20 @@ describe('getCookieOptions', () => {
       expect(redirectTo(request).startsWith('/auth/sign-in')).toBe(true)
     })
 
-    test('should include redirect param in redirection to intended path', () => {
-      expect(redirectTo(request)).toContain('redirect=/search-sbi?query=string')
+    test('should include encoded redirect param in redirection to intended path', () => {
+      expect(redirectTo(request)).toContain('redirect=%2Fsearch-sbi%3Fquery%3Dstring')
+    })
+
+    test('should properly encode redirect URL with multiple query parameters', () => {
+      const requestWithMultipleParams = {
+        url: {
+          pathname: '/search-sbi',
+          search: '?sbi=123&crn=456'
+        }
+      }
+      const result = redirectTo(requestWithMultipleParams)
+      // Verify the entire URL is encoded as a single value, preventing parameter injection
+      expect(result).toBe('/auth/sign-in?redirect=%2Fsearch-sbi%3Fsbi%3D123%26crn%3D456')
     })
   })
 

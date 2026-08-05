@@ -47,7 +47,10 @@ describe('auth plugin', () => {
       expect(mockRegisterClientSecretStrategy).toHaveBeenCalledWith(mockServer)
     })
 
-    test('should throw error if federated credentials toggle is true', async () => {
+    test('should log warning and register client-secret strategy when federated is enabled', async () => {
+      const mockLogger = { warn: vi.fn() }
+      const serverWithLogger = { ...mockServer, logger: mockLogger }
+
       mockConfigGet.mockImplementation((key) => {
         if (key === 'featureToggle.useFederatedCredentials') {
           return true
@@ -55,9 +58,12 @@ describe('auth plugin', () => {
         return null
       })
 
-      await expect(auth.plugin.register(mockServer)).rejects.toThrow(
-        'Federated credentials not yet implemented. Set USE_FEDERATED_CREDENTIALS=false'
+      await auth.plugin.register(serverWithLogger)
+
+      expect(mockLogger.warn).toHaveBeenCalledWith(
+        'Federated credentials requested but not yet implemented. Using client-secret strategy.'
       )
+      expect(mockRegisterClientSecretStrategy).toHaveBeenCalledWith(serverWithLogger)
     })
   })
 })

@@ -7,11 +7,11 @@ export const auth = {
     register: async (server) => {
       const useFederated = config.get('featureToggle.useFederatedCredentials')
       if (useFederated) {
-        // Federated credentials strategy will be added in a follow-up PR
-        throw new Error('Federated credentials not yet implemented. Set USE_FEDERATED_CREDENTIALS=false')
-      } else {
-        await registerClientSecretStrategy(server)
+        server?.logger?.warn(
+          'Federated credentials requested but not yet implemented. Using client-secret strategy.'
+        )
       }
+      await registerClientSecretStrategy(server)
     }
   }
 }

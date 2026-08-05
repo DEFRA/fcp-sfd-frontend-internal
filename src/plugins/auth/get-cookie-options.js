@@ -23,7 +23,8 @@ function getCookieOptions (validateToken) {
       isSameSite: 'Lax'
     },
     redirectTo: function (request) {
-      return `/auth/sign-in?redirect=${request.url.pathname}${request.url.search}`
+      const redirectUrl = `${request.url.pathname}${request.url.search}`
+      return `/auth/sign-in?redirect=${encodeURIComponent(redirectUrl)}`
     },
     validate: async (request, session) => validateToken(request, session)
   }

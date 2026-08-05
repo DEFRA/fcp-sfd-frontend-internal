@@ -97,7 +97,7 @@ describe('client-secret-routes', () => {
     })
   })
 
-  describe('POST /auth/sign-in-oidc handler', () => {
+  describe('GET /auth/sign-in-oidc handler', () => {
     let request
     let h
 

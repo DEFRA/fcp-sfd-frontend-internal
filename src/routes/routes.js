@@ -1,6 +1,6 @@
 import { errors } from './errors/error-routes.js'
 import { health } from './health-routes.js'
-import { auth } from './auth-routes.js'
+import { auth } from './auth/index.js'
 import { index } from './index-routes.js'
 import { staticAssetRoutes } from './static-assets-routes.js'
 import { cookies } from './footer/cookies-routes.js'

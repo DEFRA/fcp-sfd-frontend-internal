@@ -35,7 +35,7 @@ const updatePersonalDobChangeService = async (yar, crn, email) => {
 
   yar.clear('personalDetailsUpdate')
 
-  flashNotification(yar, 'Success', constants.successMessages.PERSONAL_DATE_OF_BIRTH)
+  flashNotification(yar, 'Success', 'You have updated your date of birth')
 }
 
 export {

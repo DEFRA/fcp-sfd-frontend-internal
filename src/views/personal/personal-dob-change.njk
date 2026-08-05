@@ -1,0 +1,71 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}
+{% endblock %}
+
+{% block content %}
+  {% set dobErrors = errors or {} %}
+  {% set dateError = dobErrors.day or dobErrors.month or dobErrors.year %}
+  {% set dayInputClasses = "govuk-input--width-2" + (" govuk-input--error" if dobErrors.day else "") %}
+  {% set monthInputClasses = "govuk-input--width-2" + (" govuk-input--error" if dobErrors.month else "") %}
+  {% set yearInputClasses = "govuk-input--width-4" + (" govuk-input--error" if dobErrors.year else "") %}
+
+  {% if dateError %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors | toErrorList
+    }) }}
+  {% endif %}
+
+<div class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" novalidate>
+        <input type="hidden" name="crumb" value="{{ crumb }}">
+        <div class="govuk-form-group">
+          {{ govukDateInput({
+            id: "dob",
+            fieldset: {
+              legend: {
+                text: pageTitle,
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--l"
+              }
+            },
+            errorMessage: dateError and {
+              text: dateError.text
+            },
+            hint: {
+              text: hint
+            },
+            items: [
+              {
+                classes: dayInputClasses,
+                name: "day",
+                value: day
+              },
+              {
+                classes: monthInputClasses,
+                name: "month",
+                value: month
+              },
+              {
+                classes: yearInputClasses,
+                name: "year",
+                value: year
+              }
+            ]
+          }) }}
+        </div>
+        {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -10,6 +10,8 @@ const signIn = {
     auth: { mode: 'try' }
   },
   handler: async function (request, h) {
+    const federatedConfig = config.get('entra.federatedCredentials')
+    request.server?.logger?.info(`[DEBUG] Federated credentials config: ${JSON.stringify(federatedConfig)}`)
     // @defra/hapi-auth-oidc requires manual login initiation via request.login() method
     return request.login(h)
   }
@@ -23,6 +25,8 @@ const callback = {
   },
   handler: async function (request, h) {
     request.server?.logger?.info('[TEST] Federated callback received')
+    const federatedConfig = config.get('entra.federatedCredentials')
+    request.server?.logger?.info(`[DEBUG] Federated credentials config: ${JSON.stringify(federatedConfig)}`)
     const credentials = await request.callback(h)
 
     const { tokens } = credentials

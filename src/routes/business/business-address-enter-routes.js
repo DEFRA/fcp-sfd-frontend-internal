@@ -26,7 +26,7 @@ const postBusinessAddressEnter = {
   options: {
     pre: [validateSbi],
     validate: {
-      payload: schemas.business.address,
+      payload: schemas.business.details.address,
       options: { abortEarly: false },
       failAction: async (request, h, err) => {
         const { yar, auth, payload } = request

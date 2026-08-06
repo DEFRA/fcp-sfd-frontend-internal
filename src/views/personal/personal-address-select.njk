@@ -39,7 +39,10 @@
             label: {
               html: '<div class="govuk-label govuk-!-font-weight-bold">Select an address</div>'
             },
-            items: displayAddresses
+            items: displayAddresses,
+            errorMessage: errors.addresses and {
+              text: errors.addresses.text
+            }
           }) }}
         </fieldset>
 

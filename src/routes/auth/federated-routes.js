@@ -1,47 +1,50 @@
+import Jwt from '@hapi/jwt'
 import { getSignOutUrl } from '../../auth/get-sign-out-url.js'
 import { validateState } from '../../auth/state.js'
-import { verifyToken } from '../../auth/verify-token.js'
 import { config } from '../../config/index.js'
 
 const signIn = {
   method: 'GET',
   path: '/auth/sign-in',
   options: {
-    auth: 'entra'
+    auth: { mode: 'try' }
   },
-  handler: function (_request, h) {
-    // @hapi/bell intercepts unauthenticated requests before this handler runs and redirects to Entra
-    return h.redirect('/search-sbi')
+  handler: async function (request, h) {
+    // @defra/hapi-auth-oidc requires manual login initiation via request.login() method
+    return request.login(h)
   }
 }
 
-const signInOidc = {
+const callback = {
   method: 'GET',
-  path: '/auth/sign-in-oidc',
+  path: '/auth/callback',
   options: {
-    auth: { strategy: 'entra', mode: 'try' }
+    auth: { mode: 'try' }
   },
   handler: async function (request, h) {
-    // If the user is not authenticated, redirect to the home page
-    // This should only occur if the user tries to access the sign-in page directly and not part of the sign-in flow
-    // eg if the user has bookmarked the Entra sign-in page or they have signed out and tried to go back in the browser
-    if (!request.auth.isAuthenticated) {
+    const credentials = await request.callback(h)
+
+    const { tokens } = credentials
+    const token = tokens.access_token
+    const refreshToken = tokens.refresh_token
+
+    const decoded = Jwt.token.decode(token).decoded.payload
+    const sessionId = decoded?.sid
+    if (!sessionId) {
       return h.view('unauthorised')
     }
+    const roles = decoded.roles
 
-    const { profile, token, refreshToken } = request.auth.credentials
-    // verify token returned from Entra against public key
-    await verifyToken(token)
+    const profile = {
+      ...decoded,
+      sessionId,
+      loginHint: decoded.login_hint
+    }
 
-    const { sessionId, roles } = profile
-
-    // TEMPORARY CODE FOR TESTING PURPOSES ONLY - REMOVE WHEN DAL TEST EMAIL FEATURE IS NO LONGER NEEDED
-    // Check if DAL test email feature is enabled
     if (config.get('featureToggle.useDalTestEmail')) {
       profile.email = config.get('dalConfig.emailHeader')
     }
 
-    // Store token and all useful data in the session cache
     await request.server.app.cache.set(sessionId, {
       isAuthenticated: true,
       ...profile,
@@ -50,12 +53,12 @@ const signInOidc = {
       refreshToken
     })
 
-    // Create a new session using cookie authentication strategy which is used for all subsequent requests
     request.cookieAuth.set({ sessionId })
 
+    const redirect = request.yar.get('redirect')
     request.yar.clear('redirect')
 
-    return h.redirect('/search-sbi')
+    return h.redirect(redirect || '/search-sbi')
   }
 }
 
@@ -93,9 +96,9 @@ const signOutOidc = {
   }
 }
 
-export const clientSecretRoutes = [
+export const federatedRoutes = [
   signIn,
-  signInOidc,
+  callback,
   signOut,
   signOutOidc
 ]

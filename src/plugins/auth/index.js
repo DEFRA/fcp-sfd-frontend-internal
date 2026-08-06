@@ -1,5 +1,6 @@
 import { config } from '../../config/index.js'
 import { registerClientSecretStrategy } from './strategies/client-secret.js'
+import { registerFederatedStrategy } from './strategies/federated-credentials.js'
 
 export const auth = {
   plugin: {
@@ -7,11 +8,10 @@ export const auth = {
     register: async (server) => {
       const useFederated = config.get('featureToggle.useFederatedCredentials')
       if (useFederated) {
-        server?.logger?.warn(
-          'Federated credentials requested but not yet implemented. Using client-secret strategy.'
-        )
+        await registerFederatedStrategy(server)
+      } else {
+        await registerClientSecretStrategy(server)
       }
-      await registerClientSecretStrategy(server)
     }
   }
 }

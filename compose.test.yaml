@@ -17,7 +17,7 @@ services:
       ENTRA_TENANT_ID: dummy-tenant-id
       ENTRA_FEDERATED_AUDIENCE: dummy-audience
       ENTRA_FEDERATED_MOCK: 'true'
-      USE_FEDERATED_CREDENTIALS: 'true'
+      USE_FEDERATED_CREDENTIALS: 'false'
     depends_on:
       fcp-dal-api:
         condition: service_started

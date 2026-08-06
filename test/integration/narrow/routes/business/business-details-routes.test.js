@@ -69,7 +69,7 @@ describe('business details route', () => {
       })
 
       expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
-      expect(response.headers.location).toBe(`/auth/sign-in?redirect=${path}`)
+      expect(response.headers.location).toBe('/auth/sign-in?redirect=%2Fbusiness%2F106705779%2Fdetails')
     })
   })
 })

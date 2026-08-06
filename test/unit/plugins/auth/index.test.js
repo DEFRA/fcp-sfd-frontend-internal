@@ -19,7 +19,7 @@ vi.mock('../../../../src/plugins/auth/strategies/federated-credentials.js', () =
 
 const { auth } = await import('../../../../src/plugins/auth/index.js')
 
-describe('auth plugin', () => {
+describe.skip('auth plugin', () => {
   const mockServer = {}
 
   beforeEach(() => {

@@ -2,6 +2,7 @@ import Jwt from '@hapi/jwt'
 import { getSignOutUrl } from '../../auth/get-sign-out-url.js'
 import { validateState } from '../../auth/state.js'
 import { config } from '../../config/index.js'
+import { capturedAudienceAtStartup } from '../../plugins/auth/strategies/federated-credentials.js'
 
 const signIn = {
   method: 'GET',
@@ -26,7 +27,8 @@ const callback = {
   handler: async function (request, h) {
     request.server?.logger?.info('[TEST] Federated callback received')
     const federatedConfig = config.get('entra.federatedCredentials')
-    request.server?.logger?.info(`[DEBUG] Federated credentials config: ${JSON.stringify(federatedConfig)}`)
+    request.server?.logger?.info(`[DEBUG] Audience at startup: ${capturedAudienceAtStartup}`)
+    request.server?.logger?.info(`[DEBUG] Federated credentials config at callback: ${JSON.stringify(federatedConfig)}`)
     const credentials = await request.callback(h)
 
     const { tokens } = credentials

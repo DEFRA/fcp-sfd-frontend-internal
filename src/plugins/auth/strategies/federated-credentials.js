@@ -18,6 +18,8 @@ import { hapiAuthOidcPlugin, WebIdentityTokenProvider, MockProvider } from '@def
 import { getCookieOptions } from '../get-cookie-options.js'
 import { config } from '../../../config/index.js'
 
+let capturedAudienceAtStartup = null
+
 /**
  * Chooses which authentication provider to use based on the config settings.
  *
@@ -31,6 +33,8 @@ import { config } from '../../../config/index.js'
  */
 function buildAuthProvider () {
   const { audience, enableMocking } = config.get('entra.federatedCredentials')
+  capturedAudienceAtStartup = audience
+  console.error(`[BUILDAUTHPROVIDER DEBUG] audience="${audience}", enableMocking=${enableMocking}`)
   return enableMocking
     ? new MockProvider({})
     : new WebIdentityTokenProvider({ audience })
@@ -122,4 +126,4 @@ async function validateToken (request, session) {
   return { isValid: true, credentials: userSession }
 }
 
-export { registerFederatedStrategy }
+export { registerFederatedStrategy, capturedAudienceAtStartup }

@@ -52,6 +52,9 @@ async function registerFederatedStrategy (server) {
   const clientId = config.get('entra.clientId')
   const sessionCookieSecure = config.get('server.session.cookie.secure')
   const externalBaseUrl = config.get('entra.redirectUrl')
+  const { audience, enableMocking } = config.get('entra.federatedCredentials')
+
+  server?.logger?.info(`[TEST] Initializing federated credentials strategy - mocking: ${enableMocking}, audience: ${audience}`)
 
   await server.register({
     plugin: hapiAuthOidcPlugin,
@@ -76,6 +79,7 @@ async function registerFederatedStrategy (server) {
 
   server.auth.strategy('session', 'cookie', getCookieOptions(validateToken))
   server.auth.default('session')
+  server?.logger?.info('[TEST] Federated credentials strategy registered successfully')
 }
 
 /**

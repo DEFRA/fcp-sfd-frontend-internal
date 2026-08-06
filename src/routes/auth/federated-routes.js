@@ -22,6 +22,7 @@ const callback = {
     auth: { mode: 'try' }
   },
   handler: async function (request, h) {
+    request.server?.logger?.info('[TEST] Federated callback received')
     const credentials = await request.callback(h)
 
     const { tokens } = credentials
@@ -29,6 +30,7 @@ const callback = {
     const refreshToken = tokens.refresh_token
 
     const decoded = Jwt.token.decode(token).decoded.payload
+    request.server?.logger?.info(`[TEST] Federated callback decoded token with sessionId: ${decoded?.sid}`)
     const sessionId = decoded?.sid
     if (!sessionId) {
       return h.view('unauthorised')
@@ -53,6 +55,7 @@ const callback = {
       refreshToken
     })
 
+    request.server?.logger?.info(`[TEST] Federated credentials authentication successful for sessionId: ${sessionId}`)
     request.cookieAuth.set({ sessionId })
 
     const redirect = request.yar.get('redirect')

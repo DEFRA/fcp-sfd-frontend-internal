@@ -22,6 +22,7 @@ services:
       ENTRA_CLIENT_ID: ${ENTRA_CLIENT_ID}
       ENTRA_CLIENT_SECRET: ${ENTRA_CLIENT_SECRET}
       ENTRA_REDIRECT_URL: http://localhost:3006/auth/sign-in-oidc
+      ENTRA_EXTERNAL_BASE_URL: ${ENTRA_EXTERNAL_BASE_URL:-http://localhost:3006}
       ENTRA_SIGN_OUT_REDIRECT_URL: http://localhost:3006/auth/sign-out-oidc
       ENTRA_FEDERATED_AUDIENCE: ${ENTRA_FEDERATED_AUDIENCE:-null}
       ENTRA_FEDERATED_MOCK: ${ENTRA_FEDERATED_MOCK:-false}

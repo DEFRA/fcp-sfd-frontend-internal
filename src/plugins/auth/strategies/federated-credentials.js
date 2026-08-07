@@ -55,7 +55,6 @@ function buildAuthProvider () {
 async function registerFederatedStrategy (server) {
   const clientId = config.get('entra.clientId')
   const sessionCookieSecure = config.get('server.session.cookie.secure')
-  const redirectUrl = config.get('entra.redirectUrl')
   const externalBaseUrl = config.get('entra.externalBaseUrl')
   const { audience, enableMocking } = config.get('entra.federatedCredentials')
 
@@ -69,7 +68,7 @@ async function registerFederatedStrategy (server) {
         clientId,
         authProvider: buildAuthProvider(),
         scope: `${clientId}/.default offline_access`,
-        loginCallbackUri: redirectUrl,
+        loginCallbackUri: '/auth/sign-out-oidc',
         responseMode: 'query',
         externalBaseUrl,
         defaultPostLoginUri: `${externalBaseUrl}/search-sbi`

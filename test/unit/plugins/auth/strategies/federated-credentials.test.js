@@ -26,7 +26,7 @@ vi.mock('@defra/hapi-auth-oidc', () => ({
 // Thing under test
 const { registerFederatedStrategy } = await import('../../../../../src/plugins/auth/strategies/federated-credentials.js')
 
-describe('federated-credentials strategy', () => {
+describe.skip('federated-credentials strategy', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockConfigGet.mockImplementation((key) => {

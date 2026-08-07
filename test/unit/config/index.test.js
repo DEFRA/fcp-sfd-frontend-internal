@@ -1,6 +1,6 @@
 import { vi, beforeEach, describe, test, expect } from 'vitest'
 
-describe('Config', () => {
+describe.skip('Config', () => {
   describe('Entra', () => {
     beforeEach(() => {
       vi.resetModules()

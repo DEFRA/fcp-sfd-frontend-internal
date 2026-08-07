@@ -10,6 +10,7 @@ const signIn = {
     auth: 'entra'
   },
   handler: function (_request, h) {
+    // @hapi/bell intercepts unauthenticated requests before this handler runs and redirects to Entra
     return h.redirect('/search-sbi')
   }
 }

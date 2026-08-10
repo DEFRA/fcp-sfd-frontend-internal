@@ -2,7 +2,6 @@ import Jwt from '@hapi/jwt'
 import { getSignOutUrl } from '../../auth/get-sign-out-url.js'
 import { validateState } from '../../auth/state.js'
 import { config } from '../../config/index.js'
-import { capturedAudienceAtStartup } from '../../plugins/auth/strategies/federated-credentials.js'
 
 const signIn = {
   method: 'GET',
@@ -11,8 +10,6 @@ const signIn = {
     auth: { mode: 'try' }
   },
   handler: async function (request, h) {
-    const federatedConfig = config.get('entra.federatedCredentials')
-    request.server?.logger?.info(`[DEBUG] Federated credentials config: ${JSON.stringify(federatedConfig)}`)
     // @defra/hapi-auth-oidc requires manual login initiation via request.login() method
     return request.login(h)
   }
@@ -25,22 +22,18 @@ const callback = {
     auth: { mode: 'try' }
   },
   handler: async function (request, h) {
-    request.server?.logger?.info('[TEST] Federated callback received')
-    const federatedConfig = config.get('entra.federatedCredentials')
-    request.server?.logger?.info(`[DEBUG] Audience at startup: ${capturedAudienceAtStartup}`)
-    request.server?.logger?.info(`[DEBUG] Federated credentials config at callback: ${JSON.stringify(federatedConfig)}`)
     const credentials = await request.callback(h)
 
     const { tokens } = credentials
-    const token = tokens.access_token
-    const refreshToken = tokens.refresh_token
+    const accessToken = tokens.access_token
 
-    const decoded = Jwt.token.decode(token).decoded.payload
-    request.server?.logger?.info(`[TEST] Federated callback decoded token with sessionId: ${decoded?.sid}`)
+    const decoded = Jwt.token.decode(accessToken).decoded.payload
     const sessionId = decoded?.sid
+
     if (!sessionId) {
       return h.view('unauthorised')
     }
+
     const roles = decoded.roles
 
     const profile = {
@@ -53,15 +46,16 @@ const callback = {
       profile.email = config.get('dalConfig.emailHeader')
     }
 
+    // Store the full tokens object so validateToken can pass it to ensureValidToken.
+    // The tokens object contains { access_token, refresh_token } which is what
+    // ensureValidToken expects for token refresh operations.
     await request.server.app.cache.set(sessionId, {
       isAuthenticated: true,
       ...profile,
       scope: roles,
-      token,
-      refreshToken
+      tokens // Store the full token object with access_token and refresh_token
     })
 
-    request.server?.logger?.info(`[TEST] Federated credentials authentication successful for sessionId: ${sessionId}`)
     request.cookieAuth.set({ sessionId })
 
     const redirect = request.yar.get('redirect')
@@ -79,9 +73,11 @@ const signOut = {
   },
   handler: async function (request, h) {
     await request.yar.reset()
+
     if (!request.auth.isAuthenticated) {
       return h.redirect('/')
     }
+
     const signOutUrl = await getSignOutUrl(request, request.auth.credentials.loginHint)
     return h.redirect(signOutUrl)
   }
@@ -96,6 +92,7 @@ const signOutOidc = {
   handler: async function (request, h) {
     if (request.auth.isAuthenticated) {
       validateState(request, request.query.state)
+
       if (request.auth.credentials?.sessionId) {
         await request.server.app.cache.drop(request.auth.credentials.sessionId)
       }

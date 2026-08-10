@@ -7,6 +7,7 @@ export const auth = {
     name: 'auth',
     register: async (server) => {
       const useFederated = config.get('featureToggle.useFederatedCredentials')
+
       if (useFederated) {
         await registerFederatedStrategy(server)
       } else {

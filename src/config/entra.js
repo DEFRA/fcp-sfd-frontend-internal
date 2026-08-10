@@ -59,7 +59,6 @@ export const entraConfig = {
       audience: {
         doc: 'Audience value presented to AWS STS when requesting the web identity token.',
         format: String,
-        nullable: true,
         default: null,
         env: 'ENTRA_FEDERATED_AUDIENCE'
       },

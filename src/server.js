@@ -9,7 +9,6 @@ import { catchAll } from './utils/errors.js'
 import { getCacheEngine } from './utils/caching/cache-engine.js'
 import { initTokenCache } from './utils/caching/token-cache.js'
 import { initDalConnector } from './dal/connector.js'
-import { createLogger } from './utils/logger.js'
 
 export const createServer = async () => {
   setupProxy()
@@ -59,9 +58,6 @@ export const createServer = async () => {
     segment: config.get('server.session.cache.segment'),
     expiresIn: config.get('server.session.cache.ttl')
   })
-
-  const logger = createLogger()
-  logger.info(`[TEST] Feature toggle - USE_FEDERATED_CREDENTIALS: ${config.get('featureToggle.useFederatedCredentials')}`)
 
   server.app.tokenCache = initTokenCache(server, CACHE_NAME)
 

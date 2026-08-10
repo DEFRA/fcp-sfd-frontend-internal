@@ -18,8 +18,6 @@ import { hapiAuthOidcPlugin, WebIdentityTokenProvider, MockProvider } from '@def
 import { getCookieOptions } from '../get-cookie-options.js'
 import { config } from '../../../config/index.js'
 
-let capturedAudienceAtStartup = null
-
 /**
  * Chooses which authentication provider to use based on the config settings.
  *
@@ -33,8 +31,7 @@ let capturedAudienceAtStartup = null
  */
 function buildAuthProvider () {
   const { audience, enableMocking } = config.get('entra.federatedCredentials')
-  capturedAudienceAtStartup = audience
-  console.error(`[BUILDAUTHPROVIDER DEBUG] audience="${audience}", enableMocking=${enableMocking}`)
+  console.error(`[STARTUP] buildAuthProvider - audience="${audience}", enableMocking=${enableMocking}`)
   return enableMocking
     ? new MockProvider({})
     : new WebIdentityTokenProvider({ audience })
@@ -56,9 +53,6 @@ async function registerFederatedStrategy (server) {
   const clientId = config.get('entra.clientId')
   const sessionCookieSecure = config.get('server.session.cookie.secure')
   const externalBaseUrl = config.get('entra.externalBaseUrl')
-  const { audience, enableMocking } = config.get('entra.federatedCredentials')
-
-  server?.logger?.info(`[TEST] Initializing federated credentials strategy - mocking: ${enableMocking}, audience: ${audience}`)
 
   await server.register({
     plugin: hapiAuthOidcPlugin,
@@ -113,9 +107,12 @@ async function validateToken (request, session) {
   }
 
   try {
-    const refreshedToken = await request.ensureValidToken(userSession.token)
-    if (refreshedToken !== userSession.token) {
-      userSession.token = refreshedToken
+    // ensureValidToken expects the full token object with access_token and refresh_token,
+    // and returns { token: { access_token, refresh_token }, refreshed: boolean }
+    const { token: refreshedTokens, refreshed } = await request.ensureValidToken(userSession.tokens)
+
+    if (refreshed) {
+      userSession.tokens = refreshedTokens
       await request.server.app.cache.set(session.sessionId, userSession)
     }
   } catch (err) {
@@ -126,4 +123,4 @@ async function validateToken (request, session) {
   return { isValid: true, credentials: userSession }
 }
 
-export { registerFederatedStrategy, capturedAudienceAtStartup }
+export { registerFederatedStrategy }

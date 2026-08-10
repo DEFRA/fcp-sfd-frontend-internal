@@ -24,7 +24,7 @@ const callback = {
   handler: async function (request, h) {
     const credentials = await request.callback(h)
 
-    const { tokens } = credentials
+    const { tokens, expiresIn, claims } = credentials
     const accessToken = tokens.access_token
     const refreshToken = tokens.refresh_token
 
@@ -47,15 +47,18 @@ const callback = {
       profile.email = config.get('dalConfig.emailHeader')
     }
 
-    // Store the session following CDP hapi-auth-oidc expectations.
-    // ensureValidToken expects accessToken and refreshToken as top-level properties (camelCase)
-    // for proper token refresh with the WebIdentityTokenProvider.
+    // Store the session following CDP hapi-auth-oidc pattern.
+    // Include expiry metadata so ensureValidToken can determine when to refresh.
+    // This matches the saveUserSession pattern from the CDP docs.
+    const expiresInMs = expiresIn ? expiresIn * 1000 : undefined
     const session = {
       isAuthenticated: true,
       ...profile,
       scope: roles,
-      accessToken,      // camelCase, required by ensureValidToken
-      refreshToken      // camelCase, required by ensureValidToken
+      accessToken,
+      refreshToken,
+      expiresIn: expiresInMs,
+      claims
     }
 
     await request.server.app.cache.set(sessionId, session)

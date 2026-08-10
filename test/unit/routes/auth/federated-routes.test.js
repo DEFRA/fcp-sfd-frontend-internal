@@ -103,7 +103,9 @@ describe('federated-routes', () => {
           tokens: {
             access_token: 'test-token',
             refresh_token: 'test-refresh-token'
-          }
+          },
+          expiresIn: 3600,
+          claims: { oid: 'test-oid' }
         }),
         server: {
           app: {
@@ -130,7 +132,8 @@ describe('federated-routes', () => {
           isAuthenticated: true,
           sessionId: 'test-session-id',
           accessToken: 'test-token',
-          refreshToken: 'test-refresh-token'
+          refreshToken: 'test-refresh-token',
+          expiresIn: 3600000
         })
       )
       expect(mockRequest.cookieAuth.set).toHaveBeenCalledWith({ sessionId: 'test-session-id' })

@@ -106,15 +106,28 @@ async function validateToken (request, session) {
     return { isValid: false }
   }
 
+  // Guard against validating sessions without valid tokens
+  // (e.g., during login flow before callback is complete)
+  if (!userSession.accessToken || !userSession.refreshToken) {
+    return { isValid: false }
+  }
+
   try {
     // ensureValidToken expects the full session object and handles token refresh internally.
-    // It returns { token: { accessToken, refreshToken, ... }, refreshed: boolean }
-    const { token: refreshedTokens, refreshed } = await request.ensureValidToken(userSession)
+    // It returns { token: { accessToken, refreshToken, expiresIn, claims }, refreshed: boolean }
+    const { token: refreshedTokenData, refreshed } = await request.ensureValidToken(userSession)
 
     if (refreshed) {
-      // Update the session with the new tokens from the refresh response
-      userSession.accessToken = refreshedTokens.accessToken
-      userSession.refreshToken = refreshedTokens.refreshToken
+      // Update the session with the new tokens and expiry metadata from the refresh response.
+      // This matches the pattern from the CDP docs saveUserSession function.
+      userSession.accessToken = refreshedTokenData.accessToken
+      userSession.refreshToken = refreshedTokenData.refreshToken
+      if (refreshedTokenData.expiresIn) {
+        userSession.expiresIn = refreshedTokenData.expiresIn * 1000 // Convert to milliseconds
+      }
+      if (refreshedTokenData.claims) {
+        userSession.claims = refreshedTokenData.claims
+      }
       await request.server.app.cache.set(session.sessionId, userSession)
     }
   } catch (err) {

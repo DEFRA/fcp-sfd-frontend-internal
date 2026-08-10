@@ -24,11 +24,9 @@ const callback = {
   handler: async function (request, h) {
     const credentials = await request.callback(h)
 
-    // Debug: log the full structure returned by hapi-auth-oidc
-    console.error('[DEBUG] request.callback response structure:', JSON.stringify(credentials, null, 2))
-
     const { tokens } = credentials
     const accessToken = tokens.access_token
+    const refreshToken = tokens.refresh_token
 
     const decoded = Jwt.token.decode(accessToken).decoded.payload
     const sessionId = decoded?.sid
@@ -49,16 +47,16 @@ const callback = {
       profile.email = config.get('dalConfig.emailHeader')
     }
 
-    // Store the full credentials response to ensure ensureValidToken has all the context it needs
-    // for token refresh operations (audience context, expiry info, etc.)
+    // Store the session following CDP hapi-auth-oidc expectations.
+    // ensureValidToken expects accessToken and refreshToken as top-level properties (camelCase)
+    // for proper token refresh with the WebIdentityTokenProvider.
     const session = {
       isAuthenticated: true,
       ...profile,
       scope: roles,
-      ...credentials // Spread the full credentials to preserve all metadata
+      accessToken,      // camelCase, required by ensureValidToken
+      refreshToken      // camelCase, required by ensureValidToken
     }
-
-    console.error('[DEBUG] storing session in cache:', JSON.stringify({ sessionId, session }, null, 2))
 
     await request.server.app.cache.set(sessionId, session)
 

@@ -245,8 +245,7 @@ describe('federated-credentials strategy', () => {
     })
 
     test('should get session from cache', async () => {
-      const testTokens = { access_token: 'test-access', refresh_token: 'test-refresh' }
-      const userSession = { tokens: testTokens }
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh' }
       mockCacheGet.mockResolvedValue(userSession)
       mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'test-access', refreshToken: 'test-refresh' }, refreshed: false })
 
@@ -256,8 +255,7 @@ describe('federated-credentials strategy', () => {
     })
 
     test('should ensure token is valid', async () => {
-      const testTokens = { access_token: 'test-access', refresh_token: 'test-refresh' }
-      const userSession = { tokens: testTokens }
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh' }
       mockCacheGet.mockResolvedValue(userSession)
       mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'test-access', refreshToken: 'test-refresh' }, refreshed: false })
 
@@ -267,8 +265,7 @@ describe('federated-credentials strategy', () => {
     })
 
     test('should return valid state if session exists and token is valid', async () => {
-      const testTokens = { access_token: 'test-access', refresh_token: 'test-refresh' }
-      const userSession = { tokens: testTokens }
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh' }
       mockCacheGet.mockResolvedValue(userSession)
       mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'test-access', refreshToken: 'test-refresh' }, refreshed: false })
 
@@ -279,23 +276,19 @@ describe('federated-credentials strategy', () => {
     })
 
     test('should update session if token was refreshed', async () => {
-      const oldTokens = { access_token: 'old-access', refresh_token: 'old-refresh' }
-      const userSession = { tokens: oldTokens }
+      const userSession = { accessToken: 'old-access', refreshToken: 'old-refresh' }
       mockCacheGet.mockResolvedValue(userSession)
       mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'new-access', refreshToken: 'new-refresh' }, refreshed: true })
 
       await validateToken(request, { sessionId: 'session-id' })
 
-      expect(userSession.tokens).toEqual({
-        access_token: 'new-access',
-        refresh_token: 'new-refresh'
-      })
+      expect(userSession.accessToken).toBe('new-access')
+      expect(userSession.refreshToken).toBe('new-refresh')
       expect(mockCacheSet).toHaveBeenCalledWith('session-id', userSession)
     })
 
     test('should not update cache if token was not refreshed', async () => {
-      const testTokens = { access_token: 'test-access', refresh_token: 'test-refresh' }
-      const userSession = { tokens: testTokens }
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh' }
       mockCacheGet.mockResolvedValue(userSession)
       mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'test-access', refreshToken: 'test-refresh' }, refreshed: false })
 
@@ -305,8 +298,7 @@ describe('federated-credentials strategy', () => {
     })
 
     test('should return invalid state if token validation fails', async () => {
-      const testTokens = { access_token: 'test-access', refresh_token: 'test-refresh' }
-      const userSession = { tokens: testTokens }
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh' }
       mockCacheGet.mockResolvedValue(userSession)
       mockEnsureValidToken.mockRejectedValue(new Error('Token validation failed'))
 
@@ -317,8 +309,7 @@ describe('federated-credentials strategy', () => {
 
     test('should log error if token validation fails', async () => {
       const error = new Error('Token validation failed')
-      const testTokens = { access_token: 'test-access', refresh_token: 'test-refresh' }
-      const userSession = { tokens: testTokens }
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh' }
       mockCacheGet.mockResolvedValue(userSession)
       mockEnsureValidToken.mockRejectedValue(error)
 

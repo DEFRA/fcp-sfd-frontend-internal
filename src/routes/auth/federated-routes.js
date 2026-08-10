@@ -24,6 +24,9 @@ const callback = {
   handler: async function (request, h) {
     const credentials = await request.callback(h)
 
+    // Debug: log the full structure returned by hapi-auth-oidc
+    console.error('[DEBUG] request.callback response structure:', JSON.stringify(credentials, null, 2))
+
     const { tokens } = credentials
     const accessToken = tokens.access_token
 
@@ -46,15 +49,18 @@ const callback = {
       profile.email = config.get('dalConfig.emailHeader')
     }
 
-    // Store the full tokens object so validateToken can pass it to ensureValidToken.
-    // The tokens object contains { access_token, refresh_token } which is what
-    // ensureValidToken expects for token refresh operations.
-    await request.server.app.cache.set(sessionId, {
+    // Store the full credentials response to ensure ensureValidToken has all the context it needs
+    // for token refresh operations (audience context, expiry info, etc.)
+    const session = {
       isAuthenticated: true,
       ...profile,
       scope: roles,
-      tokens // Store the full token object with access_token and refresh_token
-    })
+      ...credentials // Spread the full credentials to preserve all metadata
+    }
+
+    console.error('[DEBUG] storing session in cache:', JSON.stringify({ sessionId, session }, null, 2))
+
+    await request.server.app.cache.set(sessionId, session)
 
     request.cookieAuth.set({ sessionId })
 

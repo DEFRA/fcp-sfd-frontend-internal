@@ -107,15 +107,22 @@ async function validateToken (request, session) {
   }
 
   try {
-    // ensureValidToken expects the full token object with access_token and refresh_token,
-    // and returns { token: { access_token, refresh_token }, refreshed: boolean }
-    const { token: refreshedTokens, refreshed } = await request.ensureValidToken(userSession.tokens)
+    // ensureValidToken expects the full session object and handles token refresh internally.
+    // It returns { token: { accessToken, refreshToken, ... }, refreshed: boolean }
+    console.error('[DEBUG validateToken] calling ensureValidToken with session keys:', Object.keys(userSession))
+    const { token: refreshedTokens, refreshed } = await request.ensureValidToken(userSession)
 
     if (refreshed) {
-      userSession.tokens = refreshedTokens
+      console.error('[DEBUG validateToken] token was refreshed, new token structure:', Object.keys(refreshedTokens))
+      // Update the session with the new tokens from the refresh response
+      userSession.tokens = {
+        access_token: refreshedTokens.accessToken,
+        refresh_token: refreshedTokens.refreshToken
+      }
       await request.server.app.cache.set(session.sessionId, userSession)
     }
   } catch (err) {
+    console.error('[DEBUG validateToken] error during token validation:', err.message)
     request.server?.logger?.info(err.message)
     return { isValid: false }
   }

@@ -129,8 +129,10 @@ describe('federated-routes', () => {
         expect.objectContaining({
           isAuthenticated: true,
           sessionId: 'test-session-id',
-          token: 'test-token',
-          refreshToken: 'test-refresh-token'
+          tokens: {
+            access_token: 'test-token',
+            refresh_token: 'test-refresh-token'
+          }
         })
       )
       expect(mockRequest.cookieAuth.set).toHaveBeenCalledWith({ sessionId: 'test-session-id' })

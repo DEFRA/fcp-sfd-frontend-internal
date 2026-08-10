@@ -68,7 +68,7 @@ async function registerFederatedStrategy (server) {
         clientId,
         authProvider: buildAuthProvider(),
         scope: `${clientId}/.default offline_access`,
-        loginCallbackUri: '/auth/sign-out-oidc',
+        loginCallbackUri: '/auth/sign-in-oidc',
         responseMode: 'query',
         externalBaseUrl,
         defaultPostLoginUri: `${externalBaseUrl}/search-sbi`

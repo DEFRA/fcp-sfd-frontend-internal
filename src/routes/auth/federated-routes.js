@@ -20,7 +20,7 @@ const signIn = {
 
 const callback = {
   method: 'GET',
-  path: '/auth/callback',
+  path: '/auth/sign-in-oidc',
   options: {
     auth: { mode: 'try' }
   },

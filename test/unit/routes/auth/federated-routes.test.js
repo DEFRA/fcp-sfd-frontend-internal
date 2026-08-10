@@ -80,10 +80,10 @@ describe('federated-routes', () => {
     })
   })
 
-  describe('GET /auth/callback', () => {
+  describe('GET /auth/sign-in-oidc', () => {
     test('should have the correct method and path configured', () => {
       expect(callback.method).toBe('GET')
-      expect(callback.path).toBe('/auth/callback')
+      expect(callback.path).toBe('/auth/sign-in-oidc')
     })
 
     test('should have auth mode try', () => {

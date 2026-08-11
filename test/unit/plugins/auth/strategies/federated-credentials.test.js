@@ -82,7 +82,7 @@ describe('federated-credentials strategy', () => {
 
           const registrationCall = server.register.mock.calls[0][0]
           expect(registrationCall.options.oidc.authProvider).toBeInstanceOf(mockWebIdentityTokenProvider)
-          expect(mockWebIdentityTokenProvider).toHaveBeenCalledWith({ audience: 'mockAudience' })
+          expect(mockWebIdentityTokenProvider).toHaveBeenCalledWith({ audience: ['mockAudience'] })
         })
       })
 

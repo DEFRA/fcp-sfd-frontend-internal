@@ -34,7 +34,7 @@ function buildAuthProvider () {
   console.error(`[STARTUP] buildAuthProvider - audience="${audience}", enableMocking=${enableMocking}`)
   return enableMocking
     ? new MockProvider({})
-    : new WebIdentityTokenProvider({ audience })
+    : new WebIdentityTokenProvider({ audience: [audience] })
 }
 
 /**

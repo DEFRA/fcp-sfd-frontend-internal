@@ -14,9 +14,10 @@
  * User session data is cached in memory.
  */
 
-import { hapiAuthOidcPlugin, WebIdentityTokenProvider, MockProvider } from '@defra/hapi-auth-oidc'
+import { hapiAuthOidcPlugin, MockProvider } from '@defra/hapi-auth-oidc'
 import { getCookieOptions } from '../get-cookie-options.js'
 import { config } from '../../../config/index.js'
+import { LoggingWebIdentityTokenProvider } from './logging-web-identity-token-provider.js'
 
 /**
  * Chooses which authentication provider to use based on the config settings.
@@ -27,14 +28,14 @@ import { config } from '../../../config/index.js'
  * Mocking is required locally because the development environment runs in Docker and
  * does not have access to the CDP instance or AWS to fetch and verify tokens.
  *
- * @returns {WebIdentityTokenProvider|MockProvider} Either the real or mock provider
+ * @returns {LoggingWebIdentityTokenProvider|MockProvider} Either the real or mock provider
  */
 function buildAuthProvider () {
   const { audience, enableMocking } = config.get('entra.federatedCredentials')
-  console.error(`[STARTUP] buildAuthProvider - audience="${audience}", enableMocking=${enableMocking}`)
+
   return enableMocking
     ? new MockProvider({})
-    : new WebIdentityTokenProvider({ audience: [audience] })
+    : new LoggingWebIdentityTokenProvider({ audience: [audience] })
 }
 
 /**

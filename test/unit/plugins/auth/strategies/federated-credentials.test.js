@@ -265,81 +265,30 @@ describe('federated-credentials strategy', () => {
     test('should get session from cache', async () => {
       const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000, audience: 'mockAudience' }
       mockCacheGet.mockResolvedValue(userSession)
-      mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600 }, refreshed: false })
 
       await validateToken(request, { sessionId: 'session-id' })
 
       expect(mockCacheGet).toHaveBeenCalledWith('session-id')
     })
 
-    test('should ensure token is valid', async () => {
+    test('should return valid state if session exists with valid tokens', async () => {
       const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000, audience: 'mockAudience' }
       mockCacheGet.mockResolvedValue(userSession)
-      mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600 }, refreshed: false })
-
-      await validateToken(request, { sessionId: 'session-id' })
-
-      expect(mockEnsureValidToken).toHaveBeenCalledWith(userSession)
-    })
-
-    test('should return valid state if session exists and token is valid', async () => {
-      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000, audience: 'mockAudience' }
-      mockCacheGet.mockResolvedValue(userSession)
-      mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600 }, refreshed: false })
 
       const result = await validateToken(request, { sessionId: 'session-id' })
 
       expect(result.isValid).toBe(true)
       expect(result.credentials).toEqual(userSession)
+      expect(mockEnsureValidToken).not.toHaveBeenCalled()
     })
 
-    test('should update session if token was refreshed', async () => {
-      const userSession = { accessToken: 'old-access', refreshToken: 'old-refresh', expiresIn: 1000, audience: 'mockAudience' }
+    test('should not call ensureValidToken from cookie validator', async () => {
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000 }
       mockCacheGet.mockResolvedValue(userSession)
-      mockEnsureValidToken.mockResolvedValue({
-        token: { accessToken: 'new-access', refreshToken: 'new-refresh', expiresIn: 3600, claims: { oid: 'test' }, audience: 'mockAudience' },
-        refreshed: true
-      })
 
       await validateToken(request, { sessionId: 'session-id' })
 
-      expect(userSession.accessToken).toBe('new-access')
-      expect(userSession.refreshToken).toBe('new-refresh')
-      expect(userSession.expiresIn).toBe(3600000)
-      expect(userSession.claims).toEqual({ oid: 'test' })
-      expect(userSession.audience).toBe('mockAudience')
-      expect(mockCacheSet).toHaveBeenCalledWith('session-id', userSession)
-    })
-
-    test('should not update cache if token was not refreshed', async () => {
-      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000 }
-      mockCacheGet.mockResolvedValue(userSession)
-      mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600 }, refreshed: false })
-
-      await validateToken(request, { sessionId: 'session-id' })
-
-      expect(mockCacheSet).not.toHaveBeenCalled()
-    })
-
-    test('should return invalid state if token validation fails', async () => {
-      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000 }
-      mockCacheGet.mockResolvedValue(userSession)
-      mockEnsureValidToken.mockRejectedValue(new Error('Token validation failed'))
-
-      const result = await validateToken(request, { sessionId: 'session-id' })
-
-      expect(result.isValid).toBe(false)
-    })
-
-    test('should log error if token validation fails', async () => {
-      const error = new Error('Token validation failed')
-      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000 }
-      mockCacheGet.mockResolvedValue(userSession)
-      mockEnsureValidToken.mockRejectedValue(error)
-
-      await validateToken(request, { sessionId: 'session-id' })
-
-      expect(request.server.logger.info).toHaveBeenCalledWith(error.message)
+      expect(mockEnsureValidToken).not.toHaveBeenCalled()
     })
   })
 })

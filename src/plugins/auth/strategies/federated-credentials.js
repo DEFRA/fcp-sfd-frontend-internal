@@ -106,39 +106,24 @@ async function validateToken (request, session) {
     return { isValid: false }
   }
 
-  // Guard against validating sessions without valid tokens
-  // (e.g., during login flow before callback is complete)
-  if (!userSession.accessToken || !userSession.refreshToken) {
+  // For federated credentials, the plugin (@defra/hapi-auth-oidc) handles token refresh
+  // through its own mechanisms. The cookie validator should only verify that a session
+  // exists and has the required tokens. We do NOT attempt to call request.ensureValidToken()
+  // here because that can break the plugin's internal provider context and cause
+  // "audience is null" errors during AWS STS calls.
+
+  const hasAccessToken = userSession.accessToken &&
+                         typeof userSession.accessToken === 'string' &&
+                         userSession.accessToken.trim().length > 0
+  const hasRefreshToken = userSession.refreshToken &&
+                          typeof userSession.refreshToken === 'string' &&
+                          userSession.refreshToken.trim().length > 0
+
+  if (!hasAccessToken || !hasRefreshToken) {
     return { isValid: false }
   }
 
-  try {
-    // ensureValidToken expects the full session object and handles token refresh internally.
-    // It returns { token: { accessToken, refreshToken, expiresIn, claims }, refreshed: boolean }
-    const { token: refreshedTokenData, refreshed } = await request.ensureValidToken(userSession)
-
-    if (refreshed) {
-      // Update the session with the new tokens and expiry metadata from the refresh response.
-      // This matches the pattern from the CDP docs saveUserSession function.
-      userSession.accessToken = refreshedTokenData.accessToken
-      userSession.refreshToken = refreshedTokenData.refreshToken
-      if (refreshedTokenData.expiresIn) {
-        userSession.expiresIn = refreshedTokenData.expiresIn * 1000 // Convert to milliseconds
-      }
-      if (refreshedTokenData.claims) {
-        userSession.claims = refreshedTokenData.claims
-      }
-      // Preserve audience so it's available for the next refresh
-      if (refreshedTokenData.audience) {
-        userSession.audience = refreshedTokenData.audience
-      }
-      await request.server.app.cache.set(session.sessionId, userSession)
-    }
-  } catch (err) {
-    request.server?.logger?.info(err.message)
-    return { isValid: false }
-  }
-
+  // Session exists and has valid tokens - let the cookie stay valid
   return { isValid: true, credentials: userSession }
 }
 

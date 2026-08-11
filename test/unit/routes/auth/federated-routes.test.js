@@ -43,7 +43,8 @@ describe('federated-routes', () => {
     vi.clearAllMocks()
     mockConfigGet.mockImplementation((key) => {
       const config = {
-        'featureToggle.useDalTestEmail': false
+        'featureToggle.useDalTestEmail': false,
+        'entra.federatedCredentials.audience': 'mockAudience'
       }
       return config[key]
     })
@@ -133,7 +134,8 @@ describe('federated-routes', () => {
           sessionId: 'test-session-id',
           accessToken: 'test-token',
           refreshToken: 'test-refresh-token',
-          expiresIn: 3600000
+          expiresIn: 3600000,
+          audience: 'mockAudience'
         })
       )
       expect(mockRequest.cookieAuth.set).toHaveBeenCalledWith({ sessionId: 'test-session-id' })

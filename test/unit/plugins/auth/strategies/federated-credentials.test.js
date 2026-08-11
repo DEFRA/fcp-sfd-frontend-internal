@@ -263,7 +263,7 @@ describe('federated-credentials strategy', () => {
     })
 
     test('should get session from cache', async () => {
-      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000 }
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000, audience: 'mockAudience' }
       mockCacheGet.mockResolvedValue(userSession)
       mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600 }, refreshed: false })
 
@@ -273,7 +273,7 @@ describe('federated-credentials strategy', () => {
     })
 
     test('should ensure token is valid', async () => {
-      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000 }
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000, audience: 'mockAudience' }
       mockCacheGet.mockResolvedValue(userSession)
       mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600 }, refreshed: false })
 
@@ -283,7 +283,7 @@ describe('federated-credentials strategy', () => {
     })
 
     test('should return valid state if session exists and token is valid', async () => {
-      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000 }
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000, audience: 'mockAudience' }
       mockCacheGet.mockResolvedValue(userSession)
       mockEnsureValidToken.mockResolvedValue({ token: { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600 }, refreshed: false })
 
@@ -294,10 +294,10 @@ describe('federated-credentials strategy', () => {
     })
 
     test('should update session if token was refreshed', async () => {
-      const userSession = { accessToken: 'old-access', refreshToken: 'old-refresh', expiresIn: 1000 }
+      const userSession = { accessToken: 'old-access', refreshToken: 'old-refresh', expiresIn: 1000, audience: 'mockAudience' }
       mockCacheGet.mockResolvedValue(userSession)
       mockEnsureValidToken.mockResolvedValue({
-        token: { accessToken: 'new-access', refreshToken: 'new-refresh', expiresIn: 3600, claims: { oid: 'test' } },
+        token: { accessToken: 'new-access', refreshToken: 'new-refresh', expiresIn: 3600, claims: { oid: 'test' }, audience: 'mockAudience' },
         refreshed: true
       })
 
@@ -307,6 +307,7 @@ describe('federated-credentials strategy', () => {
       expect(userSession.refreshToken).toBe('new-refresh')
       expect(userSession.expiresIn).toBe(3600000)
       expect(userSession.claims).toEqual({ oid: 'test' })
+      expect(userSession.audience).toBe('mockAudience')
       expect(mockCacheSet).toHaveBeenCalledWith('session-id', userSession)
     })
 

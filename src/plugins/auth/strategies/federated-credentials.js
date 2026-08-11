@@ -128,6 +128,10 @@ async function validateToken (request, session) {
       if (refreshedTokenData.claims) {
         userSession.claims = refreshedTokenData.claims
       }
+      // Preserve audience so it's available for the next refresh
+      if (refreshedTokenData.audience) {
+        userSession.audience = refreshedTokenData.audience
+      }
       await request.server.app.cache.set(session.sessionId, userSession)
     }
   } catch (err) {

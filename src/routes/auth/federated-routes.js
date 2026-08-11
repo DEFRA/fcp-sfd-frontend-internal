@@ -49,6 +49,7 @@ const callback = {
 
     // Store the session following CDP hapi-auth-oidc pattern.
     // Include expiry metadata so ensureValidToken can determine when to refresh.
+    // Include audience so WebIdentityTokenProvider can refresh tokens correctly.
     // This matches the saveUserSession pattern from the CDP docs.
     const expiresInMs = expiresIn ? expiresIn * 1000 : undefined
     const session = {
@@ -58,7 +59,8 @@ const callback = {
       accessToken,
       refreshToken,
       expiresIn: expiresInMs,
-      claims
+      claims,
+      audience: config.get('entra.federatedCredentials.audience')
     }
 
     await request.server.app.cache.set(sessionId, session)

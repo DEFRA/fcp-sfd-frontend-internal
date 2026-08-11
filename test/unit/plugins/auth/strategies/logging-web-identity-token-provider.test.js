@@ -23,9 +23,6 @@ const buildToken = (claims) => {
   return `${encode({ alg: 'RS256' })}.${encode(claims)}.signature`
 }
 
-const CLAIMS_MESSAGE =
-  '[Web Identity] assertion claims, to match against the Entra federated credential'
-
 const claims = {
   iss: 'https://a19dfab3-318a-47fa-8133-57c7670003c7.tokens.sts.global.api.aws',
   sub: 'arn:aws:iam::332499610595:role/fcp-sfd-frontend-internal',
@@ -58,13 +55,24 @@ describe('LoggingWebIdentityTokenProvider', () => {
       expect(mockGetCredentials).toHaveBeenCalledWith(logger)
     })
 
-    test('should log only the issuer, subject and audience', async () => {
+    test('should report the issuer, subject and audience in the message', async () => {
       await provider.getCredentials(logger)
 
-      expect(logger.info).toHaveBeenCalledWith(
-        { iss: claims.iss, sub: claims.sub, aud: claims.aud },
-        CLAIMS_MESSAGE
-      )
+      const [, message] = logger.info.mock.calls[0]
+
+      expect(message).toContain(`iss=${claims.iss}`)
+      expect(message).toContain(`sub=${claims.sub}`)
+      expect(message).toContain(`aud="${claims.aud}"`)
+    })
+
+    test('should only use ECS fields CDP permits tenants to set', async () => {
+      await provider.getCredentials(logger)
+
+      const [mergedObject] = logger.info.mock.calls[0]
+
+      expect(mergedObject).toStrictEqual({
+        event: { action: 'web-identity-assertion', outcome: 'success' }
+      })
     })
 
     test('should not log the assertion itself', async () => {
@@ -103,10 +111,11 @@ describe('LoggingWebIdentityTokenProvider', () => {
       expect(await provider.getCredentials(logger)).toBeNull()
     })
 
-    test('should report that there are no claims', async () => {
+    test('should report the failure with a permitted event outcome', async () => {
       await provider.getCredentials(logger)
 
       expect(logger.error).toHaveBeenCalledWith(
+        { event: { action: 'web-identity-assertion', outcome: 'failure' } },
         '[Web Identity] no assertion was issued, so no claims to report'
       )
     })
@@ -117,14 +126,14 @@ describe('LoggingWebIdentityTokenProvider', () => {
   })
 
   describe('when the assertion is malformed', () => {
-    test('should log undefined claims rather than throwing', async () => {
+    test('should report undefined claims rather than throwing', async () => {
       mockGetCredentials.mockResolvedValue('not-a-jwt')
 
       await expect(provider.getCredentials(logger)).resolves.toBe('not-a-jwt')
-      expect(logger.info).toHaveBeenCalledWith(
-        { iss: undefined, sub: undefined, aud: undefined },
-        CLAIMS_MESSAGE
-      )
+
+      const [, message] = logger.info.mock.calls[0]
+
+      expect(message).toContain('iss=undefined')
     })
 
     test('should report a decoding failure when the payload is not JSON', async () => {
@@ -133,7 +142,10 @@ describe('LoggingWebIdentityTokenProvider', () => {
       await provider.getCredentials(logger)
 
       expect(logger.error).toHaveBeenCalledWith(
-        expect.objectContaining({ err: expect.any(Error) }),
+        expect.objectContaining({
+          err: expect.any(Error),
+          event: { action: 'web-identity-assertion', outcome: 'failure' }
+        }),
         '[Web Identity] could not decode the assertion claims'
       )
     })

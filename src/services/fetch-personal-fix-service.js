@@ -7,6 +7,7 @@
 import { fetchPersonalDetailsService } from './fetch-personal-details-service.js'
 
 const fetchPersonalFixService = async (crn, email, sessionData = {}) => {
+  // These get set during the initialisation service for the interrupter journey
   const { orderedSectionsToFix, personalFixUpdates, source } = sessionData
 
   const personalDetails = await fetchPersonalDetailsService(crn, email)

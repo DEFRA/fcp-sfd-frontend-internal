@@ -5,7 +5,7 @@ import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { schemas, services } from '@defra/fcp-sfd-frontend-engine'
 
 // Things under test
-import { validateSbi, validateCrn, checkCRNAndInterrupterJourney, checkSBIAndInterrupterJourney } from '../../../src/routes/pre-handlers.js'
+import { validateSbi, validateCrn, checkCrnAndInterrupterJourney, checkSbiAndInterrupterJourney } from '../../../src/routes/pre-handlers.js'
 
 // Mocks
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
@@ -168,7 +168,7 @@ describe('pre-handlers', () => {
     })
   })
 
-  describe('checkCRNAndInterrupterJourney', () => {
+  describe('checkCrnAndInterrupterJourney', () => {
     let request
     let redirectStub
 
@@ -199,7 +199,7 @@ describe('pre-handlers', () => {
       })
 
       test('it redirects to search-crn without checking journey', () => {
-        const preHandler = checkCRNAndInterrupterJourney(journey)
+        const preHandler = checkCrnAndInterrupterJourney(journey)
         preHandler.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-crn')
@@ -209,7 +209,7 @@ describe('pre-handlers', () => {
 
       test('it redirects when params.crn is undefined', () => {
         request.params.crn = undefined
-        const preHandler = checkCRNAndInterrupterJourney(journey)
+        const preHandler = checkCrnAndInterrupterJourney(journey)
         preHandler.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-crn')
@@ -218,7 +218,7 @@ describe('pre-handlers', () => {
 
       test('it redirects when params object is missing', () => {
         request.params = undefined
-        const preHandler = checkCRNAndInterrupterJourney(journey)
+        const preHandler = checkCrnAndInterrupterJourney(journey)
         preHandler.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-crn')
@@ -232,7 +232,7 @@ describe('pre-handlers', () => {
       })
 
       test('it redirects to the journey redirect path with crn substitution', () => {
-        const preHandler = checkCRNAndInterrupterJourney(journey)
+        const preHandler = checkCrnAndInterrupterJourney(journey)
         const result = preHandler.method(request, h)
 
         expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
@@ -249,7 +249,7 @@ describe('pre-handlers', () => {
       })
 
       test('it returns h.continue without redirecting', () => {
-        const preHandler = checkCRNAndInterrupterJourney(journey)
+        const preHandler = checkCrnAndInterrupterJourney(journey)
         const result = preHandler.method(request, h)
 
         expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
@@ -259,7 +259,7 @@ describe('pre-handlers', () => {
     })
   })
 
-  describe('checkSBIAndInterrupterJourney', () => {
+  describe('checkSbiAndInterrupterJourney', () => {
     let request
     let redirectStub
 
@@ -290,7 +290,7 @@ describe('pre-handlers', () => {
       })
 
       test('it redirects to search-sbi without checking journey', () => {
-        const preHandler = checkSBIAndInterrupterJourney(journey)
+        const preHandler = checkSbiAndInterrupterJourney(journey)
         preHandler.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
@@ -300,7 +300,7 @@ describe('pre-handlers', () => {
 
       test('it redirects when params.sbi is undefined', () => {
         request.params.sbi = undefined
-        const preHandler = checkSBIAndInterrupterJourney(journey)
+        const preHandler = checkSbiAndInterrupterJourney(journey)
         preHandler.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
@@ -309,7 +309,7 @@ describe('pre-handlers', () => {
 
       test('it redirects when params object is missing', () => {
         request.params = undefined
-        const preHandler = checkSBIAndInterrupterJourney(journey)
+        const preHandler = checkSbiAndInterrupterJourney(journey)
         preHandler.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
@@ -323,7 +323,7 @@ describe('pre-handlers', () => {
       })
 
       test('it redirects to the journey redirect path with sbi substitution', () => {
-        const preHandler = checkSBIAndInterrupterJourney(journey)
+        const preHandler = checkSbiAndInterrupterJourney(journey)
         const result = preHandler.method(request, h)
 
         expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
@@ -340,7 +340,7 @@ describe('pre-handlers', () => {
       })
 
       test('it returns h.continue without redirecting', () => {
-        const preHandler = checkSBIAndInterrupterJourney(journey)
+        const preHandler = checkSbiAndInterrupterJourney(journey)
         const result = preHandler.method(request, h)
 
         expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)

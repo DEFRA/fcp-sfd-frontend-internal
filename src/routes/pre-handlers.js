@@ -9,7 +9,7 @@ import { schemas, services } from '@defra/fcp-sfd-frontend-engine'
  * @param {Object} journey - Journey configuration object with journeyKey and redirectPath properties
  * @returns {Object} Hapi pre-handler object
  */
-export const checkCRNAndInterrupterJourney = (journey) => {
+export const checkCrnAndInterrupterJourney = (journey) => {
   return {
     method: (request, h) => {
       // First validate the CRN parameter
@@ -42,7 +42,7 @@ export const checkCRNAndInterrupterJourney = (journey) => {
  * @param {Object} journey - Journey configuration object with journeyKey and redirectPath properties
  * @returns {Object} Hapi pre-handler object
  */
-export const checkSBIAndInterrupterJourney = (journey) => {
+export const checkSbiAndInterrupterJourney = (journey) => {
   return {
     method: (request, h) => {
       // First validate the SBI parameter

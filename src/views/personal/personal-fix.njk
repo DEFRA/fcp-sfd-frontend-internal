@@ -1,0 +1,38 @@
+{% extends 'common/layout.njk' %}
+
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block beforeContent %}
+  {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" novalidate>
+      <input type="hidden" name="crumb" value="{{ crumb }}">
+      <h1 class="govuk-heading-l">
+        {{pageTitle}}
+      </h1>
+
+    {{ govukWarningText({
+      text: "Some of your details seem to be missing or incorrect. We need these details to contact you, or to verify your identity if you phone us.",
+      iconFallbackText: "Warning"
+    }) }}
+
+    <p>{{updateText}}</p>
+    {% if listOfErrors.length %}
+      <ul class="govuk-list govuk-list--bullet">
+        {% for error in listOfErrors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

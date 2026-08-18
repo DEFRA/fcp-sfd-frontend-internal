@@ -5,7 +5,7 @@ import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { schemas, services } from '@defra/fcp-sfd-frontend-engine'
 
 // Things under test
-import { validateSbi, validateCrn, checkInterrupterJourneyPreHandler } from '../../../src/routes/pre-handlers.js'
+import { validateSbi, validateCrn, checkCRNAndInterrupterJourney, checkSBIAndInterrupterJourney } from '../../../src/routes/pre-handlers.js'
 
 // Mocks
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
@@ -168,13 +168,13 @@ describe('pre-handlers', () => {
     })
   })
 
-  describe('checkInterrupterJourneyPreHandler', () => {
+  describe('checkCRNAndInterrupterJourney', () => {
     let request
     let redirectStub
 
     const journey = {
-      journeyKey: 'fixJourney',
-      redirectPath: '/start-page'
+      journeyKey: 'personalFixJourney',
+      redirectPath: '/customer/{crn}/details'
     }
 
     beforeEach(() => {
@@ -183,7 +183,8 @@ describe('pre-handlers', () => {
       }
 
       h = {
-        redirect: vi.fn(() => redirectStub)
+        redirect: vi.fn(() => redirectStub),
+        continue: {}
       }
 
       request = {
@@ -192,41 +193,158 @@ describe('pre-handlers', () => {
       }
     })
 
-    describe('when the session is invalid', () => {
+    describe('when CRN validation fails', () => {
       beforeEach(() => {
-        services.checkInterrupterJourneySession.mockReturnValue(false)
+        schemas.customer.crn.validate.mockReturnValue({ error: { message: 'Invalid CRN' } })
       })
 
-      test('redirects and takes over', () => {
-        const preHandler = checkInterrupterJourneyPreHandler(journey)
-        const result = preHandler.method(request, h)
-
-        expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
-        expect(h.redirect).toHaveBeenCalledWith(journey.redirectPath)
-        expect(redirectStub.takeover).toHaveBeenCalled()
-        expect(result).toBe(redirectStub)
-      })
-
-      test('it should redirect when params.crn is not defined', () => {
-        request.params = {}
-        const preHandler = checkInterrupterJourneyPreHandler(journey)
+      test('it redirects to search-crn without checking journey', () => {
+        const preHandler = checkCRNAndInterrupterJourney(journey)
         preHandler.method(request, h)
 
-        expect(h.redirect).toHaveBeenCalledWith(journey.redirectPath)
+        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
+        expect(redirectStub.takeover).toHaveBeenCalled()
+        expect(services.checkInterrupterJourneySession).not.toHaveBeenCalled()
+      })
+
+      test('it redirects when params.crn is undefined', () => {
+        request.params.crn = undefined
+        const preHandler = checkCRNAndInterrupterJourney(journey)
+        preHandler.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
+        expect(services.checkInterrupterJourneySession).not.toHaveBeenCalled()
+      })
+
+      test('it redirects when params object is missing', () => {
+        request.params = undefined
+        const preHandler = checkCRNAndInterrupterJourney(journey)
+        preHandler.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
       })
     })
 
-    describe('when the session is valid', () => {
+    describe('when CRN is valid but journey session is invalid', () => {
       beforeEach(() => {
-        services.checkInterrupterJourneySession.mockReturnValue(true)
+        schemas.customer.crn.validate.mockReturnValue({ error: null, value: { crn: '1234567890' } })
+        services.checkInterrupterJourneySession.mockReturnValue(false)
       })
 
-      test('returns true', () => {
-        const preHandler = checkInterrupterJourneyPreHandler(journey)
+      test('it redirects to the journey redirect path with crn substitution', () => {
+        const preHandler = checkCRNAndInterrupterJourney(journey)
         const result = preHandler.method(request, h)
 
         expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
-        expect(result).toBe(true)
+        expect(h.redirect).toHaveBeenCalledWith('/customer/1234567890/details')
+        expect(redirectStub.takeover).toHaveBeenCalled()
+        expect(result).toBe(redirectStub)
+      })
+    })
+
+    describe('when CRN is valid and journey session is valid', () => {
+      beforeEach(() => {
+        schemas.customer.crn.validate.mockReturnValue({ error: null, value: { crn: '1234567890' } })
+        services.checkInterrupterJourneySession.mockReturnValue(true)
+      })
+
+      test('it returns h.continue without redirecting', () => {
+        const preHandler = checkCRNAndInterrupterJourney(journey)
+        const result = preHandler.method(request, h)
+
+        expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
+        expect(result).toBe(h.continue)
+        expect(h.redirect).not.toHaveBeenCalled()
+      })
+    })
+  })
+
+  describe('checkSBIAndInterrupterJourney', () => {
+    let request
+    let redirectStub
+
+    const journey = {
+      journeyKey: 'businessFixJourney',
+      redirectPath: '/business/{sbi}/details'
+    }
+
+    beforeEach(() => {
+      redirectStub = {
+        takeover: vi.fn().mockReturnThis()
+      }
+
+      h = {
+        redirect: vi.fn(() => redirectStub),
+        continue: {}
+      }
+
+      request = {
+        yar: {},
+        params: { sbi: '123456789' }
+      }
+    })
+
+    describe('when SBI validation fails', () => {
+      beforeEach(() => {
+        schemas.business.sbi.validate.mockReturnValue({ error: { message: 'Invalid SBI' } })
+      })
+
+      test('it redirects to search-sbi without checking journey', () => {
+        const preHandler = checkSBIAndInterrupterJourney(journey)
+        preHandler.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+        expect(redirectStub.takeover).toHaveBeenCalled()
+        expect(services.checkInterrupterJourneySession).not.toHaveBeenCalled()
+      })
+
+      test('it redirects when params.sbi is undefined', () => {
+        request.params.sbi = undefined
+        const preHandler = checkSBIAndInterrupterJourney(journey)
+        preHandler.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+        expect(services.checkInterrupterJourneySession).not.toHaveBeenCalled()
+      })
+
+      test('it redirects when params object is missing', () => {
+        request.params = undefined
+        const preHandler = checkSBIAndInterrupterJourney(journey)
+        preHandler.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+      })
+    })
+
+    describe('when SBI is valid but journey session is invalid', () => {
+      beforeEach(() => {
+        schemas.business.sbi.validate.mockReturnValue({ error: null, value: { sbi: '123456789' } })
+        services.checkInterrupterJourneySession.mockReturnValue(false)
+      })
+
+      test('it redirects to the journey redirect path with sbi substitution', () => {
+        const preHandler = checkSBIAndInterrupterJourney(journey)
+        const result = preHandler.method(request, h)
+
+        expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
+        expect(h.redirect).toHaveBeenCalledWith('/business/123456789/details')
+        expect(redirectStub.takeover).toHaveBeenCalled()
+        expect(result).toBe(redirectStub)
+      })
+    })
+
+    describe('when SBI is valid and journey session is valid', () => {
+      beforeEach(() => {
+        schemas.business.sbi.validate.mockReturnValue({ error: null, value: { sbi: '123456789' } })
+        services.checkInterrupterJourneySession.mockReturnValue(true)
+      })
+
+      test('it returns h.continue without redirecting', () => {
+        const preHandler = checkSBIAndInterrupterJourney(journey)
+        const result = preHandler.method(request, h)
+
+        expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
+        expect(result).toBe(h.continue)
         expect(h.redirect).not.toHaveBeenCalled()
       })
     })

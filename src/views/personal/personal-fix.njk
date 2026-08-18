@@ -3,7 +3,6 @@
 {% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "common/sub-header/macro.njk" import subHeader %}
 
 {% block beforeContent %}
   {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}

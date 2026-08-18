@@ -1,11 +1,8 @@
 {% extends 'common/layout.njk' %}
 
-{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "common/sub-header/macro.njk" import subHeader %}
 
 {% block beforeContent %}
   {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}

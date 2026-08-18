@@ -5,8 +5,6 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "common/sub-header/macro.njk" import subHeader %}
 
 {% block beforeContent %}
   {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}
@@ -218,6 +216,10 @@
               {{ govukInput({
                 classes: "govuk-input--width-20",
                 id: "personalEmail",
+                label: {
+                  text: "Personal email address",
+                  classes: "govuk-visually-hidden"
+                },
                 name: "personalEmail",
                 value: personalEmail,
                 errorMessage: errors.personalEmail and {

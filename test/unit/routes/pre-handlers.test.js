@@ -2,10 +2,10 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 
 // Things we need to mock
-import { schemas } from '@defra/fcp-sfd-frontend-engine'
+import { schemas, services } from '@defra/fcp-sfd-frontend-engine'
 
 // Things under test
-import { validateSbi, validateCrn } from '../../../src/routes/pre-handlers.js'
+import { validateSbi, validateCrn, checkInterrupterJourneyPreHandler } from '../../../src/routes/pre-handlers.js'
 
 // Mocks
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
@@ -20,6 +20,9 @@ vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
         validate: vi.fn()
       }
     }
+  },
+  services: {
+    checkInterrupterJourneySession: vi.fn()
   }
 }))
 
@@ -161,6 +164,70 @@ describe('pre-handlers', () => {
         await validateCrn.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-crn')
+      })
+    })
+  })
+
+  describe('checkInterrupterJourneyPreHandler', () => {
+    let request
+    let redirectStub
+
+    const journey = {
+      journeyKey: 'fixJourney',
+      redirectPath: '/start-page'
+    }
+
+    beforeEach(() => {
+      redirectStub = {
+        takeover: vi.fn().mockReturnThis()
+      }
+
+      h = {
+        redirect: vi.fn(() => redirectStub)
+      }
+
+      request = {
+        yar: {},
+        params: { crn: '1234567890' }
+      }
+    })
+
+    describe('when the session is invalid', () => {
+      beforeEach(() => {
+        services.checkInterrupterJourneySession.mockReturnValue(false)
+      })
+
+      test('redirects and takes over', () => {
+        const preHandler = checkInterrupterJourneyPreHandler(journey)
+        const result = preHandler.method(request, h)
+
+        expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
+        expect(h.redirect).toHaveBeenCalledWith(journey.redirectPath)
+        expect(redirectStub.takeover).toHaveBeenCalled()
+        expect(result).toBe(redirectStub)
+      })
+
+      test('it should redirect when params.crn is not defined', () => {
+        request.params = {}
+        const preHandler = checkInterrupterJourneyPreHandler(journey)
+        preHandler.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith(journey.redirectPath)
+      })
+    })
+
+    describe('when the session is valid', () => {
+      beforeEach(() => {
+        services.checkInterrupterJourneySession.mockReturnValue(true)
+      })
+
+      test('returns true', () => {
+        const preHandler = checkInterrupterJourneyPreHandler(journey)
+        const result = preHandler.method(request, h)
+
+        expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
+        expect(result).toBe(true)
+        expect(h.redirect).not.toHaveBeenCalled()
       })
     })
   })

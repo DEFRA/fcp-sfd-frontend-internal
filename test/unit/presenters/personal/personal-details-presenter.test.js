@@ -375,6 +375,7 @@ describe('personalDetailsPresenter', () => {
         const dd = String(futureDate.getDate()).padStart(2, '0')
         data.info.dateOfBirth.full = `${yyyy}-${mm}-${dd}`
         const result = personalDetailsPresenter(data, yar)
+
         expect(result.dob.action).toEqual('Add')
       })
     })
@@ -421,10 +422,10 @@ describe('personalDetailsPresenter', () => {
           const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
           expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/account-name-change`)
-          expect(result.personalAddress.changeLink).toBe('/personal-fix?source=address')
-          expect(result.personalTelephone.changeLink).toBe('/personal-fix?source=phone')
-          expect(result.personalEmail.changeLink).toBe('/personal-fix?source=email')
-          expect(result.dob.changeLink).toBe('/personal-fix?source=dob')
+          expect(result.personalAddress.changeLink).toBe(`/customer/${data.crn}/details/fix?source=address`)
+          expect(result.personalTelephone.changeLink).toBe(`/customer/${data.crn}/details/fix?source=phone`)
+          expect(result.personalEmail.changeLink).toBe(`/customer/${data.crn}/details/fix?source=email`)
+          expect(result.dob.changeLink).toBe(`/customer/${data.crn}/details/fix?source=dob`)
         })
       })
 
@@ -437,11 +438,11 @@ describe('personalDetailsPresenter', () => {
         test('all links except the address points to the interrupter journey', () => {
           const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-          expect(result.personalName.changeLink).toBe('/personal-fix?source=name')
+          expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/details/fix?source=name`)
           expect(result.personalAddress.changeLink).toBe(`/customer/${data.crn}/account-address-change`)
-          expect(result.personalTelephone.changeLink).toBe('/personal-fix?source=phone')
-          expect(result.personalEmail.changeLink).toBe('/personal-fix?source=email')
-          expect(result.dob.changeLink).toBe('/personal-fix?source=dob')
+          expect(result.personalTelephone.changeLink).toBe(`/customer/${data.crn}/details/fix?source=phone`)
+          expect(result.personalEmail.changeLink).toBe(`/customer/${data.crn}/details/fix?source=email`)
+          expect(result.dob.changeLink).toBe(`/customer/${data.crn}/details/fix?source=dob`)
         })
       })
 
@@ -454,11 +455,11 @@ describe('personalDetailsPresenter', () => {
         test('all links except the phone number points to the interrupter journey', () => {
           const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-          expect(result.personalName.changeLink).toBe('/personal-fix?source=name')
-          expect(result.personalAddress.changeLink).toBe('/personal-fix?source=address')
+          expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/details/fix?source=name`)
+          expect(result.personalAddress.changeLink).toBe(`/customer/${data.crn}/details/fix?source=address`)
           expect(result.personalTelephone.changeLink).toBe(`/customer/${data.crn}/account-phone-numbers-change`)
-          expect(result.personalEmail.changeLink).toBe('/personal-fix?source=email')
-          expect(result.dob.changeLink).toBe('/personal-fix?source=dob')
+          expect(result.personalEmail.changeLink).toBe(`/customer/${data.crn}/details/fix?source=email`)
+          expect(result.dob.changeLink).toBe(`/customer/${data.crn}/details/fix?source=dob`)
         })
       })
 
@@ -471,11 +472,11 @@ describe('personalDetailsPresenter', () => {
         test('all links except the email points to the interrupter journey', () => {
           const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-          expect(result.personalName.changeLink).toBe('/personal-fix?source=name')
-          expect(result.personalAddress.changeLink).toBe('/personal-fix?source=address')
-          expect(result.personalTelephone.changeLink).toBe('/personal-fix?source=phone')
+          expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/details/fix?source=name`)
+          expect(result.personalAddress.changeLink).toBe(`/customer/${data.crn}/details/fix?source=address`)
+          expect(result.personalTelephone.changeLink).toBe(`/customer/${data.crn}/details/fix?source=phone`)
           expect(result.personalEmail.changeLink).toBe(`/customer/${data.crn}/account-email-change`)
-          expect(result.dob.changeLink).toBe('/personal-fix?source=dob')
+          expect(result.dob.changeLink).toBe(`/customer/${data.crn}/details/fix?source=dob`)
         })
       })
 
@@ -488,10 +489,10 @@ describe('personalDetailsPresenter', () => {
         test('all links except the dob points to the interrupter journey', () => {
           const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-          expect(result.personalName.changeLink).toBe('/personal-fix?source=name')
-          expect(result.personalAddress.changeLink).toBe('/personal-fix?source=address')
-          expect(result.personalTelephone.changeLink).toBe('/personal-fix?source=phone')
-          expect(result.personalEmail.changeLink).toBe('/personal-fix?source=email')
+          expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/details/fix?source=name`)
+          expect(result.personalAddress.changeLink).toBe(`/customer/${data.crn}/details/fix?source=address`)
+          expect(result.personalTelephone.changeLink).toBe(`/customer/${data.crn}/details/fix?source=phone`)
+          expect(result.personalEmail.changeLink).toBe(`/customer/${data.crn}/details/fix?source=email`)
           expect(result.dob.changeLink).toBe(`/customer/${data.crn}/account-date-of-birth-change`)
         })
       })
@@ -505,11 +506,11 @@ describe('personalDetailsPresenter', () => {
         test('all links point to the interrupter journey', () => {
           const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-          expect(result.personalName.changeLink).toBe('/personal-fix?source=name')
-          expect(result.personalAddress.changeLink).toBe('/personal-fix?source=address')
-          expect(result.personalTelephone.changeLink).toBe('/personal-fix?source=phone')
-          expect(result.personalEmail.changeLink).toBe('/personal-fix?source=email')
-          expect(result.dob.changeLink).toBe('/personal-fix?source=dob')
+          expect(result.personalName.changeLink).toBe(`/customer/${data.crn}/details/fix?source=name`)
+          expect(result.personalAddress.changeLink).toBe(`/customer/${data.crn}/details/fix?source=address`)
+          expect(result.personalTelephone.changeLink).toBe(`/customer/${data.crn}/details/fix?source=phone`)
+          expect(result.personalEmail.changeLink).toBe(`/customer/${data.crn}/details/fix?source=email`)
+          expect(result.dob.changeLink).toBe(`/customer/${data.crn}/details/fix?source=dob`)
         })
       })
     })

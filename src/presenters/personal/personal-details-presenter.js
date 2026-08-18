@@ -91,11 +91,11 @@ const formatChangeLinks = (crn, hasValidPersonalDetails, sectionsNeedingUpdate =
   const singleSection = sectionsNeedingUpdate.length === 1 ? sectionsNeedingUpdate[0] : null
 
   return {
-    name: singleSection === 'name' ? CHANGE_LINKS.name : '/personal-fix?source=name',
-    address: singleSection === 'address' ? CHANGE_LINKS.address : '/personal-fix?source=address',
-    phone: singleSection === 'phone' ? CHANGE_LINKS.phone : '/personal-fix?source=phone',
-    email: singleSection === 'email' ? CHANGE_LINKS.email : '/personal-fix?source=email',
-    dob: singleSection === 'dob' ? CHANGE_LINKS.dob : '/personal-fix?source=dob'
+    name: singleSection === 'name' ? CHANGE_LINKS.name : `/customer/${crn}/details/fix?source=name`,
+    address: singleSection === 'address' ? CHANGE_LINKS.address : `/customer/${crn}/details/fix?source=address`,
+    phone: singleSection === 'phone' ? CHANGE_LINKS.phone : `/customer/${crn}/details/fix?source=phone`,
+    email: singleSection === 'email' ? CHANGE_LINKS.email : `/customer/${crn}/details/fix?source=email`,
+    dob: singleSection === 'dob' ? CHANGE_LINKS.dob : `/customer/${crn}/details/fix?source=dob`
   }
 }
 

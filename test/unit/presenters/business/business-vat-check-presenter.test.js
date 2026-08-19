@@ -79,5 +79,17 @@ describe('businessVatCheckPresenter', () => {
         expect(result.vatNumber).toEqual('GB987654321')
       })
     })
+
+    describe('when there is no changed vat number and none held against the business', () => {
+      beforeEach(() => {
+        delete data.info.vat
+      })
+
+      test('it should return vatNumber as null', () => {
+        const result = businessVatCheckPresenter(data)
+
+        expect(result.vatNumber).toEqual(null)
+      })
+    })
   })
 })

@@ -6,6 +6,8 @@
 import { resolveBackLink } from '../base-presenter.js'
 
 const businessVatChangePresenter = (data, payload, referrer) => {
+  const fallbackHref = data.info?.sbi ? `/business/${data.info.sbi}/details` : '/search-sbi'
+
   return {
     backLink: {
       backLink: true,

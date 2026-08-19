@@ -50,7 +50,7 @@ const businessDetailsPresenter = (data, sbi, yar) => {
       action: presenters.getActionText(contact.email),
       changeLink: BUSINESS_CHANGE_LINKS.businessEmail(sbi)
     },
-    vatNumber: buildVatDisplay(data.info.vat, BUSINESS_CHANGE_LINKS.businessVat(sbi)),
+    vatNumber: buildVatDisplay(info.vat, sbi),
     tradeNumber: info.traderNumber ?? null,
     vendorRegistrationNumber: info.vendorNumber ?? null,
     countyParishHoldingNumbers,
@@ -75,97 +75,34 @@ const formatOverviewBreadcrumb = (businessName, sbi) => {
 /**
  * Builds the VAT row data for the business details page.
  *
- * VAT is more complex than other fields because:
- * - Users may or may not have permission to change VAT details
- * - VAT supports multiple actions (add, change, remove)
- * - During the business details interrupter flow, VAT actions may need
- *   to route via the business-fix journey instead of the normal pages
- *
- * This function does not return direct URLs in all cases.
- * Instead, it returns the data needed by the view to render:
- * - the displayed VAT value
- * - the action text (Add / Change)
- * - either a single change link, multiple links (Change / Remove),
- *   or no links at all
- *
- * Behaviour summary:
- * - If `vatChangeState` is null, the user does not have permission to
- *   change VAT and no actions are shown.
- * - If `vatChangeState` is `'interrupter'`, links are routed via the
- *   business-fix pages to force the user through the interrupter journey.
- * - Otherwise, normal add/change/remove links are returned.
+ * Unlike other fields, VAT supports two actions once a number exists, so the
+ * change link is either a single URL (Add) or an object of summary list action
+ * items (Change and Remove). The view handles both shapes.
  */
-const buildVatDisplay = (vatNumber, vatChangeState) => {
-  const hasVat = Boolean(vatNumber)
-  const value = vatNumber || 'No number added'
+const buildVatDisplay = (vatNumber, sbi) => {
   const linkStyling = 'govuk-link--no-visited-state'
 
-  // If no vatChangeState it means the user does not have permission to change VAT details
-  if (!vatChangeState) {
+  if (!vatNumber) {
     return {
-      value,
-      action: null,
-      changeLink: null
-    }
-  }
-
-  // Interrupter flow: invalid data, user has permission, must go via business-fix
-  if (vatChangeState === 'interrupter') {
-    const changeLink = '/business-fix?source=vat'
-    // Links still need to display the same as normal, but if no VAT number, link goes to interrupter add page
-    if (!hasVat) {
-      return {
-        value,
-        action: 'Add',
-        changeLink
-      }
-    }
-
-    // If VAT number exists, show normal change/remove links but via interrupter pages
-    return {
-      value: vatNumber,
-      action: 'Change',
-      changeLink: {
-        items: [
-          {
-            href: changeLink,
-            text: 'Change',
-            visuallyHiddenText: 'VAT registration number',
-            classes: linkStyling
-          },
-          {
-            href: changeLink,
-            text: 'Remove',
-            visuallyHiddenText: 'VAT registration number',
-            classes: linkStyling
-          }
-        ]
-      }
-    }
-  }
-
-  // Normal flow: user has permission and no interrupter
-  if (!hasVat) {
-    return {
-      value,
+      value: 'No number added',
       action: 'Add',
-      changeLink: BUSINESS_CHANGE_LINKS.vatNumberAdd
+      changeLink: BUSINESS_CHANGE_LINKS.businessVat(sbi)
     }
   }
 
   return {
-    value,
+    value: vatNumber,
     action: 'Change',
     changeLink: {
       items: [
         {
-          href: BUSINESS_CHANGE_LINKS.vatNumberChange,
+          href: BUSINESS_CHANGE_LINKS.businessVat(sbi),
           text: 'Change',
           visuallyHiddenText: 'VAT registration number',
           classes: linkStyling
         },
         {
-          href: BUSINESS_CHANGE_LINKS.vatNumberRemove,
+          href: BUSINESS_CHANGE_LINKS.businessVatRemove(sbi),
           text: 'Remove',
           visuallyHiddenText: 'VAT registration number',
           classes: linkStyling

@@ -1,6 +1,5 @@
 import { utils, constants, schemas } from '@defra/fcp-sfd-frontend-engine'
 import { fetchBusinessChangeService } from '../../services/business/fetch-business-change-service.js'
-import { businessEmailChangePresenter } from '../../presenters/business/business-email-change-presenter.js'
 import { setSessionData } from '../../utils/session/set-session-data.js'
 import { validateSbi } from '../pre-handlers.js'
 import { businessVatChangePresenter } from '../../presenters/business/business-vat-change-presenter.js'
@@ -39,9 +38,9 @@ const postBusinessVatChange = {
 
         const errors = utils.formatValidationErrors(err.details || [])
         const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
-        const pageData = businessVatChangePresenter(businessDetails)
+        const pageData = businessVatChangePresenter(businessDetails, payload.vatNumber, info.referrer)
 
-        return h.view('/business/business-vat-registration-number-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
+        return h.view('business/business-vat-registration-number-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
       }
     },
     handler: async (request, h) => {
@@ -49,7 +48,7 @@ const postBusinessVatChange = {
 
       setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessVat', request.payload.vatNumber)
 
-      return h.redirect(`/business/${sbi}/business-vat-registration-number-check`)
+      return h.redirect(`/business/${sbi}/details`)
     }
   }
 }

@@ -172,15 +172,31 @@ describe('businessDetailsPresenter', () => {
 
       expect(result.vatNumber.value).toBe('GB123456789')
       expect(result.vatNumber.action).toBe('Change')
-      expect(result.vatNumber.changeLink).toBe('#')
+      expect(result.vatNumber.changeLink).toEqual({
+        items: [
+          {
+            href: `/business/${sbi}/business-vat-registration-number-change`,
+            text: 'Change',
+            visuallyHiddenText: 'VAT registration number',
+            classes: 'govuk-link--no-visited-state'
+          },
+          {
+            href: `/business/${sbi}/business-vat-registration-remove`,
+            text: 'Remove',
+            visuallyHiddenText: 'VAT registration number',
+            classes: 'govuk-link--no-visited-state'
+          }
+        ]
+      })
     })
 
-    test('returns "No number added" and "Add" action when VAT is absent', () => {
+    test('returns "No number added" and a single "Add" link when VAT is absent', () => {
       data.info.vat = null
       const result = businessDetailsPresenter(data, sbi)
 
       expect(result.vatNumber.value).toBe('No number added')
       expect(result.vatNumber.action).toBe('Add')
+      expect(result.vatNumber.changeLink).toBe(`/business/${sbi}/business-vat-registration-number-change`)
     })
   })
 

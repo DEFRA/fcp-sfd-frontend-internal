@@ -39,8 +39,7 @@ describe('business VAT check routes', () => {
     request = {
       params: { sbi: '106705779' },
       yar: { get: vi.fn().mockReturnValue({}), set: vi.fn() },
-      auth: { credentials: { email: 'test.user@defra.gov.uk' } },
-      info: { referrer: 'https://example.com/business/106705779/business-vat-registration-number-change' }
+      auth: { credentials: { email: 'test.user@defra.gov.uk' } }
     }
 
     h = {
@@ -72,7 +71,7 @@ describe('business VAT check routes', () => {
       await getBusinessVatCheck.handler(request, h)
 
       expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessVat')
-      expect(businessVatCheckPresenter).toHaveBeenCalledWith(businessDetails, request.info.referrer)
+      expect(businessVatCheckPresenter).toHaveBeenCalledWith(businessDetails)
       expect(h.view).toHaveBeenCalledWith('business/business-vat-registration-number-check', pageData)
     })
   })

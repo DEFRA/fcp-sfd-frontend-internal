@@ -10,13 +10,13 @@ const getBusinessVatCheck = {
     pre: [validateSbi]
   },
   handler: async (request, h) => {
-    const { params, yar, auth, info } = request
+    const { params, yar, auth } = request
     const { sbi } = params
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
     const businessVatChange = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
-    const pageData = businessVatCheckPresenter(businessVatChange, info.referrer)
+    const pageData = businessVatCheckPresenter(businessVatChange)
 
     return h.view('business/business-vat-registration-number-check', pageData)
   }

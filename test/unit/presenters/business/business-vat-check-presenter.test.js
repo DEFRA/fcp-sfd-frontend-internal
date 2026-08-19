@@ -32,15 +32,7 @@ describe('businessVatCheckPresenter', () => {
   })
 
   describe('the "backLink" property', () => {
-    describe('when a same-origin referrer is provided', () => {
-      test('it returns the referrer path', () => {
-        const result = businessVatCheckPresenter(data, 'https://example.com/business/123456789/details')
-
-        expect(result.backLink).toEqual({ backLink: true, href: '/business/123456789/details' })
-      })
-    })
-
-    describe('when the sbi is missing and there is no referrer', () => {
+    describe('when the sbi is missing', () => {
       beforeEach(() => {
         delete data.info.sbi
       })

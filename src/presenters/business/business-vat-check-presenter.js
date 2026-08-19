@@ -3,17 +3,15 @@
  * @module businessVatCheckPresenter
  */
 
-import { resolveBackLink } from '../base-presenter.js'
 import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
 
-const businessVatCheckPresenter = (data, referrer) => {
+const businessVatCheckPresenter = (data) => {
   const sbi = data.info?.sbi ?? null
-  const fallbackHref = sbi ? BUSINESS_CHANGE_LINKS.businessVat(sbi) : '/search-sbi'
 
   return {
     backLink: {
       backLink: true,
-      href: resolveBackLink(referrer, fallbackHref)
+      href: sbi ? BUSINESS_CHANGE_LINKS.businessVat(sbi) : '/search-sbi'
     },
     changeLink: BUSINESS_CHANGE_LINKS.businessVat(data.info.sbi),
     pageTitle: 'Check your VAT registration number is correct before submitting',

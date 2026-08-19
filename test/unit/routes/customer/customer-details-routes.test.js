@@ -79,10 +79,11 @@ describe('customer details', () => {
         expect(h.view).toHaveBeenCalledWith('personal/personal-details.njk', pageData)
       })
 
-      test('it clears any pending personal details update from the session', async () => {
+      test('it clears any pending personal details update and validation state from the session', async () => {
         await getCustomerDetails.handler(request, h)
 
         expect(request.yar.clear).toHaveBeenCalledWith('personalDetailsUpdate')
+        expect(request.yar.clear).toHaveBeenCalledWith('personalDetailsValidation')
       })
 
       test('it passes validation results to the presenter when sections need updating', async () => {
@@ -95,6 +96,26 @@ describe('customer details', () => {
 
         expect(personalDetailsPresenter).toHaveBeenCalledWith(personalDetails, request.yar, false, ['dob', 'address'])
         expect(h.view).toHaveBeenCalledWith('personal/personal-details.njk', pageData)
+      })
+
+      test('stores validation summary in the session when personal details are invalid', async () => {
+        validatePersonalDetailsService.mockReturnValue({
+          hasValidPersonalDetails: false,
+          sectionsNeedingUpdate: ['dob', 'address']
+        })
+
+        await getCustomerDetails.handler(request, h)
+
+        expect(request.yar.set).toHaveBeenCalledWith('personalDetailsValidation', {
+          personalDetailsValid: false,
+          sectionsNeedingUpdate: ['dob', 'address']
+        })
+      })
+
+      test('does not store validation summary in the session when personal details are valid', async () => {
+        await getCustomerDetails.handler(request, h)
+
+        expect(request.yar.set).not.toHaveBeenCalled()
       })
 
       test('bubbles error when fetch service fails and does not render success view', async () => {

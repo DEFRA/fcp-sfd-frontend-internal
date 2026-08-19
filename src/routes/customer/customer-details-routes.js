@@ -14,10 +14,15 @@ const getCustomerDetails = {
     const { crn } = params
 
     yar.clear('personalDetailsUpdate')
+    yar.clear('personalDetailsValidation')
 
     const email = auth.credentials?.email
     const personalDetails = await fetchPersonalDetailsService(crn, email)
     const { hasValidPersonalDetails, sectionsNeedingUpdate } = validatePersonalDetailsService(personalDetails)
+
+    if (!hasValidPersonalDetails) {
+      yar.set('personalDetailsValidation', { personalDetailsValid: false, sectionsNeedingUpdate })
+    }
 
     const pageData = personalDetailsPresenter(personalDetails, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 

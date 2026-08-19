@@ -21,7 +21,7 @@ const updatePersonalFixService = async (crn, sessionData, yar, email) => {
   await updateDalService(mutations.updateCustomerDetails, variables, email)
   yar.clear('personalDetails')
 
-  const message = services.buildPersonalFixSuccessMessage(personalDetails)
+  const message = services.buildFixSuccessMessage('personal', personalDetails)
 
   if (message.type === 'html') {
     flashNotification(yar, 'Success', null, message.value)

@@ -19,7 +19,7 @@ vi.mock('../../../../src/services/fetch-personal-fix-service.js', () => ({
 
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
   services: {
-    buildPersonalFixSuccessMessage: vi.fn(),
+    buildFixSuccessMessage: vi.fn(),
     buildCustomerFixUpdateVariables: vi.fn()
   },
   mutations: {
@@ -71,7 +71,7 @@ describe('updatePersonalFixService', () => {
 
     fetchPersonalFixService.mockResolvedValue(personalDetails)
     services.buildCustomerFixUpdateVariables.mockReturnValue(updateVariables)
-    services.buildPersonalFixSuccessMessage.mockReturnValue({
+    services.buildFixSuccessMessage.mockReturnValue({
       type: 'text',
       value: 'You have updated your personal email address'
     })
@@ -114,7 +114,7 @@ describe('updatePersonalFixService', () => {
 
     describe('when the success message is html', () => {
       beforeEach(() => {
-        services.buildPersonalFixSuccessMessage.mockReturnValue({
+        services.buildFixSuccessMessage.mockReturnValue({
           type: 'html',
           value: '<p>You have updated your personal email address</p>'
         })

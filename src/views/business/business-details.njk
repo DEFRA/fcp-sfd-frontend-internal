@@ -170,16 +170,20 @@
       Reference numbers
     </h2>
 
-    {% set vatNumberActions = {
-      items: [
-        {
-          href: vatNumber.changeLink,
-          text: vatNumber.action,
-          visuallyHiddenText: "VAT registration number",
-          classes: "govuk-link--no-visited-state"
-        }
-      ]
-    } %}
+    {% if vatNumber.changeLink.items %}
+      {% set vatNumberActions = vatNumber.changeLink %}
+    {% else %}
+      {% set vatNumberActions = {
+        items: [
+          {
+            href: vatNumber.changeLink,
+            text: vatNumber.action,
+            visuallyHiddenText: "VAT registration number",
+            classes: "govuk-link--no-visited-state"
+          }
+        ]
+      } %}
+    {% endif %}
 
     {% set referenceRows = [
       {

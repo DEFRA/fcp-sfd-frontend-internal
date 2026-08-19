@@ -50,7 +50,7 @@ const businessDetailsPresenter = (data, sbi, yar) => {
       action: presenters.getActionText(contact.email),
       changeLink: BUSINESS_CHANGE_LINKS.businessEmail(sbi)
     },
-    vatNumber: createEditableValueField(info.vat, 'No number added'),
+    vatNumber: buildVatDisplay(info.vat, sbi),
     tradeNumber: info.traderNumber ?? null,
     vendorRegistrationNumber: info.vendorNumber ?? null,
     countyParishHoldingNumbers,
@@ -70,6 +70,46 @@ const createEditableValueField = (value, emptyValueText) => {
 
 const formatOverviewBreadcrumb = (businessName, sbi) => {
   return businessName ? `${businessName} (SBI: ${sbi})` : `SBI: ${sbi}`
+}
+
+/**
+ * Builds the VAT row data for the business details page.
+ *
+ * Unlike other fields, VAT supports two actions once a number exists, so the
+ * change link is either a single URL (Add) or an object of summary list action
+ * items (Change and Remove). The view handles both shapes.
+ */
+const buildVatDisplay = (vatNumber, sbi) => {
+  const linkStyling = 'govuk-link--no-visited-state'
+
+  if (!vatNumber) {
+    return {
+      value: 'No number added',
+      action: 'Add',
+      changeLink: BUSINESS_CHANGE_LINKS.businessVat(sbi)
+    }
+  }
+
+  return {
+    value: vatNumber,
+    action: 'Change',
+    changeLink: {
+      items: [
+        {
+          href: BUSINESS_CHANGE_LINKS.businessVat(sbi),
+          text: 'Change',
+          visuallyHiddenText: 'VAT registration number',
+          classes: linkStyling
+        },
+        {
+          href: BUSINESS_CHANGE_LINKS.businessVatRemove(sbi),
+          text: 'Remove',
+          visuallyHiddenText: 'VAT registration number',
+          classes: linkStyling
+        }
+      ]
+    }
+  }
 }
 
 export {

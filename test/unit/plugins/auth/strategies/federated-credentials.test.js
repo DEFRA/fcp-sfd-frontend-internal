@@ -1,0 +1,294 @@
+import { vi, beforeEach, describe, test, expect } from 'vitest'
+
+// Mocks
+const mockConfigGet = vi.fn()
+vi.mock('../../../../../src/config/index.js', () => ({
+  config: {
+    get: mockConfigGet
+  }
+}))
+
+const mockGetCookieOptions = vi.fn()
+vi.mock('../../../../../src/plugins/auth/get-cookie-options.js', () => ({
+  getCookieOptions: mockGetCookieOptions
+}))
+
+const mockWebIdentityTokenProvider = vi.fn()
+const mockMockProvider = vi.fn()
+const mockHapiAuthOidcPlugin = vi.fn()
+
+vi.mock('@defra/hapi-auth-oidc', () => ({
+  hapiAuthOidcPlugin: mockHapiAuthOidcPlugin,
+  WebIdentityTokenProvider: mockWebIdentityTokenProvider,
+  MockProvider: mockMockProvider
+}))
+
+// Thing under test
+const { registerFederatedStrategy } = await import('../../../../../src/plugins/auth/strategies/federated-credentials.js')
+
+describe('federated-credentials strategy', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockConfigGet.mockImplementation((key) => {
+      switch (key) {
+        case 'entra.clientId':
+          return 'mockClientId'
+        case 'entra.redirectUrl':
+          return 'mockRedirectUrl'
+        case 'entra.wellKnownUrl':
+          return 'mockWellKnownUrl'
+        case 'entra.federatedCredentials':
+          return { audience: 'mockAudience', enableMocking: false }
+        case 'server.session.cookie.password':
+          return 'mockPassword'
+        case 'server.session.cookie.secure':
+          return true
+        default:
+          return 'defaultConfigValue'
+      }
+    })
+    mockGetCookieOptions.mockReturnValue({})
+  })
+
+  describe('registerFederatedStrategy', () => {
+    let server
+
+    beforeEach(() => {
+      server = {
+        register: vi.fn().mockResolvedValue(undefined),
+        auth: {
+          strategy: vi.fn(),
+          default: vi.fn()
+        }
+      }
+      mockGetCookieOptions.mockReturnValue({})
+      mockWebIdentityTokenProvider.mockImplementation(class {})
+    })
+
+    test('should be a function', () => {
+      expect(registerFederatedStrategy).toBeInstanceOf(Function)
+    })
+
+    describe('when choosing authentication provider', () => {
+      describe('and enableMocking is false', () => {
+        test('should use WebIdentityTokenProvider in production', async () => {
+          mockWebIdentityTokenProvider.mockImplementation(class {
+            constructor (config) {
+              this.config = config
+            }
+          })
+
+          await registerFederatedStrategy(server)
+
+          const registrationCall = server.register.mock.calls[0][0]
+          expect(registrationCall.options.oidc.authProvider).toBeInstanceOf(mockWebIdentityTokenProvider)
+          expect(mockWebIdentityTokenProvider).toHaveBeenCalledWith({ audience: ['mockAudience'] })
+        })
+      })
+
+      describe('and enableMocking is true', () => {
+        beforeEach(() => {
+          mockConfigGet.mockImplementation((key) => {
+            if (key === 'entra.federatedCredentials') {
+              return { audience: 'mockAudience', enableMocking: true }
+            }
+            switch (key) {
+              case 'entra.clientId':
+                return 'mockClientId'
+              case 'entra.redirectUrl':
+                return 'mockRedirectUrl'
+              case 'entra.wellKnownUrl':
+                return 'mockWellKnownUrl'
+              case 'server.session.cookie.password':
+                return 'mockPassword'
+              case 'server.session.cookie.secure':
+                return true
+              default:
+                return 'defaultConfigValue'
+            }
+          })
+          mockMockProvider.mockImplementation(class {
+            constructor () {
+              this.config = {}
+            }
+          })
+        })
+
+        test('should use MockProvider in development', async () => {
+          await registerFederatedStrategy(server)
+
+          const registrationCall = server.register.mock.calls[0][0]
+          expect(registrationCall.options.oidc.authProvider).toBeInstanceOf(mockMockProvider)
+          expect(mockMockProvider).toHaveBeenCalledWith({})
+        })
+      })
+    })
+
+    test('should register with correct OIDC configuration', async () => {
+      mockConfigGet.mockImplementation((key) => {
+        switch (key) {
+          case 'entra.clientId':
+            return 'mockClientId'
+          case 'entra.externalBaseUrl':
+            return 'mockExternalBaseUrl'
+          case 'entra.wellKnownUrl':
+            return 'mockWellKnownUrl'
+          case 'entra.federatedCredentials':
+            return { audience: 'mockAudience', enableMocking: false }
+          case 'server.session.cookie.password':
+            return 'mockPassword'
+          case 'server.session.cookie.secure':
+            return true
+          default:
+            return 'defaultConfigValue'
+        }
+      })
+
+      await registerFederatedStrategy(server)
+
+      const registrationCall = server.register.mock.calls[0][0]
+      expect(registrationCall.options.oidc).toMatchObject({
+        discoveryUri: 'mockWellKnownUrl',
+        clientId: 'mockClientId',
+        scope: 'mockClientId/.default offline_access',
+        loginCallbackUri: '/auth/sign-in-oidc',
+        responseMode: 'query',
+        externalBaseUrl: 'mockExternalBaseUrl',
+        defaultPostLoginUri: 'mockExternalBaseUrl/search-sbi'
+      })
+    })
+
+    test('should register with cookie options', async () => {
+      await registerFederatedStrategy(server)
+
+      const registrationCall = server.register.mock.calls[0][0]
+      expect(registrationCall.options.cookieOptions).toMatchObject({
+        password: 'mockPassword',
+        isSecure: true,
+        isSameSite: 'None'
+      })
+    })
+
+    test('should register session cookie strategy', async () => {
+      await registerFederatedStrategy(server)
+
+      expect(server.auth.strategy).toHaveBeenCalledWith(
+        'session',
+        'cookie',
+        expect.any(Object)
+      )
+    })
+
+    test('should set default strategy to session', async () => {
+      await registerFederatedStrategy(server)
+
+      expect(server.auth.default).toHaveBeenCalledWith('session')
+    })
+
+    test('should get cookie options with validateToken function', async () => {
+      await registerFederatedStrategy(server)
+
+      expect(mockGetCookieOptions).toHaveBeenCalledWith(expect.any(Function))
+    })
+  })
+
+  describe('validateToken', () => {
+    let validateToken
+    let mockCacheGet
+    let mockCacheSet
+    let mockEnsureValidToken
+    let request
+
+    beforeEach(async () => {
+      mockCacheGet = vi.fn()
+      mockCacheSet = vi.fn()
+      mockEnsureValidToken = vi.fn()
+
+      request = {
+        server: {
+          app: {
+            cache: {
+              get: mockCacheGet,
+              set: mockCacheSet
+            }
+          },
+          logger: {
+            info: vi.fn()
+          }
+        },
+        ensureValidToken: mockEnsureValidToken
+      }
+
+      // Get validateToken from the getCookieOptions call
+      mockWebIdentityTokenProvider.mockImplementation(class {})
+      mockGetCookieOptions.mockImplementation((fn) => {
+        validateToken = fn
+        return {
+          cookie: {},
+          redirectTo: () => {},
+          validate: fn
+        }
+      })
+
+      await registerFederatedStrategy({
+        register: vi.fn().mockResolvedValue(undefined),
+        auth: { strategy: vi.fn(), default: vi.fn() }
+      })
+    })
+
+    test('should return invalid state if session does not exist', async () => {
+      mockCacheGet.mockResolvedValue(null)
+
+      const result = await validateToken(request, { sessionId: 'session-id' })
+
+      expect(result.isValid).toBe(false)
+    })
+
+    test('should return invalid state if accessToken is missing', async () => {
+      mockCacheGet.mockResolvedValue({ refreshToken: 'test-refresh' })
+
+      const result = await validateToken(request, { sessionId: 'session-id' })
+
+      expect(result.isValid).toBe(false)
+      expect(mockEnsureValidToken).not.toHaveBeenCalled()
+    })
+
+    test('should return invalid state if refreshToken is missing', async () => {
+      mockCacheGet.mockResolvedValue({ accessToken: 'test-access' })
+
+      const result = await validateToken(request, { sessionId: 'session-id' })
+
+      expect(result.isValid).toBe(false)
+      expect(mockEnsureValidToken).not.toHaveBeenCalled()
+    })
+
+    test('should get session from cache', async () => {
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000, audience: 'mockAudience' }
+      mockCacheGet.mockResolvedValue(userSession)
+
+      await validateToken(request, { sessionId: 'session-id' })
+
+      expect(mockCacheGet).toHaveBeenCalledWith('session-id')
+    })
+
+    test('should return valid state if session exists with valid tokens', async () => {
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000, audience: 'mockAudience' }
+      mockCacheGet.mockResolvedValue(userSession)
+
+      const result = await validateToken(request, { sessionId: 'session-id' })
+
+      expect(result.isValid).toBe(true)
+      expect(result.credentials).toEqual(userSession)
+      expect(mockEnsureValidToken).not.toHaveBeenCalled()
+    })
+
+    test('should not call ensureValidToken from cookie validator', async () => {
+      const userSession = { accessToken: 'test-access', refreshToken: 'test-refresh', expiresIn: 3600000 }
+      mockCacheGet.mockResolvedValue(userSession)
+
+      await validateToken(request, { sessionId: 'session-id' })
+
+      expect(mockEnsureValidToken).not.toHaveBeenCalled()
+    })
+  })
+})

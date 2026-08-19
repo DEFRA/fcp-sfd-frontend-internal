@@ -96,12 +96,6 @@ describe('updatePersonalFixService', () => {
       expect(updateDalService).toHaveBeenCalledWith(mutations.updateCustomerDetails, updateVariables, email)
     })
 
-    test('it clears personalDetails from the session', async () => {
-      await updatePersonalFixService(crn, sessionData, yar, email)
-
-      expect(yar.clear).toHaveBeenCalledWith('personalDetails')
-    })
-
     test('it flashes a success notification', async () => {
       await updatePersonalFixService(crn, sessionData, yar, email)
 

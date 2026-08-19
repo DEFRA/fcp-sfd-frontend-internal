@@ -3,7 +3,6 @@
  *
  * Fetches the pending personal fixes from the session
  * Calls the DAL to persist the updated details using updateDalService
- * Clears the cached personal details validation data from the session
  * Displays a success flash notification to the user
  *
  * @module updatePersonalFixService
@@ -19,7 +18,6 @@ const updatePersonalFixService = async (crn, sessionData, yar, email) => {
   const variables = services.buildCustomerFixUpdateVariables(personalDetails)
 
   await updateDalService(mutations.updateCustomerDetails, variables, email)
-  yar.clear('personalDetails')
 
   const message = services.buildFixSuccessMessage('personal', personalDetails)
 

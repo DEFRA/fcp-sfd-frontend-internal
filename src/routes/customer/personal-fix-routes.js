@@ -14,7 +14,7 @@ const getPersonalFix = {
     const { params, yar, auth, query } = request
     const { crn } = params
 
-    const sessionData = services.initialiseFixJourneyService(yar, query.source, 'personal')
+    const sessionData = services.initialiseFixJourney(yar, query.source, 'personal')
     const personalDetails = await fetchPersonalFixService(crn, auth.credentials?.email, sessionData)
     const pageData = personalFixPresenter(personalDetails, crn)
 

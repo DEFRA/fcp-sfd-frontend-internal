@@ -34,7 +34,7 @@ const postPersonalFixList = {
     const { crn } = params
 
     const sessionData = yar.get('personalDetailsValidation')
-    const validation = services.validateFixDetailsService(payload, sessionData.orderedSectionsToFix, schemas.personal)
+    const validation = services.validateFixDetails(payload, sessionData.orderedSectionsToFix, schemas.personal)
 
     if (validation.error) {
       const errors = utils.formatValidationErrors(validation.error.details || [])

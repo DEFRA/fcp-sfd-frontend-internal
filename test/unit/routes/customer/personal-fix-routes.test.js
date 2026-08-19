@@ -13,7 +13,7 @@ const [getPersonalFix, postPersonalFix] = personalFixRoutes
 // Mocks
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
   services: {
-    initialiseFixJourneyService: vi.fn()
+    initialiseFixJourney: vi.fn()
   }
 }))
 
@@ -50,7 +50,7 @@ describe('personal fix routes', () => {
           view: vi.fn().mockReturnValue({})
         }
 
-        services.initialiseFixJourneyService.mockReturnValue(getMockSessionData())
+        services.initialiseFixJourney.mockReturnValue(getMockSessionData())
         fetchPersonalFixService.mockResolvedValue('personal details')
         personalFixPresenter.mockReturnValue(getPageData())
       })
@@ -67,7 +67,7 @@ describe('personal fix routes', () => {
       test('it initialises the personal fix journey using the session and source', async () => {
         await getPersonalFix.handler(request, h)
 
-        expect(services.initialiseFixJourneyService).toHaveBeenCalledWith(request.yar, request.query.source, 'personal')
+        expect(services.initialiseFixJourney).toHaveBeenCalledWith(request.yar, request.query.source, 'personal')
       })
 
       test('it fetches personal fix data using the crn, email and session data', async () => {

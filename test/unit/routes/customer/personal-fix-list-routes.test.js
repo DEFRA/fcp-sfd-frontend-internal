@@ -17,7 +17,7 @@ vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
   constants: { statusCodes: { BAD_REQUEST: 400 } },
   services: {
     checkInterrupterJourneySession: vi.fn(),
-    validateFixDetailsService: vi.fn(),
+    validateFixDetails: vi.fn(),
     setFixSessionData: vi.fn()
   }
 }))
@@ -110,7 +110,7 @@ describe('personal fix list routes', () => {
           personalEmail: 'john@example.com'
         }
 
-        services.validateFixDetailsService.mockReturnValue({})
+        services.validateFixDetails.mockReturnValue({})
       })
 
       test('should have the correct method and path configured', () => {
@@ -126,7 +126,7 @@ describe('personal fix list routes', () => {
         test('it stores the session data and redirects', async () => {
           await postPersonalFixList.handler(request, h)
 
-          expect(services.validateFixDetailsService).toHaveBeenCalledWith(request.payload, sessionData.orderedSectionsToFix, schemas.personal)
+          expect(services.validateFixDetails).toHaveBeenCalledWith(request.payload, sessionData.orderedSectionsToFix, schemas.personal)
           expect(services.setFixSessionData).toHaveBeenCalledWith(
             request.yar,
             sessionData,
@@ -156,7 +156,7 @@ describe('personal fix list routes', () => {
             { field: 'first', message: 'Enter your first name' }
           ]
 
-          services.validateFixDetailsService.mockReturnValue({ error: validationError })
+          services.validateFixDetails.mockReturnValue({ error: validationError })
           utils.formatValidationErrors.mockReturnValue(errors)
           fetchPersonalFixService.mockResolvedValue({ some: 'data' })
           personalFixListPresenter.mockReturnValue({ page: 'data', errors })

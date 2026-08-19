@@ -1,0 +1,49 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appBackSignOutLink(backLink) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" novalidate>
+      <input type="hidden" name="crumb" value="{{ crumb }}">
+      <div class="govuk-form-group">
+        <h1 class="govuk-heading-l">
+          {{ pageTitle }}
+        </h1>
+
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "VAT registration number"
+              },
+              value: {
+                text: vatNumber
+              },
+              actions: {
+                items: [
+                  {
+                    href: changeLink,
+                    text: "Change",
+                    visuallyHiddenText: "vat registration number",
+                    classes: "govuk-link--no-visited-state"
+                  }
+                ]
+              }
+            }
+          ]
+        }) }}
+      </div>
+
+      {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

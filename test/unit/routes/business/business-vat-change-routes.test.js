@@ -78,11 +78,11 @@ describe('business VAT change routes', () => {
       expect(postBusinessVatChange.path).toBe('/business/{sbi}/business-vat-registration-number-change')
     })
 
-    test('stores the submitted VAT number in session and redirects to the details page', async () => {
+    test('stores the submitted VAT number in session and redirects to the check page', async () => {
       await postBusinessVatChange.options.handler(request, h)
 
       expect(setSessionData).toHaveBeenCalledWith(request.yar, 'businessDetailsUpdate', 'changeBusinessVat', 'GB123456789')
-      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
+      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-vat-registration-number-check')
     })
   })
 

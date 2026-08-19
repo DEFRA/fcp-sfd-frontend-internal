@@ -20,6 +20,9 @@ import { personalPhoneNumbersChangeRoutes } from './customer/personal-phone-numb
 import { personalPhoneNumbersCheckRoutes } from './customer/personal-phone-numbers-check-routes.js'
 import { personalEmailChangeRoutes } from './customer/personal-email-change-routes.js'
 import { personalEmailCheckRoutes } from './customer/personal-email-check-routes.js'
+import { personalFixRoutes } from './customer/personal-fix-routes.js'
+import { personalFixListRoutes } from './customer/personal-fix-list-routes.js'
+import { personalFixCheckRoutes } from './customer/personal-fix-check-routes.js'
 import { businessDetailsRoutes } from './business/business-details-routes.js'
 import { businessEmailChangeRoutes } from './business/business-email-change-routes.js'
 import { businessEmailCheckRoutes } from './business/business-email-check-routes.js'
@@ -59,6 +62,9 @@ export const routes = [
   ...personalPhoneNumbersCheckRoutes,
   ...personalDobChangeRoutes,
   ...personalDobCheckRoutes,
+  ...personalFixRoutes,
+  ...personalFixListRoutes,
+  ...personalFixCheckRoutes,
   ...businessDetailsRoutes,
   ...businessEmailChangeRoutes,
   ...businessEmailCheckRoutes,

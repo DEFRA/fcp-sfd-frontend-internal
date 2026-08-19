@@ -11,12 +11,8 @@ describe('businessVatChangePresenter', () => {
   beforeEach(() => {
     data = {
       info: {
-        businessName: 'Agile Farm Ltd',
         sbi: '123456789',
         vat: 'GB123456789'
-      },
-      customer: {
-        userName: 'Alfred Waldron'
       },
       contact: {
         email: 'test@test.com'
@@ -32,9 +28,7 @@ describe('businessVatChangePresenter', () => {
         backLink: { backLink: true, href: '/business/123456789/details' },
         pageTitle: 'What is your VAT registration number?',
         metaDescription: 'Update the VAT registration number for your business.',
-        businessName: 'Agile Farm Ltd',
         sbi: '123456789',
-        userName: 'Alfred Waldron',
         vatNumber: 'GB123456789'
       })
     })
@@ -62,20 +56,6 @@ describe('businessVatChangePresenter', () => {
     })
   })
 
-  describe('the "businessName" property', () => {
-    describe('when the businessName property is missing', () => {
-      beforeEach(() => {
-        delete data.info.businessName
-      })
-
-      test('it should return businessName as null', () => {
-        const result = businessVatChangePresenter(data)
-
-        expect(result.businessName).toEqual(null)
-      })
-    })
-  })
-
   describe('the "sbi" property', () => {
     describe('when the sbi (singleBusinessIdentifier) property is missing', () => {
       beforeEach(() => {
@@ -86,20 +66,6 @@ describe('businessVatChangePresenter', () => {
         const result = businessVatChangePresenter(data)
 
         expect(result.sbi).toEqual(null)
-      })
-    })
-  })
-
-  describe('the "userName" property', () => {
-    describe('when the userName property is missing', () => {
-      beforeEach(() => {
-        delete data.customer.userName
-      })
-
-      test('it should return userName as null', () => {
-        const result = businessVatChangePresenter(data)
-
-        expect(result.userName).toEqual(null)
       })
     })
   })

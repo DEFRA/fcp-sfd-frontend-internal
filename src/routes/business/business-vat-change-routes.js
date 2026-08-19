@@ -48,7 +48,7 @@ const postBusinessVatChange = {
 
       setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessVat', request.payload.vatNumber)
 
-      return h.redirect(`/business/${sbi}/details`)
+      return h.redirect(`/business/${sbi}/business-vat-registration-number-check`)
     }
   }
 }

@@ -39,6 +39,7 @@ import { personalAddressSelectRoutes } from './customer/personal-address-select-
 import { personalAddressCheckRoutes } from './customer/personal-address-check-routes.js'
 import { personalAddressChangeRoutes } from './customer/personal-address-change-routes.js'
 import { businessVatChangeRoutes } from './business/business-vat-change-routes.js'
+import { businessVatCheckRoutes } from './business/business-vat-check-routes.js'
 
 export const routes = [
   health,
@@ -81,5 +82,6 @@ export const routes = [
   ...personalAddressSelectRoutes,
   ...personalAddressCheckRoutes,
   ...personalAddressChangeRoutes,
-  ...businessVatChangeRoutes
+  ...businessVatChangeRoutes,
+  ...businessVatCheckRoutes
 ]

@@ -4,7 +4,8 @@ export const BUSINESS_CHANGE_LINKS = {
   businessTelephone: (sbi) => `/business/${sbi}/business-phone-numbers-change`,
   businessAddress: (sbi) => `/business/${sbi}/business-address-change`,
   businessVat: (sbi) => `/business/${sbi}/business-vat-registration-number-change`,
-  businessVatRemove: (sbi) => `/business/${sbi}/business-vat-registration-remove`
+  // Temporary: points at the details page until the VAT remove journey is built
+  businessVatRemove: (sbi) => `/business/${sbi}/details`
 }
 
 export const PERSONAL_CHANGE_LINKS = {

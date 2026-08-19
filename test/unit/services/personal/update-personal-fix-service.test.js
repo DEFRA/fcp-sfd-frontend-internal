@@ -3,7 +3,6 @@ import { describe, test, expect, beforeEach, vi } from 'vitest'
 
 // Things we need to mock
 import { fetchPersonalFixService } from '../../../../src/services/fetch-personal-fix-service.js'
-import { buildPersonalFixUpdateVariablesService } from '../../../../src/services/personal/build-personal-fix-update-variables-service.js'
 import { updateDalService } from '../../../../src/services/DAL/update-dal-service.js'
 import { flashNotification } from '../../../../src/utils/notifications/flash-notification.js'
 
@@ -20,7 +19,8 @@ vi.mock('../../../../src/services/fetch-personal-fix-service.js', () => ({
 
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
   services: {
-    buildPersonalFixSuccessMessage: vi.fn()
+    buildPersonalFixSuccessMessage: vi.fn(),
+    buildCustomerFixUpdateVariables: vi.fn()
   },
   mutations: {
     updateCustomerDetails: 'updateCustomerDetails'
@@ -70,7 +70,7 @@ describe('updatePersonalFixService', () => {
     }
 
     fetchPersonalFixService.mockResolvedValue(personalDetails)
-    buildPersonalFixUpdateVariablesService.mockReturnValue(updateVariables)
+    services.buildCustomerFixUpdateVariables.mockReturnValue(updateVariables)
     services.buildPersonalFixSuccessMessage.mockReturnValue({
       type: 'text',
       value: 'You have updated your personal email address'
@@ -87,7 +87,7 @@ describe('updatePersonalFixService', () => {
     test('it builds mutation variables from personal details', async () => {
       await updatePersonalFixService(crn, sessionData, yar, email)
 
-      expect(buildPersonalFixUpdateVariablesService).toHaveBeenCalledWith(personalDetails)
+      expect(services.buildCustomerFixUpdateVariables).toHaveBeenCalledWith(personalDetails)
     })
 
     test('it calls the DAL update service with the correct mutation and variables', async () => {

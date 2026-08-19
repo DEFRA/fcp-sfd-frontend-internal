@@ -10,7 +10,7 @@
  *
  * @param {object} yar - The Hapi `request.yar` session manager
  * @param {string} [title='Updated'] - title for the notification
- * @param {string} [text='Changes made'] - text for the notification
+ * @param {string|null} [text='Changes made'] - text for the notification
  * @param {string|null} [html=null] - Optional HTML content for the notification
  */
 const flashNotification = (yar, title = 'Updated', text = 'Changes made', html = null) => {

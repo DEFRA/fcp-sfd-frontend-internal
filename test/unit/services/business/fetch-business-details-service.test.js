@@ -13,8 +13,10 @@ vi.mock('../../../../src/dal/connector.js', () => ({
   getDalConnector: vi.fn(() => mockDalConnector)
 }))
 
-vi.mock('../../../../src/mappers/business-details-mapper.js', () => ({
-  mapBusinessDetails: mockMapBusinessDetails
+vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
+  mappers: {
+    businessDetails: mockMapBusinessDetails
+  }
 }))
 
 // Thing under test

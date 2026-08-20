@@ -1,6 +1,6 @@
 import { utils, constants, schemas } from '@defra/fcp-sfd-frontend-engine'
 
-import { fetchBusinessDetailsService } from '../../services/business/fetch-business-details-service.js'
+import { fetchBusinessChangeService } from '../../services/business/fetch-business-change-service.js'
 import { updateBusinessVatRemoveService } from '../../services/business/update-business-vat-remove-service.js'
 import { businessVatRemovePresenter } from '../../presenters/business/business-vat-remove-presenter.js'
 import { validateSbi } from '../pre-handlers.js'
@@ -12,13 +12,13 @@ const getBusinessVatRemove = {
     pre: [validateSbi]
   },
   handler: async (request, h) => {
-    const { params, yar, auth } = request
+    const { params, yar, auth, info } = request
     const { sbi } = params
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
-    const businessVatRemove = await fetchBusinessDetailsService(yar, auth.credentials, 'changeBusinessVat')
-    const pageData = businessVatRemovePresenter(businessVatRemove)
+    const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
+    const pageData = businessVatRemovePresenter(businessDetails, info.referrer)
 
     return h.view('business/business-vat-registration-remove', pageData)
   }
@@ -35,8 +35,10 @@ const postBusinessVatRemove = {
         abortEarly: false
       },
       failAction: async (request, h, err) => {
+        const { yar, auth, info } = request
+
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessDetailsService(request.auth.credentials)
+        const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
         const pageData = businessVatRemovePresenter(businessDetails)
 
         return h.view('business/business-vat-registration-remove', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
@@ -44,11 +46,13 @@ const postBusinessVatRemove = {
     }
   },
   handler: async (request, h) => {
+    const { sbi } = request.params
+
     if (request.payload.confirmRemove === 'yes') {
       await updateBusinessVatRemoveService(request.yar, request.auth.credentials)
     }
 
-    return h.redirect('/business-details')
+    return h.redirect(`/business/${sbi}/details`)
   }
 }
 

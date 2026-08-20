@@ -3,7 +3,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "common/sub-header/macro.njk" import subHeader %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
 
 {% block beforeContent %}
   {{ appBackSignOutLink(backLink) }}

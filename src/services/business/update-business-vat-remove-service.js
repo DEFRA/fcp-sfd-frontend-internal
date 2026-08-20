@@ -11,16 +11,18 @@
  * @module updateBusinessVatRemoveService
  */
 
-import { mutations } from '@defra/fcp-sfd-frontend-engine'
-import { fetchBusinessDetailsService } from './fetch-business-details-service.js'
+import { mutations, constants } from '@defra/fcp-sfd-frontend-engine'
+import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 import { updateDalService } from '../DAL/update-dal-service.js'
 
 const updateBusinessVatRemoveService = async (yar, credentials) => {
-  const businessDetails = await fetchBusinessDetailsService(credentials)
+  const businessDetails = await fetchBusinessChangeService(yar, credentials, 'changeBusinessVat')
   const variables = { input: { vat: '', sbi: businessDetails.info.sbi } }
 
-  await updateDalService(mutations.updateBusinessVat, variables, credentials.sessionId)
+  await updateDalService(mutations.updateBusinessVat, variables, credentials.email)
+
+  yar.clear('businessDetailsUpdate')
 
   flashNotification(yar, 'Success', constants.successMessages.BUSINESS_VAT_REMOVE)
 }

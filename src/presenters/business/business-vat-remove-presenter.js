@@ -15,7 +15,7 @@ const businessVatRemovePresenter = (data, referrer) => {
     },
     pageTitle: 'Are you sure you want to remove your VAT registration number?',
     metaDescription: 'Are you sure you want to remove your VAT registration number?',
-    vatNumber: payload ?? data.changeBusinessVat ?? data.info.vat,
+    vatNumber: data.changeBusinessVat ?? data.info.vat,
     sbi: data.info.sbi ?? null
   }
 }

@@ -55,7 +55,11 @@ const businessDetailsPresenter = (data, sbi, yar) => {
     vendorRegistrationNumber: info.vendorNumber ?? null,
     countyParishHoldingNumbers,
     countyParishHoldingNumbersText: presenters.formatCphText(countyParishHoldingNumbers.length),
-    businessLegalStatus: createEditableValueField(info.legalStatus, 'Not added'),
+    businessLegalStatus: {
+      value: info.legalStatus || 'Not added',
+      action: presenters.getActionText(info.legalStatus),
+      changeLink: BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)
+    },
     businessType: createEditableValueField(info.type, 'Not added')
   }
 }

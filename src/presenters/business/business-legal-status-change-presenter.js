@@ -3,7 +3,7 @@
  * @module businessLegalStatusChangePresenter
  */
 
-import { BUSINESS_LEGAL_STATUS } from '../../constants/business-legal-status.js'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 const businessLegalStatusChangePresenter = (data, payload) => {
   const backLink = data.info?.sbi ? `/business/${data.info.sbi}/details` : '/search-sbi'
@@ -23,7 +23,7 @@ const businessLegalStatusChangePresenter = (data, payload) => {
 // Maps the BUSINESS_LEGAL_STATUS constants into govukRadios items, marking the currently selected option
 // The DAL code is numeric while our constants store it as a string, so compare as strings
 const buildLegalStatusItems = (selected) => {
-  return Object.values(BUSINESS_LEGAL_STATUS).map(({ code, text }) => ({
+  return Object.values(constants.BUSINESS_LEGAL_STATUS).map(({ code, text }) => ({
     value: code,
     text,
     checked: String(code) === String(selected)

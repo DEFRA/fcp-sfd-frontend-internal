@@ -3,19 +3,15 @@
  * @module businessVatRemovePresenter
  */
 
-import { resolveBackLink } from '../base-presenter.js'
-
-const businessVatRemovePresenter = (data, referrer) => {
-  const fallbackHref = data.info?.sbi ? `/business/${data.info.sbi}/details` : '/search-sbi'
-
+const businessVatRemovePresenter = (data) => {
   return {
     backLink: {
       backLink: true,
-      href: resolveBackLink(referrer, fallbackHref)
+      href: data.info?.sbi ? `/business/${data.info.sbi}/details` : '/search-sbi'
     },
     pageTitle: 'Are you sure you want to remove your VAT registration number?',
     metaDescription: 'Are you sure you want to remove your VAT registration number?',
-    vatNumber: data.changeBusinessVat ?? data.info.vat,
+    vatNumber: data.changeBusinessVat ?? data.info.vat ?? null,
     sbi: data.info.sbi ?? null
   }
 }

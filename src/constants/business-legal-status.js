@@ -56,3 +56,6 @@ export const BUSINESS_LEGAL_STATUS = {
     code: '102114'
   },
 }
+
+// Derived from BUSINESS_LEGAL_STATUS so the codes can't drift out of sync
+export const BUSINESS_LEGAL_STATUS_CODES = Object.values(BUSINESS_LEGAL_STATUS).map(({ code }) => code)

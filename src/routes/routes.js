@@ -40,6 +40,7 @@ import { personalAddressCheckRoutes } from './customer/personal-address-check-ro
 import { personalAddressChangeRoutes } from './customer/personal-address-change-routes.js'
 import { businessVatChangeRoutes } from './business/business-vat-change-routes.js'
 import { businessVatCheckRoutes } from './business/business-vat-check-routes.js'
+import { businessVatRemoveRoutes } from './business/business-vat-remove-routes.js'
 
 export const routes = [
   health,
@@ -83,5 +84,6 @@ export const routes = [
   ...personalAddressCheckRoutes,
   ...personalAddressChangeRoutes,
   ...businessVatChangeRoutes,
-  ...businessVatCheckRoutes
+  ...businessVatCheckRoutes,
+  ...businessVatRemoveRoutes
 ]

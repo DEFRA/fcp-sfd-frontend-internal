@@ -263,7 +263,7 @@ describe('businessDetailsPresenter', () => {
 
       expect(result.businessLegalStatus.value).toBe('Sole Proprietorship')
       expect(result.businessLegalStatus.action).toBe('Change')
-      expect(result.businessLegalStatus.changeLink).toBe('#')
+      expect(result.businessLegalStatus.changeLink).toBe(`/business/${sbi}/business-legal-status-change`)
     })
 
     test('returns "Not added" and "Add" action when legal status is absent', () => {

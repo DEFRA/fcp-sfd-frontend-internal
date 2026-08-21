@@ -1,0 +1,68 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+
+{% block beforeContent %}
+    {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" novalidate>
+      <input type="hidden" name="crumb" value="{{ crumb }}">
+      <h1 class="govuk-heading-l">
+        {{ pageTitle }}
+      </h1>
+
+      {% set rows = [
+        {
+          key: {
+            text: "Business legal status"
+          },
+          value: {
+            text: businessLegalStatus
+          },
+          actions: {
+            items: [
+              {
+                href: legalStatusChangeLink,
+                text: "Change",
+                visuallyHiddenText: "business legal status",
+                classes: "govuk-link--no-visited-state"
+              }
+            ]
+          }
+        }
+      ] %}
+
+      {% if registrationNumberLabel %}
+        {% set rows = rows.concat([{
+          key: {
+            text: registrationNumberLabel
+          },
+          value: {
+            text: registrationNumber
+          },
+          actions: {
+            items: [
+              {
+                href: registrationNumberChangeLink,
+                text: "Change",
+                visuallyHiddenText: registrationNumberLabel | lower,
+                classes: "govuk-link--no-visited-state"
+              }
+            ]
+          }
+        }]) %}
+      {% endif %}
+
+      {{ govukSummaryList({ rows: rows }) }}
+
+      {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

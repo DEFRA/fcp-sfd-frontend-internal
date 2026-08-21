@@ -40,6 +40,9 @@ import { personalAddressCheckRoutes } from './customer/personal-address-check-ro
 import { personalAddressChangeRoutes } from './customer/personal-address-change-routes.js'
 import { businessVatChangeRoutes } from './business/business-vat-change-routes.js'
 import { businessVatCheckRoutes } from './business/business-vat-check-routes.js'
+import { businessLegalStatusChangeRoutes } from './business/business-legal-status-change-routes.js'
+import { businessLegalStatusEnterRoutes } from './business/business-legal-status-enter-routes.js'
+import { businessLegalStatusCheckRoutes } from './business/business-legal-status-check-routes.js'
 
 export const routes = [
   health,
@@ -83,5 +86,8 @@ export const routes = [
   ...personalAddressCheckRoutes,
   ...personalAddressChangeRoutes,
   ...businessVatChangeRoutes,
-  ...businessVatCheckRoutes
+  ...businessVatCheckRoutes,
+  ...businessLegalStatusChangeRoutes,
+  ...businessLegalStatusEnterRoutes,
+  ...businessLegalStatusCheckRoutes
 ]

@@ -72,6 +72,24 @@ describe('business legal status change', () => {
         expect(getBusinessLegalStatusChange.options.pre).toHaveLength(1)
       })
     })
+
+    describe('when a registration number was entered for a previous legal status selection', () => {
+      test('it clears both registration number fields from the session', async () => {
+        request.yar.get.mockReturnValue({
+          sbi: '106705779',
+          changeBusinessLegalStatus: '102101',
+          changeBusinessCharityCommissionRegistrationNumber: '1234567',
+          changeBusinessCompanyRegistrationNumber: '12345678'
+        })
+
+        await getBusinessLegalStatusChange.handler(request, h)
+
+        expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', {
+          sbi: '106705779',
+          changeBusinessLegalStatus: '102101'
+        })
+      })
+    })
   })
 
   describe('POST /business/{sbi}/business-legal-status-change', () => {

@@ -14,7 +14,12 @@ const getBusinessLegalStatusChange = {
     const { params, yar, auth } = request
     const { sbi } = params
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
+    // Any previously entered registration number belongs to a legal status the user may now be changing away from
+    const sessionData = { ...yar.get('businessDetailsUpdate') }
+    delete sessionData.changeBusinessCharityCommissionRegistrationNumber
+    delete sessionData.changeBusinessCompanyRegistrationNumber
+
+    yar.set('businessDetailsUpdate', { ...sessionData, sbi })
 
     const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessLegalStatus')
     const pageData = businessLegalStatusChangePresenter(businessDetails)

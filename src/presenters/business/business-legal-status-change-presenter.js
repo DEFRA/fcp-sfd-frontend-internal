@@ -20,10 +20,10 @@ const businessLegalStatusChangePresenter = (data, payload) => {
   }
 }
 
-// Maps the BUSINESS_LEGAL_STATUS constants into govukRadios items, marking the currently selected option
+// Maps the LEGAL_STATUS constants into govukRadios items, marking the currently selected option
 // The DAL code is numeric while our constants store it as a string, so compare as strings
 const buildLegalStatusItems = (selected) => {
-  return Object.values(constants.businessLegalStatus.BUSINESS_LEGAL_STATUS).map(({ code, text }) => ({
+  return Object.values(constants.business.LEGAL_STATUS).map(({ code, text }) => ({
     value: code,
     text,
     checked: String(code) === String(selected)

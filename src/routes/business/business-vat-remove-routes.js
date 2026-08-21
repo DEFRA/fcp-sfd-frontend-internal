@@ -35,11 +35,11 @@ const postBusinessVatRemove = {
         abortEarly: false
       },
       failAction: async (request, h, err) => {
-        const { yar, auth } = request
+        const { yar, auth, payload } = request
 
         const errors = utils.formatValidationErrors(err.details || [])
         const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
-        const pageData = businessVatRemovePresenter(businessDetails)
+        const pageData = businessVatRemovePresenter(businessDetails, payload?.confirmRemove)
 
         return h.view('business/business-vat-registration-remove', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
       }
@@ -50,6 +50,8 @@ const postBusinessVatRemove = {
 
     if (request.payload.confirmRemove === 'yes') {
       await updateBusinessVatRemoveService(request.yar, request.auth.credentials)
+    } else {
+      request.yar.clear('businessDetailsUpdate')
     }
 
     return h.redirect(`/business/${sbi}/details`)

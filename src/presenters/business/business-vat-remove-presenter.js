@@ -3,7 +3,7 @@
  * @module businessVatRemovePresenter
  */
 
-const businessVatRemovePresenter = (data) => {
+const businessVatRemovePresenter = (data, payload) => {
   return {
     backLink: {
       backLink: true,
@@ -11,8 +11,9 @@ const businessVatRemovePresenter = (data) => {
     },
     pageTitle: 'Are you sure you want to remove your VAT registration number?',
     metaDescription: 'Are you sure you want to remove your VAT registration number?',
-    vatNumber: data.changeBusinessVat ?? data.info.vat ?? null,
-    sbi: data.info.sbi ?? null
+    confirmRemove: payload ?? null,
+    vatNumber: data.info?.vat ?? null,
+    sbi: data.info?.sbi ?? null
   }
 }
 

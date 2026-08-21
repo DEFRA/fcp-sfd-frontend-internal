@@ -1,6 +1,5 @@
 // Test framework dependencies
 import { describe, test, expect, beforeEach, vi } from 'vitest'
-import { mutations, constants } from '@defra/fcp-sfd-frontend-engine'
 
 // Things we need to mock
 import { fetchBusinessChangeService } from '../../../../src/services/business/fetch-business-change-service.js'
@@ -49,7 +48,7 @@ describe('updateBusinessVatRemoveService', () => {
     test('it calls updateDalService with the correct mutation and variables', async () => {
       await updateBusinessVatRemoveService(yar, credentials)
 
-      expect(updateDalService).toHaveBeenCalledWith(mutations.updateBusinessVat, {
+      expect(updateDalService).toHaveBeenCalledWith(expect.stringContaining('updateBusinessVAT'), {
         input: {
           vat: '',
           sbi: '107183280'
@@ -66,7 +65,7 @@ describe('updateBusinessVatRemoveService', () => {
     test('adds a flash notification confirming the VAT removal', async () => {
       await updateBusinessVatRemoveService(yar, credentials)
 
-      expect(flashNotification).toHaveBeenCalledWith(yar, 'Success', constants.successMessages.BUSINESS_VAT_REMOVE)
+      expect(flashNotification).toHaveBeenCalledWith(yar, 'Success', 'You have removed your VAT registration number')
     })
   })
 

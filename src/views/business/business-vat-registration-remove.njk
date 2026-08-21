@@ -10,13 +10,13 @@
 {% endblock %}
 
 {% block content %}
-  {% if errors %}
+  {% if errors.confirmRemove %}
     {{ govukErrorSummary({
         titleText: "There is a problem",
         errorList: [
           {
             text: errors.confirmRemove.text,
-            href: "#confirm-remove"
+            href: "#confirmRemove"
           }
         ]
     }) }}
@@ -27,29 +27,25 @@
     <form method="post" novalidate>
       <input type="hidden" name="crumb" value="{{ crumb }}">
       <div class="govuk-form-group">
-        <h1 class="govuk-heading-l">
-          {{ pageTitle }}
-        </h1>
-
         {{ govukRadios({
           name: "confirmRemove",
+          idPrefix: "confirmRemove",
+          value: confirmRemove,
           fieldset: {
             legend: {
-              text: "",
-              isPageHeading: false,
+              text: pageTitle,
+              isPageHeading: true,
               classes: "govuk-fieldset__legend--l"
             }
           },
           items: [
             {
               value: "yes",
-              text: "Yes",
-              checked: confirmRemove === "yes"
+              text: "Yes"
             },
             {
               value: "no",
-              text: "No",
-              checked: confirmRemove === "no"
+              text: "No"
             }
           ],
           errorMessage: errors.confirmRemove and {

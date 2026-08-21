@@ -24,8 +24,27 @@ describe('businessVatRemovePresenter', () => {
         backLink: { backLink: true, href: '/business/123456789/details' },
         pageTitle: 'Are you sure you want to remove your VAT registration number?',
         metaDescription: 'Are you sure you want to remove your VAT registration number?',
+        confirmRemove: null,
         vatNumber: 'GB123456789',
-        sbi: '123456789',
+        sbi: '123456789'
+      })
+    })
+  })
+
+  describe('the "confirmRemove" property', () => {
+    describe('when a payload value is provided', () => {
+      test('it returns the payload value so the selection is replayed', () => {
+        const result = businessVatRemovePresenter(data, 'no')
+
+        expect(result.confirmRemove).toEqual('no')
+      })
+    })
+
+    describe('when no payload value is provided', () => {
+      test('it returns null', () => {
+        const result = businessVatRemovePresenter(data)
+
+        expect(result.confirmRemove).toEqual(null)
       })
     })
   })
@@ -67,6 +86,32 @@ describe('businessVatRemovePresenter', () => {
 
         expect(result.vatNumber).toEqual(null)
       })
+    })
+
+    describe('when there is a pending vat change in the session', () => {
+      beforeEach(() => {
+        data.changeBusinessVat = 'GB987654321'
+      })
+
+      test('it should still return the persisted vat number', () => {
+        const result = businessVatRemovePresenter(data)
+
+        expect(result.vatNumber).toEqual('GB123456789')
+      })
+    })
+  })
+
+  describe('when the "info" property is missing', () => {
+    beforeEach(() => {
+      delete data.info
+    })
+
+    test('it should not throw and should fall back to the search page', () => {
+      const result = businessVatRemovePresenter(data)
+
+      expect(result.backLink).toEqual({ backLink: true, href: '/search-sbi' })
+      expect(result.vatNumber).toEqual(null)
+      expect(result.sbi).toEqual(null)
     })
   })
 })

@@ -6,6 +6,9 @@ import { fetchBusinessChangeService } from '../../../../src/services/business/fe
 import { updateBusinessVatRemoveService } from '../../../../src/services/business/update-business-vat-remove-service.js'
 import { businessVatRemovePresenter } from '../../../../src/presenters/business/business-vat-remove-presenter.js'
 
+// Test helpers
+import { validateSbi } from '../../../../src/routes/pre-handlers.js'
+
 // Thing under test
 import { businessVatRemoveRoutes } from '../../../../src/routes/business/business-vat-remove-routes.js'
 
@@ -36,7 +39,7 @@ describe('business VAT remove routes', () => {
 
     request = {
       params: { sbi: '106705779' },
-      yar: { get: vi.fn().mockReturnValue({ sbi: '106705779' }), set: vi.fn() },
+      yar: { get: vi.fn().mockReturnValue({ sbi: '106705779' }), set: vi.fn(), clear: vi.fn() },
       auth: { credentials: { email: 'test.user@defra.gov.uk' } },
       payload: { confirmRemove: 'yes' }
     }
@@ -54,6 +57,10 @@ describe('business VAT remove routes', () => {
     test('should have the correct method and path configured', () => {
       expect(getBusinessVatRemove.method).toBe('GET')
       expect(getBusinessVatRemove.path).toBe('/business/{sbi}/business-vat-registration-remove')
+    })
+
+    test('should guard the route with the sbi pre-handler', () => {
+      expect(getBusinessVatRemove.options.pre).toEqual([validateSbi])
     })
 
     test('fetches the business change details, presents them and renders the page', async () => {
@@ -77,6 +84,10 @@ describe('business VAT remove routes', () => {
       expect(postBusinessVatRemove.path).toBe('/business/{sbi}/business-vat-registration-remove')
     })
 
+    test('should guard the route with the sbi pre-handler', () => {
+      expect(postBusinessVatRemove.options.pre).toEqual([validateSbi])
+    })
+
     describe('and the payload confirmRemove property is "yes"', () => {
       test('removes the VAT number and redirects to the business details page', async () => {
         await postBusinessVatRemove.handler(request, h)
@@ -97,6 +108,12 @@ describe('business VAT remove routes', () => {
         expect(updateBusinessVatRemoveService).not.toHaveBeenCalled()
         expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
       })
+
+      test('clears any pending business details update from the session', async () => {
+        await postBusinessVatRemove.handler(request, h)
+
+        expect(request.yar.clear).toHaveBeenCalledWith('businessDetailsUpdate')
+      })
     })
   })
 
@@ -115,7 +132,7 @@ describe('business VAT remove routes', () => {
       await postBusinessVatRemove.options.validate.failAction(request, h, err)
 
       expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessVat')
-      expect(businessVatRemovePresenter).toHaveBeenCalledWith(businessDetails)
+      expect(businessVatRemovePresenter).toHaveBeenCalledWith(businessDetails, 'yes')
       expect(h.view).toHaveBeenCalledWith('business/business-vat-registration-remove', {
         ...pageData,
         errors: { confirmRemove: { text: 'Select yes if you want to remove your VAT registration number' } }
@@ -129,6 +146,14 @@ describe('business VAT remove routes', () => {
         ...pageData,
         errors: {}
       })
+    })
+
+    test('it should handle a missing payload', async () => {
+      request.payload = undefined
+
+      await postBusinessVatRemove.options.validate.failAction(request, h, {})
+
+      expect(businessVatRemovePresenter).toHaveBeenCalledWith(businessDetails, undefined)
     })
   })
 })

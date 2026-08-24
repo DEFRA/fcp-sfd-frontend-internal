@@ -43,6 +43,7 @@ import { businessVatCheckRoutes } from './business/business-vat-check-routes.js'
 import { businessLegalStatusChangeRoutes } from './business/business-legal-status-change-routes.js'
 import { businessLegalStatusEnterRoutes } from './business/business-legal-status-enter-routes.js'
 import { businessLegalStatusCheckRoutes } from './business/business-legal-status-check-routes.js'
+import { businessVatRemoveRoutes } from './business/business-vat-remove-routes.js'
 
 export const routes = [
   health,
@@ -89,5 +90,6 @@ export const routes = [
   ...businessVatCheckRoutes,
   ...businessLegalStatusChangeRoutes,
   ...businessLegalStatusEnterRoutes,
-  ...businessLegalStatusCheckRoutes
+  ...businessLegalStatusCheckRoutes,
+  ...businessVatRemoveRoutes
 ]

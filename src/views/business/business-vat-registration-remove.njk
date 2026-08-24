@@ -1,0 +1,64 @@
+{% extends 'common/layout.njk' %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+
+{% block beforeContent %}
+  {{ appBackSignOutLink(backLink) }}
+{% endblock %}
+
+{% block content %}
+  {% if errors.confirmRemove %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: errors.confirmRemove.text,
+            href: "#confirmRemove"
+          }
+        ]
+    }) }}
+  {% endif %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" novalidate>
+      <input type="hidden" name="crumb" value="{{ crumb }}">
+      <div class="govuk-form-group">
+        {{ govukRadios({
+          name: "confirmRemove",
+          idPrefix: "confirmRemove",
+          value: confirmRemove,
+          fieldset: {
+            legend: {
+              text: pageTitle,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ],
+          errorMessage: errors.confirmRemove and {
+            text: errors.confirmRemove.text
+          }
+        }) }}
+      </div>
+
+      {{ govukButton({
+        text: "Submit",
+        preventDoubleClick: true
+      }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

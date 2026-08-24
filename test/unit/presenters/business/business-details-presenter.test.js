@@ -181,7 +181,7 @@ describe('businessDetailsPresenter', () => {
             classes: 'govuk-link--no-visited-state'
           },
           {
-            href: `/business/${sbi}/details`,
+            href: `/business/${sbi}/business-vat-registration-remove`,
             text: 'Remove',
             visuallyHiddenText: 'VAT registration number',
             classes: 'govuk-link--no-visited-state'

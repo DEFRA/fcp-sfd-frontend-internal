@@ -26,6 +26,7 @@ const businessLegalStatusCheckPresenter = (data) => {
 }
 
 const setLinks = (isCharity, isCompany, sbi) => {
+  const SEARCH_SBI_LINK = '/search-sbi'
   if (sbi) {
     const legalStatusChangeLink = `/business/${sbi}/business-legal-status-change`
     const registrationNumberChangeLink = `/business/${sbi}/business-legal-status-enter`
@@ -44,9 +45,9 @@ const setLinks = (isCharity, isCompany, sbi) => {
     }
   }
   return {
-    backLink: '/search-sbi',
-    legalStatusChangeLink: '/search-sbi',
-    registrationNumberChangeLink: '/search-sbi'
+    backLink: SEARCH_SBI_LINK,
+    legalStatusChangeLink: SEARCH_SBI_LINK,
+    registrationNumberChangeLink: SEARCH_SBI_LINK
   }
 }
 

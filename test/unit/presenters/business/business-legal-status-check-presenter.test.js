@@ -151,12 +151,12 @@ describe('businessLegalStatusCheckPresenter', () => {
       expect(result.businessLegalStatus).not.toBe('Sole proprietorship')
     })
 
-    test('it falls back to the fetched legal status when the session change does not match a known code', () => {
+    test('it is null when the session change does not match a known code', () => {
       data.changeBusinessLegalStatus = '999999'
 
       const result = businessLegalStatusCheckPresenter(data)
 
-      expect(result.businessLegalStatus).toBe('Sole proprietorship')
+      expect(result.businessLegalStatus).toBeNull()
     })
 
     test('it is null when there is no session change and no fetched legal status text', () => {

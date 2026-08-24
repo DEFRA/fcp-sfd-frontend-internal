@@ -36,6 +36,14 @@ describe('businessLegalStatusEnterPresenter', () => {
       expect(result.registrationNumber).toBe('1234567')
     })
 
+    test('it falls back to the fetched charity registration number when no session value exists', () => {
+      data.info.registrationNumbers = { charityCommission: '7654321' }
+
+      const result = businessLegalStatusEnterPresenter(data, payload)
+
+      expect(result.registrationNumber).toBe('7654321')
+    })
+
     test('it uses the submitted payload over the session value', () => {
       data.changeBusinessCharityCommissionRegistrationNumber = '1234567'
       payload = { charityCommissionRegistrationNumber: '7654321' }
@@ -66,6 +74,14 @@ describe('businessLegalStatusEnterPresenter', () => {
       const result = businessLegalStatusEnterPresenter(data, payload)
 
       expect(result.registrationNumber).toBe('12345678')
+    })
+
+    test('it falls back to the fetched company registration number when no session value exists', () => {
+      data.info.registrationNumbers = { companiesHouse: 'AB123456' }
+
+      const result = businessLegalStatusEnterPresenter(data, payload)
+
+      expect(result.registrationNumber).toBe('AB123456')
     })
   })
 

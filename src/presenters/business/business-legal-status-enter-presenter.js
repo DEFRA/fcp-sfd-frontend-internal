@@ -38,11 +38,18 @@ const businessLegalStatusEnterPresenter = (data, payload) => {
   const legalStatusCode = String(data.changeBusinessLegalStatus ?? data.info?.legalStatusCode ?? '')
   const isCharity = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
 
-  // Picking the whole content object up front avoids repeating the isCharity check for every field below
-  const content = isCharity ? REGISTRATION_CONTENT.charity : REGISTRATION_CONTENT.company
-  const sessionValue = isCharity
-    ? data.changeBusinessCharityCommissionRegistrationNumber
-    : data.changeBusinessCompanyRegistrationNumber
+  // There are far more legal status codes that use the company registration number than the charity registration
+  // number, so default to the company variant and if it is a charity override the content and session/fetched values
+  // to the charity variant.
+  let content = REGISTRATION_CONTENT.company
+  let sessionValue = data.changeBusinessCompanyRegistrationNumber
+  let fetchedValue = data.info?.registrationNumbers?.companiesHouse
+
+  if (isCharity) {
+    content = REGISTRATION_CONTENT.charity
+    sessionValue = data.changeBusinessCharityCommissionRegistrationNumber
+    fetchedValue = data.info?.registrationNumbers?.charityCommission
+  }
 
   return {
     backLink: { href: sbi ? `/business/${sbi}/business-legal-status-change` : '/search-sbi' },
@@ -50,7 +57,7 @@ const businessLegalStatusEnterPresenter = (data, payload) => {
     metaDescription: content.metaDescription,
     field: content.field,
     hintText: content.hintText,
-    registrationNumber: payload?.[content.field] ?? sessionValue ?? null
+    registrationNumber: payload?.[content.field] ?? sessionValue ?? fetchedValue ?? null
   }
 }
 

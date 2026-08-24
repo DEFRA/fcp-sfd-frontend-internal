@@ -42,7 +42,11 @@ describe('fetchBusinessDetailsService', () => {
           vat: 'GB123456789',
           traderNumber: '123456',
           vendorNumber: '654321',
-          legalStatus: { type: 'Sole Proprietorship' },
+          legalStatus: { code: 102111, type: 'Sole Proprietorship' },
+          registrationNumbers: {
+            companiesHouse: 'AB123456',
+            charityCommission: null
+          },
           type: { type: 'Not Specified' },
           address: {},
           email: { address: 'test@example.com' },

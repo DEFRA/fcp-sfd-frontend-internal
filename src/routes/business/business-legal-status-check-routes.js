@@ -1,14 +1,14 @@
 import { fetchBusinessChangeService } from '../../services/business/fetch-business-change-service.js'
 import { updateBusinessLegalStatusChangeService } from '../../services/business/update-business-legal-status-change-service.js'
 import { businessLegalStatusCheckPresenter } from '../../presenters/business/business-legal-status-check-presenter.js'
-import { validateSbi } from '../pre-handlers.js'
+import { validateSbi, validateLegalStatusRegistrationNumber } from '../pre-handlers.js'
 import { BUSINESS_LEGAL_STATUS_SESSION_FIELDS } from '../../constants/business-legal-status-session-fields.js'
 
 const getBusinessLegalStatusCheck = {
   method: 'GET',
   path: '/business/{sbi}/business-legal-status-check',
   options: {
-    pre: [validateSbi]
+    pre: [validateSbi, validateLegalStatusRegistrationNumber]
   },
   handler: async (request, h) => {
     const { params, yar, auth } = request
@@ -27,7 +27,7 @@ const postBusinessLegalStatusCheck = {
   method: 'POST',
   path: '/business/{sbi}/business-legal-status-check',
   options: {
-    pre: [validateSbi]
+    pre: [validateSbi, validateLegalStatusRegistrationNumber]
   },
   handler: async (request, h) => {
     const { params } = request

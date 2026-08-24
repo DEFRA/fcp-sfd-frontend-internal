@@ -2,10 +2,13 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 
 // Things we need to mock
-import { schemas, services } from '@defra/fcp-sfd-frontend-engine'
+import { schemas, services, constants } from '@defra/fcp-sfd-frontend-engine'
 
 // Things under test
-import { validateSbi, validateCrn, checkCrnAndInterrupterJourney, checkSbiAndInterrupterJourney } from '../../../src/routes/pre-handlers.js'
+import { validateSbi, validateCrn, checkCrnAndInterrupterJourney, checkSbiAndInterrupterJourney, validateLegalStatusRegistrationNumber } from '../../../src/routes/pre-handlers.js'
+
+// Mock the service we need for the new pre-handler
+import { fetchBusinessChangeService } from '../../../src/services/business/fetch-business-change-service.js'
 
 // Mocks
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
@@ -23,7 +26,17 @@ vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
   },
   services: {
     checkInterrupterJourneySession: vi.fn()
+  },
+  constants: {
+    business: {
+      CHARITY_REGISTRATION_LEGAL_STATUS_CODES: ['102101', '102102'],
+      COMPANY_REGISTRATION_LEGAL_STATUS_CODES: ['102105', '102106']
+    }
   }
+}))
+
+vi.mock('../../../src/services/business/fetch-business-change-service.js', () => ({
+  fetchBusinessChangeService: vi.fn()
 }))
 
 describe('pre-handlers', () => {
@@ -347,6 +360,89 @@ describe('pre-handlers', () => {
         expect(result).toBe(h.continue)
         expect(h.redirect).not.toHaveBeenCalled()
       })
+    })
+  })
+
+  describe('validateLegalStatusRegistrationNumber', () => {
+    let request
+    let takeoverMock
+
+    beforeEach(() => {
+      takeoverMock = vi.fn().mockReturnValue({})
+      h = {
+        redirect: vi.fn().mockReturnValue({ takeover: takeoverMock }),
+        continue: {}
+      }
+
+      request = {
+        params: { sbi: '106705779' },
+        yar: { get: vi.fn() },
+        auth: { credentials: { email: 'test@example.com' } }
+      }
+
+      fetchBusinessChangeService.mockResolvedValue({
+        info: { sbi: '106705779', legalStatusCode: '102111' },
+        changeBusinessLegalStatus: '102111'
+      })
+    })
+
+    test('it returns h.continue when legal status does not require a registration number', async () => {
+      const result = await validateLegalStatusRegistrationNumber.method(request, h)
+
+      expect(result).toBe(h.continue)
+      expect(h.redirect).not.toHaveBeenCalled()
+    })
+
+    test('it redirects to enter page when charity status is selected but no charity number is present', async () => {
+      fetchBusinessChangeService.mockResolvedValue({
+        info: { sbi: '106705779', legalStatusCode: '102111' },
+        changeBusinessLegalStatus: '102101',
+        changeBusinessCharityCommissionRegistrationNumber: null
+      })
+
+      await validateLegalStatusRegistrationNumber.method(request, h)
+
+      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-enter')
+      expect(takeoverMock).toHaveBeenCalled()
+    })
+
+    test('it redirects to enter page when company status is selected but no company number is present', async () => {
+      fetchBusinessChangeService.mockResolvedValue({
+        info: { sbi: '106705779', legalStatusCode: '102111' },
+        changeBusinessLegalStatus: '102105',
+        changeBusinessCompanyRegistrationNumber: null
+      })
+
+      await validateLegalStatusRegistrationNumber.method(request, h)
+
+      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-enter')
+      expect(takeoverMock).toHaveBeenCalled()
+    })
+
+    test('it returns h.continue when charity status is selected and charity number is present', async () => {
+      fetchBusinessChangeService.mockResolvedValue({
+        info: { sbi: '106705779', legalStatusCode: '102111' },
+        changeBusinessLegalStatus: '102101',
+        changeBusinessCharityCommissionRegistrationNumber: '1234567'
+      })
+
+      const result = await validateLegalStatusRegistrationNumber.method(request, h)
+
+      expect(result).toBe(h.continue)
+      expect(h.redirect).not.toHaveBeenCalled()
+    })
+
+    test('it returns h.continue when company status is selected and company number is present', async () => {
+      fetchBusinessChangeService.mockResolvedValue({
+        info: { sbi: '106705779', legalStatusCode: '102111' },
+        changeBusinessLegalStatus: '102105',
+        changeBusinessCompanyRegistrationNumber: '12345678'
+      })
+
+      const result = await validateLegalStatusRegistrationNumber.method(request, h)
+
+      expect(result).toBe(h.continue)
+      expect(h.redirect).not.toHaveBeenCalled()
     })
   })
 })

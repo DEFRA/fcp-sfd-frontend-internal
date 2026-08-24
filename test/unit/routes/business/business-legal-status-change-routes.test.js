@@ -102,7 +102,7 @@ describe('business legal status change', () => {
       test('it sets session data and redirects to the enter page', async () => {
         request.payload = { businessLegalStatus: constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES[0] }
 
-        await postBusinessLegalStatusChange.options.handler(request, h)
+        await postBusinessLegalStatusChange.handler(request, h)
 
         expect(setSessionData).toHaveBeenCalledWith(
           request.yar,
@@ -118,7 +118,7 @@ describe('business legal status change', () => {
       test('it sets session data and redirects to the enter page', async () => {
         request.payload = { businessLegalStatus: constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES[0] }
 
-        await postBusinessLegalStatusChange.options.handler(request, h)
+        await postBusinessLegalStatusChange.handler(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-enter')
       })
@@ -128,7 +128,7 @@ describe('business legal status change', () => {
       test('it sets session data and redirects to the check page', async () => {
         request.payload = { businessLegalStatus: '102111' } // Sole proprietorship
 
-        await postBusinessLegalStatusChange.options.handler(request, h)
+        await postBusinessLegalStatusChange.handler(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-check')
       })

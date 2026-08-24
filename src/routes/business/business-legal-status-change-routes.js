@@ -47,23 +47,23 @@ const postBusinessLegalStatusChange = {
 
         return h.view('business/business-legal-status-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
       }
-    },
-    handler: async (request, h) => {
-      const { sbi } = request.params
-      const { businessLegalStatus } = request.payload
-
-      setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessLegalStatus', businessLegalStatus)
-
-      // Only these statuses require a registration number, so route the rest straight to the check page
-      const requiresRegistrationNumber = [
-        ...constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES,
-        ...constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES
-      ].includes(businessLegalStatus)
-
-      const nextPage = requiresRegistrationNumber ? 'business-legal-status-enter' : 'business-legal-status-check'
-
-      return h.redirect(`/business/${sbi}/${nextPage}`)
     }
+  },
+  handler: async (request, h) => {
+    const { sbi } = request.params
+    const { businessLegalStatus } = request.payload
+
+    setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessLegalStatus', businessLegalStatus)
+
+    // Only these statuses require a registration number, so route the rest straight to the check page
+    const requiresRegistrationNumber = [
+      ...constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES,
+      ...constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES
+    ].includes(businessLegalStatus)
+
+    const nextPage = requiresRegistrationNumber ? 'business-legal-status-enter' : 'business-legal-status-check'
+
+    return h.redirect(`/business/${sbi}/${nextPage}`)
   }
 }
 

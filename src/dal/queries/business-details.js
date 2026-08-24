@@ -11,6 +11,10 @@ export const businessDetailsQuery = `
         code
         type
       }
+      registrationNumbers {
+        companiesHouse
+        charityCommission
+      }
       type {
         type
       }

@@ -12,10 +12,9 @@ const getBusinessPhoneNumbersCheck = {
   handler: async (request, h) => {
     const { params, yar, auth, info } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessPhoneNumbersChange = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessPhoneNumbers')
+    const businessPhoneNumbersChange = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessPhoneNumbers')
     const pageData = businessPhoneNumbersCheckPresenter(businessPhoneNumbersChange, info.referrer)
 
     return h.view('business/business-phone-numbers-check', pageData)
@@ -31,8 +30,9 @@ const postBusinessPhoneNumbersCheck = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    await updateBusinessPhoneNumbersChangeService(yar, auth.credentials)
+    await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
     return h.redirect(`/business/${sbi}/details`)
   }

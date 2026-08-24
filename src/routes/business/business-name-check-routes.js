@@ -12,10 +12,9 @@ const getBusinessNameCheck = {
   handler: async (request, h) => {
     const { params, yar, auth, info } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessNameChange = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessName')
+    const businessNameChange = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessName')
     const pageData = businessNameCheckPresenter(businessNameChange, info.referrer)
 
     return h.view('business/business-name-check', pageData)
@@ -31,10 +30,9 @@ const postBusinessNameCheck = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    await updateBusinessNameChangeService(yar, auth.credentials)
+    await updateBusinessNameChangeService(yar, sbi, email)
 
     return h.redirect(`/business/${sbi}/details`)
   }

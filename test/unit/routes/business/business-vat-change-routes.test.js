@@ -60,15 +60,9 @@ describe('business VAT change routes', () => {
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessVatChange.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessVat')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessVat')
       expect(businessVatChangePresenter).toHaveBeenCalledWith(businessDetails, undefined, request.info.referrer)
       expect(h.view).toHaveBeenCalledWith('business/business-vat-registration-number-change', pageData)
-    })
-
-    test('persists the sbi in session', async () => {
-      await getBusinessVatChange.handler(request, h)
-
-      expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
     })
   })
 
@@ -100,7 +94,7 @@ describe('business VAT change routes', () => {
 
       await postBusinessVatChange.options.validate.failAction(request, h, err)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessVat')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessVat')
       expect(businessVatChangePresenter).toHaveBeenCalledWith(businessDetails, 'GB123456789', request.info.referrer)
       expect(h.view).toHaveBeenCalledWith('business/business-vat-registration-number-change', {
         ...pageData,

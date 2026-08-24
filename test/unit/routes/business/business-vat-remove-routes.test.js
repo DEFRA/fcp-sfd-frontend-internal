@@ -66,15 +66,9 @@ describe('business VAT remove routes', () => {
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessVatRemove.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessVat')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessVat')
       expect(businessVatRemovePresenter).toHaveBeenCalledWith(businessDetails)
       expect(h.view).toHaveBeenCalledWith('business/business-vat-registration-remove', pageData)
-    })
-
-    test('persists the sbi in session', async () => {
-      await getBusinessVatRemove.handler(request, h)
-
-      expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
     })
   })
 
@@ -92,7 +86,7 @@ describe('business VAT remove routes', () => {
       test('removes the VAT number and redirects to the business details page', async () => {
         await postBusinessVatRemove.handler(request, h)
 
-        expect(updateBusinessVatRemoveService).toHaveBeenCalledWith(request.yar, request.auth.credentials)
+        expect(updateBusinessVatRemoveService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email)
         expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
       })
     })
@@ -131,7 +125,7 @@ describe('business VAT remove routes', () => {
 
       await postBusinessVatRemove.options.validate.failAction(request, h, err)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessVat')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessVat')
       expect(businessVatRemovePresenter).toHaveBeenCalledWith(businessDetails, 'yes')
       expect(h.view).toHaveBeenCalledWith('business/business-vat-registration-remove', {
         ...pageData,

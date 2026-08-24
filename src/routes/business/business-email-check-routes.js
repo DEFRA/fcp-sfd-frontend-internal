@@ -12,10 +12,9 @@ const getBusinessEmailCheck = {
   handler: async (request, h) => {
     const { params, yar, auth, info } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessEmailChange = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessEmail')
+    const businessEmailChange = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessEmail')
     const pageData = businessEmailCheckPresenter(businessEmailChange, info.referrer)
 
     return h.view('business/business-email-check', pageData)
@@ -31,8 +30,9 @@ const postBusinessEmailCheck = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    await updateBusinessEmailChangeService(yar, auth.credentials)
+    await updateBusinessEmailChangeService(yar, sbi, email)
 
     return h.redirect(`/business/${sbi}/details`)
   }

@@ -62,15 +62,9 @@ describe('business email change routes', () => {
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessEmailChange.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessEmail')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessEmail')
       expect(businessEmailChangePresenter).toHaveBeenCalledWith(businessDetails, undefined, request.info.referrer)
       expect(h.view).toHaveBeenCalledWith('business/business-email-change', pageData)
-    })
-
-    test('persists the sbi in session', async () => {
-      await getBusinessEmailChange.handler(request, h)
-
-      expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
     })
   })
 

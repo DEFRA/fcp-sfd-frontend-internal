@@ -13,9 +13,11 @@ const getBusinessAddressChange = {
     pre: [validateSbi]
   },
   handler: async (request, h) => {
-    const { yar, auth } = request
+    const { yar, auth, params } = request
+    const { sbi } = params
+    const email = auth.credentials?.email
 
-    const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessPostcode')
+    const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessPostcode')
     const pageData = businessAddressChangePresenter(businessDetails)
 
     return h.view('business/business-address-change', pageData)
@@ -31,9 +33,11 @@ const postBusinessAddressChange = {
       payload: schemas.osPlaces.ukPostcode,
       options: { abortEarly: false },
       failAction: async (request, h, err) => {
-        const { yar, auth, payload } = request
+        const { yar, auth, payload, params } = request
+        const { sbi } = params
+        const email = auth.credentials?.email
 
-        const pageData = await businessAddressChangeErrorService(yar, auth.credentials, payload.postcode, err.details)
+        const pageData = await businessAddressChangeErrorService(yar, sbi, email, payload.postcode, err.details)
 
         return h.view('business/business-address-change', pageData).code(constants.statusCodes.BAD_REQUEST).takeover()
       }
@@ -42,12 +46,13 @@ const postBusinessAddressChange = {
   handler: async (request, h) => {
     const { yar, auth, payload, params } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
     setSessionData(yar, 'businessDetailsUpdate', 'changeBusinessPostcode', payload)
     const addresses = await addressLookupService(payload.postcode, yar, 'business')
 
     if (addresses.error) {
-      const pageData = await businessAddressChangeErrorService(yar, auth.credentials, payload.postcode, addresses.error)
+      const pageData = await businessAddressChangeErrorService(yar, sbi, email, payload.postcode, addresses.error)
 
       return h.view('business/business-address-change', pageData).code(constants.statusCodes.BAD_REQUEST).takeover()
     }

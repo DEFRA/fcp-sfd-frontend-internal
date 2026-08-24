@@ -68,30 +68,9 @@ describe('business phone numbers check routes', () => {
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessPhoneNumbersCheck.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessPhoneNumbers')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessPhoneNumbers')
       expect(businessPhoneNumbersCheckPresenter).toHaveBeenCalledWith(businessPhoneNumbersChange, request.info.referrer)
       expect(h.view).toHaveBeenCalledWith('business/business-phone-numbers-check', pageData)
-    })
-
-    test('persists the sbi in session', async () => {
-      await getBusinessPhoneNumbersCheck.handler(request, h)
-
-      expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
-    })
-
-    describe('when there is existing session data', () => {
-      beforeEach(() => {
-        request.yar.get.mockReturnValue({ changeBusinessPhoneNumbers: { businessTelephone: '01234567890' } })
-      })
-
-      test('merges the sbi into the existing session data', async () => {
-        await getBusinessPhoneNumbersCheck.handler(request, h)
-
-        expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', {
-          changeBusinessPhoneNumbers: { businessTelephone: '01234567890' },
-          sbi: '106705779'
-        })
-      })
     })
 
     describe('when fetchBusinessChangeService throws', () => {
@@ -118,7 +97,7 @@ describe('business phone numbers check routes', () => {
     test('updates the phone numbers and redirects to the business details page for the sbi', async () => {
       await postBusinessPhoneNumbersCheck.handler(request, h)
 
-      expect(updateBusinessPhoneNumbersChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials)
+      expect(updateBusinessPhoneNumbersChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email)
       expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
     })
 

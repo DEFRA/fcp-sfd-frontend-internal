@@ -21,12 +21,14 @@ const { businessAddressChangeErrorService } = await import('../../../../src/serv
 
 describe('businessAddressChangeErrorService', () => {
   let yar
-  let credentials
+  let sbi
+  let email
 
   beforeEach(() => {
     vi.clearAllMocks()
 
-    credentials = { email: 'test.user@defra.gov.uk' }
+    sbi = '106705779'
+    email = 'test.user@defra.gov.uk'
 
     yar = {
       get: vi.fn().mockReturnValue({ sbi: '106705779' })
@@ -43,15 +45,15 @@ describe('businessAddressChangeErrorService', () => {
     test('it fetches business details with changeBusinessPostcode', async () => {
       const errors = [{ message: 'Postcode not found' }]
 
-      await businessAddressChangeErrorService(yar, credentials, 'SW1A 1AA', errors)
+      await businessAddressChangeErrorService(yar, sbi, email, 'SW1A 1AA', errors)
 
-      expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, credentials, 'changeBusinessPostcode')
+      expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, sbi, email, 'changeBusinessPostcode')
     })
 
     test('it returns page data with postcode and errors', async () => {
       const errors = [{ message: 'Postcode not found' }]
 
-      const result = await businessAddressChangeErrorService(yar, credentials, 'SW1A 1AA', errors)
+      const result = await businessAddressChangeErrorService(yar, sbi, email, 'SW1A 1AA', errors)
 
       expect(result).toMatchObject({
         pageTitle: 'What is your business address?',
@@ -64,7 +66,7 @@ describe('businessAddressChangeErrorService', () => {
 
   describe('when there are no validation errors', () => {
     test('it returns page data with empty errors', async () => {
-      const result = await businessAddressChangeErrorService(yar, credentials, 'SW1A 1AA', [])
+      const result = await businessAddressChangeErrorService(yar, sbi, email, 'SW1A 1AA', [])
 
       expect(result).toMatchObject({
         pageTitle: 'What is your business address?',

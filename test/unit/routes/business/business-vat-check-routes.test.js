@@ -61,16 +61,10 @@ describe('business VAT check routes', () => {
       expect(getBusinessVatCheck.options.pre).toEqual([validateSbi])
     })
 
-    test('persists the sbi in session', async () => {
-      await getBusinessVatCheck.handler(request, h)
-
-      expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
-    })
-
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessVatCheck.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessVat')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessVat')
       expect(businessVatCheckPresenter).toHaveBeenCalledWith(businessDetails)
       expect(h.view).toHaveBeenCalledWith('business/business-vat-registration-number-check', pageData)
     })
@@ -89,7 +83,7 @@ describe('business VAT check routes', () => {
     test('updates the VAT number and redirects to the business details page', async () => {
       await postBusinessVatCheck.handler(request, h)
 
-      expect(updateBusinessVatChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials)
+      expect(updateBusinessVatChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email)
       expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
     })
   })

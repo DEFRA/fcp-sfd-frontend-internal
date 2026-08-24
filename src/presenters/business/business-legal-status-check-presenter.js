@@ -19,7 +19,7 @@ const businessLegalStatusCheckPresenter = (data) => {
     registrationNumberChangeLink,
     pageTitle: 'Check your business legal status is correct before submitting',
     metaDescription: 'Check the legal status of this business is correct.',
-    businessLegalStatus: getLegalStatusText(data.changeBusinessLegalStatus) ?? data.info?.legalStatus ?? null,
+    businessLegalStatus: getLegalStatusText(data.changeBusinessLegalStatus ?? data.info?.legalStatusCode) ?? null,
     registrationNumberLabel: getRegistrationNumberLabel(isCharity, isCompany),
     registrationNumber: getRegistrationNumber(data, isCharity, isCompany)
   }
@@ -71,11 +71,11 @@ const getRegistrationNumberLabel = (isCharity, isCompany) => {
 
 const getRegistrationNumber = (data, isCharity, isCompany) => {
   if (isCharity) {
-    return data.changeBusinessCharityCommissionRegistrationNumber ?? null
+    return data.changeBusinessCharityCommissionRegistrationNumber ?? data.info?.registrationNumbers?.charityCommission ?? null
   }
 
   if (isCompany) {
-    return data.changeBusinessCompanyRegistrationNumber ?? null
+    return data.changeBusinessCompanyRegistrationNumber ?? data.info?.registrationNumbers?.companiesHouse ?? null
   }
 
   return null

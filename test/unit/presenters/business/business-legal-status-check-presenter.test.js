@@ -74,6 +74,15 @@ describe('businessLegalStatusCheckPresenter', () => {
       expect(result.registrationNumberLabel).toBe('Charity commission registration number')
       expect(result.registrationNumber).toBe('1234567')
     })
+
+    test('it falls back to the fetched charity registration number when no session value exists', () => {
+      delete data.changeBusinessCharityCommissionRegistrationNumber
+      data.info.registrationNumbers = { charityCommission: '7654321' }
+
+      const result = businessLegalStatusCheckPresenter(data)
+
+      expect(result.registrationNumber).toBe('7654321')
+    })
   })
 
   describe('when the legal status requires a company registration number', () => {
@@ -100,6 +109,15 @@ describe('businessLegalStatusCheckPresenter', () => {
 
       expect(result.registrationNumberLabel).toBe('Company registration number')
       expect(result.registrationNumber).toBe('12345678')
+    })
+
+    test('it falls back to the fetched company registration number when no session value exists', () => {
+      delete data.changeBusinessCompanyRegistrationNumber
+      data.info.registrationNumbers = { companiesHouse: 'AB123456' }
+
+      const result = businessLegalStatusCheckPresenter(data)
+
+      expect(result.registrationNumber).toBe('AB123456')
     })
   })
 
@@ -143,6 +161,7 @@ describe('businessLegalStatusCheckPresenter', () => {
 
     test('it is null when there is no session change and no fetched legal status text', () => {
       delete data.info.legalStatus
+      delete data.info.legalStatusCode
 
       const result = businessLegalStatusCheckPresenter(data)
 

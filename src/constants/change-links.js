@@ -4,7 +4,8 @@ export const BUSINESS_CHANGE_LINKS = {
   businessTelephone: (sbi) => `/business/${sbi}/business-phone-numbers-change`,
   businessAddress: (sbi) => `/business/${sbi}/business-address-change`,
   businessVat: (sbi) => `/business/${sbi}/business-vat-registration-number-change`,
-  businessVatRemove: (sbi) => `/business/${sbi}/business-vat-registration-remove`
+  businessVatRemove: (sbi) => `/business/${sbi}/business-vat-registration-remove`,
+  businessLegalStatus: (sbi) => `/business/${sbi}/business-legal-status-change`
 }
 
 export const PERSONAL_CHANGE_LINKS = {

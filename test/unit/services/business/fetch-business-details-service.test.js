@@ -13,8 +13,10 @@ vi.mock('../../../../src/dal/connector.js', () => ({
   getDalConnector: vi.fn(() => mockDalConnector)
 }))
 
-vi.mock('../../../../src/mappers/business-details-mapper.js', () => ({
-  mapBusinessDetails: mockMapBusinessDetails
+vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
+  mappers: {
+    businessDetails: mockMapBusinessDetails
+  }
 }))
 
 // Thing under test
@@ -40,7 +42,11 @@ describe('fetchBusinessDetailsService', () => {
           vat: 'GB123456789',
           traderNumber: '123456',
           vendorNumber: '654321',
-          legalStatus: { type: 'Sole Proprietorship' },
+          legalStatus: { code: 102111, type: 'Sole Proprietorship' },
+          registrationNumbers: {
+            companiesHouse: 'AB123456',
+            charityCommission: null
+          },
           type: { type: 'Not Specified' },
           address: {},
           email: { address: 'test@example.com' },

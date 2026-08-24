@@ -8,7 +8,12 @@ export const businessDetailsQuery = `
       traderNumber
       vendorNumber
       legalStatus {
+        code
         type
+      }
+      registrationNumbers {
+        companiesHouse
+        charityCommission
       }
       type {
         type

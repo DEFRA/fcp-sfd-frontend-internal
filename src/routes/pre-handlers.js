@@ -1,4 +1,6 @@
-import { schemas, services } from '@defra/fcp-sfd-frontend-engine'
+import { schemas, services, constants } from '@defra/fcp-sfd-frontend-engine'
+import { fetchBusinessChangeService } from '../services/business/fetch-business-change-service.js'
+import { BUSINESS_LEGAL_STATUS_SESSION_FIELDS } from '../constants/business-legal-status-session-fields.js'
 
 /**
  * Creates a Hapi pre-handler that validates a CRN and checks the interrupted journey session.
@@ -95,6 +97,40 @@ export const validateCrn = {
     // Mutate params with the Joi-coerced value to ensure downstream handlers
     // work with the normalised input
     request.params.crn = validation.value.crn
+
+    return h.continue
+  }
+}
+
+/**
+ * Pre-handler that validates a business legal status change has a required registration number.
+ * If the selected legal status requires a registration number (charity or company),
+ * this handler ensures one has been entered. If missing, redirects to the enter page.
+ * Prevents users from bypassing the registration number capture step.
+ */
+export const validateLegalStatusRegistrationNumber = {
+  method: async (request, h) => {
+    const { params, yar, auth } = request
+    const { sbi } = params
+
+    const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
+
+    const legalStatusCode = String(businessDetails.changeBusinessLegalStatus ?? businessDetails.info?.legalStatusCode ?? '')
+
+    const isCharity = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
+    const isCompany = constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
+
+    if (isCharity || isCompany) {
+      const charityNumber = businessDetails.changeBusinessCharityCommissionRegistrationNumber
+      const companyNumber = businessDetails.changeBusinessCompanyRegistrationNumber
+
+      const charityRequired = isCharity && !charityNumber
+      const companyRequired = isCompany && !companyNumber
+
+      if (charityRequired || companyRequired) {
+        return h.redirect(`/business/${sbi}/business-legal-status-enter`).takeover()
+      }
+    }
 
     return h.continue
   }

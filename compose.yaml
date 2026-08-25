@@ -70,6 +70,7 @@ services:
       KIT_EXT_PERSON_ID_OVERRIDE: 3000000
       KITS_GATEWAY_TIMEOUT_MS: 3000
       KITS_DISABLE_MTLS: true
+      KITS_DAL_SERVICE_ACCOUNT_EMAIL: ${KITS_DAL_SERVICE_ACCOUNT_EMAIL:-dal@defra.gov.uk}
       HITACHI_GATEWAY_URL: http://upstream-mock:3100/api/
       HITACHI_TIMEOUT_MS: 3000
       MONGO_URI: mongodb://mongo:27017

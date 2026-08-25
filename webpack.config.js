@@ -51,7 +51,7 @@ export default {
   },
   resolve: {
     alias: {
-      '/public/assets': path.join(govukFrontendPath, 'dist/govuk/assets/rebrand')
+      '/public/assets': path.join(govukFrontendPath, 'dist/govuk/assets')
     }
   },
   module: {

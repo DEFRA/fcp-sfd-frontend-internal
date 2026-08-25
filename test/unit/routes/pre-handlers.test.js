@@ -2,7 +2,7 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 
 // Things we need to mock
-import { schemas, services } from '@defra/fcp-sfd-frontend-engine'
+import { schemas, services, constants } from '@defra/fcp-sfd-frontend-engine'
 
 // Things under test
 import { validateSbi, validateCrn, checkCrnAndInterrupterJourney, checkSbiAndInterrupterJourney, validateLegalStatusRegistrationNumber } from '../../../src/routes/pre-handlers.js'

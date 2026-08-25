@@ -24,6 +24,16 @@ updates:
       interval: "daily"
     commit-message:
       prefix: "chore"
+    ignore:
+      # global-agent 4.x gates its TLS options on `configuration.secureEndpoint`,
+      # a property Node core never sets on the options passed to `Agent.addRequest`.
+      # As a result `servername` is never forwarded to `tls.connect()` when tunnelling
+      # HTTPS through the CDP proxy, so Node falls back to verifying the certificate
+      # against "localhost" and every outbound HTTPS call (Entra OIDC, DAL token) fails
+      # with "Hostname/IP does not match certificate's altnames".
+      # Remove this once https://github.com/gajus/global-agent is fixed upstream.
+      - dependency-name: "global-agent"
+        versions: [">=4.0.0"]
     groups:
       npm-security:
         applies-to: security-updates

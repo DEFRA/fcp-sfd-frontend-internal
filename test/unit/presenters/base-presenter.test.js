@@ -2,7 +2,7 @@
 import { describe, test, expect, beforeEach } from 'vitest'
 
 // Thing under test
-import { formatAddressLines, resolveBackLink } from '../../../src/presenters/base-presenter.js'
+import { formatAddressLines, resolveBackLink, formatBreadcrumbLabel } from '../../../src/presenters/base-presenter.js'
 
 describe('basePresenter', () => {
   describe('#resolveBackLink', () => {
@@ -166,6 +166,32 @@ describe('basePresenter', () => {
           addressLines: '10 Main Street, Bristol, England',
           postcode: 'BS1 1AA'
         })
+      })
+    })
+  })
+
+  describe('#formatBreadcrumbLabel', () => {
+    describe('when a name is provided', () => {
+      test('it should return the name followed by the id label and id in brackets', () => {
+        const result = formatBreadcrumbLabel('Herberts Lawn Mowing', 'SBI', '106705779')
+
+        expect(result).toBe('Herberts Lawn Mowing (SBI: 106705779)')
+      })
+    })
+
+    describe('when no name is provided', () => {
+      test('it should fall back to just the id label and id', () => {
+        const result = formatBreadcrumbLabel('', 'CRN', '1101996862')
+
+        expect(result).toBe('CRN: 1101996862')
+      })
+    })
+
+    describe('when the name is null', () => {
+      test('it should fall back to just the id label and id', () => {
+        const result = formatBreadcrumbLabel(null, 'SBI', '106705779')
+
+        expect(result).toBe('SBI: 106705779')
       })
     })
   })

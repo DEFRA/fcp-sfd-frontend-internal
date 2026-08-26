@@ -89,3 +89,16 @@ export const formatAddressLines = (address) => {
     postcode: postcode || ''
   }
 }
+
+/**
+ * Formats the business/customer breadcrumb label used on overview and details pages.
+ *
+ * @param {string} name - The business or customer name
+ * @param {string} idLabel - The label for the identifier, e.g. 'SBI' or 'CRN'
+ * @param {string} id - The SBI or CRN value
+ *
+ * @returns {string} e.g. "Alfred Waldron (CRN: 1101996862)" or "SBI: 123456789" when there's no name
+ */
+export const formatBreadcrumbLabel = (name, idLabel, id) => {
+  return name ? `${name} (${idLabel}: ${id})` : `${idLabel}: ${id}`
+}

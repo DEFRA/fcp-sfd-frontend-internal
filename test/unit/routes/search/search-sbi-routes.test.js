@@ -134,6 +134,20 @@ describe('search sbi routes', () => {
           expect(fetchSbiSearchDetailsService).not.toHaveBeenCalled()
         })
       })
+
+      describe('when Joi returns both a value and an error for an invalid SBI', () => {
+        beforeEach(() => {
+          request.query = { sbi: 'not-an-sbi' }
+          mockValidate.mockReturnValue({ value: { sbi: 'not-an-sbi' }, error: { details: [] } })
+        })
+
+        test('it renders the search page with no page data', async () => {
+          await getSearchSbi.handler(request, h)
+
+          expect(h.view).toHaveBeenCalledWith('search/search-sbi')
+          expect(fetchSbiSearchDetailsService).not.toHaveBeenCalled()
+        })
+      })
     })
 
     describe('when an SBI is in session', () => {

@@ -17,11 +17,11 @@ const getSearchCrn = {
     // so we need to check whether this is just an initial request to display the page or whether it is a request for a
     // page of results. The CRN can arrive via session (after a POST) or via query string (e.g. "Search results" link).
     const crnFromQuery = request.query?.crn?.trim() ?? ''
-    const { value } = crnFromQuery
+    const { value, error } = crnFromQuery
       ? schemas.customer.crn.validate({ crn: crnFromQuery })
-      : { value: null }
+      : { value: null, error: null }
 
-    const searchState = sessionState ?? (value ? { crn: value.crn } : null)
+    const searchState = sessionState ?? (!error && value ? { crn: value.crn } : null)
 
     if (!searchState) {
       return h.view(SEARCH_CRN_VIEW)

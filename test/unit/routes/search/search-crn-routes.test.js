@@ -134,6 +134,20 @@ describe('search crn routes', () => {
           expect(fetchCrnSearchDetailsService).not.toHaveBeenCalled()
         })
       })
+
+      describe('when Joi returns both a value and an error for an invalid CRN', () => {
+        beforeEach(() => {
+          request.query = { crn: 'not-a-crn' }
+          mockValidate.mockReturnValue({ value: { crn: 'not-a-crn' }, error: { details: [] } })
+        })
+
+        test('it renders the search page with no page data', async () => {
+          await getSearchCrn.handler(request, h)
+
+          expect(h.view).toHaveBeenCalledWith('search/search-crn')
+          expect(fetchCrnSearchDetailsService).not.toHaveBeenCalled()
+        })
+      })
     })
 
     describe('when a CRN is in session', () => {

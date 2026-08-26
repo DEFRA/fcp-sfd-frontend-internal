@@ -17,11 +17,11 @@ const getSearchSbi = {
     // so we need to check whether this is just an initial request to display the page or whether it is a request for a
     // page of results. The SBI can arrive via session (after a POST) or via query string (e.g. "Search results" link).
     const sbiFromQuery = request.query?.sbi?.trim() ?? ''
-    const { value } = sbiFromQuery
+    const { value, error } = sbiFromQuery
       ? schemas.business.sbi.validate({ sbi: sbiFromQuery })
-      : { value: null }
+      : { value: null, error: null }
 
-    const searchState = sessionState ?? (value ? { sbi: value.sbi } : null)
+    const searchState = sessionState ?? (!error && value ? { sbi: value.sbi } : null)
 
     if (!searchState) {
       return h.view(SEARCH_SBI_VIEW)

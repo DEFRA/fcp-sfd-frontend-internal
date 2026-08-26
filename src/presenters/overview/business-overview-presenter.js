@@ -4,6 +4,7 @@
  */
 
 import { paginationPresenter } from '../pagination-presenter.js'
+import { formatBreadcrumbLabel } from '../base-presenter.js'
 import { BUSINESS_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 
 const businessOverviewPresenter = (businessDetails, page) => {
@@ -29,6 +30,9 @@ const businessOverviewPresenter = (businessDetails, page) => {
       {
         text: 'Search results',
         href: `/search-sbi?sbi=${businessDetails?.sbi}`
+      },
+      {
+        text: formatBreadcrumbLabel(businessDetails?.businessName, 'SBI', businessDetails?.sbi)
       }
     ]
   }

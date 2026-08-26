@@ -49,6 +49,9 @@ describe('businessOverviewPresenter', () => {
           {
             text: 'Search results',
             href: '/search-sbi?sbi=106705779'
+          },
+          {
+            text: 'Herberts Lawn Mowing (SBI: 106705779)'
           }
         ]
       })
@@ -185,12 +188,32 @@ describe('businessOverviewPresenter', () => {
     test('it should always return the search results breadcrumb with the SBI as a query param', () => {
       const result = businessOverviewPresenter(data, page)
 
-      expect(result.breadcrumbs).toEqual([
-        {
-          text: 'Search results',
-          href: '/search-sbi?sbi=106705779'
-        }
-      ])
+      expect(result.breadcrumbs[0]).toEqual({
+        text: 'Search results',
+        href: '/search-sbi?sbi=106705779'
+      })
+    })
+
+    test('it should return the business name and SBI as the final, non-clickable breadcrumb', () => {
+      const result = businessOverviewPresenter(data, page)
+
+      expect(result.breadcrumbs[1]).toEqual({
+        text: 'Herberts Lawn Mowing (SBI: 106705779)'
+      })
+    })
+
+    describe('when the businessName property is missing', () => {
+      beforeEach(() => {
+        delete data.businessName
+      })
+
+      test('it should fall back to just the SBI', () => {
+        const result = businessOverviewPresenter(data, page)
+
+        expect(result.breadcrumbs[1]).toEqual({
+          text: 'SBI: 106705779'
+        })
+      })
     })
   })
 

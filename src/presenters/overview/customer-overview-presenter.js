@@ -4,6 +4,7 @@
  */
 
 import { paginationPresenter } from '../pagination-presenter.js'
+import { formatBreadcrumbLabel } from '../base-presenter.js'
 import { CUSTOMER_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 
 const customerOverviewPresenter = (customerDetails, page) => {
@@ -26,8 +27,11 @@ const customerOverviewPresenter = (customerDetails, page) => {
     pagination,
     breadcrumbs: [
       {
-        text: 'Search for another customer',
-        href: '/search-crn'
+        text: 'Search results',
+        href: `/search-crn?crn=${customerDetails?.info?.crn}`
+      },
+      {
+        text: formatBreadcrumbLabel(customerDetails?.info?.customerName, 'CRN', customerDetails?.info?.crn)
       }
     ]
   }

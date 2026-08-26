@@ -1,10 +1,14 @@
+import { getSafeBackLink } from '../../utils/get-safe-back-link.js'
+
 export const cookies = {
   method: 'GET',
   path: '/cookies',
-  handler: (_request, h) => {
+  handler: (request, h) => {
+    const backLink = getSafeBackLink(request.info.referrer, '/search-sbi')
     return h.view('cookies', {
       pageTitle: 'Cookies',
-      heading: 'How we use cookies to store information about how you use this service.'
+      heading: 'How we use cookies to store information about how you use this service.',
+      backLink
     })
   }
 }

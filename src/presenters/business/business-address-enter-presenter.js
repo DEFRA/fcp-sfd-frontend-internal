@@ -13,6 +13,8 @@ const businessAddressEnterPresenter = (data, payload) => {
     backLink: sbi ? `/business/${sbi}/business-address-change` : SEARCH_SBI,
     pageTitle: 'Enter your business address',
     metaDescription: 'Enter the address for your business.',
+    businessName: data.info?.businessName ?? null,
+    sbi: sbi ?? null,
     address: formatAddress(payload, data.changeBusinessAddress, data.address)
   }
 }

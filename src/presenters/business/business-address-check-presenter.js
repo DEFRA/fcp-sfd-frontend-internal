@@ -19,6 +19,8 @@ const businessAddressCheckPresenter = (businessDetails) => {
     changeLink: `/business/${sbi}/${addressPage}`,
     pageTitle: 'Check your business address is correct before submitting',
     metaDescription: 'Check the address for your business is correct.',
+    businessName: info?.businessName ?? null,
+    sbi: sbi ?? null,
     address: formatAddress(changeBusinessAddress, address)
   }
 }

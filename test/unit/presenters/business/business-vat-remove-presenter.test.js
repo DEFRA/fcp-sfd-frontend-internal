@@ -11,7 +11,8 @@ describe('businessVatRemovePresenter', () => {
     data = {
       info: {
         sbi: '123456789',
-        vat: 'GB123456789'
+        vat: 'GB123456789',
+        businessName: 'Agile Farm Ltd'
       }
     }
   })
@@ -24,6 +25,7 @@ describe('businessVatRemovePresenter', () => {
         backLink: '/business/123456789/details',
         pageTitle: 'Are you sure you want to remove your VAT registration number?',
         metaDescription: 'Are you sure you want to remove your VAT registration number?',
+        businessName: 'Agile Farm Ltd',
         confirmRemove: null,
         vatNumber: 'GB123456789',
         sbi: '123456789'

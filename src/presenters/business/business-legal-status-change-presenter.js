@@ -16,6 +16,8 @@ const businessLegalStatusChangePresenter = (data, payload) => {
     backLink: sbi ? `/business/${sbi}/details` : SEARCH_SBI,
     pageTitle: 'Change legal status',
     metaDescription: 'Update the legal status of this business.',
+    businessName: data.info?.businessName ?? null,
+    sbi: sbi ?? null,
     businessLegalStatus: selected,
     businessLegalStatusItems: buildLegalStatusItems(selected)
   }

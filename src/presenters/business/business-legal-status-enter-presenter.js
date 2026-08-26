@@ -56,6 +56,8 @@ const businessLegalStatusEnterPresenter = (data, payload) => {
     backLink: sbi ? `/business/${sbi}/business-legal-status-change` : SEARCH_SBI,
     pageTitle: content.pageTitle,
     metaDescription: content.metaDescription,
+    businessName: data.info?.businessName ?? null,
+    sbi: sbi ?? null,
     field: content.field,
     hintText: content.hintText,
     registrationNumber: payload?.[content.field] ?? sessionValue ?? fetchedValue ?? null

@@ -26,6 +26,8 @@ describe('businessAddressChangePresenter', () => {
         manualAddressLink: '/business/106705779/business-address-enter',
         pageTitle: 'What is your business address?',
         metaDescription: 'Update the address for your business.',
+        businessName: 'Herberts Lawn Mowing',
+        sbi: '106705779',
         postcode: 'SW1A 1AA'
       })
     })

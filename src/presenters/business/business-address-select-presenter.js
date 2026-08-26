@@ -15,6 +15,8 @@ const businessAddressSelectPresenter = (data) => {
     manualAddressLink: `/business/${sbi}/business-address-enter`,
     pageTitle: 'Choose your business address',
     metaDescription: 'Choose the address for your business.',
+    businessName: data.info?.businessName ?? null,
+    sbi: sbi ?? null,
     postcode: data.changeBusinessPostcode?.postcode ?? null,
     displayAddresses: presenters.formatDisplayAddresses(data.changeBusinessAddresses ?? [], data.changeBusinessAddress)
   }

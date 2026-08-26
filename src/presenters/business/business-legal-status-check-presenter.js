@@ -20,6 +20,8 @@ const businessLegalStatusCheckPresenter = (data) => {
     registrationNumberChangeLink,
     pageTitle: 'Check your business legal status is correct before submitting',
     metaDescription: 'Check the legal status of this business is correct.',
+    businessName: data.info?.businessName ?? null,
+    sbi: sbi ?? null,
     businessLegalStatus: getLegalStatusText(data.changeBusinessLegalStatus ?? data.info?.legalStatusCode) ?? null,
     registrationNumberLabel: getRegistrationNumberLabel(isCharity, isCompany),
     registrationNumber: getRegistrationNumber(data, isCharity, isCompany)

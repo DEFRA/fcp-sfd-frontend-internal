@@ -62,7 +62,7 @@ describe('business email check routes', () => {
       await getBusinessEmailCheck.handler(request, h)
 
       expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessEmail')
-      expect(businessEmailCheckPresenter).toHaveBeenCalledWith(businessEmailChange, request.info.referrer)
+      expect(businessEmailCheckPresenter).toHaveBeenCalledWith(businessEmailChange)
       expect(h.view).toHaveBeenCalledWith('business/business-email-check', pageData)
     })
 

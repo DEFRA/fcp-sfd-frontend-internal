@@ -41,7 +41,7 @@ describe('personalAddressCheckPresenter', () => {
       const result = personalAddressCheckPresenter(data)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/account-address-enter' },
+        backLink: '/customer/1234567890/account-address-enter',
         changeLink: '/customer/1234567890/account-address-enter',
         pageTitle: 'Check your personal address is correct before submitting',
         metaDescription: 'Check the address for your personal account is correct.',
@@ -172,7 +172,7 @@ describe('personalAddressCheckPresenter', () => {
       test('it should return backLink with account-address-select', () => {
         const result = personalAddressCheckPresenter(data)
 
-        expect(result.backLink).toEqual({ href: '/customer/1234567890/account-address-select' })
+        expect(result.backLink).toEqual('/customer/1234567890/account-address-select')
       })
     })
 
@@ -186,7 +186,19 @@ describe('personalAddressCheckPresenter', () => {
       test('it should return backLink with account-address-enter', () => {
         const result = personalAddressCheckPresenter(data)
 
-        expect(result.backLink).toEqual({ href: '/customer/1234567890/account-address-enter' })
+        expect(result.backLink).toEqual('/customer/1234567890/account-address-enter')
+      })
+    })
+
+    describe('when the crn is missing', () => {
+      beforeEach(() => {
+        delete data.crn
+      })
+
+      test('it falls back to the search page', () => {
+        const result = personalAddressCheckPresenter(data)
+
+        expect(result.backLink).toEqual('/search-crn')
       })
     })
   })

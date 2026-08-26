@@ -110,7 +110,7 @@ const getMockData = () => {
 
 const getPageData = () => {
   return {
-    backLink: { href: '/customer/1234567890/account-phone-numbers-change' },
+    backLink: '/customer/1234567890/account-phone-numbers-change',
     changeLink: '/customer/1234567890/account-phone-numbers-change',
     pageTitle: 'Check your personal phone numbers are correct before submitting',
     metaDescription: 'Check the phone numbers for your personal account are correct.',

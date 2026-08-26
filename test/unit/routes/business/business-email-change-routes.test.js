@@ -63,7 +63,7 @@ describe('business email change routes', () => {
       await getBusinessEmailChange.handler(request, h)
 
       expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessEmail')
-      expect(businessEmailChangePresenter).toHaveBeenCalledWith(businessDetails, undefined, request.info.referrer)
+      expect(businessEmailChangePresenter).toHaveBeenCalledWith(businessDetails)
       expect(h.view).toHaveBeenCalledWith('business/business-email-change', pageData)
     })
 
@@ -88,7 +88,7 @@ describe('business email change routes', () => {
 
       await postBusinessEmailChange.options.validate.failAction(request, h, err)
 
-      expect(businessEmailChangePresenter).toHaveBeenCalledWith(businessDetails, 'new@example.com', request.info.referrer)
+      expect(businessEmailChangePresenter).toHaveBeenCalledWith(businessDetails, 'new@example.com')
     })
   })
 

@@ -22,7 +22,7 @@ describe('businessAddressChangePresenter', () => {
       const result = businessAddressChangePresenter(data, payload)
 
       expect(result).toEqual({
-        backLink: { href: '/business/106705779/details' },
+        backLink: '/business/106705779/details',
         manualAddressLink: '/business/106705779/business-address-enter',
         pageTitle: 'What is your business address?',
         metaDescription: 'Update the address for your business.',

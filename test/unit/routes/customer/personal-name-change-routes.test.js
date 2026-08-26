@@ -157,7 +157,7 @@ const getMockData = () => {
 
 const getPageData = () => {
   return {
-    backLink: { href: '/customer/1234567890/details' },
+    backLink: '/customer/1234567890/details',
     pageTitle: 'What is your full name?',
     metaDescription: 'Update the full name for your personal account.',
     userName: 'John Doe',
@@ -169,7 +169,7 @@ const getPageData = () => {
 
 const getPageDataError = () => {
   return {
-    backLink: { href: '/customer/1234567890/details' },
+    backLink: '/customer/1234567890/details',
     pageTitle: 'What is your full name?',
     metaDescription: 'Update the full name for your personal account.',
     userName: 'John Doe',

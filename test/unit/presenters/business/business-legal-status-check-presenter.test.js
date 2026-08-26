@@ -28,7 +28,7 @@ describe('businessLegalStatusCheckPresenter', () => {
     test('the back link and legal status change link point to the change page', () => {
       const result = businessLegalStatusCheckPresenter(data)
 
-      expect(result.backLink).toEqual({ href: '/business/106705779/business-legal-status-change' })
+      expect(result.backLink).toEqual('/business/106705779/business-legal-status-change')
       expect(result.legalStatusChangeLink).toBe('/business/106705779/business-legal-status-change')
     })
 
@@ -58,7 +58,7 @@ describe('businessLegalStatusCheckPresenter', () => {
     test('the back link points to the enter page, but the legal status change link still points to the change page', () => {
       const result = businessLegalStatusCheckPresenter(data)
 
-      expect(result.backLink).toEqual({ href: '/business/106705779/business-legal-status-enter' })
+      expect(result.backLink).toEqual('/business/106705779/business-legal-status-enter')
       expect(result.legalStatusChangeLink).toBe('/business/106705779/business-legal-status-change')
     })
 
@@ -94,7 +94,7 @@ describe('businessLegalStatusCheckPresenter', () => {
     test('the back link points to the enter page, but the legal status change link still points to the change page', () => {
       const result = businessLegalStatusCheckPresenter(data)
 
-      expect(result.backLink).toEqual({ href: '/business/106705779/business-legal-status-enter' })
+      expect(result.backLink).toEqual('/business/106705779/business-legal-status-enter')
       expect(result.legalStatusChangeLink).toBe('/business/106705779/business-legal-status-change')
     })
 
@@ -127,7 +127,7 @@ describe('businessLegalStatusCheckPresenter', () => {
 
       const result = businessLegalStatusCheckPresenter(data)
 
-      expect(result.backLink).toEqual({ href: '/search-sbi' })
+      expect(result.backLink).toEqual('/search-sbi')
     })
   })
 

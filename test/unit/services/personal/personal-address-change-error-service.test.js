@@ -55,7 +55,7 @@ describe('personalAddressChangeErrorService', () => {
       const result = await personalAddressChangeErrorService(yar, crn, email, postcode, errors)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/details' },
+        backLink: '/customer/1234567890/details',
         manualAddressLink: '/customer/1234567890/account-address-enter',
         pageTitle: 'What is your personal address?',
         metaDescription: 'Update the address for your personal account.',

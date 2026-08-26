@@ -107,7 +107,7 @@ const getMockData = () => {
 
 const getPageData = () => {
   return {
-    backLink: { href: '/customer/1234567890/account-date-of-birth-change' },
+    backLink: '/customer/1234567890/account-date-of-birth-change',
     pageTitle: 'Check your date of birth is correct before submitting',
     metaDescription: 'Check the date of birth for your personal account is correct.',
     userName: 'John Doe',

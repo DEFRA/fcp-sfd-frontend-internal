@@ -10,13 +10,13 @@ const getBusinessPhoneNumbersCheck = {
     pre: [validateSbi]
   },
   handler: async (request, h) => {
-    const { params, yar, auth, info } = request
+    const { params, yar, auth } = request
     const { sbi } = params
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
     const businessPhoneNumbersChange = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessPhoneNumbers')
-    const pageData = businessPhoneNumbersCheckPresenter(businessPhoneNumbersChange, info.referrer)
+    const pageData = businessPhoneNumbersCheckPresenter(businessPhoneNumbersChange)
 
     return h.view('business/business-phone-numbers-check', pageData)
   }

@@ -26,13 +26,27 @@ describe('personalNameCheckPresenter', () => {
       const result = personalNameCheckPresenter(data, crn)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/account-name-change' },
+        backLink: '/customer/1234567890/account-name-change',
         changeLink: '/customer/1234567890/account-name-change',
         pageTitle: 'Check your name is correct before submitting',
         metaDescription: 'Check the full name for your personal account is correct.',
         userName: 'John Doe',
         fullName: 'John M Doe'
       })
+    })
+  })
+
+  describe('the "backLink" property', () => {
+    test('it directs to the name change page', () => {
+      const result = personalNameCheckPresenter(data, crn)
+
+      expect(result.backLink).toBe('/customer/1234567890/account-name-change')
+    })
+
+    test('it falls back to the search page when the crn is missing', () => {
+      const result = personalNameCheckPresenter(data, undefined)
+
+      expect(result.backLink).toBe('/search-crn')
     })
   })
 

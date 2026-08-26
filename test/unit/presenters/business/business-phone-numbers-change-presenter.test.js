@@ -7,7 +7,6 @@ import { businessPhoneNumbersChangePresenter } from '../../../../src/presenters/
 describe('businessPhoneNumbersChangePresenter', () => {
   let data
   let payload
-  let referrer
 
   beforeEach(() => {
     data = {
@@ -26,7 +25,6 @@ describe('businessPhoneNumbersChangePresenter', () => {
     }
 
     payload = undefined
-    referrer = undefined
   })
 
   describe('when provided with business phone numbers change data', () => {
@@ -34,7 +32,7 @@ describe('businessPhoneNumbersChangePresenter', () => {
       const result = businessPhoneNumbersChangePresenter(data)
 
       expect(result).toEqual({
-        backLink: { backLink: true, href: '/business/106705779/details' },
+        backLink: '/business/106705779/details',
         pageTitle: 'What are your business phone numbers?',
         metaDescription: 'Update the phone numbers for your business.',
         businessName: 'Agile Farm Ltd',
@@ -49,7 +47,7 @@ describe('businessPhoneNumbersChangePresenter', () => {
   describe('the "businessTelephone" and "businessMobile" properties', () => {
     describe('when there is no change or payload', () => {
       test('it uses the current business telephone and business mobile numbers', () => {
-        const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
+        const result = businessPhoneNumbersChangePresenter(data, payload)
 
         expect(result.businessTelephone).toBe('01234 567891')
         expect(result.businessMobile).toBe(null)
@@ -65,7 +63,7 @@ describe('businessPhoneNumbersChangePresenter', () => {
       })
 
       test('it prefers the in-progress change over the current numbers', () => {
-        const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
+        const result = businessPhoneNumbersChangePresenter(data, payload)
 
         expect(result.businessTelephone).toBe('01111 111111')
         expect(result.businessMobile).toBe('09876 543210')
@@ -86,7 +84,7 @@ describe('businessPhoneNumbersChangePresenter', () => {
       })
 
       test('it prefers the submitted payload over everything else', () => {
-        const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
+        const result = businessPhoneNumbersChangePresenter(data, payload)
 
         expect(result.businessTelephone).toBe('02222 222222')
         expect(result.businessMobile).toBe('')
@@ -95,42 +93,30 @@ describe('businessPhoneNumbersChangePresenter', () => {
   })
 
   describe('the "backLink" property', () => {
-    describe('when the referrer is a valid url', () => {
-      beforeEach(() => {
-        referrer = 'https://example.com/business/106705779/details'
-      })
+    describe('when the sbi is present', () => {
+      test('it returns the sbi details page', () => {
+        const result = businessPhoneNumbersChangePresenter(data, payload)
 
-      test('it builds the back link from the referrer', () => {
-        const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
-
-        expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/details' })
+        expect(result.backLink).toEqual('/business/106705779/details')
       })
     })
 
-    describe('when there is no referrer', () => {
-      test('it falls back to the sbi details page', () => {
-        const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
-
-        expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/details' })
-      })
-    })
-
-    describe('when there is no referrer and the sbi is missing', () => {
+    describe('when the sbi is missing', () => {
       beforeEach(() => {
         delete data.info.sbi
       })
 
       test('it falls back to the search page', () => {
-        const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
+        const result = businessPhoneNumbersChangePresenter(data, payload)
 
-        expect(result.backLink).toEqual({ backLink: true, href: '/search-sbi' })
+        expect(result.backLink).toEqual('/search-sbi')
       })
     })
   })
 
   describe('the "businessName" property', () => {
     test('it should return the business name', () => {
-      const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
+      const result = businessPhoneNumbersChangePresenter(data, payload)
 
       expect(result.businessName).toBe('Agile Farm Ltd')
     })
@@ -141,7 +127,7 @@ describe('businessPhoneNumbersChangePresenter', () => {
       })
 
       test('it should return businessName as null', () => {
-        const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
+        const result = businessPhoneNumbersChangePresenter(data, payload)
 
         expect(result.businessName).toEqual(null)
       })
@@ -150,7 +136,7 @@ describe('businessPhoneNumbersChangePresenter', () => {
 
   describe('the "sbi" property', () => {
     test('it should return the sbi', () => {
-      const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
+      const result = businessPhoneNumbersChangePresenter(data, payload)
 
       expect(result.sbi).toBe('106705779')
     })
@@ -161,7 +147,7 @@ describe('businessPhoneNumbersChangePresenter', () => {
       })
 
       test('it should return the sbi as null', () => {
-        const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
+        const result = businessPhoneNumbersChangePresenter(data, payload)
 
         expect(result.sbi).toEqual(null)
       })
@@ -170,7 +156,7 @@ describe('businessPhoneNumbersChangePresenter', () => {
 
   describe('the "userName" property', () => {
     test('it should return the user name', () => {
-      const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
+      const result = businessPhoneNumbersChangePresenter(data, payload)
 
       expect(result.userName).toBe('Alfred Waldron')
     })
@@ -181,7 +167,7 @@ describe('businessPhoneNumbersChangePresenter', () => {
       })
 
       test('it should return the userName as null', () => {
-        const result = businessPhoneNumbersChangePresenter(data, payload, referrer)
+        const result = businessPhoneNumbersChangePresenter(data, payload)
 
         expect(result.userName).toEqual(null)
       })

@@ -20,12 +20,30 @@ describe('personalFixPresenter', () => {
       const result = personalFixPresenter(personalDetails, crn)
 
       expect(result).toEqual({
-        backLink: { href: `/customer/${crn}/details` },
+        backLink: `/customer/${crn}/details`,
         pageTitle: 'Update your personal details',
         metaDescription: 'Update your personal details.',
         updateText: 'We will ask you to update these details as well as your full name:',
         listOfErrors: []
       })
+    })
+  })
+
+  describe('the "backLink" property', () => {
+    test('it includes the crn in the URL', () => {
+      const personalDetails = { source: 'name', orderedSectionsToFix: ['name'] }
+
+      const result = personalFixPresenter(personalDetails, crn)
+
+      expect(result.backLink).toEqual(`/customer/${crn}/details`)
+    })
+
+    test('it falls back to the search page when the crn is missing', () => {
+      const personalDetails = { source: 'name', orderedSectionsToFix: ['name'] }
+
+      const result = personalFixPresenter(personalDetails, undefined)
+
+      expect(result.backLink).toEqual('/search-crn')
     })
   })
 

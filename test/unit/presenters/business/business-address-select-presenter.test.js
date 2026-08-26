@@ -54,7 +54,7 @@ describe('businessAddressSelectPresenter', () => {
       const result = businessAddressSelectPresenter(data)
 
       expect(result).toEqual({
-        backLink: { href: '/business/123456789/business-address-change' },
+        backLink: '/business/123456789/business-address-change',
         postcodeChangeLink: '/business/123456789/business-address-change',
         manualAddressLink: '/business/123456789/business-address-enter',
         pageTitle: 'Choose your business address',

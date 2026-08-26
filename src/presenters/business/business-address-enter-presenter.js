@@ -4,10 +4,13 @@
  */
 
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const businessAddressEnterPresenter = (data, payload) => {
+  const sbi = data.info?.sbi
+
   return {
-    backLink: { href: `/business/${data.info?.sbi}/business-address-change` },
+    backLink: sbi ? `/business/${sbi}/business-address-change` : SEARCH_SBI,
     pageTitle: 'Enter your business address',
     metaDescription: 'Enter the address for your business.',
     address: formatAddress(payload, data.changeBusinessAddress, data.address)

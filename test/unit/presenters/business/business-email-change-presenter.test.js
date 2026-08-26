@@ -7,7 +7,6 @@ import { businessEmailChangePresenter } from '../../../../src/presenters/busines
 describe('businessEmailChangePresenter', () => {
   let data
   let payload
-  let referrer
 
   beforeEach(() => {
     data = {
@@ -15,15 +14,14 @@ describe('businessEmailChangePresenter', () => {
       contact: { email: 'test@example.com' }
     }
     payload = undefined
-    referrer = undefined
   })
 
   describe('when provided with business email change data', () => {
     test('it correctly presents the data', () => {
-      const result = businessEmailChangePresenter(data, payload, referrer)
+      const result = businessEmailChangePresenter(data, payload)
 
       expect(result).toEqual({
-        backLink: { backLink: true, href: '/business/106705779/details' },
+        backLink: '/business/106705779/details',
         pageTitle: 'What is your business email address?',
         metaDescription: 'Update the email address for your business.',
         userName: null,
@@ -35,35 +33,23 @@ describe('businessEmailChangePresenter', () => {
   })
 
   describe('the "backLink" property', () => {
-    describe('when the referrer is a valid url', () => {
-      beforeEach(() => {
-        referrer = 'https://example.com/business/106705779/details'
-      })
+    describe('when the sbi is present', () => {
+      test('it returns the sbi details page', () => {
+        const result = businessEmailChangePresenter(data, payload)
 
-      test('it builds the back link from the referrer', () => {
-        const result = businessEmailChangePresenter(data, payload, referrer)
-
-        expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/details' })
+        expect(result.backLink).toEqual('/business/106705779/details')
       })
     })
 
-    describe('when there is no referrer', () => {
-      test('it falls back to the sbi details page', () => {
-        const result = businessEmailChangePresenter(data, payload, referrer)
-
-        expect(result.backLink).toEqual({ backLink: true, href: '/business/106705779/details' })
-      })
-    })
-
-    describe('when there is no referrer and the sbi is missing', () => {
+    describe('when the sbi is missing', () => {
       beforeEach(() => {
         delete data.info.sbi
       })
 
       test('it falls back to the search page', () => {
-        const result = businessEmailChangePresenter(data, payload, referrer)
+        const result = businessEmailChangePresenter(data, payload)
 
-        expect(result.backLink).toEqual({ backLink: true, href: '/search-sbi' })
+        expect(result.backLink).toEqual('/search-sbi')
       })
     })
   })
@@ -71,7 +57,7 @@ describe('businessEmailChangePresenter', () => {
   describe('the "businessEmail" property', () => {
     describe('when there is no change or payload', () => {
       test('it uses the current business email', () => {
-        const result = businessEmailChangePresenter(data, payload, referrer)
+        const result = businessEmailChangePresenter(data, payload)
 
         expect(result.businessEmail).toBe('test@example.com')
       })
@@ -83,7 +69,7 @@ describe('businessEmailChangePresenter', () => {
       })
 
       test('it prefers the in-progress change over the current email', () => {
-        const result = businessEmailChangePresenter(data, payload, referrer)
+        const result = businessEmailChangePresenter(data, payload)
 
         expect(result.businessEmail).toBe('changed@example.com')
       })
@@ -96,7 +82,7 @@ describe('businessEmailChangePresenter', () => {
       })
 
       test('it prefers the submitted payload over everything else', () => {
-        const result = businessEmailChangePresenter(data, payload, referrer)
+        const result = businessEmailChangePresenter(data, payload)
 
         expect(result.businessEmail).toBe('payload@example.com')
       })
@@ -110,7 +96,7 @@ describe('businessEmailChangePresenter', () => {
       })
 
       test('it returns the userName', () => {
-        const result = businessEmailChangePresenter(data, payload, referrer)
+        const result = businessEmailChangePresenter(data, payload)
 
         expect(result.userName).toBe('Jane Doe')
       })
@@ -118,7 +104,7 @@ describe('businessEmailChangePresenter', () => {
 
     describe('when there is no customer', () => {
       test('it defaults the userName to null', () => {
-        const result = businessEmailChangePresenter(data, payload, referrer)
+        const result = businessEmailChangePresenter(data, payload)
 
         expect(result.userName).toBeNull()
       })
@@ -127,7 +113,7 @@ describe('businessEmailChangePresenter', () => {
 
   describe('the "businessName" and "sbi" properties', () => {
     test('it exposes the business name and sbi', () => {
-      const result = businessEmailChangePresenter(data, payload, referrer)
+      const result = businessEmailChangePresenter(data, payload)
 
       expect(result.businessName).toBe('Herberts Lawn Mowing')
       expect(result.sbi).toBe('106705779')

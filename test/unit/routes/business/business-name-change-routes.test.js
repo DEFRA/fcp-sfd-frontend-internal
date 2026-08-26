@@ -73,7 +73,7 @@ describe('business name change routes', () => {
       await getBusinessNameChange.handler(request, h)
 
       expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessName')
-      expect(businessNameChangePresenter).toHaveBeenCalledWith(businessDetails, undefined, request.info.referrer)
+      expect(businessNameChangePresenter).toHaveBeenCalledWith(businessDetails)
       expect(h.view).toHaveBeenCalledWith('business/business-name-change', pageData)
     })
 
@@ -108,7 +108,7 @@ describe('business name change routes', () => {
 
       await postBusinessNameChange.options.validate.failAction(request, h, err)
 
-      expect(businessNameChangePresenter).toHaveBeenCalledWith(businessDetails, 'New Farm Ltd', request.info.referrer)
+      expect(businessNameChangePresenter).toHaveBeenCalledWith(businessDetails, 'New Farm Ltd')
     })
 
     test('formats the validation errors and merges them into the page data with a 400 status', async () => {

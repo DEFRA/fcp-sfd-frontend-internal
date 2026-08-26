@@ -21,7 +21,7 @@ describe('businessLegalStatusEnterPresenter', () => {
     test('it correctly presents the data', () => {
       const result = businessLegalStatusEnterPresenter(data, payload)
 
-      expect(result.backLink).toEqual({ href: '/business/106705779/business-legal-status-change' })
+      expect(result.backLink).toEqual('/business/106705779/business-legal-status-change')
       expect(result.pageTitle).toBe('Enter the charity commission registration number')
       expect(result.metaDescription).toBe('Enter the Charity Commission registration number for this business.')
       expect(result.hintText).toBe('This is 7 or 8 numbers, for example, 12345678.')
@@ -91,7 +91,7 @@ describe('businessLegalStatusEnterPresenter', () => {
 
       const result = businessLegalStatusEnterPresenter(data, payload)
 
-      expect(result.backLink).toEqual({ href: '/search-sbi' })
+      expect(result.backLink).toEqual('/search-sbi')
     })
   })
 

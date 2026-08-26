@@ -21,7 +21,7 @@ describe('businessVatRemovePresenter', () => {
       const result = businessVatRemovePresenter(data)
 
       expect(result).toEqual({
-        backLink: { backLink: true, href: '/business/123456789/details' },
+        backLink: '/business/123456789/details',
         pageTitle: 'Are you sure you want to remove your VAT registration number?',
         metaDescription: 'Are you sure you want to remove your VAT registration number?',
         confirmRemove: null,
@@ -109,7 +109,7 @@ describe('businessVatRemovePresenter', () => {
     test('it should not throw and should fall back to the search page', () => {
       const result = businessVatRemovePresenter(data)
 
-      expect(result.backLink).toEqual({ backLink: true, href: '/search-sbi' })
+      expect(result.backLink).toEqual('/search-sbi')
       expect(result.vatNumber).toEqual(null)
       expect(result.sbi).toEqual(null)
     })

@@ -6,6 +6,7 @@
 import { paginationPresenter } from '../pagination-presenter.js'
 import { formatBreadcrumbLabel } from '../base-presenter.js'
 import { CUSTOMER_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
+import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const customerOverviewPresenter = (customerDetails, page) => {
   const businesses = customerDetails?.businesses ?? []
@@ -20,7 +21,7 @@ const customerOverviewPresenter = (customerDetails, page) => {
 
   return {
     customerName: customerDetails?.info?.customerName || '',
-    personalDetailsLink: customerDetails?.info?.crn ? `/customer/${customerDetails.info.crn}/details` : '/search-crn',
+    personalDetailsLink: customerDetails?.info?.crn ? `/customer/${customerDetails.info.crn}/details` : SEARCH_CRN,
     crn: customerDetails?.info?.crn || '',
     hasBusinesses: totalBusinesses > 0,
     businesses: formatBusinesses(pagedBusinesses),

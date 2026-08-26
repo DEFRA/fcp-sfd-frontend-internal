@@ -34,4 +34,28 @@ describe('Contact us endpoint', () => {
 
     expect(result).toBe(mockView)
   })
+
+  test('falls back to the search page when there is no referer', () => {
+    const mockRequest = { headers: {} }
+
+    contactUs.handler(mockRequest, mockH)
+
+    expect(mockH.view).toHaveBeenCalledWith('footer/contact-help', expect.objectContaining({
+      backLink: '/search-sbi'
+    }))
+  })
+
+  test('falls back to the search page when the referer is unsafe', () => {
+    const mockRequest = {
+      headers: {
+        referer: '//evil.com/phish'
+      }
+    }
+
+    contactUs.handler(mockRequest, mockH)
+
+    expect(mockH.view).toHaveBeenCalledWith('footer/contact-help', expect.objectContaining({
+      backLink: '/search-sbi'
+    }))
+  })
 })

@@ -34,4 +34,28 @@ describe('Cookies endpoint', () => {
 
     expect(result).toBe(mockView)
   })
+
+  test('falls back to the search page when there is no referer', () => {
+    const mockRequest = { headers: {} }
+
+    cookies.handler(mockRequest, mockH)
+
+    expect(mockH.view).toHaveBeenCalledWith('cookies', expect.objectContaining({
+      backLink: '/search-sbi'
+    }))
+  })
+
+  test('falls back to the search page when the referer is unsafe', () => {
+    const mockRequest = {
+      headers: {
+        referer: 'javascript:alert(1)'
+      }
+    }
+
+    cookies.handler(mockRequest, mockH)
+
+    expect(mockH.view).toHaveBeenCalledWith('cookies', expect.objectContaining({
+      backLink: '/search-sbi'
+    }))
+  })
 })

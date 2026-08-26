@@ -33,4 +33,30 @@ describe('Accessibility statement endpoint', () => {
 
     expect(result).toBe('mock view return')
   })
+
+  test('falls back to the search page when there is no referer', () => {
+    const mockRequest = { headers: {} }
+    const h = { view: viewMock }
+
+    accessibilityStatement.handler(mockRequest, h)
+
+    expect(viewMock).toHaveBeenCalledWith('footer/accessibility-statement', expect.objectContaining({
+      backLink: '/search-sbi'
+    }))
+  })
+
+  test('falls back to the search page when the referer is unsafe', () => {
+    const mockRequest = {
+      headers: {
+        referer: 'javascript:alert(1)'
+      }
+    }
+    const h = { view: viewMock }
+
+    accessibilityStatement.handler(mockRequest, h)
+
+    expect(viewMock).toHaveBeenCalledWith('footer/accessibility-statement', expect.objectContaining({
+      backLink: '/search-sbi'
+    }))
+  })
 })

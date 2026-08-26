@@ -57,7 +57,7 @@ describe('business address enter', () => {
       test('it calls fetchBusinessChangeService with credentials and changeBusinessAddress', async () => {
         await getBusinessAddressEnter.handler(request, h)
 
-        expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessAddress')
+        expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessAddress')
       })
 
       test('should render business-address-enter view with page data', async () => {

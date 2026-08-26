@@ -72,15 +72,9 @@ describe('business name change routes', () => {
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessNameChange.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessName')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessName')
       expect(businessNameChangePresenter).toHaveBeenCalledWith(businessDetails, undefined, request.info.referrer)
       expect(h.view).toHaveBeenCalledWith('business/business-name-change', pageData)
-    })
-
-    test('persists the sbi in session', async () => {
-      await getBusinessNameChange.handler(request, h)
-
-      expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
     })
 
     describe('when fetchBusinessChangeService throws', () => {

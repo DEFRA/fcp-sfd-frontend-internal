@@ -13,10 +13,9 @@ const getBusinessVatChange = {
   handler: async (request, h) => {
     const { params, yar, auth, info } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
+    const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessVat')
     const pageData = businessVatChangePresenter(businessDetails, undefined, info.referrer)
 
     return h.view('business/business-vat-registration-number-change', pageData)
@@ -34,10 +33,12 @@ const postBusinessVatChange = {
         abortEarly: false
       },
       failAction: async (request, h, err) => {
-        const { yar, auth, payload, info } = request
+        const { yar, auth, payload, info, params } = request
+        const { sbi } = params
+        const email = auth.credentials?.email
 
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
+        const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessVat')
         const pageData = businessVatChangePresenter(businessDetails, payload.vatNumber, info.referrer)
 
         return h.view('business/business-vat-registration-number-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()

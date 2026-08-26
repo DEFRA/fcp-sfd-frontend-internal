@@ -61,15 +61,9 @@ describe('business email check routes', () => {
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessEmailCheck.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessEmail')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessEmail')
       expect(businessEmailCheckPresenter).toHaveBeenCalledWith(businessEmailChange, request.info.referrer)
       expect(h.view).toHaveBeenCalledWith('business/business-email-check', pageData)
-    })
-
-    test('persists the sbi in session', async () => {
-      await getBusinessEmailCheck.handler(request, h)
-
-      expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
     })
   })
 
@@ -82,7 +76,7 @@ describe('business email check routes', () => {
     test('updates the email and redirects to the business details page for the sbi', async () => {
       await postBusinessEmailCheck.handler(request, h)
 
-      expect(updateBusinessEmailChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials)
+      expect(updateBusinessEmailChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email)
       expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
     })
   })

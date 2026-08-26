@@ -72,15 +72,9 @@ describe('business phone numbers change routes', () => {
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessPhoneNumbersChange.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessPhoneNumbers')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessPhoneNumbers')
       expect(businessPhoneNumbersChangePresenter).toHaveBeenCalledWith(businessDetails, undefined, request.info.referrer)
       expect(h.view).toHaveBeenCalledWith('business/business-phone-numbers-change', pageData)
-    })
-
-    test('persists the sbi in session', async () => {
-      await getBusinessPhoneNumbersChange.handler(request, h)
-
-      expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
     })
 
     describe('when fetchBusinessChangeService throws', () => {
@@ -108,7 +102,7 @@ describe('business phone numbers change routes', () => {
 
       await postBusinessPhoneNumbersChange.options.validate.failAction(request, h, err)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessPhoneNumbers')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessPhoneNumbers')
       expect(businessPhoneNumbersChangePresenter).toHaveBeenCalledWith(businessDetails, request.payload)
     })
 

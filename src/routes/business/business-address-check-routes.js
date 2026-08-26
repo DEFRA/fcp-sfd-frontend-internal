@@ -10,9 +10,11 @@ const getBusinessAddressCheck = {
     pre: [validateSbi]
   },
   handler: async (request, h) => {
-    const { yar, auth } = request
+    const { yar, auth, params } = request
+    const { sbi } = params
+    const email = auth.credentials?.email
 
-    const businessAddressChange = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessAddress')
+    const businessAddressChange = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessAddress')
     const pageData = businessAddressCheckPresenter(businessAddressChange)
 
     return h.view('business/business-address-check', pageData)
@@ -28,8 +30,9 @@ const postBusinessAddressCheck = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    await updateBusinessAddressChangeService(yar, auth.credentials)
+    await updateBusinessAddressChangeService(yar, sbi, email)
 
     return h.redirect(`/business/${sbi}/details`)
   }

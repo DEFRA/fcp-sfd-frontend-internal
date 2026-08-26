@@ -13,8 +13,8 @@ import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 import { updateDalService } from '../DAL/update-dal-service.js'
 
-const updateBusinessAddressChangeService = async (yar, credentials) => {
-  const businessDetails = await fetchBusinessChangeService(yar, credentials, 'changeBusinessAddress')
+const updateBusinessAddressChangeService = async (yar, sbi, email) => {
+  const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessAddress')
 
   if (!businessDetails.changeBusinessAddress) {
     return
@@ -22,7 +22,7 @@ const updateBusinessAddressChangeService = async (yar, credentials) => {
 
   const variables = businessAddressVariables(businessDetails)
 
-  await updateDalService(mutations.updateBusinessAddress, variables, credentials.email)
+  await updateDalService(mutations.updateBusinessAddress, variables, email)
 
   yar.clear('businessDetailsUpdate')
 

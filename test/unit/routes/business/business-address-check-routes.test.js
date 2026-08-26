@@ -57,7 +57,7 @@ describe('business address check', () => {
       test('it calls fetchBusinessChangeService with credentials and changeBusinessAddress', async () => {
         await getBusinessAddressCheck.handler(request, h)
 
-        expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessAddress')
+        expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessAddress')
       })
 
       test('should render business-address-check view with page data', async () => {
@@ -91,7 +91,7 @@ describe('business address check', () => {
     test('it calls updateBusinessAddressChangeService', async () => {
       await postBusinessAddressCheck.handler(request, h)
 
-      expect(updateBusinessAddressChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials)
+      expect(updateBusinessAddressChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email)
     })
 
     test('it redirects to business details', async () => {

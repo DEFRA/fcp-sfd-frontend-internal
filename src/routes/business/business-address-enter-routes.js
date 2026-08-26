@@ -11,9 +11,11 @@ const getBusinessAddressEnter = {
     pre: [validateSbi]
   },
   handler: async (request, h) => {
-    const { yar, auth } = request
+    const { yar, auth, params } = request
+    const { sbi } = params
+    const email = auth.credentials?.email
 
-    const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessAddress')
+    const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessAddress')
     const pageData = businessAddressEnterPresenter(businessDetails)
 
     return h.view('business/business-address-enter', pageData)
@@ -29,10 +31,12 @@ const postBusinessAddressEnter = {
       payload: schemas.business.details.address,
       options: { abortEarly: false },
       failAction: async (request, h, err) => {
-        const { yar, auth, payload } = request
+        const { yar, auth, payload, params } = request
+        const { sbi } = params
+        const email = auth.credentials?.email
 
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessAddress')
+        const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessAddress')
         const pageData = businessAddressEnterPresenter(businessDetails, payload)
 
         return h.view('business/business-address-enter', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()

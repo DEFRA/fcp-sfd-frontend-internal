@@ -41,12 +41,14 @@ const { updateBusinessPhoneNumbersChangeService } = await import('../../../../sr
 
 describe('updateBusinessPhoneNumbersChangeService', () => {
   let yar
-  let credentials
+  let sbi
+  let email
 
   beforeEach(() => {
     vi.clearAllMocks()
 
-    credentials = { email: 'test.user@defra.gov.uk' }
+    sbi = '107183280'
+    email = 'test.user@defra.gov.uk'
 
     yar = {
       clear: vi.fn()
@@ -64,29 +66,29 @@ describe('updateBusinessPhoneNumbersChangeService', () => {
   })
 
   test('fetches the pending business phone numbers change from session', async () => {
-    await updateBusinessPhoneNumbersChangeService(yar, credentials)
+    await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
-    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, credentials, 'changeBusinessPhoneNumbers')
+    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, sbi, email, 'changeBusinessPhoneNumbers')
   })
 
   test('persists the updated phone numbers via the DAL', async () => {
-    await updateBusinessPhoneNumbersChangeService(yar, credentials)
+    await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
     expect(mockUpdateDalService).toHaveBeenCalledWith(
       'update-business-phone-numbers-mutation',
       { input: { phone: { landline: '01111 111111', mobile: '09876 543210' }, sbi: '106705779' } },
-      credentials.email
+      email
     )
   })
 
   test('clears the cached business details from session', async () => {
-    await updateBusinessPhoneNumbersChangeService(yar, credentials)
+    await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
     expect(yar.clear).toHaveBeenCalledWith('businessDetailsUpdate')
   })
 
   test('displays a success flash notification', async () => {
-    await updateBusinessPhoneNumbersChangeService(yar, credentials)
+    await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
     expect(mockFlashNotification).toHaveBeenCalledWith(yar, 'Success', 'You have updated your business phone numbers')
   })
@@ -97,7 +99,7 @@ describe('updateBusinessPhoneNumbersChangeService', () => {
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {
-      await updateBusinessPhoneNumbersChangeService(yar, credentials)
+      await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
       expect(mockUpdateDalService).not.toHaveBeenCalled()
       expect(yar.clear).not.toHaveBeenCalled()

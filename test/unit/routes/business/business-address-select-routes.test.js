@@ -59,7 +59,8 @@ describe('business address select', () => {
 
         expect(fetchBusinessChangeService).toHaveBeenCalledWith(
           request.yar,
-          request.auth.credentials,
+          '106705779',
+          request.auth.credentials.email,
           ['changeBusinessPostcode', 'changeBusinessAddresses', 'changeBusinessAddress']
         )
       })

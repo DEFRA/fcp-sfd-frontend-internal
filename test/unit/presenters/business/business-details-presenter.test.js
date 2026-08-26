@@ -96,6 +96,16 @@ describe('businessDetailsPresenter', () => {
         expect(result.breadcrumbs[1]).toEqual({ text: `SBI: ${sbi}`, href: `/business/${sbi}` })
       })
     })
+
+    describe('when sbi is missing', () => {
+      test('it should link to the search page without a query param and omit the business breadcrumb', () => {
+        const result = businessDetailsPresenter(data, null)
+
+        expect(result.breadcrumbs).toEqual([
+          { text: 'Search results', href: '/search-sbi' }
+        ])
+      })
+    })
   })
 
   describe('businessName', () => {

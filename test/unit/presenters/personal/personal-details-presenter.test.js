@@ -141,6 +141,17 @@ describe('personalDetailsPresenter', () => {
         })
       })
     })
+
+    describe('when crn is missing', () => {
+      test('it should link to the search page without a query param and omit the customer breadcrumb', () => {
+        data.crn = null
+        const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
+
+        expect(result.breadcrumbs).toEqual([
+          { text: 'Search results', href: '/search-crn' }
+        ])
+      })
+    })
   })
 
   describe('the "personalTelephone" property', () => {

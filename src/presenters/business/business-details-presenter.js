@@ -65,19 +65,14 @@ const createEditableValueField = (value, emptyValueText) => {
 }
 
 const buildBreadcrumbs = (businessName, sbi) => {
-  const breadCrumbs = [{
-    text: 'Search results',
-    href: '/search-sbi'
-  }]
-
-  if (sbi) {
-    return breadCrumbs.concat([{
-      text: formatBreadcrumbLabel(businessName, 'SBI', sbi),
-      href: `/business/${sbi}`
-    }])
+  if (!sbi) {
+    return [{ text: 'Search results', href: '/search-sbi' }]
   }
 
-  return breadCrumbs
+  return [
+    { text: 'Search results', href: `/search-sbi?sbi=${sbi}` },
+    { text: formatBreadcrumbLabel(businessName, 'SBI', sbi), href: `/business/${sbi}` }
+  ]
 }
 
 /**

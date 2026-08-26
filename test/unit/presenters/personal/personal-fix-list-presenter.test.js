@@ -40,7 +40,7 @@ describe('personalFixListPresenter', () => {
       const result = personalFixListPresenter(personalDetails, payload, crn)
 
       expect(result).toEqual({
-        backLink: { href: `/customer/${crn}/details/fix?source=phone` },
+        backLink: `/customer/${crn}/details/fix?source=phone`,
         pageTitle: 'Your personal details to update',
         metaDescription: 'Your personal details to update.',
         sections: ['name', 'dob', 'address', 'phone', 'email'],
@@ -60,6 +60,20 @@ describe('personalFixListPresenter', () => {
         address: null,
         errors: null
       })
+    })
+  })
+
+  describe('the "backLink" property', () => {
+    test('it includes the crn and source in the URL', () => {
+      const result = personalFixListPresenter(personalDetails, payload, crn)
+
+      expect(result.backLink).toEqual(`/customer/${crn}/details/fix?source=phone`)
+    })
+
+    test('it falls back to the search page when the crn is missing', () => {
+      const result = personalFixListPresenter(personalDetails, payload, undefined)
+
+      expect(result.backLink).toEqual('/search-crn')
     })
   })
 

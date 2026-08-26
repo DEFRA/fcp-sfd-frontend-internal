@@ -5,7 +5,7 @@
 
 const personalEmailCheckPresenter = (personalDetails, crn) => {
   return {
-    backLink: { href: `/customer/${crn}/account-email-change` },
+    backLink: crn ? `/customer/${crn}/account-email-change` : '/search-crn',
     changeLink: `/customer/${crn}/account-email-change`,
     pageTitle: 'Check your personal email address is correct before submitting',
     metaDescription: 'Check the email address for your personal account is correct.',

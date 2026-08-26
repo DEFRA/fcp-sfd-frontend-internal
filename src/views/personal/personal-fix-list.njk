@@ -7,7 +7,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% block beforeContent %}
-  {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}
+  {{ appBackSignOutLink(backLink) }}
 {% endblock %}
 
 {% block content %}

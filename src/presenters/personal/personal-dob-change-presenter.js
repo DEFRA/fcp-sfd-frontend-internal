@@ -9,7 +9,7 @@ const personalDobChangePresenter = (data, payload, crn) => {
   const { day, month, year } = presenters.formatDateInputValues(payload, data.changePersonalDob, data.info.dateOfBirth)
 
   return {
-    backLink: { href: crn ? `/customer/${crn}/details` : '/search-crn' },
+    backLink: crn ? `/customer/${crn}/details` : '/search-crn',
     pageTitle: 'What is your date of birth?',
     metaDescription: 'Update the date of birth for your personal account.',
     userName: data.info.userName ?? null,

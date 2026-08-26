@@ -155,7 +155,7 @@ const getMockData = () => {
 
 const getPageData = () => {
   return {
-    backLink: { href: '/customer/1234567890/details' },
+    backLink: '/customer/1234567890/details',
     pageTitle: 'What is your personal email address?',
     metaDescription: 'Update the email address for your personal account.',
     userName: 'John Doe',
@@ -165,7 +165,7 @@ const getPageData = () => {
 
 const getPageDataError = () => {
   return {
-    backLink: { href: '/customer/1234567890/details' },
+    backLink: '/customer/1234567890/details',
     pageTitle: 'What is your personal email address?',
     metaDescription: 'Update the email address for your personal account.',
     userName: 'John Doe',

@@ -5,7 +5,7 @@
 
 const personalEmailChangePresenter = (personalDetails, payload, crn) => {
   return {
-    backLink: { href: crn ? `/customer/${crn}/details` : '/search-crn' },
+    backLink: crn ? `/customer/${crn}/details` : '/search-crn',
     pageTitle: 'What is your personal email address?',
     metaDescription: 'Update the email address for your personal account.',
     userName: personalDetails.info.userName ?? null,

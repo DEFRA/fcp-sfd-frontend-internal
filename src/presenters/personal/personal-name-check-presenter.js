@@ -7,7 +7,7 @@ import { utils } from '@defra/fcp-sfd-frontend-engine'
 
 const personalNameCheckPresenter = (personalDetails, crn) => {
   return {
-    backLink: { href: `/customer/${crn}/account-name-change` },
+    backLink: crn ? `/customer/${crn}/account-name-change` : '/search-crn',
     changeLink: `/customer/${crn}/account-name-change`,
     pageTitle: 'Check your name is correct before submitting',
     metaDescription: 'Check the full name for your personal account is correct.',

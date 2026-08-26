@@ -7,7 +7,7 @@ import { presenters } from '@defra/fcp-sfd-frontend-engine'
 
 const personalPhoneNumbersChangePresenter = (personalDetails, payload, crn) => {
   return {
-    backLink: { href: crn ? `/customer/${crn}/details` : '/search-crn' },
+    backLink: crn ? `/customer/${crn}/details` : '/search-crn',
     pageTitle: 'What are your personal phone numbers?',
     metaDescription: 'Update the phone numbers for your personal account.',
     userName: personalDetails.info.userName ?? null,

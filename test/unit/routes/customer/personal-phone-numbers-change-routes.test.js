@@ -182,7 +182,7 @@ const getMockData = () => {
 
 const getPageData = () => {
   return {
-    backLink: { href: '/customer/1234567890/details' },
+    backLink: '/customer/1234567890/details',
     pageTitle: 'What are your personal phone numbers?',
     metaDescription: 'Update the phone numbers for your personal account.',
     userName: 'John Doe',
@@ -193,7 +193,7 @@ const getPageData = () => {
 
 const getPageDataError = () => {
   return {
-    backLink: { href: '/customer/1234567890/details' },
+    backLink: '/customer/1234567890/details',
     pageTitle: 'What are your personal phone numbers?',
     metaDescription: 'Update the phone numbers for your personal account.',
     userName: 'John Doe',

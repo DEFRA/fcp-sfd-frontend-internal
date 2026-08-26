@@ -16,7 +16,7 @@ const personalFixCheckPresenter = (personalDetails, crn) => {
   } = personalDetails
 
   return {
-    backLink: { href: `/customer/${crn}/details/fix-list` },
+    backLink: crn ? `/customer/${crn}/details/fix-list` : '/search-crn',
     pageTitle: 'Check your details are correct before submitting',
     metaDescription: 'Check your details are correct before submitting',
     changeLink: `/customer/${crn}/details/fix-list`,

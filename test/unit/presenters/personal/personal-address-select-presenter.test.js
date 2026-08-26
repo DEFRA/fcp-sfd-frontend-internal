@@ -32,7 +32,7 @@ describe('personalAddressSelectPresenter', () => {
       const result = personalAddressSelectPresenter(data)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/account-address-change' },
+        backLink: '/customer/1234567890/account-address-change',
         postcodeChangeLink: '/customer/1234567890/account-address-change',
         manualAddressLink: '/customer/1234567890/account-address-enter',
         pageTitle: 'Choose your personal address',
@@ -85,7 +85,15 @@ describe('personalAddressSelectPresenter', () => {
 
       const result = personalAddressSelectPresenter(data)
 
-      expect(result.backLink.href).toBe('/customer/9876543210/account-address-change')
+      expect(result.backLink).toBe('/customer/9876543210/account-address-change')
+    })
+
+    test('it falls back to the search page when the crn is missing', () => {
+      const data = { changePersonalPostcode: {} }
+
+      const result = personalAddressSelectPresenter(data)
+
+      expect(result.backLink).toBe('/search-crn')
     })
   })
 

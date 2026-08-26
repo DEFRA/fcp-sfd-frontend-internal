@@ -6,8 +6,10 @@
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 
 const personalAddressEnterPresenter = (data, payload) => {
+  const crn = data.crn
+
   return {
-    backLink: { href: `/customer/${data.crn}/account-address-change` },
+    backLink: crn ? `/customer/${crn}/account-address-change` : '/search-crn',
     pageTitle: 'Enter your personal address',
     metaDescription: 'Enter the address for your personal account.',
     address: formatAddress(payload, data.changePersonalAddress, data.address)

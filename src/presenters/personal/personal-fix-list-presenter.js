@@ -14,7 +14,7 @@ const personalFixListPresenter = (personalDetails, payload, crn, errors = null) 
     : null
 
   return {
-    backLink: { href: `/customer/${crn}/details/fix?source=${personalDetails.source}` },
+    backLink: crn ? `/customer/${crn}/details/fix?source=${personalDetails.source}` : '/search-crn',
     pageTitle: 'Your personal details to update',
     metaDescription: 'Your personal details to update.',
     sections: personalDetails.orderedSectionsToFix,

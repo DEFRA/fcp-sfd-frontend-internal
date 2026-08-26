@@ -13,7 +13,7 @@ const personalAddressCheckPresenter = (personalDetails) => {
   const addressPage = changePersonalAddress?.postcodeLookup ? 'account-address-select' : 'account-address-enter'
 
   return {
-    backLink: { href: `/customer/${crn}/${addressPage}` },
+    backLink: crn ? `/customer/${crn}/${addressPage}` : '/search-crn',
     changeLink: `/customer/${crn}/${addressPage}`,
     pageTitle: 'Check your personal address is correct before submitting',
     metaDescription: 'Check the address for your personal account is correct.',

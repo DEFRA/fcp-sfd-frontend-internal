@@ -32,7 +32,7 @@ describe('personalDobChangePresenter', () => {
       const result = personalDobChangePresenter(data, undefined, crn)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/details' },
+        backLink: '/customer/1234567890/details',
         pageTitle: 'What is your date of birth?',
         metaDescription: 'Update the date of birth for your personal account.',
         userName: 'Alfred Waldron',
@@ -49,7 +49,7 @@ describe('personalDobChangePresenter', () => {
       test('it points to the search-crn page', () => {
         const result = personalDobChangePresenter(data)
 
-        expect(result.backLink).toEqual({ href: '/search-crn' })
+        expect(result.backLink).toEqual('/search-crn')
       })
     })
   })

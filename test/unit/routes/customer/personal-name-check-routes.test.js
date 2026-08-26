@@ -108,7 +108,7 @@ const getMockData = () => {
 
 const getPageData = () => {
   return {
-    backLink: { href: '/customer/1234567890/account-name-change' },
+    backLink: '/customer/1234567890/account-name-change',
     changeLink: '/customer/1234567890/account-name-change',
     pageTitle: 'Check your name is correct before submitting',
     metaDescription: 'Check the full name for your personal account is correct.',

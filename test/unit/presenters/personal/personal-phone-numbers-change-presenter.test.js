@@ -29,7 +29,7 @@ describe('personalPhoneNumbersChangePresenter', () => {
       const result = personalPhoneNumbersChangePresenter(data, undefined, crn)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/details' },
+        backLink: '/customer/1234567890/details',
         pageTitle: 'What are your personal phone numbers?',
         metaDescription: 'Update the phone numbers for your personal account.',
         userName: 'John Doe',
@@ -90,7 +90,7 @@ describe('personalPhoneNumbersChangePresenter', () => {
       test('it should link to the customer details page', () => {
         const result = personalPhoneNumbersChangePresenter(data, undefined, crn)
 
-        expect(result.backLink).toEqual({ href: '/customer/1234567890/details' })
+        expect(result.backLink).toEqual('/customer/1234567890/details')
       })
     })
 
@@ -98,7 +98,7 @@ describe('personalPhoneNumbersChangePresenter', () => {
       test('it should link to the search-crn page', () => {
         const result = personalPhoneNumbersChangePresenter(data, undefined, undefined)
 
-        expect(result.backLink).toEqual({ href: '/search-crn' })
+        expect(result.backLink).toEqual('/search-crn')
       })
     })
   })

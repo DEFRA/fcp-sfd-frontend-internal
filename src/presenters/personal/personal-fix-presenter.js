@@ -12,7 +12,7 @@ const personalFixPresenter = (personalDetails, crn) => {
   const hasMultipleErrors = orderedSectionsToFix.length > 2
 
   return {
-    backLink: { href: `/customer/${crn}/details` },
+    backLink: crn ? `/customer/${crn}/details` : '/search-crn',
     pageTitle: 'Update your personal details',
     metaDescription: 'Update your personal details.',
     updateText: buildUpdateText(orderedSectionsToFix, source),

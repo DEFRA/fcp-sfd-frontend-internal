@@ -17,7 +17,7 @@ describe('Accessibility statement endpoint', () => {
   test('should render the accessibility-statement view with correct data', () => {
     const mockRequest = {
       headers: {
-        referer: '/some-previous-page'
+        referer: 'https://internal.test/some-previous-page'
       }
     }
 
@@ -49,6 +49,21 @@ describe('Accessibility statement endpoint', () => {
     const mockRequest = {
       headers: {
         referer: 'javascript:alert(1)'
+      }
+    }
+    const h = { view: viewMock }
+
+    accessibilityStatement.handler(mockRequest, h)
+
+    expect(viewMock).toHaveBeenCalledWith('footer/accessibility-statement', expect.objectContaining({
+      backLink: '/search-sbi'
+    }))
+  })
+
+  test('falls back to the search page when the referer is relative', () => {
+    const mockRequest = {
+      headers: {
+        referer: '/some-previous-page'
       }
     }
     const h = { view: viewMock }

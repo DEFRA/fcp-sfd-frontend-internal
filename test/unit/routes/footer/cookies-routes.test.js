@@ -20,7 +20,7 @@ describe('Cookies endpoint', () => {
   test('should render the cookies view with correct data', () => {
     const mockRequest = {
       headers: {
-        referer: '/some-previous-page'
+        referer: 'https://internal.test/some-previous-page'
       }
     }
 
@@ -49,6 +49,20 @@ describe('Cookies endpoint', () => {
     const mockRequest = {
       headers: {
         referer: 'javascript:alert(1)'
+      }
+    }
+
+    cookies.handler(mockRequest, mockH)
+
+    expect(mockH.view).toHaveBeenCalledWith('cookies', expect.objectContaining({
+      backLink: '/search-sbi'
+    }))
+  })
+
+  test('falls back to the search page when the referer is relative', () => {
+    const mockRequest = {
+      headers: {
+        referer: '/some-previous-page'
       }
     }
 

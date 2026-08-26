@@ -2,8 +2,12 @@ import { describe, test, expect } from 'vitest'
 import { getSafeBackLink } from '../../../src/utils/get-safe-back-link.js'
 
 describe('getSafeBackLink', () => {
-  test('returns the referer when it is a safe relative path', () => {
-    expect(getSafeBackLink('/business/106705779/details', '/fallback')).toBe('/business/106705779/details')
+  test('falls back when the referer is relative (real browsers only ever send an absolute Referer)', () => {
+    expect(getSafeBackLink('/business/106705779/details', '/fallback')).toBe('/fallback')
+  })
+
+  test('falls back when the referer uses a backslash to disguise a protocol-relative host', () => {
+    expect(getSafeBackLink('/\\evil.com', '/fallback')).toBe('/fallback')
   })
 
   test('extracts the path from an absolute http(s) referer', () => {

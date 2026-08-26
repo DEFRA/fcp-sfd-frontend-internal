@@ -20,7 +20,7 @@ describe('Contact us endpoint', () => {
   test('should render the contact-us view with correct data', () => {
     const mockRequest = {
       headers: {
-        referer: '/some-previous-page'
+        referer: 'https://internal.test/some-previous-page'
       }
     }
 
@@ -49,6 +49,20 @@ describe('Contact us endpoint', () => {
     const mockRequest = {
       headers: {
         referer: '//evil.com/phish'
+      }
+    }
+
+    contactUs.handler(mockRequest, mockH)
+
+    expect(mockH.view).toHaveBeenCalledWith('footer/contact-help', expect.objectContaining({
+      backLink: '/search-sbi'
+    }))
+  })
+
+  test('falls back to the search page when the referer is relative', () => {
+    const mockRequest = {
+      headers: {
+        referer: '/some-previous-page'
       }
     }
 

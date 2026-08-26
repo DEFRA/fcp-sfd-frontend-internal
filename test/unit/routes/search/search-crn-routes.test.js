@@ -67,6 +67,7 @@ describe('search crn routes', () => {
           email: 'test@example.com'
         }
       },
+      query: {},
       payload: {
         crn: '1234567890'
       }
@@ -97,6 +98,41 @@ describe('search crn routes', () => {
         expect(fetchCrnSearchDetailsService).not.toHaveBeenCalled()
         expect(searchCrnPresenter).not.toHaveBeenCalled()
         expect(request.yar.clear).not.toHaveBeenCalled()
+      })
+
+      describe('when a valid CRN is provided as a query param', () => {
+        const details = { info: { customerName: 'Jane Smith' } }
+        const pageData = { resultText: '1 result for "1234567890"' }
+
+        beforeEach(() => {
+          request.query = { crn: '1234567890' }
+          mockValidate.mockReturnValue({ value: { crn: '1234567890' } })
+          fetchCrnSearchDetailsService.mockResolvedValue(details)
+          searchCrnPresenter.mockReturnValue(pageData)
+        })
+
+        test('it fetches details, presents them and clears session state', async () => {
+          await getSearchCrn.handler(request, h)
+
+          expect(fetchCrnSearchDetailsService).toHaveBeenCalledWith('1234567890', 'test@example.com')
+          expect(searchCrnPresenter).toHaveBeenCalledWith(details, '1234567890')
+          expect(request.yar.clear).toHaveBeenCalledWith('searchCrn')
+          expect(h.view).toHaveBeenCalledWith('search/search-crn', pageData)
+        })
+      })
+
+      describe('when an invalid CRN is provided as a query param', () => {
+        beforeEach(() => {
+          request.query = { crn: 'not-a-crn' }
+          mockValidate.mockReturnValue({ error: { details: [] } })
+        })
+
+        test('it renders the search page with no page data', async () => {
+          await getSearchCrn.handler(request, h)
+
+          expect(h.view).toHaveBeenCalledWith('search/search-crn')
+          expect(fetchCrnSearchDetailsService).not.toHaveBeenCalled()
+        })
       })
     })
 

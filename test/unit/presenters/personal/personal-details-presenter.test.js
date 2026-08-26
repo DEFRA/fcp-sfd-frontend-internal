@@ -47,7 +47,7 @@ describe('personalDetailsPresenter', () => {
         breadcrumbs: [
           {
             text: 'Search results',
-            href: '/search-crn'
+            href: `/search-crn?crn=${data.crn}`
           },
           {
             text: `${data.info.userName} (CRN: ${data.crn})`,
@@ -112,63 +112,33 @@ describe('personalDetailsPresenter', () => {
   })
 
   describe('the "breadcrumbs" property', () => {
-    describe('when both userName and CRN exist', () => {
-      test('it should return both breadcrumbs', () => {
-        const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
+    test('it should return the search results breadcrumb with the CRN as a query param', () => {
+      const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-        expect(result.breadcrumbs).toEqual([
-          {
-            text: 'Search results',
-            href: '/search-crn'
-          },
-          {
-            text: `${data.info.userName} (CRN: ${data.crn})`,
-            href: `/customer/${data.crn}`
-          }
-        ])
+      expect(result.breadcrumbs[0]).toEqual({
+        text: 'Search results',
+        href: `/search-crn?crn=${data.crn}`
+      })
+    })
+
+    test('it should return the customer name and CRN as the final, clickable breadcrumb linking to the overview page', () => {
+      const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
+
+      expect(result.breadcrumbs[1]).toEqual({
+        text: `${data.info.userName} (CRN: ${data.crn})`,
+        href: `/customer/${data.crn}`
       })
     })
 
     describe('when userName is missing', () => {
-      test('it should return only the Search results breadcrumb', () => {
+      test('it should fall back to just the CRN', () => {
         data.info.userName = null
         const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-        expect(result.breadcrumbs).toEqual([
-          {
-            text: 'Search results',
-            href: '/search-crn'
-          }
-        ])
-      })
-    })
-
-    describe('when CRN is missing', () => {
-      test('it should return only the Search results breadcrumb', () => {
-        data.crn = null
-        const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
-
-        expect(result.breadcrumbs).toEqual([
-          {
-            text: 'Search results',
-            href: '/search-crn'
-          }
-        ])
-      })
-    })
-
-    describe('when both fullNameJoined and CRN are missing', () => {
-      test('it should return only the Search results breadcrumb', () => {
-        data.info.fullNameJoined = null
-        data.crn = null
-        const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
-
-        expect(result.breadcrumbs).toEqual([
-          {
-            text: 'Search results',
-            href: '/search-crn'
-          }
-        ])
+        expect(result.breadcrumbs[1]).toEqual({
+          text: `CRN: ${data.crn}`,
+          href: `/customer/${data.crn}`
+        })
       })
     })
   })

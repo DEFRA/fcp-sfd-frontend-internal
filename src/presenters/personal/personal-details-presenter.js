@@ -5,6 +5,7 @@
 
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { config } from '../../config/index.js'
+import { formatBreadcrumbLabel } from '../base-presenter.js'
 
 const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNeedingUpdate) => {
   const changeLinks = formatChangeLinks(data.crn, hasValidPersonalDetails, sectionsNeedingUpdate)
@@ -118,22 +119,16 @@ const formatDob = (dob) => {
 }
 
 const buildBreadcrumbs = (data) => {
-  // Defensively build breadcrumbs - show second breadcrumb only if both fullNameJoined and CRN exist
-  const breadcrumbs = [
+  return [
     {
       text: 'Search results',
-      href: '/search-crn'
+      href: `/search-crn?crn=${data.crn}`
+    },
+    {
+      text: formatBreadcrumbLabel(data.info?.userName, 'CRN', data.crn),
+      href: `/customer/${data.crn}`
     }
   ]
-
-  if (data.info?.userName && data.crn) {
-    breadcrumbs.push({
-      text: `${data.info.userName} (CRN: ${data.crn})`,
-      href: `/customer/${data.crn}`
-    })
-  }
-
-  return breadcrumbs
 }
 
 export {

@@ -33,6 +33,7 @@ describe('personalEmailCheckPresenter', () => {
         pageTitle: 'Check your personal email address is correct before submitting',
         metaDescription: 'Check the email address for your personal account is correct.',
         userName: 'John Doe',
+        crn,
         personalEmail: 'test@test.com'
       })
     })

@@ -11,6 +11,7 @@ const personalEmailChangePresenter = (personalDetails, payload, crn) => {
     pageTitle: 'What is your personal email address?',
     metaDescription: 'Update the email address for your personal account.',
     userName: personalDetails.info.userName ?? null,
+    crn: crn ?? null,
     personalEmail: payload ?? personalDetails.changePersonalEmail ?? personalDetails.contact.email
   }
 }

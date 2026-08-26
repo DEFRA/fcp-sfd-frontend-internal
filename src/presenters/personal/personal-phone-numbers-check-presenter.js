@@ -17,6 +17,7 @@ const personalPhoneNumbersCheckPresenter = (personalDetails, crn) => {
     pageTitle: 'Check your personal phone numbers are correct before submitting',
     metaDescription: 'Check the phone numbers for your personal account are correct.',
     userName: personalDetails.info.userName ?? null,
+    crn: crn ?? null,
     personalTelephone: {
       telephone: phoneNumbers.personalTelephone ?? null,
       mobile: phoneNumbers.personalMobile ?? null

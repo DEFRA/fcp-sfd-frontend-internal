@@ -186,6 +186,7 @@ const getPageData = () => {
     pageTitle: 'What are your personal phone numbers?',
     metaDescription: 'Update the phone numbers for your personal account.',
     userName: 'John Doe',
+    crn: '1234567890',
     personalTelephone: '01111111111',
     personalMobile: '02222222222'
   }
@@ -197,6 +198,7 @@ const getPageDataError = () => {
     pageTitle: 'What are your personal phone numbers?',
     metaDescription: 'Update the phone numbers for your personal account.',
     userName: 'John Doe',
+    crn: '1234567890',
     personalTelephone: '01234567890',
     personalMobile: '07123456789',
     errors: {

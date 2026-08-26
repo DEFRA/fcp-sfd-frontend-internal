@@ -48,6 +48,8 @@ describe('personalFixCheckPresenter', () => {
         backLink: `/customer/${crn}/details/fix-list`,
         pageTitle: 'Check your details are correct before submitting',
         metaDescription: 'Check your details are correct before submitting',
+        userName: null,
+        crn,
         changeLink: `/customer/${crn}/details/fix-list`,
         sections: ['name', 'dob', 'address', 'phone', 'email'],
         fullName: 'Alfred J Waldron',

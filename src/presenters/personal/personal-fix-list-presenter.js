@@ -18,6 +18,8 @@ const personalFixListPresenter = (personalDetails, payload, crn, errors = null) 
     backLink: crn ? `/customer/${crn}/details/fix?source=${personalDetails.source}` : SEARCH_CRN,
     pageTitle: 'Your personal details to update',
     metaDescription: 'Your personal details to update.',
+    userName: personalDetails.info?.userName ?? null,
+    crn: crn ?? null,
     sections: personalDetails.orderedSectionsToFix,
     name: formatName(payload, personalDetails),
     dateOfBirth: {

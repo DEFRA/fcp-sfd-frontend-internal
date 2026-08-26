@@ -115,6 +115,8 @@ const getPageData = () => {
     backLink: '/customer/987654321/details/fix-list',
     pageTitle: 'Check your details are correct before submitting',
     metaDescription: 'Check your details are correct before submitting',
+    userName: null,
+    crn: '987654321',
     changeLink: '/customer/987654321/details/fix-list',
     sections: ['name', 'email'],
     fullName: 'New Person',

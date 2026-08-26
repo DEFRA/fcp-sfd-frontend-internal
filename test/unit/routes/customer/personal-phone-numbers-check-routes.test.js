@@ -115,6 +115,7 @@ const getPageData = () => {
     pageTitle: 'Check your personal phone numbers are correct before submitting',
     metaDescription: 'Check the phone numbers for your personal account are correct.',
     userName: 'John Doe',
+    crn: '1234567890',
     personalTelephone: {
       telephone: '01234567890',
       mobile: '07123456789'

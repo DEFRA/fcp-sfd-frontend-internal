@@ -33,6 +33,7 @@ describe('personalEmailChangePresenter', () => {
         pageTitle: 'What is your personal email address?',
         metaDescription: 'Update the email address for your personal account.',
         userName: 'John Doe',
+        crn,
         personalEmail: 'test@test.com'
       })
     })

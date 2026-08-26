@@ -7,7 +7,7 @@ import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const personalAddressCheckPresenter = (personalDetails) => {
-  const { changePersonalAddress, address, crn } = personalDetails
+  const { changePersonalAddress, address, crn, info } = personalDetails
 
   // Determine the appropriate address page based on how the address was entered.
   // Postcode lookup uses the select page, manual entry uses the enter page.
@@ -18,6 +18,8 @@ const personalAddressCheckPresenter = (personalDetails) => {
     changeLink: `/customer/${crn}/${addressPage}`,
     pageTitle: 'Check your personal address is correct before submitting',
     metaDescription: 'Check the address for your personal account is correct.',
+    userName: info?.userName ?? null,
+    crn: crn ?? null,
     address: formatAddress(changePersonalAddress, address)
   }
 }

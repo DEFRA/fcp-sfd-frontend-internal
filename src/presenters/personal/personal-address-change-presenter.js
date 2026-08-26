@@ -13,6 +13,8 @@ const personalAddressChangePresenter = (data, payload) => {
     manualAddressLink: `/customer/${crn}/account-address-enter`,
     pageTitle: 'What is your personal address?',
     metaDescription: 'Update the address for your personal account.',
+    userName: data.info?.userName ?? null,
+    crn: crn ?? null,
     postcode: payload ?? data.changePersonalPostcode?.postcode ?? data.address.postcode
   }
 }

@@ -4,6 +4,7 @@
  */
 
 import { constants } from '@defra/fcp-sfd-frontend-engine'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const REGISTRATION_CONTENT = {
   charity: {
@@ -52,7 +53,7 @@ const businessLegalStatusEnterPresenter = (data, payload) => {
   }
 
   return {
-    backLink: sbi ? `/business/${sbi}/business-legal-status-change` : '/search-sbi',
+    backLink: sbi ? `/business/${sbi}/business-legal-status-change` : SEARCH_SBI,
     pageTitle: content.pageTitle,
     metaDescription: content.metaDescription,
     field: content.field,

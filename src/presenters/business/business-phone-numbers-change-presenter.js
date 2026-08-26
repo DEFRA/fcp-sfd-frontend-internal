@@ -4,12 +4,13 @@
  */
 
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const businessPhoneNumbersChangePresenter = (data, payload) => {
   const sbi = data.info?.sbi
 
   return {
-    backLink: sbi ? `/business/${sbi}/details` : '/search-sbi',
+    backLink: sbi ? `/business/${sbi}/details` : SEARCH_SBI,
     pageTitle: 'What are your business phone numbers?',
     metaDescription: 'Update the phone numbers for your business.',
     userName: data.customer?.userName ?? null,

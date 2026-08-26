@@ -4,6 +4,7 @@
  */
 
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
+import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const personalDobCheckPresenter = (personalDetails, crn) => {
   const { day, month, year } = personalDetails.changePersonalDob ?? personalDetails.info.dateOfBirth
@@ -13,7 +14,7 @@ const personalDobCheckPresenter = (personalDetails, crn) => {
   )
 
   return {
-    backLink: crn ? `/customer/${crn}/account-date-of-birth-change` : '/search-crn',
+    backLink: crn ? `/customer/${crn}/account-date-of-birth-change` : SEARCH_CRN,
     pageTitle: 'Check your date of birth is correct before submitting',
     metaDescription: 'Check the date of birth for your personal account is correct.',
     userName: personalDetails.info.userName ?? null,

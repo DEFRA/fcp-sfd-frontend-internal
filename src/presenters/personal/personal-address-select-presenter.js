@@ -4,12 +4,13 @@
  */
 
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
+import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const personalAddressSelectPresenter = (data) => {
   const crn = data.crn
 
   return {
-    backLink: crn ? `/customer/${crn}/account-address-change` : '/search-crn',
+    backLink: crn ? `/customer/${crn}/account-address-change` : SEARCH_CRN,
     postcodeChangeLink: `/customer/${crn}/account-address-change`,
     manualAddressLink: `/customer/${crn}/account-address-enter`,
     pageTitle: 'Choose your personal address',

@@ -4,6 +4,7 @@
  */
 
 import { constants } from '@defra/fcp-sfd-frontend-engine'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const businessLegalStatusChangePresenter = (data, payload) => {
   const sbi = data.info?.sbi
@@ -12,7 +13,7 @@ const businessLegalStatusChangePresenter = (data, payload) => {
   const selected = payload ?? data.changeBusinessLegalStatus ?? data.info?.legalStatusCode
 
   return {
-    backLink: sbi ? `/business/${sbi}/details` : '/search-sbi',
+    backLink: sbi ? `/business/${sbi}/details` : SEARCH_SBI,
     pageTitle: 'Change legal status',
     metaDescription: 'Update the legal status of this business.',
     businessLegalStatus: selected,

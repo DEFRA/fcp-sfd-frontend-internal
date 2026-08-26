@@ -4,10 +4,11 @@
  */
 
 import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const businessNameCheckPresenter = (data) => {
   const sbi = data.info?.sbi ?? null
-  const changeLink = sbi ? BUSINESS_CHANGE_LINKS.businessName(sbi) : '/search-sbi'
+  const changeLink = sbi ? BUSINESS_CHANGE_LINKS.businessName(sbi) : SEARCH_SBI
 
   return {
     backLink: changeLink,

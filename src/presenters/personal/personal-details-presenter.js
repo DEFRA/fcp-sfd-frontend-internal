@@ -5,6 +5,7 @@
 
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { config } from '../../config/index.js'
+import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNeedingUpdate) => {
   const changeLinks = formatChangeLinks(data.crn, hasValidPersonalDetails, sectionsNeedingUpdate)
@@ -122,7 +123,7 @@ const buildBreadcrumbs = (data) => {
   const breadcrumbs = [
     {
       text: 'Search results',
-      href: '/search-crn'
+      href: SEARCH_CRN
     }
   ]
 

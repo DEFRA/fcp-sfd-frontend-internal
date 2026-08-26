@@ -4,6 +4,7 @@
  */
 
 import { constants } from '@defra/fcp-sfd-frontend-engine'
+import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const { PERSONAL_SECTION_ORDER, PERSONAL_UPDATE_TEXT_LABELS, PERSONAL_SECTION_LABELS } = constants.interrupterJourney
 
@@ -12,7 +13,7 @@ const personalFixPresenter = (personalDetails, crn) => {
   const hasMultipleErrors = orderedSectionsToFix.length > 2
 
   return {
-    backLink: crn ? `/customer/${crn}/details` : '/search-crn',
+    backLink: crn ? `/customer/${crn}/details` : SEARCH_CRN,
     pageTitle: 'Update your personal details',
     metaDescription: 'Update your personal details.',
     updateText: buildUpdateText(orderedSectionsToFix, source),

@@ -3,9 +3,11 @@
  * @module personalEmailCheckPresenter
  */
 
+import { SEARCH_CRN } from '../../constants/search-links.js'
+
 const personalEmailCheckPresenter = (personalDetails, crn) => {
   return {
-    backLink: crn ? `/customer/${crn}/account-email-change` : '/search-crn',
+    backLink: crn ? `/customer/${crn}/account-email-change` : SEARCH_CRN,
     changeLink: `/customer/${crn}/account-email-change`,
     pageTitle: 'Check your personal email address is correct before submitting',
     metaDescription: 'Check the email address for your personal account is correct.',

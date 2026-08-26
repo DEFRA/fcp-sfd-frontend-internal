@@ -119,16 +119,19 @@ const formatDob = (dob) => {
 }
 
 const buildBreadcrumbs = (userName, crn) => {
-  return [
-    {
-      text: 'Search results',
-      href: `/search-crn?crn=${crn}`
-    },
-    {
+  const breadCrumbs = [{
+    text: 'Search results',
+    href: '/search-crn'
+  }]
+
+  if (crn) {
+    return breadCrumbs.concat([{
       text: formatBreadcrumbLabel(userName, 'CRN', crn),
       href: `/customer/${crn}`
-    }
-  ]
+    }])
+  }
+
+  return breadCrumbs
 }
 
 export {

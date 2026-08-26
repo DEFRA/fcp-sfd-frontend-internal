@@ -6,7 +6,7 @@ describe('getSafeBackLink', () => {
     expect(getSafeBackLink('/business/106705779/details', '/fallback')).toBe('/business/106705779/details')
   })
 
-  test('extracts the path from a same-origin absolute referer', () => {
+  test('extracts the path from an absolute http(s) referer', () => {
     expect(getSafeBackLink('https://example.com/business/106705779/details?foo=bar', '/fallback')).toBe('/business/106705779/details?foo=bar')
   })
 

@@ -4,7 +4,7 @@ const ALLOWED_PROTOCOLS = new Set(['http:', 'https:'])
  * Reduces a client-supplied Referer value down to a safe, same-origin relative path.
  * Falls back to the given default if the value is missing, protocol-relative (e.g. "//evil.com"),
  * or uses a disallowed protocol (e.g. "javascript:").
- * @param {string} referer - the raw `request.headers.referer` value
+ * @param {string | undefined} referer - the raw `request.headers.referer` value
  * @param {string} fallback - the path to use when the referer is missing or unsafe
  * @returns {string}
  */

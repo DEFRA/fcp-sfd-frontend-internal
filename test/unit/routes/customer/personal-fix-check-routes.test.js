@@ -112,7 +112,7 @@ describe('personal fix check routes', () => {
 
 const getPageData = () => {
   return {
-    backLink: { href: '/customer/987654321/details/fix-list' },
+    backLink: '/customer/987654321/details/fix-list',
     pageTitle: 'Check your details are correct before submitting',
     metaDescription: 'Check your details are correct before submitting',
     changeLink: '/customer/987654321/details/fix-list',

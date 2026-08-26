@@ -4,6 +4,7 @@
  */
 
 import { presenters, constants } from '@defra/fcp-sfd-frontend-engine'
+import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const personalFixListPresenter = (personalDetails, payload, crn, errors = null) => {
   const { day, month, year } = formatDateOfBirth(personalDetails, payload)
@@ -14,7 +15,7 @@ const personalFixListPresenter = (personalDetails, payload, crn, errors = null) 
     : null
 
   return {
-    backLink: { href: `/customer/${crn}/details/fix?source=${personalDetails.source}` },
+    backLink: crn ? `/customer/${crn}/details/fix?source=${personalDetails.source}` : SEARCH_CRN,
     pageTitle: 'Your personal details to update',
     metaDescription: 'Your personal details to update.',
     sections: personalDetails.orderedSectionsToFix,

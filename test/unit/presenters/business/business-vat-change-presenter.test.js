@@ -25,7 +25,7 @@ describe('businessVatChangePresenter', () => {
       const result = businessVatChangePresenter(data)
 
       expect(result).toEqual({
-        backLink: { backLink: true, href: '/business/123456789/details' },
+        backLink: '/business/123456789/details',
         pageTitle: 'What is your VAT registration number?',
         metaDescription: 'Update the VAT registration number for your business.',
         sbi: '123456789',
@@ -35,15 +35,15 @@ describe('businessVatChangePresenter', () => {
   })
 
   describe('the "backLink" property', () => {
-    describe('when a same-origin referrer is provided', () => {
-      test('it returns the referrer path', () => {
-        const result = businessVatChangePresenter(data, undefined, 'https://example.com/business/123456789/details')
+    describe('when the sbi is present', () => {
+      test('it returns the sbi details page', () => {
+        const result = businessVatChangePresenter(data)
 
-        expect(result.backLink).toEqual({ backLink: true, href: '/business/123456789/details' })
+        expect(result.backLink).toEqual('/business/123456789/details')
       })
     })
 
-    describe('when the sbi is missing and there is no referrer', () => {
+    describe('when the sbi is missing', () => {
       beforeEach(() => {
         delete data.info.sbi
       })
@@ -51,7 +51,7 @@ describe('businessVatChangePresenter', () => {
       test('it falls back to the search page', () => {
         const result = businessVatChangePresenter(data)
 
-        expect(result.backLink).toEqual({ backLink: true, href: '/search-sbi' })
+        expect(result.backLink).toEqual('/search-sbi')
       })
     })
   })

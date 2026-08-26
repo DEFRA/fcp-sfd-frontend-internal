@@ -26,13 +26,27 @@ describe('personalDobCheckPresenter', () => {
       const result = personalDobCheckPresenter(data, crn)
 
       expect(result).toEqual({
-        backLink: { href: `/customer/${crn}/account-date-of-birth-change` },
+        backLink: `/customer/${crn}/account-date-of-birth-change`,
         pageTitle: 'Check your date of birth is correct before submitting',
         metaDescription: 'Check the date of birth for your personal account is correct.',
         userName: 'Alfred Waldron',
         changeLink: `/customer/${crn}/account-date-of-birth-change`,
         dateOfBirth: '25 June 1984'
       })
+    })
+  })
+
+  describe('the "backLink" property', () => {
+    test('it directs to the date of birth change page', () => {
+      const result = personalDobCheckPresenter(data, crn)
+
+      expect(result.backLink).toBe(`/customer/${crn}/account-date-of-birth-change`)
+    })
+
+    test('it falls back to the search page when the crn is missing', () => {
+      const result = personalDobCheckPresenter(data, undefined)
+
+      expect(result.backLink).toBe('/search-crn')
     })
   })
 

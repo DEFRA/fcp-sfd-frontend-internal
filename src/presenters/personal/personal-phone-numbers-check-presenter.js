@@ -3,6 +3,8 @@
  * @module personalPhoneNumbersCheckPresenter
  */
 
+import { SEARCH_CRN } from '../../constants/search-links.js'
+
 const personalPhoneNumbersCheckPresenter = (personalDetails, crn) => {
   const phoneNumbers = personalDetails.changePersonalPhoneNumbers ?? {
     personalTelephone: personalDetails.contact.telephone,
@@ -10,7 +12,7 @@ const personalPhoneNumbersCheckPresenter = (personalDetails, crn) => {
   }
 
   return {
-    backLink: { href: `/customer/${crn}/account-phone-numbers-change` },
+    backLink: crn ? `/customer/${crn}/account-phone-numbers-change` : SEARCH_CRN,
     changeLink: `/customer/${crn}/account-phone-numbers-change`,
     pageTitle: 'Check your personal phone numbers are correct before submitting',
     metaDescription: 'Check the phone numbers for your personal account are correct.',

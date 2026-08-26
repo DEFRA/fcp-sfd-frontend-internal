@@ -11,13 +11,13 @@ const getBusinessEmailChange = {
     pre: [validateSbi]
   },
   handler: async (request, h) => {
-    const { params, yar, auth, info } = request
+    const { params, yar, auth } = request
     const { sbi } = params
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
     const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessEmail')
-    const pageData = businessEmailChangePresenter(businessDetails, undefined, info.referrer)
+    const pageData = businessEmailChangePresenter(businessDetails)
 
     return h.view('business/business-email-change', pageData)
   }
@@ -34,11 +34,11 @@ const postBusinessEmailChange = {
         abortEarly: false
       },
       failAction: async (request, h, err) => {
-        const { yar, auth, payload, info } = request
+        const { yar, auth, payload } = request
 
         const errors = utils.formatValidationErrors(err.details || [])
         const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessEmail')
-        const pageData = businessEmailChangePresenter(businessDetails, payload.businessEmail, info.referrer)
+        const pageData = businessEmailChangePresenter(businessDetails, payload.businessEmail)
 
         return h.view('business/business-email-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
       }

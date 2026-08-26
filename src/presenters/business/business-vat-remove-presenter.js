@@ -3,12 +3,13 @@
  * @module businessVatRemovePresenter
  */
 
+import { SEARCH_SBI } from '../../constants/search-links.js'
+
 const businessVatRemovePresenter = (data, payload) => {
+  const sbi = data.info?.sbi
+
   return {
-    backLink: {
-      backLink: true,
-      href: data.info?.sbi ? `/business/${data.info.sbi}/details` : '/search-sbi'
-    },
+    backLink: sbi ? `/business/${sbi}/details` : SEARCH_SBI,
     pageTitle: 'Are you sure you want to remove your VAT registration number?',
     metaDescription: 'Are you sure you want to remove your VAT registration number?',
     confirmRemove: payload ?? null,

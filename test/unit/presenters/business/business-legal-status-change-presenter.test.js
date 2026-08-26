@@ -19,7 +19,7 @@ describe('businessLegalStatusChangePresenter', () => {
     test('it correctly presents the data', () => {
       const result = businessLegalStatusChangePresenter(data, payload)
 
-      expect(result.backLink).toEqual({ href: '/business/106705779/details' })
+      expect(result.backLink).toEqual('/business/106705779/details')
       expect(result.pageTitle).toBe('Change legal status')
       expect(result.metaDescription).toBe('Update the legal status of this business.')
       expect(result.businessLegalStatus).toBe('102111')
@@ -30,14 +30,14 @@ describe('businessLegalStatusChangePresenter', () => {
     test('it builds the back link from the sbi details page when the sbi is present', () => {
       const result = businessLegalStatusChangePresenter(data, payload)
 
-      expect(result.backLink).toEqual({ href: '/business/106705779/details' })
+      expect(result.backLink).toEqual('/business/106705779/details')
     })
 
     test('it falls back to the search page when the sbi is missing', () => {
       delete data.info.sbi
       const result = businessLegalStatusChangePresenter(data, payload)
 
-      expect(result.backLink).toEqual({ href: '/search-sbi' })
+      expect(result.backLink).toEqual('/search-sbi')
     })
   })
 

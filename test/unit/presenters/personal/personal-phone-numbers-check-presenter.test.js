@@ -33,7 +33,7 @@ describe('personalPhoneNumbersCheckPresenter', () => {
       const result = personalPhoneNumbersCheckPresenter(data, crn)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/account-phone-numbers-change' },
+        backLink: '/customer/1234567890/account-phone-numbers-change',
         changeLink: '/customer/1234567890/account-phone-numbers-change',
         pageTitle: 'Check your personal phone numbers are correct before submitting',
         metaDescription: 'Check the phone numbers for your personal account are correct.',
@@ -43,6 +43,20 @@ describe('personalPhoneNumbersCheckPresenter', () => {
           mobile: '07123456789'
         }
       })
+    })
+  })
+
+  describe('the "backLink" property', () => {
+    test('it directs to the phone numbers change page', () => {
+      const result = personalPhoneNumbersCheckPresenter(data, crn)
+
+      expect(result.backLink).toBe('/customer/1234567890/account-phone-numbers-change')
+    })
+
+    test('it falls back to the search page when the crn is missing', () => {
+      const result = personalPhoneNumbersCheckPresenter(data, undefined)
+
+      expect(result.backLink).toBe('/search-crn')
     })
   })
 

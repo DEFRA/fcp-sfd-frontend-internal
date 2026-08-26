@@ -28,13 +28,27 @@ describe('personalEmailCheckPresenter', () => {
       const result = personalEmailCheckPresenter(data, crn)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/account-email-change' },
+        backLink: '/customer/1234567890/account-email-change',
         changeLink: '/customer/1234567890/account-email-change',
         pageTitle: 'Check your personal email address is correct before submitting',
         metaDescription: 'Check the email address for your personal account is correct.',
         userName: 'John Doe',
         personalEmail: 'test@test.com'
       })
+    })
+  })
+
+  describe('the "backLink" property', () => {
+    test('it directs to the email change page', () => {
+      const result = personalEmailCheckPresenter(data, crn)
+
+      expect(result.backLink).toBe('/customer/1234567890/account-email-change')
+    })
+
+    test('it falls back to the search page when the crn is missing', () => {
+      const result = personalEmailCheckPresenter(data, undefined)
+
+      expect(result.backLink).toBe('/search-crn')
     })
   })
 

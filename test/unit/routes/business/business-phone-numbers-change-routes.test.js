@@ -73,7 +73,7 @@ describe('business phone numbers change routes', () => {
       await getBusinessPhoneNumbersChange.handler(request, h)
 
       expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessPhoneNumbers')
-      expect(businessPhoneNumbersChangePresenter).toHaveBeenCalledWith(businessDetails, undefined, request.info.referrer)
+      expect(businessPhoneNumbersChangePresenter).toHaveBeenCalledWith(businessDetails)
       expect(h.view).toHaveBeenCalledWith('business/business-phone-numbers-change', pageData)
     })
 

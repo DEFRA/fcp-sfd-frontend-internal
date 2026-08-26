@@ -158,7 +158,7 @@ const getMockData = () => {
 
 const getPageData = () => {
   return {
-    backLink: { href: '/customer/1234567890/details' },
+    backLink: '/customer/1234567890/details',
     pageTitle: 'What is your date of birth?',
     metaDescription: 'Update the date of birth for your personal account.',
     userName: 'John Doe',
@@ -171,7 +171,7 @@ const getPageData = () => {
 
 const getPageDataError = () => {
   return {
-    backLink: { href: '/customer/1234567890/details' },
+    backLink: '/customer/1234567890/details',
     pageTitle: 'What is your date of birth?',
     metaDescription: 'Update the date of birth for your personal account.',
     userName: 'John Doe',

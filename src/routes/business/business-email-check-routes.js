@@ -10,13 +10,13 @@ const getBusinessEmailCheck = {
     pre: [validateSbi]
   },
   handler: async (request, h) => {
-    const { params, yar, auth, info } = request
+    const { params, yar, auth } = request
     const { sbi } = params
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
     const businessEmailChange = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessEmail')
-    const pageData = businessEmailCheckPresenter(businessEmailChange, info.referrer)
+    const pageData = businessEmailCheckPresenter(businessEmailChange)
 
     return h.view('business/business-email-check', pageData)
   }

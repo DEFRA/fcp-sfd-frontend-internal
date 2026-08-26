@@ -4,6 +4,7 @@
  */
 
 import { constants } from '@defra/fcp-sfd-frontend-engine'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const businessLegalStatusCheckPresenter = (data) => {
   const sbi = data.info?.sbi
@@ -13,7 +14,7 @@ const businessLegalStatusCheckPresenter = (data) => {
   const { backLink, legalStatusChangeLink, registrationNumberChangeLink } = setLinks(isCharity, isCompany, sbi)
 
   return {
-    backLink: { href: backLink },
+    backLink,
     // Each row links back to the specific page that captured it, rather than both sharing the back link above
     legalStatusChangeLink,
     registrationNumberChangeLink,
@@ -26,7 +27,6 @@ const businessLegalStatusCheckPresenter = (data) => {
 }
 
 const setLinks = (isCharity, isCompany, sbi) => {
-  const SEARCH_SBI_LINK = '/search-sbi'
   if (sbi) {
     const legalStatusChangeLink = `/business/${sbi}/business-legal-status-change`
     const registrationNumberChangeLink = `/business/${sbi}/business-legal-status-enter`
@@ -45,9 +45,9 @@ const setLinks = (isCharity, isCompany, sbi) => {
     }
   }
   return {
-    backLink: SEARCH_SBI_LINK,
-    legalStatusChangeLink: SEARCH_SBI_LINK,
-    registrationNumberChangeLink: SEARCH_SBI_LINK
+    backLink: SEARCH_SBI,
+    legalStatusChangeLink: SEARCH_SBI,
+    registrationNumberChangeLink: SEARCH_SBI
   }
 }
 

@@ -3,9 +3,11 @@
  * @module personalNameChangePresenter
  */
 
+import { SEARCH_CRN } from '../../constants/search-links.js'
+
 const personalNameChangePresenter = (data, payload, crn) => {
   return {
-    backLink: { href: crn ? `/customer/${crn}/details` : '/search-crn' },
+    backLink: crn ? `/customer/${crn}/details` : SEARCH_CRN,
     pageTitle: 'What is your full name?',
     metaDescription: 'Update the full name for your personal account.',
     userName: data.info.userName ?? null,

@@ -45,7 +45,7 @@ describe('personalFixCheckPresenter', () => {
       const result = personalFixCheckPresenter(personalDetails, crn)
 
       expect(result).toEqual({
-        backLink: { href: `/customer/${crn}/details/fix-list` },
+        backLink: `/customer/${crn}/details/fix-list`,
         pageTitle: 'Check your details are correct before submitting',
         metaDescription: 'Check your details are correct before submitting',
         changeLink: `/customer/${crn}/details/fix-list`,
@@ -270,9 +270,13 @@ describe('personalFixCheckPresenter', () => {
     test('it includes the crn in the URL', () => {
       const result = personalFixCheckPresenter(personalDetails, crn)
 
-      expect(result.backLink).toEqual({
-        href: `/customer/${crn}/details/fix-list`
-      })
+      expect(result.backLink).toEqual(`/customer/${crn}/details/fix-list`)
+    })
+
+    test('it falls back to the search page when the crn is missing', () => {
+      const result = personalFixCheckPresenter(personalDetails, undefined)
+
+      expect(result.backLink).toEqual('/search-crn')
     })
   })
 

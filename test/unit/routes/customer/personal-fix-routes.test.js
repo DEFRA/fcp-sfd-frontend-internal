@@ -123,7 +123,7 @@ const getMockSessionData = () => {
 
 const getPageData = () => {
   return {
-    backLink: { href: '/customer/987654321/details' },
+    backLink: '/customer/987654321/details',
     pageTitle: 'Update your personal details',
     metaDescription: 'Update your personal details.',
     updateText: 'We will ask you to update your personal email address as well as your personal name.',

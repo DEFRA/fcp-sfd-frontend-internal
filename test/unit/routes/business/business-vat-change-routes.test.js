@@ -61,7 +61,7 @@ describe('business VAT change routes', () => {
       await getBusinessVatChange.handler(request, h)
 
       expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessVat')
-      expect(businessVatChangePresenter).toHaveBeenCalledWith(businessDetails, undefined, request.info.referrer)
+      expect(businessVatChangePresenter).toHaveBeenCalledWith(businessDetails)
       expect(h.view).toHaveBeenCalledWith('business/business-vat-registration-number-change', pageData)
     })
 
@@ -101,7 +101,7 @@ describe('business VAT change routes', () => {
       await postBusinessVatChange.options.validate.failAction(request, h, err)
 
       expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessVat')
-      expect(businessVatChangePresenter).toHaveBeenCalledWith(businessDetails, 'GB123456789', request.info.referrer)
+      expect(businessVatChangePresenter).toHaveBeenCalledWith(businessDetails, 'GB123456789')
       expect(h.view).toHaveBeenCalledWith('business/business-vat-registration-number-change', {
         ...pageData,
         errors: { vatNumber: { text: 'Enter a VAT registration number' } }

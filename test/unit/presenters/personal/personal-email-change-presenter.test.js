@@ -29,7 +29,7 @@ describe('personalEmailChangePresenter', () => {
       const result = personalEmailChangePresenter(data, undefined, crn)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/details' },
+        backLink: '/customer/1234567890/details',
         pageTitle: 'What is your personal email address?',
         metaDescription: 'Update the email address for your personal account.',
         userName: 'John Doe',
@@ -83,7 +83,7 @@ describe('personalEmailChangePresenter', () => {
       test('it should link to the customer details page', () => {
         const result = personalEmailChangePresenter(data, undefined, crn)
 
-        expect(result.backLink).toEqual({ href: '/customer/1234567890/details' })
+        expect(result.backLink).toEqual('/customer/1234567890/details')
       })
     })
 
@@ -91,7 +91,7 @@ describe('personalEmailChangePresenter', () => {
       test('it should link to the search-crn page', () => {
         const result = personalEmailChangePresenter(data, undefined, undefined)
 
-        expect(result.backLink).toEqual({ href: '/search-crn' })
+        expect(result.backLink).toEqual('/search-crn')
       })
     })
   })

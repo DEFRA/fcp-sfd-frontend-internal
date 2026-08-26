@@ -28,7 +28,7 @@ describe('personalNameChangePresenter', () => {
       const result = personalNameChangePresenter(data, undefined, crn)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/details' },
+        backLink: '/customer/1234567890/details',
         pageTitle: 'What is your full name?',
         metaDescription: 'Update the full name for your personal account.',
         userName: 'John Doe',
@@ -175,7 +175,7 @@ describe('personalNameChangePresenter', () => {
       test('it should link to the customer details page', () => {
         const result = personalNameChangePresenter(data, undefined, crn)
 
-        expect(result.backLink).toEqual({ href: '/customer/1234567890/details' })
+        expect(result.backLink).toEqual('/customer/1234567890/details')
       })
     })
 
@@ -183,7 +183,7 @@ describe('personalNameChangePresenter', () => {
       test('it should link to the search-crn page', () => {
         const result = personalNameChangePresenter(data, undefined, undefined)
 
-        expect(result.backLink).toEqual({ href: '/search-crn' })
+        expect(result.backLink).toEqual('/search-crn')
       })
     })
   })

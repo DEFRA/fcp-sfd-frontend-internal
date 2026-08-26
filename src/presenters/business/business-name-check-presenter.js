@@ -3,19 +3,16 @@
  * @module businessNameCheckPresenter
  */
 
-import { resolveBackLink } from '../base-presenter.js'
 import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
-const businessNameCheckPresenter = (data, referrer) => {
+const businessNameCheckPresenter = (data) => {
   const sbi = data.info?.sbi ?? null
-  const fallbackHref = sbi ? BUSINESS_CHANGE_LINKS.businessName(sbi) : '/search-sbi'
+  const changeLink = sbi ? BUSINESS_CHANGE_LINKS.businessName(sbi) : SEARCH_SBI
 
   return {
-    backLink: {
-      backLink: true,
-      href: resolveBackLink(referrer, fallbackHref)
-    },
-    changeLink: fallbackHref,
+    backLink: changeLink,
+    changeLink,
     pageTitle: 'Check your business name is correct before submitting',
     metaDescription: 'Check the name for your business is correct.',
     userName: data.customer?.userName ?? null,

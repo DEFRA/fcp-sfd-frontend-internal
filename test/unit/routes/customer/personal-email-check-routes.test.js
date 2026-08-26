@@ -105,7 +105,7 @@ const getMockData = () => {
 
 const getPageData = () => {
   return {
-    backLink: { href: '/customer/1234567890/account-email-change' },
+    backLink: '/customer/1234567890/account-email-change',
     changeLink: '/customer/1234567890/account-email-change',
     pageTitle: 'Check your personal email address is correct before submitting',
     metaDescription: 'Check the email address for your personal account is correct.',

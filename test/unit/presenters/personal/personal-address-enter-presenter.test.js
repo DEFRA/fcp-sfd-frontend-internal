@@ -32,7 +32,7 @@ describe('personalAddressEnterPresenter', () => {
       const result = personalAddressEnterPresenter(data)
 
       expect(result).toEqual({
-        backLink: { href: '/customer/1234567890/account-address-change' },
+        backLink: '/customer/1234567890/account-address-change',
         pageTitle: 'Enter your personal address',
         metaDescription: 'Enter the address for your personal account.',
         address: expect.any(Object)
@@ -99,7 +99,15 @@ describe('personalAddressEnterPresenter', () => {
 
       const result = personalAddressEnterPresenter(data)
 
-      expect(result.backLink.href).toBe('/customer/9876543210/account-address-change')
+      expect(result.backLink).toBe('/customer/9876543210/account-address-change')
+    })
+
+    test('it falls back to the search page when the crn is missing', () => {
+      const data = {}
+
+      const result = personalAddressEnterPresenter(data)
+
+      expect(result.backLink).toBe('/search-crn')
     })
   })
 

@@ -20,7 +20,7 @@ const businessDetailsPresenter = (data, sbi, yar) => {
     pageTitle: 'View and update your business details',
     metaDescription: 'View and update your business details.',
     sbi,
-    breadcrumbs: buildBreadcrumbs(data, sbi),
+    breadcrumbs: buildBreadcrumbs(info.businessName, sbi),
     businessName: {
       value: info.businessName || 'Not added',
       action: presenters.getActionText(info.businessName),
@@ -64,14 +64,14 @@ const createEditableValueField = (value, emptyValueText) => {
   }
 }
 
-const buildBreadcrumbs = (data, sbi) => {
+const buildBreadcrumbs = (businessName, sbi) => {
   return [
     {
       text: 'Search results',
       href: `/search-sbi?sbi=${sbi}`
     },
     {
-      text: formatBreadcrumbLabel(data.info.businessName, 'SBI', sbi),
+      text: formatBreadcrumbLabel(businessName, 'SBI', sbi),
       href: `/business/${sbi}`
     }
   ]

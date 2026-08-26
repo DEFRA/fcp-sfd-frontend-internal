@@ -12,7 +12,7 @@ const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNe
   const { action: dobAction, formattedDob } = formatDob(data.info.dateOfBirth.full)
 
   return {
-    breadcrumbs: buildBreadcrumbs(data),
+    breadcrumbs: buildBreadcrumbs(data.info.userName, data.crn),
     notification: yar ? yar.flash('notification')[0] : null,
     pageTitle: 'View and update your personal details',
     metaDescription: 'View and update your personal details.',
@@ -118,15 +118,15 @@ const formatDob = (dob) => {
   }
 }
 
-const buildBreadcrumbs = (data) => {
+const buildBreadcrumbs = (userName, crn) => {
   return [
     {
       text: 'Search results',
-      href: `/search-crn?crn=${data.crn}`
+      href: `/search-crn?crn=${crn}`
     },
     {
-      text: formatBreadcrumbLabel(data.info?.userName, 'CRN', data.crn),
-      href: `/customer/${data.crn}`
+      text: formatBreadcrumbLabel(userName, 'CRN', crn),
+      href: `/customer/${crn}`
     }
   ]
 }

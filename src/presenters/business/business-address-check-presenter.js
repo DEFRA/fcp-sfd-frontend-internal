@@ -14,7 +14,7 @@ const businessAddressCheckPresenter = (businessDetails) => {
   const addressPage = changeBusinessAddress?.postcodeLookup ? 'business-address-select' : 'business-address-enter'
 
   return {
-    backLink: { href: `/business/${sbi}/${addressPage}` },
+    backLink: sbi ? `/business/${sbi}/${addressPage}` : '/search-sbi',
     changeLink: `/business/${sbi}/${addressPage}`,
     pageTitle: 'Check your business address is correct before submitting',
     metaDescription: 'Check the address for your business is correct.',

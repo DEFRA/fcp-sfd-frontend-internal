@@ -13,7 +13,7 @@ const businessLegalStatusCheckPresenter = (data) => {
   const { backLink, legalStatusChangeLink, registrationNumberChangeLink } = setLinks(isCharity, isCompany, sbi)
 
   return {
-    backLink: { href: backLink },
+    backLink,
     // Each row links back to the specific page that captured it, rather than both sharing the back link above
     legalStatusChangeLink,
     registrationNumberChangeLink,

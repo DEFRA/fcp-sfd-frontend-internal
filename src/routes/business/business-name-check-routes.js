@@ -10,13 +10,13 @@ const getBusinessNameCheck = {
     pre: [validateSbi]
   },
   handler: async (request, h) => {
-    const { params, yar, auth, info } = request
+    const { params, yar, auth } = request
     const { sbi } = params
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
     const businessNameChange = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessName')
-    const pageData = businessNameCheckPresenter(businessNameChange, info.referrer)
+    const pageData = businessNameCheckPresenter(businessNameChange)
 
     return h.view('business/business-name-check', pageData)
   }

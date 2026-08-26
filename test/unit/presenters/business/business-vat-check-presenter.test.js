@@ -21,7 +21,7 @@ describe('businessVatCheckPresenter', () => {
       const result = businessVatCheckPresenter(data)
 
       expect(result).toEqual({
-        backLink: { backLink: true, href: '/business/123456789/business-vat-registration-number-change' },
+        backLink: '/business/123456789/business-vat-registration-number-change',
         changeLink: '/business/123456789/business-vat-registration-number-change',
         pageTitle: 'Check your VAT registration number is correct before submitting',
         metaDescription: 'Check the VAT registration number for your business is correct.',
@@ -40,7 +40,7 @@ describe('businessVatCheckPresenter', () => {
       test('it falls back to the search page', () => {
         const result = businessVatCheckPresenter(data)
 
-        expect(result.backLink).toEqual({ backLink: true, href: '/search-sbi' })
+        expect(result.backLink).toEqual('/search-sbi')
       })
     })
   })

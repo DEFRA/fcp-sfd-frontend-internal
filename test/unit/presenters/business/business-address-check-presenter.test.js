@@ -43,7 +43,7 @@ describe('businessAddressCheckPresenter', () => {
       const result = businessAddressCheckPresenter(data)
 
       expect(result).toEqual({
-        backLink: { href: '/business/123456789/business-address-enter' },
+        backLink: '/business/123456789/business-address-enter',
         changeLink: '/business/123456789/business-address-enter',
         pageTitle: 'Check your business address is correct before submitting',
         metaDescription: 'Check the address for your business is correct.',
@@ -174,7 +174,7 @@ describe('businessAddressCheckPresenter', () => {
       test('it should return backLink with business-address-select', () => {
         const result = businessAddressCheckPresenter(data)
 
-        expect(result.backLink).toEqual({ href: '/business/123456789/business-address-select' })
+        expect(result.backLink).toEqual('/business/123456789/business-address-select')
       })
     })
 
@@ -188,7 +188,7 @@ describe('businessAddressCheckPresenter', () => {
       test('it should return backLink with business-address-enter', () => {
         const result = businessAddressCheckPresenter(data)
 
-        expect(result.backLink).toEqual({ href: '/business/123456789/business-address-enter' })
+        expect(result.backLink).toEqual('/business/123456789/business-address-enter')
       })
     })
   })

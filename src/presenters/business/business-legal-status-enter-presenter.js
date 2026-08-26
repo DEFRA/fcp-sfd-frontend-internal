@@ -52,7 +52,7 @@ const businessLegalStatusEnterPresenter = (data, payload) => {
   }
 
   return {
-    backLink: { href: sbi ? `/business/${sbi}/business-legal-status-change` : '/search-sbi' },
+    backLink: sbi ? `/business/${sbi}/business-legal-status-change` : '/search-sbi',
     pageTitle: content.pageTitle,
     metaDescription: content.metaDescription,
     field: content.field,

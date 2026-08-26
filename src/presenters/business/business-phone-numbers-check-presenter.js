@@ -3,17 +3,13 @@
  * @module businessPhoneNumbersCheckPresenter
  */
 
-import { resolveBackLink } from '../base-presenter.js'
 import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
 
-const businessPhoneNumbersCheckPresenter = (data, referrer) => {
-  const fallbackHref = data.info?.sbi ? BUSINESS_CHANGE_LINKS.businessTelephone(data.info.sbi) : '/search-sbi'
+const businessPhoneNumbersCheckPresenter = (data) => {
+  const sbi = data.info?.sbi
 
   return {
-    backLink: {
-      backLink: true,
-      href: resolveBackLink(referrer, fallbackHref)
-    },
+    backLink: sbi ? BUSINESS_CHANGE_LINKS.businessTelephone(sbi) : '/search-sbi',
     changeLink: BUSINESS_CHANGE_LINKS.businessTelephone(data.info.sbi),
     pageTitle: 'Check your business phone numbers are correct before submitting',
     metaDescription: 'Check the phone numbers for your business are correct.',

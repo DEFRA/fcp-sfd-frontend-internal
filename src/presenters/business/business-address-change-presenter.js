@@ -4,9 +4,11 @@
  */
 
 const businessAddressChangePresenter = (data, payload) => {
+  const sbi = data.info?.sbi
+
   return {
-    backLink: { href: `/business/${data.info?.sbi}/details` },
-    manualAddressLink: `/business/${data.info?.sbi}/business-address-enter`,
+    backLink: sbi ? `/business/${sbi}/details` : '/search-sbi',
+    manualAddressLink: `/business/${sbi}/business-address-enter`,
     pageTitle: 'What is your business address?',
     metaDescription: 'Update the address for your business.',
     postcode: payload ?? data.changeBusinessPostcode?.postcode ?? data.address.postcode

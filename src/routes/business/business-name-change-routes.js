@@ -11,13 +11,13 @@ const getBusinessNameChange = {
     pre: [validateSbi]
   },
   handler: async (request, h) => {
-    const { params, yar, auth, info } = request
+    const { params, yar, auth } = request
     const { sbi } = params
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
     const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessName')
-    const pageData = businessNameChangePresenter(businessDetails, undefined, info.referrer)
+    const pageData = businessNameChangePresenter(businessDetails)
 
     return h.view('business/business-name-change', pageData)
   }
@@ -34,11 +34,11 @@ const postBusinessNameChange = {
         abortEarly: false
       },
       failAction: async (request, h, err) => {
-        const { yar, auth, payload, info } = request
+        const { yar, auth, payload } = request
 
         const errors = utils.formatValidationErrors(err.details || [])
         const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessName')
-        const pageData = businessNameChangePresenter(businessDetails, payload.businessName, info.referrer)
+        const pageData = businessNameChangePresenter(businessDetails, payload.businessName)
 
         return h.view('business/business-name-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
       }

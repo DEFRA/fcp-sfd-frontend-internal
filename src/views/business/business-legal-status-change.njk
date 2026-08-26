@@ -6,7 +6,7 @@
 {% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
 
 {% block beforeContent %}
-  {{ appBackSignOutLink({ backLink: backLink, href: backLink.href }) }}
+  {{ appBackSignOutLink(backLink)}}
 {% endblock %}
 
 {% block content %}

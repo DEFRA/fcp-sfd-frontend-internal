@@ -6,13 +6,13 @@
 import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 const businessLegalStatusChangePresenter = (data, payload) => {
-  const backLink = data.info?.sbi ? `/business/${data.info.sbi}/details` : '/search-sbi'
+  const sbi = data.info?.sbi
 
   // payload/changeBusinessLegalStatus hold a status code from the form; otherwise use the code fetched from the DAL
   const selected = payload ?? data.changeBusinessLegalStatus ?? data.info?.legalStatusCode
 
   return {
-    backLink: { href: backLink },
+    backLink: sbi ? `/business/${sbi}/details` : '/search-sbi',
     pageTitle: 'Change legal status',
     metaDescription: 'Update the legal status of this business.',
     businessLegalStatus: selected,

@@ -18,11 +18,18 @@ describe('Cookies endpoint', () => {
   })
 
   test('should render the cookies view with correct data', () => {
-    const result = cookies.handler(null, mockH)
+    const mockRequest = {
+      headers: {
+        referer: '/some-previous-page'
+      }
+    }
+
+    const result = cookies.handler(mockRequest, mockH)
 
     expect(mockH.view).toHaveBeenCalledWith('cookies', {
       pageTitle: 'Cookies',
-      heading: 'How we use cookies to store information about how you use this service.'
+      heading: 'How we use cookies to store information about how you use this service.',
+      backLink: '/some-previous-page'
     })
 
     expect(result).toBe(mockView)

@@ -1,10 +1,14 @@
+import { getSafeBackLink } from '../../utils/get-safe-back-link.js'
+
 export const contactUs = {
   method: 'GET',
   path: '/contact-help',
-  handler: (_request, h) => {
+  handler: (request, h) => {
+    const backLink = getSafeBackLink(request.info.referrer, '/search-sbi')
     return h.view('footer/contact-help', {
       pageTitle: 'Contact us for help',
-      heading: 'How to contact this service if you need help.'
+      heading: 'How to contact this service if you need help.',
+      backLink
     })
   }
 }

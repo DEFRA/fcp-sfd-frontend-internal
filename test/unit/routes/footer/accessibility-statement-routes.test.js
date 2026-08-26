@@ -16,8 +16,8 @@ describe('Accessibility statement endpoint', () => {
 
   test('should render the accessibility-statement view with correct data', () => {
     const mockRequest = {
-      headers: {
-        referer: 'https://internal.test/some-previous-page'
+      info: {
+        referrer: 'https://internal.test/some-previous-page'
       }
     }
 
@@ -35,7 +35,7 @@ describe('Accessibility statement endpoint', () => {
   })
 
   test('falls back to the search page when there is no referer', () => {
-    const mockRequest = { headers: {} }
+    const mockRequest = { info: { referrer: '' } }
     const h = { view: viewMock }
 
     accessibilityStatement.handler(mockRequest, h)
@@ -47,8 +47,8 @@ describe('Accessibility statement endpoint', () => {
 
   test('falls back to the search page when the referer is unsafe', () => {
     const mockRequest = {
-      headers: {
-        referer: 'javascript:alert(1)'
+      info: {
+        referrer: 'javascript:alert(1)'
       }
     }
     const h = { view: viewMock }
@@ -62,8 +62,8 @@ describe('Accessibility statement endpoint', () => {
 
   test('falls back to the search page when the referer is relative', () => {
     const mockRequest = {
-      headers: {
-        referer: '/some-previous-page'
+      info: {
+        referrer: '/some-previous-page'
       }
     }
     const h = { view: viewMock }

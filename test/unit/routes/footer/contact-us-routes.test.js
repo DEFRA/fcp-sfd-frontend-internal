@@ -19,8 +19,8 @@ describe('Contact us endpoint', () => {
 
   test('should render the contact-us view with correct data', () => {
     const mockRequest = {
-      headers: {
-        referer: 'https://internal.test/some-previous-page'
+      info: {
+        referrer: 'https://internal.test/some-previous-page'
       }
     }
 
@@ -36,7 +36,7 @@ describe('Contact us endpoint', () => {
   })
 
   test('falls back to the search page when there is no referer', () => {
-    const mockRequest = { headers: {} }
+    const mockRequest = { info: { referrer: '' } }
 
     contactUs.handler(mockRequest, mockH)
 
@@ -47,8 +47,8 @@ describe('Contact us endpoint', () => {
 
   test('falls back to the search page when the referer is unsafe', () => {
     const mockRequest = {
-      headers: {
-        referer: '//evil.com/phish'
+      info: {
+        referrer: '//evil.com/phish'
       }
     }
 
@@ -61,8 +61,8 @@ describe('Contact us endpoint', () => {
 
   test('falls back to the search page when the referer is relative', () => {
     const mockRequest = {
-      headers: {
-        referer: '/some-previous-page'
+      info: {
+        referrer: '/some-previous-page'
       }
     }
 

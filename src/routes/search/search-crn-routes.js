@@ -1,32 +1,30 @@
 import { schemas, utils, constants } from '@defra/fcp-sfd-frontend-engine'
 
-import { SEARCH_CRN, SEARCH_CRN_VIEW } from '../../constants/search-links.js'
 import { fetchCrnSearchDetailsService } from '../../services/search/fetch-crn-search-details-service.js'
 import { searchCrnPresenter } from '../../presenters/search/search-crn-presenter.js'
 
+const SEARCH_CRN_PATH = '/search-crn'
+const SEARCH_CRN_SESSION_KEY = 'searchCrn'
+const SEARCH_CRN_VIEW = 'search/search-crn'
+
 const getSearchCrn = {
   method: 'GET',
-  path: SEARCH_CRN,
-  options: {
-    validate: {
-      // Reuse the CRN schema so a repeated/invalid crn query param is rejected rather than assumed to be a string
-      query: schemas.customer.crn,
-      failAction: (request, h) => h.view(SEARCH_CRN_VIEW).code(constants.statusCodes.BAD_REQUEST).takeover()
-    }
-  },
+  path: SEARCH_CRN_PATH,
   handler: async (request, h) => {
-    // The CRN arrives via query string, either from the POST redirect or the "Search results" link.
-    // Route validation has already trimmed it, so it'll be a valid CRN, undefined, or ''.
-    const { crn } = request.query
+    const searchState = request.yar.get(SEARCH_CRN_SESSION_KEY)
 
-    // Undefined or '' is a falsy value, so this will catch both cases and just render the search page without results.
-    if (!crn) {
+    // Requests sent to the /search page might be either to just show the search page or to view search results,
+    // so we need to check whether this is just an initial request to display the page or whether it is a request for a
+    // page of results
+    if (!searchState) {
       return h.view(SEARCH_CRN_VIEW)
     }
 
     const email = request.auth.credentials?.email
-    const crnDetails = await fetchCrnSearchDetailsService(crn, email)
-    const pageData = searchCrnPresenter(crnDetails, crn)
+    const crnDetails = await fetchCrnSearchDetailsService(searchState.crn, email)
+    const pageData = searchCrnPresenter(crnDetails, searchState.crn)
+
+    request.yar.clear(SEARCH_CRN_SESSION_KEY)
 
     return h.view(SEARCH_CRN_VIEW, pageData)
   }
@@ -34,28 +32,32 @@ const getSearchCrn = {
 
 const postSearchCrn = {
   method: 'POST',
-  path: SEARCH_CRN,
-  options: {
-    validate: {
-      payload: schemas.customer.crn,
-      failAction: (request, h, err) => {
-        const errors = utils.formatValidationErrors(err.details || [])
-        const pageData = { ...request.payload, errors, showClear: true, clearSearchLink: SEARCH_CRN }
-
-        return h.view(SEARCH_CRN_VIEW, pageData).code(constants.statusCodes.BAD_REQUEST).takeover()
-      }
-    }
-  },
+  path: SEARCH_CRN_PATH,
   handler: async (request, h) => {
-    const { crn } = request.payload
+    const { payload, yar } = request
+    // Trim whitespace so values like " 1234567890 " are treated as valid CRN input.
+    const crnInput = payload.crn?.trim() ?? ''
 
-    // An empty form submission just redirects back to the search page without showing a validation error.
-    if (!crn) {
-      return h.redirect(SEARCH_CRN)
+    // If the user submitted an empty form, just redirect back to the search page without showing a validation error.
+    if (crnInput === '') {
+      return h.redirect(SEARCH_CRN_PATH)
     }
 
-    // Redirect with the CRN as a query param so the GET route can fetch and render results.
-    return h.redirect(`${SEARCH_CRN}?crn=${encodeURIComponent(crn)}`)
+    const validation = schemas.customer.crn.validate({ crn: crnInput })
+
+    if (validation.error) {
+      const errors = utils.formatValidationErrors(validation.error.details || [])
+      const pageData = { ...payload, errors, showClear: true, clearSearchLink: '/search-crn' }
+
+      return h.view(SEARCH_CRN_VIEW, pageData).code(constants.statusCodes.BAD_REQUEST).takeover()
+    }
+
+    const { crn } = validation.value
+
+    yar.set(SEARCH_CRN_SESSION_KEY, { crn })
+
+    // Save CRN in session and redirect so the GET route can fetch and render results.
+    return h.redirect(SEARCH_CRN_PATH)
   }
 }
 

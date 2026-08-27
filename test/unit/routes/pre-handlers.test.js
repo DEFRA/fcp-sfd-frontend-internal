@@ -75,6 +75,49 @@ describe('pre-handlers', () => {
       })
     })
 
+    describe('when SBI has surrounding whitespace that the schema trims', () => {
+      beforeEach(() => {
+        request.params.sbi = '  123456789  '
+        // The schema trims internally, so the mocked validate call returns the trimmed value
+        schemas.business.sbi.validate.mockReturnValue({ error: null, value: { sbi: '123456789' } })
+      })
+
+      test('it should allow the request to continue', async () => {
+        const result = await validateSbi.method(request, h)
+
+        expect(result).toBe(h.continue)
+        expect(h.redirect).not.toHaveBeenCalled()
+      })
+
+      test('it should mutate params.sbi to the trimmed value', async () => {
+        await validateSbi.method(request, h)
+
+        expect(request.params.sbi).toBe('123456789')
+      })
+    })
+
+    describe('when SBI is whitespace-only and trims to an empty string', () => {
+      beforeEach(() => {
+        request.params.sbi = '   '
+        // The schema allows '' (for the search routes), so validation succeeds with an empty value
+        schemas.business.sbi.validate.mockReturnValue({ error: null, value: { sbi: '' } })
+      })
+
+      test('it should redirect to search-sbi instead of continuing', async () => {
+        const result = await validateSbi.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+        expect(takeoverMock).toHaveBeenCalled()
+        expect(result).not.toBe(h.continue)
+      })
+
+      test('it should not mutate params.sbi', async () => {
+        await validateSbi.method(request, h)
+
+        expect(request.params.sbi).toBe('   ')
+      })
+    })
+
     describe('when SBI is invalid', () => {
       beforeEach(() => {
         schemas.business.sbi.validate.mockReturnValue({ error: { message: 'Invalid SBI' } })
@@ -136,6 +179,49 @@ describe('pre-handlers', () => {
 
         expect(result).toBe(h.continue)
         expect(h.redirect).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('when CRN has surrounding whitespace that the schema trims', () => {
+      beforeEach(() => {
+        request.params.crn = '  1234567890  '
+        // The schema trims internally, so the mocked validate call returns the trimmed value
+        schemas.customer.crn.validate.mockReturnValue({ error: null, value: { crn: '1234567890' } })
+      })
+
+      test('it should allow the request to continue', async () => {
+        const result = await validateCrn.method(request, h)
+
+        expect(result).toBe(h.continue)
+        expect(h.redirect).not.toHaveBeenCalled()
+      })
+
+      test('it should mutate params.crn to the trimmed value', async () => {
+        await validateCrn.method(request, h)
+
+        expect(request.params.crn).toBe('1234567890')
+      })
+    })
+
+    describe('when CRN is whitespace-only and trims to an empty string', () => {
+      beforeEach(() => {
+        request.params.crn = '   '
+        // The schema allows '' (for the search routes), so validation succeeds with an empty value
+        schemas.customer.crn.validate.mockReturnValue({ error: null, value: { crn: '' } })
+      })
+
+      test('it should redirect to search-crn instead of continuing', async () => {
+        const result = await validateCrn.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
+        expect(takeoverMock).toHaveBeenCalled()
+        expect(result).not.toBe(h.continue)
+      })
+
+      test('it should not mutate params.crn', async () => {
+        await validateCrn.method(request, h)
+
+        expect(request.params.crn).toBe('   ')
       })
     })
 
@@ -238,6 +324,22 @@ describe('pre-handlers', () => {
       })
     })
 
+    describe('when CRN is whitespace-only and trims to an empty string', () => {
+      beforeEach(() => {
+        request.params.crn = '   '
+        schemas.customer.crn.validate.mockReturnValue({ error: null, value: { crn: '' } })
+      })
+
+      test('it redirects to search-crn without checking journey', () => {
+        const preHandler = checkCrnAndInterrupterJourney(journey)
+        preHandler.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
+        expect(redirectStub.takeover).toHaveBeenCalled()
+        expect(services.checkInterrupterJourneySession).not.toHaveBeenCalled()
+      })
+    })
+
     describe('when CRN is valid but journey session is invalid', () => {
       beforeEach(() => {
         schemas.customer.crn.validate.mockReturnValue({ error: null, value: { crn: '1234567890' } })
@@ -326,6 +428,22 @@ describe('pre-handlers', () => {
         preHandler.method(request, h)
 
         expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+      })
+    })
+
+    describe('when SBI is whitespace-only and trims to an empty string', () => {
+      beforeEach(() => {
+        request.params.sbi = '   '
+        schemas.business.sbi.validate.mockReturnValue({ error: null, value: { sbi: '' } })
+      })
+
+      test('it redirects to search-sbi without checking journey', () => {
+        const preHandler = checkSbiAndInterrupterJourney(journey)
+        preHandler.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+        expect(redirectStub.takeover).toHaveBeenCalled()
+        expect(services.checkInterrupterJourneySession).not.toHaveBeenCalled()
       })
     })
 

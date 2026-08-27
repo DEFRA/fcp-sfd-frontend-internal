@@ -9,6 +9,7 @@ const getSearchSbi = {
   path: SEARCH_SBI,
   options: {
     validate: {
+      // The schema will trim the SBI whitespace
       query: schemas.business.sbi,
       failAction: (request, h) => h.view(SEARCH_SBI_VIEW).code(constants.statusCodes.BAD_REQUEST).takeover()
     }

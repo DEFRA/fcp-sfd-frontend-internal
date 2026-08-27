@@ -82,8 +82,8 @@ export const formatBreadcrumbLabel = (name, idLabel, id) => {
  * Builds the "Search results" > entity breadcrumb trail used on overview and details pages.
  *
  * @param {string} queryKey - Query string key for the id on the search results link, e.g. 'sbi' or 'crn'
- * @param {string} name - The business or customer name
  * @param {string} id - The SBI or CRN value
+ * @param {string | null | undefined} name - The business or customer name
  * @param {string} [currentHref] - Href for the current page crumb, omitted when the crumb isn't a link
  *
  * @returns {Array<Object>} Breadcrumb items

@@ -2,7 +2,10 @@
 <div class="govuk-grid-row sub-header-container govuk-!-padding-top-3">
 
   <div class="govuk-grid-column-two-thirds">
+      {# No current pages pass both businessName and userName #}
+      {% if businessName or userName %}
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1 text-wrap-no-hyphen">{{ businessName or userName }}</h3>
+      {% endif %}
       {% if sbi %}
       <p class="govuk-body-s govuk-!-margin-bottom-2">Single business identifier (SBI): {{ sbi }}</p>
       {% elif crn %}

@@ -215,6 +215,20 @@ describe('businessOverviewPresenter', () => {
         })
       })
     })
+
+    describe('when the sbi is missing', () => {
+      beforeEach(() => {
+        delete data.sbi
+      })
+
+      test('it should link to the search page without a query param and omit the business breadcrumb', () => {
+        const result = businessOverviewPresenter(data, page)
+
+        expect(result.breadcrumbs).toEqual([
+          { text: 'Search results', href: '/search-sbi' }
+        ])
+      })
+    })
   })
 
   describe('page normalisation', () => {

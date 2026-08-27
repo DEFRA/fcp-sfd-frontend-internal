@@ -199,6 +199,20 @@ describe('customerOverviewPresenter', () => {
         })
       })
     })
+
+    describe('when the crn is missing', () => {
+      beforeEach(() => {
+        delete data.info.crn
+      })
+
+      test('it should link to the search page without a query param and omit the customer breadcrumb', () => {
+        const result = customerOverviewPresenter(data, page)
+
+        expect(result.breadcrumbs).toEqual([
+          { text: 'Search results', href: '/search-crn' }
+        ])
+      })
+    })
   })
 
   describe('page normalisation', () => {

@@ -6,6 +6,7 @@
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { formatBreadcrumbLabel } from '../base-presenter.js'
 import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const CHANGE_LINK = '#'
 
@@ -66,7 +67,7 @@ const createEditableValueField = (value, emptyValueText) => {
 
 const buildBreadcrumbs = (businessName, sbi) => {
   if (!sbi) {
-    return [{ text: 'Search results', href: '/search-sbi' }]
+    return [{ text: 'Search results', href: SEARCH_SBI }]
   }
 
   return [

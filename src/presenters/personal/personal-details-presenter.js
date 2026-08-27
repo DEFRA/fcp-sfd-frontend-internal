@@ -6,6 +6,7 @@
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { config } from '../../config/index.js'
 import { formatBreadcrumbLabel } from '../base-presenter.js'
+import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNeedingUpdate) => {
   const changeLinks = formatChangeLinks(data.crn, hasValidPersonalDetails, sectionsNeedingUpdate)
@@ -120,7 +121,7 @@ const formatDob = (dob) => {
 
 const buildBreadcrumbs = (userName, crn) => {
   if (!crn) {
-    return [{ text: 'Search results', href: '/search-crn' }]
+    return [{ text: 'Search results', href: SEARCH_CRN }]
   }
 
   return [

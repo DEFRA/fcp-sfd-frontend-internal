@@ -26,16 +26,19 @@ const customerOverviewPresenter = (customerDetails, page) => {
     hasBusinesses: totalBusinesses > 0,
     businesses: formatBusinesses(pagedBusinesses),
     pagination,
-    breadcrumbs: [
-      {
-        text: 'Search results',
-        href: `/search-crn?crn=${customerDetails?.info?.crn}`
-      },
-      {
-        text: formatBreadcrumbLabel(customerDetails?.info?.customerName, 'CRN', customerDetails?.info?.crn)
-      }
-    ]
+    breadcrumbs: buildBreadcrumbs(customerDetails?.info?.customerName, customerDetails?.info?.crn)
   }
+}
+
+const buildBreadcrumbs = (customerName, crn) => {
+  if (!crn) {
+    return [{ text: 'Search results', href: SEARCH_CRN }]
+  }
+
+  return [
+    { text: 'Search results', href: `/search-crn?crn=${crn}` },
+    { text: formatBreadcrumbLabel(customerName, 'CRN', crn) }
+  ]
 }
 
 /**

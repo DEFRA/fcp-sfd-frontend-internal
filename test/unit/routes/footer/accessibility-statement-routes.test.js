@@ -14,6 +14,10 @@ describe('Accessibility statement endpoint', () => {
     expect(accessibilityStatement.path).toBe('/accessibility-statement')
   })
 
+  test('should not require authentication', () => {
+    expect(accessibilityStatement.options.auth).toBe(false)
+  })
+
   test('should render the accessibility-statement view with correct data', () => {
     const mockRequest = {
       info: {

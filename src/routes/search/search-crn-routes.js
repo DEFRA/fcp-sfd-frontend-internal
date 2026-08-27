@@ -11,7 +11,7 @@ const getSearchCrn = {
     validate: {
       // The schema will trim the CRN whitespace
       query: schemas.customer.crn,
-      failAction: (request, h) => h.view(SEARCH_CRN_VIEW).code(constants.statusCodes.BAD_REQUEST).takeover()
+      failAction: (_request, h) => h.view(SEARCH_CRN_VIEW).code(constants.statusCodes.BAD_REQUEST).takeover()
     }
   },
   handler: async (request, h) => {

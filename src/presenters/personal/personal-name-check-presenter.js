@@ -13,6 +13,7 @@ const personalNameCheckPresenter = (personalDetails, crn) => {
     pageTitle: 'Check your name is correct before submitting',
     metaDescription: 'Check the full name for your personal account is correct.',
     userName: personalDetails.info.userName ?? null,
+    crn: crn ?? null,
     fullName: utils.formatFullName(personalDetails.changePersonalName ?? personalDetails.info.fullName)
   }
 }

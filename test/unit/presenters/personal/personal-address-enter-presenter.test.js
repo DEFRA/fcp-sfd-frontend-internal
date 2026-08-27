@@ -35,6 +35,8 @@ describe('personalAddressEnterPresenter', () => {
         backLink: '/customer/1234567890/account-address-change',
         pageTitle: 'Enter your personal address',
         metaDescription: 'Enter the address for your personal account.',
+        userName: null,
+        crn: '1234567890',
         address: expect.any(Object)
       })
     })

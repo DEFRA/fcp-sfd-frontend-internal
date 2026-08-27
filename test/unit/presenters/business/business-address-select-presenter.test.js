@@ -59,6 +59,8 @@ describe('businessAddressSelectPresenter', () => {
         manualAddressLink: '/business/123456789/business-address-enter',
         pageTitle: 'Choose your business address',
         metaDescription: 'Choose the address for your business.',
+        businessName: 'Agile Farm Ltd',
+        sbi: '123456789',
         postcode: 'SK22 1DL',
         displayAddresses: expect.any(Array)
       })

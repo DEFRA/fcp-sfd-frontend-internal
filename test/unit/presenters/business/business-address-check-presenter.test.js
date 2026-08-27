@@ -10,7 +10,8 @@ describe('businessAddressCheckPresenter', () => {
   beforeEach(() => {
     data = {
       info: {
-        sbi: '123456789'
+        sbi: '123456789',
+        businessName: 'Agile Farm Ltd'
       },
       address: {
         lookup: {
@@ -47,6 +48,8 @@ describe('businessAddressCheckPresenter', () => {
         changeLink: '/business/123456789/business-address-enter',
         pageTitle: 'Check your business address is correct before submitting',
         metaDescription: 'Check the address for your business is correct.',
+        businessName: 'Agile Farm Ltd',
+        sbi: '123456789',
         address: [
           '10 Skirbeck Way',
           'Lonely Lane',

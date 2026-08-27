@@ -161,6 +161,7 @@ const getPageData = () => {
     pageTitle: 'What is your full name?',
     metaDescription: 'Update the full name for your personal account.',
     userName: 'John Doe',
+    crn: '1234567890',
     first: 'John',
     middle: 'M',
     last: 'Doe'
@@ -173,6 +174,7 @@ const getPageDataError = () => {
     pageTitle: 'What is your full name?',
     metaDescription: 'Update the full name for your personal account.',
     userName: 'John Doe',
+    crn: '1234567890',
     first: 'John',
     middle: 'A',
     last: 'Doe',

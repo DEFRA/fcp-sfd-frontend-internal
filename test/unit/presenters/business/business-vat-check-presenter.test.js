@@ -11,7 +11,8 @@ describe('businessVatCheckPresenter', () => {
     data = {
       info: {
         sbi: '123456789',
-        vat: 'GB123456789'
+        vat: 'GB123456789',
+        businessName: 'Agile Farm Ltd'
       }
     }
   })
@@ -25,6 +26,7 @@ describe('businessVatCheckPresenter', () => {
         changeLink: '/business/123456789/business-vat-registration-number-change',
         pageTitle: 'Check your VAT registration number is correct before submitting',
         metaDescription: 'Check the VAT registration number for your business is correct.',
+        businessName: 'Agile Farm Ltd',
         sbi: '123456789',
         vatNumber: 'GB123456789'
       })

@@ -32,6 +32,7 @@ describe('personalNameChangePresenter', () => {
         pageTitle: 'What is your full name?',
         metaDescription: 'Update the full name for your personal account.',
         userName: 'John Doe',
+        crn,
         first: 'John',
         middle: 'M',
         last: 'Doe'

@@ -13,6 +13,8 @@ const businessAddressChangePresenter = (data, payload) => {
     manualAddressLink: `/business/${sbi}/business-address-enter`,
     pageTitle: 'What is your business address?',
     metaDescription: 'Update the address for your business.',
+    businessName: data.info?.businessName ?? null,
+    sbi: sbi ?? null,
     postcode: payload ?? data.changeBusinessPostcode?.postcode ?? data.address.postcode
   }
 }

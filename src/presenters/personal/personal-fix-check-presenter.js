@@ -20,6 +20,8 @@ const personalFixCheckPresenter = (personalDetails, crn) => {
     backLink: crn ? `/customer/${crn}/details/fix-list` : SEARCH_CRN,
     pageTitle: 'Check your details are correct before submitting',
     metaDescription: 'Check your details are correct before submitting',
+    userName: personalDetails.info?.userName ?? null,
+    crn: crn ?? null,
     changeLink: `/customer/${crn}/details/fix-list`,
     sections: orderedSectionsToFix,
     fullName: formatFullName(changePersonalName),

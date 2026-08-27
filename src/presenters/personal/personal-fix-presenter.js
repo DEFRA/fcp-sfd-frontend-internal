@@ -16,6 +16,8 @@ const personalFixPresenter = (personalDetails, crn) => {
     backLink: crn ? `/customer/${crn}/details` : SEARCH_CRN,
     pageTitle: 'Update your personal details',
     metaDescription: 'Update your personal details.',
+    userName: personalDetails.info?.userName ?? null,
+    crn: crn ?? null,
     updateText: buildUpdateText(orderedSectionsToFix, source),
     listOfErrors: hasMultipleErrors ? buildListOfErrors(orderedSectionsToFix, source) : []
   }

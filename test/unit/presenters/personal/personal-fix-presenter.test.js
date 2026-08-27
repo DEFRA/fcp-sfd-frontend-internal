@@ -23,6 +23,8 @@ describe('personalFixPresenter', () => {
         backLink: `/customer/${crn}/details`,
         pageTitle: 'Update your personal details',
         metaDescription: 'Update your personal details.',
+        userName: null,
+        crn,
         updateText: 'We will ask you to update these details as well as your full name:',
         listOfErrors: []
       })

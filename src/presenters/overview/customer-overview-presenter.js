@@ -6,6 +6,7 @@
 import { paginationPresenter } from '../pagination-presenter.js'
 import { buildEntityBreadcrumbs } from '../base-presenter.js'
 import { CUSTOMER_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
+import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const customerOverviewPresenter = (customerDetails, page) => {
   const businesses = customerDetails?.businesses ?? []

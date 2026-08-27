@@ -17,10 +17,10 @@
     {% endif %}
 
     {% if params.breadcrumbs and (params.breadcrumbs | length) %}
-      <div class="govuk-breadcrumbs govuk-!-margin-top-0" style="display: inline-block">
+      <nav class="govuk-breadcrumbs govuk-!-margin-top-0" aria-label="Breadcrumb">
         <ol class="govuk-breadcrumbs__list">
           {% for item in params.breadcrumbs %}
-            <li class="govuk-breadcrumbs__list-item">
+            <li class="govuk-breadcrumbs__list-item"{% if not item.href %} aria-current="page"{% endif %}>
               {% if item.href %}
                 <a class="govuk-breadcrumbs__link" href="{{ item.href }}">{{ item.text }}</a>
               {% else %}
@@ -29,7 +29,7 @@
             </li>
           {% endfor %}
         </ol>
-      </div>
+      </nav>
     {% endif %}
   </div>
 {% endmacro %}

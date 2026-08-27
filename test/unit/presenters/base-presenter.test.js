@@ -2,7 +2,8 @@
 import { describe, test, expect, beforeEach } from 'vitest'
 
 // Thing under test
-import { formatAddressLines, formatBreadcrumbLabel } from '../../../src/presenters/base-presenter.js'
+import { formatAddressLines, formatBreadcrumbLabel, buildEntityBreadcrumbs } from '../../../src/presenters/base-presenter.js'
+import { SEARCH_SBI, SEARCH_CRN } from '../../../src/constants/search-links.js'
 
 describe('basePresenter', () => {
   describe('#formatAddressLines', () => {
@@ -166,6 +167,62 @@ describe('basePresenter', () => {
         const result = formatBreadcrumbLabel(null, 'SBI', '106705779')
 
         expect(result).toBe('SBI: 106705779')
+      })
+    })
+  })
+
+  describe('#buildEntityBreadcrumbs', () => {
+    describe('when there is no id', () => {
+      test('it should return only the search results crumb, linking to the search path', () => {
+        const result = buildEntityBreadcrumbs('sbi', null, 'Herberts Lawn Mowing')
+
+        expect(result).toEqual([{ text: 'Search results', href: SEARCH_SBI }])
+      })
+    })
+
+    describe('when the queryKey is "sbi"', () => {
+      test('it should use the SBI search path and label', () => {
+        const result = buildEntityBreadcrumbs('sbi', '106705779', 'Herberts Lawn Mowing')
+
+        expect(result).toEqual([
+          { text: 'Search results', href: `${SEARCH_SBI}?sbi=106705779` },
+          { text: 'Herberts Lawn Mowing (SBI: 106705779)' }
+        ])
+      })
+    })
+
+    describe('when the queryKey is "crn"', () => {
+      test('it should use the CRN search path and label', () => {
+        const result = buildEntityBreadcrumbs('crn', '1101996862', 'Alfred Waldron')
+
+        expect(result).toEqual([
+          { text: 'Search results', href: `${SEARCH_CRN}?crn=1101996862` },
+          { text: 'Alfred Waldron (CRN: 1101996862)' }
+        ])
+      })
+    })
+
+    describe('when a currentHref is provided', () => {
+      test('it should add it to the current page crumb', () => {
+        const result = buildEntityBreadcrumbs('sbi', '106705779', 'Herberts Lawn Mowing', '/business/106705779')
+
+        expect(result[1]).toEqual({ text: 'Herberts Lawn Mowing (SBI: 106705779)', href: '/business/106705779' })
+      })
+    })
+
+    describe('when no currentHref is provided', () => {
+      test('it should omit the href from the current page crumb', () => {
+        const result = buildEntityBreadcrumbs('sbi', '106705779', 'Herberts Lawn Mowing')
+
+        expect(result[1]).not.toHaveProperty('href')
+      })
+    })
+
+    describe('when no name is provided', () => {
+      test('it should fall back to just the id label and id in the current page crumb', () => {
+        const result = buildEntityBreadcrumbs('sbi', '106705779', null)
+
+        expect(result[1]).toEqual({ text: 'SBI: 106705779' })
       })
     })
   })

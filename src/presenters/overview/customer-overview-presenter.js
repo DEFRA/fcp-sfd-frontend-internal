@@ -4,9 +4,8 @@
  */
 
 import { paginationPresenter } from '../pagination-presenter.js'
-import { formatBreadcrumbLabel } from '../base-presenter.js'
+import { buildEntityBreadcrumbs } from '../base-presenter.js'
 import { CUSTOMER_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
-import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const customerOverviewPresenter = (customerDetails, page) => {
   const businesses = customerDetails?.businesses ?? []
@@ -26,19 +25,8 @@ const customerOverviewPresenter = (customerDetails, page) => {
     hasBusinesses: totalBusinesses > 0,
     businesses: formatBusinesses(pagedBusinesses),
     pagination,
-    breadcrumbs: buildBreadcrumbs(customerDetails?.info?.customerName, customerDetails?.info?.crn)
+    breadcrumbs: buildEntityBreadcrumbs('crn', customerDetails?.info?.crn, customerDetails?.info?.customerName)
   }
-}
-
-const buildBreadcrumbs = (customerName, crn) => {
-  if (!crn) {
-    return [{ text: 'Search results', href: SEARCH_CRN }]
-  }
-
-  return [
-    { text: 'Search results', href: `/search-crn?crn=${crn}` },
-    { text: formatBreadcrumbLabel(customerName, 'CRN', crn) }
-  ]
 }
 
 /**

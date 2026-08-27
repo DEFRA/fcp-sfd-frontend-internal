@@ -1,37 +1,31 @@
 import { schemas, utils, constants } from '@defra/fcp-sfd-frontend-engine'
 
+import { SEARCH_SBI, SEARCH_SBI_VIEW } from '../../constants/search-links.js'
 import { fetchSbiSearchDetailsService } from '../../services/search/fetch-sbi-search-details-service.js'
 import { searchSbiPresenter } from '../../presenters/search/search-sbi-presenter.js'
 
-const SEARCH_SBI_PATH = '/search-sbi'
-const SEARCH_SBI_SESSION_KEY = 'searchSbi'
-const SEARCH_SBI_VIEW = 'search/search-sbi'
-
 const getSearchSbi = {
   method: 'GET',
-  path: SEARCH_SBI_PATH,
+  path: SEARCH_SBI,
+  options: {
+    validate: {
+      query: schemas.business.sbi,
+      failAction: (request, h) => h.view(SEARCH_SBI_VIEW).code(constants.statusCodes.BAD_REQUEST).takeover()
+    }
+  },
   handler: async (request, h) => {
-    const sessionState = request.yar.get(SEARCH_SBI_SESSION_KEY)
+    // The SBI arrives via query string, either from the POST redirect or the "Search results" link.
+    // Route validation has already trimmed it, so it'll be a valid SBI, undefined, or ''.
+    const { sbi } = request.query
 
-    // Requests sent to the /search page might be either to just show the search page or to view search results,
-    // so we need to check whether this is just an initial request to display the page or whether it is a request for a
-    // page of results. The SBI can arrive via session (after a POST) or via query string (e.g. "Search results" link).
-    const sbiFromQuery = request.query?.sbi?.trim() ?? ''
-    const { value } = sbiFromQuery
-      ? schemas.business.sbi.validate({ sbi: sbiFromQuery })
-      : { value: null }
-
-    const searchState = sessionState ?? (value ? { sbi: value.sbi } : null)
-
-    if (!searchState) {
+    // Undefined or '' is a falsy value, so this will catch both cases and just render the search page without results.
+    if (!sbi) {
       return h.view(SEARCH_SBI_VIEW)
     }
 
     const email = request.auth.credentials?.email
-    const sbiDetails = await fetchSbiSearchDetailsService(searchState.sbi, email)
-    const pageData = searchSbiPresenter(sbiDetails, searchState.sbi)
-
-    request.yar.clear(SEARCH_SBI_SESSION_KEY)
+    const sbiDetails = await fetchSbiSearchDetailsService(sbi, email)
+    const pageData = searchSbiPresenter(sbiDetails, sbi)
 
     return h.view(SEARCH_SBI_VIEW, pageData)
   }
@@ -39,32 +33,28 @@ const getSearchSbi = {
 
 const postSearchSbi = {
   method: 'POST',
-  path: SEARCH_SBI_PATH,
+  path: SEARCH_SBI,
+  options: {
+    validate: {
+      payload: schemas.business.sbi,
+      failAction: (request, h, err) => {
+        const errors = utils.formatValidationErrors(err.details || [])
+        const pageData = { ...request.payload, errors, showClear: true, clearSearchLink: SEARCH_SBI }
+
+        return h.view(SEARCH_SBI_VIEW, pageData).code(constants.statusCodes.BAD_REQUEST).takeover()
+      }
+    }
+  },
   handler: async (request, h) => {
-    const { payload, yar } = request
-    // Trim whitespace so values like " 106705779 " are treated as valid SBI input.
-    const sbiInput = payload.sbi?.trim() ?? ''
+    const { sbi } = request.payload
 
-    // If the user submitted an empty form, just redirect back to the search page without showing a validation error.
-    if (sbiInput === '') {
-      return h.redirect(SEARCH_SBI_PATH)
+    // An empty form submission just redirects back to the search page without showing a validation error.
+    if (!sbi) {
+      return h.redirect(SEARCH_SBI)
     }
 
-    const validation = schemas.business.sbi.validate({ sbi: sbiInput })
-
-    if (validation.error) {
-      const errors = utils.formatValidationErrors(validation.error.details || [])
-      const pageData = { ...payload, errors, showClear: true, clearSearchLink: '/search-sbi' }
-
-      return h.view(SEARCH_SBI_VIEW, pageData).code(constants.statusCodes.BAD_REQUEST).takeover()
-    }
-
-    const { sbi } = validation.value
-
-    yar.set(SEARCH_SBI_SESSION_KEY, { sbi })
-
-    // Save SBI in session and redirect so the GET route can fetch and render results.
-    return h.redirect(SEARCH_SBI_PATH)
+    // Redirect with the SBI as a query param so the GET route can fetch and render results.
+    return h.redirect(`${SEARCH_SBI}?sbi=${encodeURIComponent(sbi)}`)
   }
 }
 

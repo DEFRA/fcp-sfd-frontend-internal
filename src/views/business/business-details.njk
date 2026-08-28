@@ -244,6 +244,14 @@
       {% endif %}
     {% endset %}
 
+    {% set registrationNumberDisplay %}
+      {% if registrationNumber.value === 'Not added' %}
+        <span class="govuk-hint display-inline">{{ registrationNumber.value }}</span>
+      {% else %}
+        <span>{{ registrationNumber.value }}</span>
+      {% endif %}
+    {% endset %}
+
     {% set businessLegalStatusActions = {
       items: [
         {
@@ -266,19 +274,41 @@
       ]
     } %}
 
+    {% set additionalDetailsRows = [
+      {
+        key: { text: "Business legal status" },
+        value: { html: businessLegalStatusDisplay },
+        actions: businessLegalStatusActions
+      }
+    ] %}
+
+    {% if registrationNumber %}
+      {% set _ = additionalDetailsRows.push({
+          key: { text: registrationNumber.label },
+          value: { html: registrationNumberDisplay },
+          actions: {
+            items: [
+              {
+                href: registrationNumber.changeLink,
+                text: registrationNumber.action,
+                visuallyHiddenText: registrationNumber.label | lower,
+                classes: "govuk-link--no-visited-state"
+              }
+            ]
+          }
+        })
+      %}
+    {% endif %}
+
+    {% set _ = additionalDetailsRows.push({
+        key: { text: "Business type" },
+        value: { html: businessTypeDisplay },
+        actions: businessTypeActions
+      })
+    %}
+
     {{ govukSummaryList({
-      rows: [
-        {
-          key: { text: "Business legal status" },
-          value: { html: businessLegalStatusDisplay },
-          actions: businessLegalStatusActions
-        },
-        {
-          key: { text: "Business type" },
-          value: { html: businessTypeDisplay },
-          actions: businessTypeActions
-        }
-      ]
+      rows: additionalDetailsRows
     }) }}
 
   </div>

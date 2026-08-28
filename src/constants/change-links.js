@@ -6,7 +6,7 @@ export const BUSINESS_CHANGE_LINKS = {
   businessVat: (sbi) => `/business/${sbi}/business-vat-registration-number-change`,
   businessVatRemove: (sbi) => `/business/${sbi}/business-vat-registration-remove`,
   businessLegalStatus: (sbi) => `/business/${sbi}/business-legal-status-change`,
-  businessLegalStatusRegistration: (sbi) => `/business/${sbi}/business-legal-status-enter`
+  businessLegalStatusRegistrationNumber: (sbi) => `/business/${sbi}/business-legal-status-enter`
 }
 
 export const PERSONAL_CHANGE_LINKS = {

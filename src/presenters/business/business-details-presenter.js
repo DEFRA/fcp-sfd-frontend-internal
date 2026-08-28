@@ -65,40 +65,6 @@ const businessDetailsPresenter = (data, sbi, yar) => {
   }
 }
 
-/**
- * Builds the registration number row for the business details page.
- *
- * Only charity and company legal statuses hold a registration number, so this
- * returns null for every other status and the view omits the row entirely. The
- * change link goes straight to the enter page, letting the number be corrected
- * without going through the legal status journey.
- */
-const buildRegistrationNumberDisplay = (info, sbi) => {
-  // The DAL returns the legal status code as a number, the engine codes are strings
-  const legalStatusCode = String(info.legalStatusCode ?? '')
-  const registrationNumbers = info.registrationNumbers ?? {}
-
-  let label
-  let number
-
-  if (constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)) {
-    label = 'Charity commission registration number'
-    number = registrationNumbers.charityCommission
-  } else if (constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)) {
-    label = 'Company registration number'
-    number = registrationNumbers.companiesHouse
-  } else {
-    return null
-  }
-
-  return {
-    label,
-    value: number || 'Not added',
-    action: presenters.getActionText(number),
-    changeLink: BUSINESS_CHANGE_LINKS.businessLegalStatusRegistration(sbi)
-  }
-}
-
 const createEditableValueField = (value, emptyValueText) => {
   return {
     value: value || emptyValueText,
@@ -148,6 +114,40 @@ const buildVatDisplay = (vatNumber, sbi) => {
         }
       ]
     }
+  }
+}
+
+/**
+ * Builds the registration number row for the business details page.
+ *
+ * Only charity and company legal statuses hold a registration number, so this
+ * returns null for every other status and the view omits the row entirely. The
+ * change link goes straight to the enter page, letting the number be corrected
+ * without going through the legal status journey.
+ */
+const buildRegistrationNumberDisplay = (info, sbi) => {
+  // The DAL returns the legal status code as a number, the engine codes are strings
+  const legalStatusCode = String(info.legalStatusCode ?? '')
+  const registrationNumbers = info.registrationNumbers ?? {}
+
+  let label
+  let number
+
+  if (constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)) {
+    label = 'Charity commission registration number'
+    number = registrationNumbers.charityCommission
+  } else if (constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)) {
+    label = 'Company registration number'
+    number = registrationNumbers.companiesHouse
+  } else {
+    return null
+  }
+
+  return {
+    label,
+    value: number || 'Not added',
+    action: presenters.getActionText(number),
+    changeLink: BUSINESS_CHANGE_LINKS.businessLegalStatusRegistrationNumber(sbi)
   }
 }
 

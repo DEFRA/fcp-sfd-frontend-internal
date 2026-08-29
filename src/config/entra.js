@@ -35,6 +35,13 @@ export const entraConfig = {
       default: null,
       env: 'ENTRA_REDIRECT_URL'
     },
+    externalBaseUrl: {
+      doc: 'The external base URL for federated credentials callbacks',
+      format: String,
+      nullable: true,
+      default: null,
+      env: 'ENTRA_EXTERNAL_BASE_URL'
+    },
     signOutRedirectUrl: {
       doc: 'The Entra sign out redirect URl',
       format: String,
@@ -52,7 +59,6 @@ export const entraConfig = {
       audience: {
         doc: 'Audience value presented to AWS STS when requesting the web identity token.',
         format: String,
-        nullable: true,
         default: null,
         env: 'ENTRA_FEDERATED_AUDIENCE'
       },

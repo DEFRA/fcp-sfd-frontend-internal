@@ -88,7 +88,7 @@ const updateBusinessLegalStatusChangeService = async (yar, credentials) => {
 
 const getSuccessMessage = (legalStatusChanged, isCharity) => {
   if (legalStatusChanged) {
-    return constants.successMessages.BUSINESS_LEGAL_STATUS ?? 'You have updated your business legal status'
+    return constants.successMessages.BUSINESS_LEGAL_STATUS
   }
 
   if (isCharity) {

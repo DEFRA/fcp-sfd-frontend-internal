@@ -10,7 +10,7 @@
  * @module updateBusinessLegalStatusChangeService
  */
 
-import { mutations, constants } from '@defra/fcp-sfd-frontend-engine'
+import { constants, mutations } from '@defra/fcp-sfd-frontend-engine'
 
 import { updateDalService } from '../DAL/update-dal-service.js'
 import { fetchBusinessChangeService } from './fetch-business-change-service.js'
@@ -73,8 +73,7 @@ const updateBusinessLegalStatusChangeService = async (yar, credentials) => {
 
   yar.clear('businessDetailsUpdate')
 
-  const successMessage = constants.successMessages.BUSINESS_LEGAL_STATUS ?? 'You have updated your business legal status'
-  flashNotification(yar, 'Success', successMessage)
+  flashNotification(yar, 'Success', constants.successMessages.BUSINESS_LEGAL_STATUS)
 }
 
 const assertMutationSuccess = (response, mutationFieldName) => {

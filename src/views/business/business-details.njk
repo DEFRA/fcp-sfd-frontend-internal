@@ -244,11 +244,11 @@
       {% endif %}
     {% endset %}
 
-    {% set registrationNumberDisplay %}
-      {% if registrationNumber.value === 'Not added' %}
-        <span class="govuk-hint display-inline">{{ registrationNumber.value }}</span>
+    {% set legalStatusRegistrationNumberDisplay %}
+      {% if legalStatusRegistrationNumber.value === 'Not added' %}
+        <span class="govuk-hint display-inline">{{ legalStatusRegistrationNumber.value }}</span>
       {% else %}
-        <span>{{ registrationNumber.value }}</span>
+        <span>{{ legalStatusRegistrationNumber.value }}</span>
       {% endif %}
     {% endset %}
 
@@ -282,16 +282,16 @@
       }
     ] %}
 
-    {% if registrationNumber %}
+    {% if legalStatusRegistrationNumber %}
       {% set _ = additionalDetailsRows.push({
-          key: { text: registrationNumber.label },
-          value: { html: registrationNumberDisplay },
+          key: { text: legalStatusRegistrationNumber.label },
+          value: { html: legalStatusRegistrationNumberDisplay },
           actions: {
             items: [
               {
-                href: registrationNumber.changeLink,
-                text: registrationNumber.action,
-                visuallyHiddenText: registrationNumber.label | lower,
+                href: legalStatusRegistrationNumber.changeLink,
+                text: legalStatusRegistrationNumber.action,
+                visuallyHiddenText: legalStatusRegistrationNumber.label,
                 classes: "govuk-link--no-visited-state"
               }
             ]

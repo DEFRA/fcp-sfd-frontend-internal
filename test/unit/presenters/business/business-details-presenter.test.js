@@ -298,7 +298,7 @@ describe('businessDetailsPresenter', () => {
     })
   })
 
-  describe('registrationNumber', () => {
+  describe('legalStatusRegistrationNumber', () => {
     describe('when the legal status is a charity', () => {
       beforeEach(() => {
         data.info.legalStatusCode = LEGAL_STATUS.charitableIncorporatedOrganisation.code
@@ -308,7 +308,7 @@ describe('businessDetailsPresenter', () => {
       test('returns the charity label and the charity commission number', () => {
         const result = businessDetailsPresenter(data, sbi)
 
-        expect(result.registrationNumber).toEqual({
+        expect(result.legalStatusRegistrationNumber).toEqual({
           label: 'Charity commission registration number',
           value: '12345678',
           action: 'Change',
@@ -320,16 +320,16 @@ describe('businessDetailsPresenter', () => {
         data.info.registrationNumbers.charityCommission = null
         const result = businessDetailsPresenter(data, sbi)
 
-        expect(result.registrationNumber.value).toBe('Not added')
-        expect(result.registrationNumber.action).toBe('Add')
-        expect(result.registrationNumber.changeLink).toBe(`/business/${sbi}/business-legal-status-enter`)
+        expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
+        expect(result.legalStatusRegistrationNumber.action).toBe('Add')
+        expect(result.legalStatusRegistrationNumber.changeLink).toBe(`/business/${sbi}/business-legal-status-enter`)
       })
 
       test('matches the legal status when the code is a number rather than a string', () => {
         data.info.legalStatusCode = Number(LEGAL_STATUS.charitableIncorporatedOrganisation.code)
         const result = businessDetailsPresenter(data, sbi)
 
-        expect(result.registrationNumber.label).toBe('Charity commission registration number')
+        expect(result.legalStatusRegistrationNumber.label).toBe('Charity commission registration number')
       })
     })
 
@@ -342,7 +342,7 @@ describe('businessDetailsPresenter', () => {
       test('returns the company label and the companies house number', () => {
         const result = businessDetailsPresenter(data, sbi)
 
-        expect(result.registrationNumber).toEqual({
+        expect(result.legalStatusRegistrationNumber).toEqual({
           label: 'Company registration number',
           value: 'SC123456',
           action: 'Change',
@@ -354,30 +354,30 @@ describe('businessDetailsPresenter', () => {
         data.info.registrationNumbers.companiesHouse = null
         const result = businessDetailsPresenter(data, sbi)
 
-        expect(result.registrationNumber.value).toBe('Not added')
-        expect(result.registrationNumber.action).toBe('Add')
-        expect(result.registrationNumber.changeLink).toBe(`/business/${sbi}/business-legal-status-enter`)
+        expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
+        expect(result.legalStatusRegistrationNumber.action).toBe('Add')
+        expect(result.legalStatusRegistrationNumber.changeLink).toBe(`/business/${sbi}/business-legal-status-enter`)
       })
 
       test('matches the legal status when the code is a number rather than a string', () => {
         data.info.legalStatusCode = Number(LEGAL_STATUS.privateLimitedCompany.code)
         const result = businessDetailsPresenter(data, sbi)
 
-        expect(result.registrationNumber.label).toBe('Company registration number')
+        expect(result.legalStatusRegistrationNumber.label).toBe('Company registration number')
       })
     })
 
     test('returns null when the legal status does not hold a registration number', () => {
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.registrationNumber).toBeNull()
+      expect(result.legalStatusRegistrationNumber).toBeNull()
     })
 
     test('returns null when the legal status code is absent', () => {
       data.info.legalStatusCode = null
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.registrationNumber).toBeNull()
+      expect(result.legalStatusRegistrationNumber).toBeNull()
     })
 
     test('returns "Not added" when the registration numbers are absent entirely', () => {
@@ -385,7 +385,7 @@ describe('businessDetailsPresenter', () => {
       delete data.info.registrationNumbers
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.registrationNumber.value).toBe('Not added')
+      expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
     })
   })
 })

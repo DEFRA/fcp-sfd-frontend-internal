@@ -60,7 +60,7 @@ const businessDetailsPresenter = (data, sbi, yar) => {
       action: presenters.getActionText(info.legalStatus),
       changeLink: BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)
     },
-    registrationNumber: buildRegistrationNumberDisplay(info, sbi),
+    legalStatusRegistrationNumber: buildLegalStatusRegistrationNumberDisplay(info, sbi),
     businessType: createEditableValueField(info.type, 'Not added')
   }
 }
@@ -125,7 +125,7 @@ const buildVatDisplay = (vatNumber, sbi) => {
  * change link goes straight to the enter page, letting the number be corrected
  * without going through the legal status journey.
  */
-const buildRegistrationNumberDisplay = (info, sbi) => {
+const buildLegalStatusRegistrationNumberDisplay = (info, sbi) => {
   // The DAL returns the legal status code as a number, the engine codes are strings
   const legalStatusCode = String(info.legalStatusCode ?? '')
   const registrationNumbers = info.registrationNumbers ?? {}

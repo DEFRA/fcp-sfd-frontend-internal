@@ -42,15 +42,7 @@ const updateBusinessLegalStatusChangeService = async (yar, credentials) => {
 
   const sbi = businessDetails.info.sbi
 
-  // Default the registration numbers to null, as the user may be changing away from a legal status that requires one
-  let companiesHouseNumber = null
-  let charityCommissionNumber = null
-
-  // If the new legal status requires a registration number, fetch it from the session and send it to the DAL mutation
-  if (requiresRegistrationNumber) {
-    companiesHouseNumber = businessDetails.changeBusinessCompanyRegistrationNumber ?? null
-    charityCommissionNumber = businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? null
-  }
+  const { companiesHouseNumber, charityCommissionNumber } = resolveRegistrationNumbers(businessDetails, requiresRegistrationNumber)
 
   const registrationNumbersVariables = {
     input: {
@@ -86,6 +78,18 @@ const updateBusinessLegalStatusChangeService = async (yar, credentials) => {
   yar.clear('businessDetailsUpdate')
 
   flashNotification(yar, 'Success', getSuccessMessage(legalStatusChanged, isCharity, isCompany))
+}
+
+// The user may be changing away from a legal status that requires a registration number, so default both to null
+const resolveRegistrationNumbers = (businessDetails, requiresRegistrationNumber) => {
+  if (!requiresRegistrationNumber) {
+    return { companiesHouseNumber: null, charityCommissionNumber: null }
+  }
+
+  return {
+    companiesHouseNumber: businessDetails.changeBusinessCompanyRegistrationNumber ?? null,
+    charityCommissionNumber: businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? null
+  }
 }
 
 const getSuccessMessage = (legalStatusChanged, isCharity, isCompany) => {

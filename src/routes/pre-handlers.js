@@ -121,8 +121,8 @@ export const validateLegalStatusRegistrationNumber = {
     const isCompany = constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
 
     if (isCharity || isCompany) {
-      const charityNumber = businessDetails.changeBusinessCharityCommissionRegistrationNumber
-      const companyNumber = businessDetails.changeBusinessCompanyRegistrationNumber
+      const charityNumber = businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? businessDetails.info?.registrationNumbers?.charityCommission
+      const companyNumber = businessDetails.changeBusinessCompanyRegistrationNumber ?? businessDetails.info?.registrationNumbers?.companiesHouse
 
       const charityRequired = isCharity && !charityNumber
       const companyRequired = isCompany && !companyNumber

@@ -37,7 +37,7 @@
 }
 
 .sfd-definition-list__definition--hint {
-  color: govuk-frontend.govuk-colour("dark-grey");
+  color: govuk-frontend.govuk-colour("black", $variant: "tint-25");
 }
 
 .sfd-definition-list--meta {

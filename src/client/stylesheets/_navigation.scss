@@ -4,7 +4,7 @@
 .login-nav {
   @include govuk-clearfix;
   @include govuk-font($size: 16);
-  @include govuk-text-colour;
+  color: govuk-functional-colour(text);
   margin-top: 15px;
 }
 

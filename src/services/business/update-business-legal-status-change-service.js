@@ -77,7 +77,7 @@ const updateBusinessLegalStatusChangeService = async (yar, credentials) => {
 
   yar.clear('businessDetailsUpdate')
 
-  flashNotification(yar, 'Success', getSuccessMessage(legalStatusChanged, isCharity, isCompany))
+  flashNotification(yar, 'Success', getSuccessMessage(legalStatusChanged, isCharity))
 }
 
 // The user may be changing away from a legal status that requires a registration number, so default both to null
@@ -95,7 +95,7 @@ const resolveRegistrationNumbers = (businessDetails, requiresRegistrationNumber)
   }
 }
 
-const getSuccessMessage = (legalStatusChanged, isCharity, isCompany) => {
+const getSuccessMessage = (legalStatusChanged, isCharity) => {
   if (legalStatusChanged) {
     return constants.successMessages.BUSINESS_LEGAL_STATUS
   }
@@ -104,11 +104,7 @@ const getSuccessMessage = (legalStatusChanged, isCharity, isCompany) => {
     return 'You have updated your charity commission registration number'
   }
 
-  if (isCompany) {
-    return 'You have updated your company registration number'
-  }
-
-  throw new Error('Must be either charity or company')
+  return 'You have updated your company registration number'
 }
 
 const assertMutationSuccess = (response, mutationFieldName) => {

@@ -101,10 +101,10 @@ const getSuccessMessage = (legalStatusChanged, isCharity) => {
   }
 
   if (isCharity) {
-    return 'You have updated your charity commission registration number'
+    return constants.successMessages.BUSINESS_CHARITY_REGISTRATION_NUMBER
   }
 
-  return 'You have updated your company registration number'
+  return constants.successMessages.BUSINESS_COMPANY_REGISTRATION_NUMBER
 }
 
 const assertMutationSuccess = (response, mutationFieldName) => {

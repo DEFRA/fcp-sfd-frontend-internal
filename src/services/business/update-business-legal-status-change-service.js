@@ -86,9 +86,12 @@ const resolveRegistrationNumbers = (businessDetails, requiresRegistrationNumber)
     return { companiesHouseNumber: null, charityCommissionNumber: null }
   }
 
+  const { info } = businessDetails
+
+  // Fall back to the fetched value so an unchanged, already-stored number isn't wiped out
   return {
-    companiesHouseNumber: businessDetails.changeBusinessCompanyRegistrationNumber ?? null,
-    charityCommissionNumber: businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? null
+    companiesHouseNumber: businessDetails.changeBusinessCompanyRegistrationNumber ?? info?.registrationNumbers?.companiesHouse ?? null,
+    charityCommissionNumber: businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? info?.registrationNumbers?.charityCommission ?? null
   }
 }
 

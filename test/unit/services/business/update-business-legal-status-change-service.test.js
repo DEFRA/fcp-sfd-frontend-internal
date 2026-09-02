@@ -146,6 +146,64 @@ describe('updateBusinessLegalStatusChangeService', () => {
     })
   })
 
+  describe('when the legal status requires a registration number that is only present on the fetched details', () => {
+    describe('and the business is a company', () => {
+      beforeEach(() => {
+        mockFetchBusinessChangeService.mockResolvedValue({
+          changeBusinessLegalStatus: '102105',
+          info: { sbi: '107183280', registrationNumbers: { companiesHouse: '87654321' } }
+        })
+      })
+
+      test('sends the fetched registration number when none is pending in session', async () => {
+        await updateBusinessLegalStatusChangeService(yar, credentials)
+
+        expect(mockUpdateDalService).toHaveBeenNthCalledWith(
+          2,
+          'update-business-registration-numbers-mutation',
+          {
+            input: {
+              sbi: '107183280',
+              registrationNumbers: {
+                companiesHouse: '87654321',
+                charityCommission: null
+              }
+            }
+          },
+          credentials.email
+        )
+      })
+    })
+
+    describe('and the business is a charity', () => {
+      beforeEach(() => {
+        mockFetchBusinessChangeService.mockResolvedValue({
+          changeBusinessLegalStatus: '102101',
+          info: { sbi: '107183280', registrationNumbers: { charityCommission: '7654321' } }
+        })
+      })
+
+      test('sends the fetched registration number when none is pending in session', async () => {
+        await updateBusinessLegalStatusChangeService(yar, credentials)
+
+        expect(mockUpdateDalService).toHaveBeenNthCalledWith(
+          2,
+          'update-business-registration-numbers-mutation',
+          {
+            input: {
+              sbi: '107183280',
+              registrationNumbers: {
+                companiesHouse: null,
+                charityCommission: '7654321'
+              }
+            }
+          },
+          credentials.email
+        )
+      })
+    })
+  })
+
   describe('when neither the legal status nor the registration number have changed', () => {
     beforeEach(() => {
       mockFetchBusinessChangeService.mockResolvedValue({ info: { sbi: '107183280' } })

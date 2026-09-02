@@ -236,19 +236,19 @@
       {% endif %}
     {% endset %}
 
-    {% set businessTypeDisplay %}
-      {% if businessType.value === 'Not added' %}
-        <span class="govuk-hint display-inline">{{ businessType.value }}</span>
-      {% else %}
-        <span>{{ businessType.value }}</span>
-      {% endif %}
-    {% endset %}
-
     {% set legalStatusRegistrationNumberDisplay %}
       {% if legalStatusRegistrationNumber.value === 'Not added' %}
         <span class="govuk-hint display-inline">{{ legalStatusRegistrationNumber.value }}</span>
       {% else %}
         <span>{{ legalStatusRegistrationNumber.value }}</span>
+      {% endif %}
+    {% endset %}
+
+    {% set businessTypeDisplay %}
+      {% if businessType.value === 'Not added' %}
+        <span class="govuk-hint display-inline">{{ businessType.value }}</span>
+      {% else %}
+        <span>{{ businessType.value }}</span>
       {% endif %}
     {% endset %}
 
@@ -262,6 +262,19 @@
         }
       ]
     } %}
+
+    {% if legalStatusRegistrationNumber %}
+      {% set legalStatusRegistrationNumberActions = {
+        items: [
+          {
+            href: legalStatusRegistrationNumber.changeLink,
+            text: legalStatusRegistrationNumber.action,
+            visuallyHiddenText: legalStatusRegistrationNumber.label,
+            classes: "govuk-link--no-visited-state"
+          }
+        ]
+      } %}
+    {% endif %}
 
     {% set businessTypeActions = {
       items: [
@@ -286,16 +299,7 @@
       {% set _ = additionalDetailsRows.push({
           key: { text: legalStatusRegistrationNumber.label },
           value: { html: legalStatusRegistrationNumberDisplay },
-          actions: {
-            items: [
-              {
-                href: legalStatusRegistrationNumber.changeLink,
-                text: legalStatusRegistrationNumber.action,
-                visuallyHiddenText: legalStatusRegistrationNumber.label,
-                classes: "govuk-link--no-visited-state"
-              }
-            ]
-          }
+          actions: legalStatusRegistrationNumberActions
         })
       %}
     {% endif %}

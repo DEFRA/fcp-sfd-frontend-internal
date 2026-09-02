@@ -21,8 +21,18 @@ const updateBusinessLegalStatusChangeService = async (yar, credentials) => {
   const businessDetails = await fetchBusinessChangeService(yar, credentials, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
 
   const legalStatusChanged = Boolean(businessDetails.changeBusinessLegalStatus)
-  const registrationNumberChanged = Boolean(
-    businessDetails.changeBusinessCharityCommissionRegistrationNumber ??
+
+  // The registration number can be changed on its own from the business details page, leaving the legal
+  // status untouched, so fall back to the fetched status when the session holds no change for it
+  const legalStatusCode = businessDetails.changeBusinessLegalStatus ?? businessDetails.info?.legalStatusCode
+
+  const isCharity = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(String(legalStatusCode))
+  const isCompany = constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(String(legalStatusCode))
+  const requiresRegistrationNumber = isCharity || isCompany
+
+  // Ignore a session value left over from a status that no longer requires a registration number
+  const registrationNumberChanged = requiresRegistrationNumber && Boolean(
+    businessDetails.changeBusinessCharityCommissionRegistrationNumber ||
     businessDetails.changeBusinessCompanyRegistrationNumber
   )
 
@@ -31,21 +41,6 @@ const updateBusinessLegalStatusChangeService = async (yar, credentials) => {
   }
 
   const sbi = businessDetails.info.sbi
-
-  // The registration number can be changed on its own from the business details page, leaving the legal
-  // status untouched, so fall back to the fetched status when the session holds no change for it
-  const legalStatusCode = businessDetails.changeBusinessLegalStatus ?? businessDetails.info?.legalStatusCode
-
-  const legalStatusVariables = {
-    input: {
-      sbi,
-      legalStatusCode: Number(legalStatusCode)
-    }
-  }
-
-  const isCharity = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(String(legalStatusCode))
-  const isCompany = constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(String(legalStatusCode))
-  const requiresRegistrationNumber = isCharity || isCompany
 
   // Default the registration numbers to null, as the user may be changing away from a legal status that requires one
   let companiesHouseNumber = null
@@ -70,6 +65,13 @@ const updateBusinessLegalStatusChangeService = async (yar, credentials) => {
   // Execute in sequence because both mutations touch additional business details in the upstream.
   // Running these in parallel can result in stale-write ordering where the legal status change is lost.
   if (legalStatusChanged) {
+    const legalStatusVariables = {
+      input: {
+        sbi,
+        legalStatusCode: Number(legalStatusCode)
+      }
+    }
+
     const legalStatusResponse = await updateDalService(mutations.updateBusinessLegalStatus, legalStatusVariables, credentials.email)
     assertMutationSuccess(legalStatusResponse, 'updateBusinessLegalStatus')
   }
@@ -83,10 +85,10 @@ const updateBusinessLegalStatusChangeService = async (yar, credentials) => {
 
   yar.clear('businessDetailsUpdate')
 
-  flashNotification(yar, 'Success', getSuccessMessage(legalStatusChanged, isCharity))
+  flashNotification(yar, 'Success', getSuccessMessage(legalStatusChanged, isCharity, isCompany))
 }
 
-const getSuccessMessage = (legalStatusChanged, isCharity) => {
+const getSuccessMessage = (legalStatusChanged, isCharity, isCompany) => {
   if (legalStatusChanged) {
     return constants.successMessages.BUSINESS_LEGAL_STATUS
   }
@@ -95,7 +97,11 @@ const getSuccessMessage = (legalStatusChanged, isCharity) => {
     return 'You have updated your charity commission registration number'
   }
 
-  return 'You have updated your company registration number'
+  if (isCompany) {
+    return 'You have updated your company registration number'
+  }
+
+  throw new Error('Must be either charity or company')
 }
 
 const assertMutationSuccess = (response, mutationFieldName) => {

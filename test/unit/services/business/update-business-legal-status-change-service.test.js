@@ -160,6 +160,23 @@ describe('updateBusinessLegalStatusChangeService', () => {
     })
   })
 
+  describe('when a registration number is present in session but the current legal status does not require one', () => {
+    beforeEach(() => {
+      mockFetchBusinessChangeService.mockResolvedValue({
+        changeBusinessCompanyRegistrationNumber: '87654321',
+        info: { sbi: '107183280', legalStatusCode: '102199' }
+      })
+    })
+
+    test('returns early without calling the DAL, clearing session or notifying', async () => {
+      await updateBusinessLegalStatusChangeService(yar, credentials)
+
+      expect(mockUpdateDalService).not.toHaveBeenCalled()
+      expect(yar.clear).not.toHaveBeenCalled()
+      expect(mockFlashNotification).not.toHaveBeenCalled()
+    })
+  })
+
   describe('when only the registration number has changed', () => {
     beforeEach(() => {
       mockUpdateDalService.mockReset()

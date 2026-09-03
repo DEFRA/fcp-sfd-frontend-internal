@@ -46,8 +46,11 @@ describe('customerOverviewPresenter', () => {
         },
         breadcrumbs: [
           {
-            text: 'Search for another customer',
-            href: '/search-crn'
+            text: 'Search results',
+            href: '/search-crn?crn=1234567890'
+          },
+          {
+            text: 'Jane Smith (CRN: 1234567890)'
           }
         ]
       })
@@ -166,15 +169,49 @@ describe('customerOverviewPresenter', () => {
   })
 
   describe('the "breadcrumbs" property', () => {
-    test('it should always return the static search results breadcrumb', () => {
+    test('it should always return the search results breadcrumb with the CRN as a query param', () => {
       const result = customerOverviewPresenter(data, page)
 
-      expect(result.breadcrumbs).toEqual([
-        {
-          text: 'Search for another customer',
-          href: '/search-crn'
-        }
-      ])
+      expect(result.breadcrumbs[0]).toEqual({
+        text: 'Search results',
+        href: '/search-crn?crn=1234567890'
+      })
+    })
+
+    test('it should return the customer name and CRN as the final, non-clickable breadcrumb', () => {
+      const result = customerOverviewPresenter(data, page)
+
+      expect(result.breadcrumbs[1]).toEqual({
+        text: 'Jane Smith (CRN: 1234567890)'
+      })
+    })
+
+    describe('when the customerName property is missing', () => {
+      beforeEach(() => {
+        delete data.info.customerName
+      })
+
+      test('it should fall back to just the CRN', () => {
+        const result = customerOverviewPresenter(data, page)
+
+        expect(result.breadcrumbs[1]).toEqual({
+          text: 'CRN: 1234567890'
+        })
+      })
+    })
+
+    describe('when the crn is missing', () => {
+      beforeEach(() => {
+        delete data.info.crn
+      })
+
+      test('it should link to the search page without a query param and omit the customer breadcrumb', () => {
+        const result = customerOverviewPresenter(data, page)
+
+        expect(result.breadcrumbs).toEqual([
+          { text: 'Search results', href: '/search-crn' }
+        ])
+      })
     })
   })
 

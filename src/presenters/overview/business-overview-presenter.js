@@ -4,8 +4,8 @@
  */
 
 import { paginationPresenter } from '../pagination-presenter.js'
+import { buildEntityBreadcrumbs } from '../base-presenter.js'
 import { BUSINESS_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
-import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const businessOverviewPresenter = (businessDetails, page) => {
   const customers = businessDetails?.customers ?? []
@@ -26,12 +26,7 @@ const businessOverviewPresenter = (businessDetails, page) => {
     hasCustomers: totalCustomers > 0,
     customers: formatCustomers(pagedCustomers),
     pagination,
-    breadcrumbs: [
-      {
-        text: 'Search results',
-        href: `${SEARCH_SBI}?sbi=${businessDetails?.sbi}`
-      }
-    ]
+    breadcrumbs: buildEntityBreadcrumbs('sbi', businessDetails?.sbi, businessDetails?.businessName)
   }
 }
 

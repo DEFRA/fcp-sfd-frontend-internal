@@ -5,7 +5,7 @@
 
 import { constants, presenters } from '@defra/fcp-sfd-frontend-engine'
 import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
-import { SEARCH_SBI } from '../../constants/search-links.js'
+import { buildEntityBreadcrumbs } from '../base-presenter.js'
 
 const CHANGE_LINK = '#'
 
@@ -20,16 +20,7 @@ const businessDetailsPresenter = (data, sbi, yar) => {
     pageTitle: 'View and update your business details',
     metaDescription: 'View and update your business details.',
     sbi,
-    breadcrumbs: [
-      {
-        text: 'Search results',
-        href: `${SEARCH_SBI}?sbi=${sbi}`
-      },
-      {
-        text: formatOverviewBreadcrumb(data.info.businessName, sbi),
-        href: `/business/${sbi}`
-      }
-    ],
+    breadcrumbs: buildEntityBreadcrumbs('sbi', sbi, info.businessName, `/business/${sbi}`),
     businessName: {
       value: info.businessName || 'Not added',
       action: presenters.getActionText(info.businessName),
@@ -72,10 +63,6 @@ const createEditableValueField = (value, emptyValueText) => {
     action: presenters.getActionText(value),
     changeLink: CHANGE_LINK
   }
-}
-
-const formatOverviewBreadcrumb = (businessName, sbi) => {
-  return businessName ? `${businessName} (SBI: ${sbi})` : `SBI: ${sbi}`
 }
 
 /**

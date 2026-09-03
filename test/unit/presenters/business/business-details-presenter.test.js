@@ -80,20 +80,37 @@ describe('businessDetailsPresenter', () => {
     })
   })
 
-  test('returns breadcrumbs for search results and the business overview', () => {
-    const result = businessDetailsPresenter(data, sbi)
+  describe('the "breadcrumbs" property', () => {
+    test('it should return the search results breadcrumb with the SBI as a query param', () => {
+      const result = businessDetailsPresenter(data, sbi)
 
-    expect(result.breadcrumbs).toEqual([
-      { text: 'Search results', href: `/search-sbi?sbi=${sbi}` },
-      { text: `Herberts Lawn Mowing (SBI: ${sbi})`, href: `/business/${sbi}` }
-    ])
-  })
+      expect(result.breadcrumbs[0]).toEqual({ text: 'Search results', href: `/search-sbi?sbi=${sbi}` })
+    })
 
-  test('falls back to just the SBI in the overview breadcrumb when the business name is absent', () => {
-    data.info.businessName = null
-    const result = businessDetailsPresenter(data, sbi)
+    test('it should return the business name and SBI as the final, clickable breadcrumb linking to the overview page', () => {
+      const result = businessDetailsPresenter(data, sbi)
 
-    expect(result.breadcrumbs[1]).toEqual({ text: `SBI: ${sbi}`, href: `/business/${sbi}` })
+      expect(result.breadcrumbs[1]).toEqual({ text: `Herberts Lawn Mowing (SBI: ${sbi})`, href: `/business/${sbi}` })
+    })
+
+    describe('when the businessName property is missing', () => {
+      test('it should fall back to just the SBI', () => {
+        data.info.businessName = null
+        const result = businessDetailsPresenter(data, sbi)
+
+        expect(result.breadcrumbs[1]).toEqual({ text: `SBI: ${sbi}`, href: `/business/${sbi}` })
+      })
+    })
+
+    describe('when sbi is missing', () => {
+      test('it should link to the search page without a query param and omit the business breadcrumb', () => {
+        const result = businessDetailsPresenter(data, null)
+
+        expect(result.breadcrumbs).toEqual([
+          { text: 'Search results', href: '/search-sbi' }
+        ])
+      })
+    })
   })
 
   describe('businessName', () => {

@@ -5,6 +5,7 @@
 
 import { constants, presenters } from '@defra/fcp-sfd-frontend-engine'
 import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const CHANGE_LINK = '#'
 
@@ -22,7 +23,7 @@ const businessDetailsPresenter = (data, sbi, yar) => {
     breadcrumbs: [
       {
         text: 'Search results',
-        href: `/search-sbi?sbi=${sbi}`
+        href: `${SEARCH_SBI}?sbi=${sbi}`
       },
       {
         text: formatOverviewBreadcrumb(data.info.businessName, sbi),

@@ -103,6 +103,8 @@ export const buildEntityBreadcrumbs = (queryKey, id, name, currentHref) => {
 
   const crumb = { text: formatBreadcrumbLabel(name, idLabel, id) }
 
+  // CurrentHref may not be present when the page rendering the breadcrumbs is
+  // the last crumb in the trail
   if (currentHref) {
     crumb.href = currentHref
   }

@@ -1,9 +1,6 @@
 // Test framework dependencies
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 
-// Engine dependencies
-import { constants } from '@defra/fcp-sfd-frontend-engine'
-
 // Mock dependencies
 const mockFetchBusinessChangeService = vi.fn()
 const mockUpdateDalService = vi.fn()
@@ -101,7 +98,7 @@ describe('updateBusinessAddressChangeService', () => {
   test('displays a success flash notification', async () => {
     await updateBusinessAddressChangeService(yar, credentials)
 
-    expect(mockFlashNotification).toHaveBeenCalledWith(yar, 'Success', constants.successMessages.BUSINESS_ADDRESS)
+    expect(mockFlashNotification).toHaveBeenCalledWith(yar, 'Success', 'You have updated your business address')
   })
 
   describe('when there is no pending business address change', () => {

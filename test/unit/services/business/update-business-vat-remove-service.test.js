@@ -1,9 +1,6 @@
 // Test framework dependencies
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 
-// Engine dependencies
-import { constants } from '@defra/fcp-sfd-frontend-engine'
-
 // Things we need to mock
 import { fetchBusinessChangeService } from '../../../../src/services/business/fetch-business-change-service.js'
 import { flashNotification } from '../../../../src/utils/notifications/flash-notification.js'
@@ -68,7 +65,7 @@ describe('updateBusinessVatRemoveService', () => {
     test('adds a flash notification confirming the VAT removal', async () => {
       await updateBusinessVatRemoveService(yar, credentials)
 
-      expect(flashNotification).toHaveBeenCalledWith(yar, 'Success', constants.successMessages.BUSINESS_VAT_REMOVE)
+      expect(flashNotification).toHaveBeenCalledWith(yar, 'Success', 'You have removed your VAT registration number')
     })
   })
 

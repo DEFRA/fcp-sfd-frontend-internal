@@ -2,6 +2,8 @@
  * Base presenter for formatting data for display
  */
 
+import { SEARCH_SBI, SEARCH_CRN } from '../constants/search-links.js'
+
 const getAddressParts = (address) => {
   const lookup = address.lookup || {}
   const manual = address.manual || {}
@@ -61,4 +63,51 @@ export const formatAddressLines = (address) => {
     addressLines: lines.filter(Boolean).join(', '),
     postcode: postcode || ''
   }
+}
+
+/**
+ * Formats the business/customer breadcrumb label used on overview and details pages.
+ *
+ * @param {string} name - The business or customer name
+ * @param {string} idLabel - The label for the identifier, e.g. 'SBI' or 'CRN'
+ * @param {string} id - The SBI or CRN value
+ *
+ * @returns {string} e.g. "Alfred Waldron (CRN: 1101996862)" or "SBI: 123456789" when there's no name
+ */
+export const formatBreadcrumbLabel = (name, idLabel, id) => {
+  return name ? `${name} (${idLabel}: ${id})` : `${idLabel}: ${id}`
+}
+
+/**
+ * Builds the "Search results" > entity breadcrumb trail used on overview and details pages.
+ *
+ * @param {string} queryKey - Query string key for the id on the search results link, e.g. 'sbi' or 'crn'
+ * @param {string | null | undefined} id - The SBI or CRN value
+ * @param {string | null | undefined} name - The business or customer name
+ * @param {string} [currentHref] - Href for the current page crumb, omitted when the crumb isn't a link
+ *
+ * @returns {Array<Object>} Breadcrumb items
+ */
+export const buildEntityBreadcrumbs = (queryKey, id, name, currentHref) => {
+  let searchPath = SEARCH_SBI
+  let idLabel = 'SBI'
+
+  if (queryKey === 'crn') {
+    searchPath = SEARCH_CRN
+    idLabel = 'CRN'
+  }
+
+  if (!id) {
+    return [{ text: 'Search results', href: searchPath }]
+  }
+
+  const crumb = { text: formatBreadcrumbLabel(name, idLabel, id) }
+
+  // CurrentHref may not be present when the page rendering the breadcrumbs is
+  // the last crumb in the trail
+  if (currentHref) {
+    crumb.href = currentHref
+  }
+
+  return [{ text: 'Search results', href: `${searchPath}?${queryKey}=${id}` }, crumb]
 }

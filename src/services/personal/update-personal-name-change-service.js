@@ -9,7 +9,7 @@
  * @module updatePersonalNameChangeService
  */
 
-import { mutations } from '@defra/fcp-sfd-frontend-engine'
+import { constants, mutations } from '@defra/fcp-sfd-frontend-engine'
 
 import { fetchPersonalChangeService } from './fetch-personal-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
@@ -35,7 +35,7 @@ const updatePersonalNameChangeService = async (yar, crn, email) => {
 
   yar.clear('personalDetailsUpdate')
 
-  flashNotification(yar, 'Success', 'You have updated your full name')
+  flashNotification(yar, 'Success', constants.successMessages.PERSONAL_NAME)
 }
 
 export {

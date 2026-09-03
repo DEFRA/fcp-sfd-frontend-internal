@@ -2,10 +2,10 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 
 // Things we need to mock
+import { mutations, services } from '@defra/fcp-sfd-frontend-engine'
 import { fetchPersonalChangeService } from '../../../../src/services/personal/fetch-personal-change-service.js'
 import { flashNotification } from '../../../../src/utils/notifications/flash-notification.js'
 import { updateDalService } from '../../../../src/services/DAL/update-dal-service.js'
-import { mutations, services } from '@defra/fcp-sfd-frontend-engine'
 
 // Test helpers
 import { getMappedData } from '../../../mocks/mock-personal-details.js'
@@ -27,6 +27,9 @@ vi.mock('../../../../src/services/DAL/update-dal-service.js', () => ({
 }))
 
 vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
+  constants: {
+    successMessages: { PERSONAL_ADDRESS: 'You have updated your personal address' }
+  },
   mutations: {
     updateCustomerAddress: 'UPDATE_CUSTOMER_ADDRESS_MUTATION'
   },

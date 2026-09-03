@@ -5,14 +5,14 @@
 
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { config } from '../../config/index.js'
-import { SEARCH_CRN } from '../../constants/search-links.js'
+import { buildEntityBreadcrumbs } from '../base-presenter.js'
 
 const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNeedingUpdate) => {
   const changeLinks = formatChangeLinks(data.crn, hasValidPersonalDetails, sectionsNeedingUpdate)
   const { action: dobAction, formattedDob } = formatDob(data.info.dateOfBirth.full)
 
   return {
-    breadcrumbs: buildBreadcrumbs(data),
+    breadcrumbs: buildEntityBreadcrumbs('crn', data.crn, data.info.userName, `/customer/${data.crn}`),
     notification: yar ? yar.flash('notification')[0] : null,
     pageTitle: 'View and update your personal details',
     metaDescription: 'View and update your personal details.',
@@ -116,25 +116,6 @@ const formatDob = (dob) => {
     formattedDob: presenters.formatLongDate(date),
     action: 'Change'
   }
-}
-
-const buildBreadcrumbs = (data) => {
-  // Defensively build breadcrumbs - show second breadcrumb only if both fullNameJoined and CRN exist
-  const breadcrumbs = [
-    {
-      text: 'Search results',
-      href: SEARCH_CRN
-    }
-  ]
-
-  if (data.info?.userName && data.crn) {
-    breadcrumbs.push({
-      text: `${data.info.userName} (CRN: ${data.crn})`,
-      href: `/customer/${data.crn}`
-    })
-  }
-
-  return breadcrumbs
 }
 
 export {

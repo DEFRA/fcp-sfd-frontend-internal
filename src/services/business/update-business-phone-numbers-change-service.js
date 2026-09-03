@@ -7,7 +7,7 @@
  * Displays a success flash notification to the user
  */
 
-import { constants, mutations, utils } from '@defra/fcp-sfd-frontend-engine'
+import { mutations, utils, constants } from '@defra/fcp-sfd-frontend-engine'
 
 import { updateDalService } from '../DAL/update-dal-service.js'
 import { fetchBusinessChangeService } from './fetch-business-change-service.js'

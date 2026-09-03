@@ -11,7 +11,7 @@
  * @module updateBusinessVatRemoveService
  */
 
-import { constants, mutations, utils } from '@defra/fcp-sfd-frontend-engine'
+import { mutations, utils, constants } from '@defra/fcp-sfd-frontend-engine'
 import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 import { updateDalService } from '../DAL/update-dal-service.js'

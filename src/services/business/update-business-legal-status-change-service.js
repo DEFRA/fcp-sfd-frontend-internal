@@ -10,7 +10,7 @@
  * @module updateBusinessLegalStatusChangeService
  */
 
-import { constants, mutations } from '@defra/fcp-sfd-frontend-engine'
+import { mutations, constants } from '@defra/fcp-sfd-frontend-engine'
 
 import { updateDalService } from '../DAL/update-dal-service.js'
 import { fetchBusinessChangeService } from './fetch-business-change-service.js'

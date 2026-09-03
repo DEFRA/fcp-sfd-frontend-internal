@@ -22,7 +22,6 @@ describe('searchCrnPresenter', () => {
       const result = searchCrnPresenter(data, payload)
 
       expect(result).toEqual({
-        changeSearchCriteriaLink: '/change-search-criteria',
         clearSearchLink: '/search-crn',
         customerName: 'Jane Smith',
         customerAddress: 'Flat 1, The Farm House, 12 Farm Lane, Rural Area, West Fields, Exeter, Devon, England',

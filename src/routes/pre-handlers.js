@@ -49,6 +49,7 @@ export const checkSbiAndInterrupterJourney = (journey) => {
     method: (request, h) => {
       // First validate the SBI parameter
       const sbiValidation = validateSbi.method(request, h)
+
       if (sbiValidation !== h.continue) {
         return sbiValidation
       }
@@ -73,7 +74,8 @@ export const validateSbi = {
     const sbiInput = request.params?.sbi ?? ''
     const validation = schemas.business.sbi.validate({ sbi: sbiInput })
 
-    if (validation.error) {
+    // The schema allows '' (used by the search routes), but a path param must always have a real value
+    if (validation.error || !validation.value.sbi) {
       return h.redirect('/search-sbi').takeover()
     }
 
@@ -90,7 +92,8 @@ export const validateCrn = {
     const crnInput = request.params?.crn ?? ''
     const validation = schemas.customer.crn.validate({ crn: crnInput })
 
-    if (validation.error) {
+    // The schema allows '' (used by the search routes), but a path param must always have a real value
+    if (validation.error || !validation.value.crn) {
       return h.redirect('/search-crn').takeover()
     }
 

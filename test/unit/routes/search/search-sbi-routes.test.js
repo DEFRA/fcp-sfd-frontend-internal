@@ -12,8 +12,7 @@ import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { searchSbiRoutes } from '../../../../src/routes/search/search-sbi-routes.js'
 const [getSearchSbi, postSearchSbi] = searchSbiRoutes
 
-const { mockValidate, mockFormatValidationErrors } = vi.hoisted(() => ({
-  mockValidate: vi.fn(),
+const { mockFormatValidationErrors } = vi.hoisted(() => ({
   mockFormatValidationErrors: vi.fn()
 }))
 
@@ -23,9 +22,7 @@ vi.mock('@defra/fcp-sfd-frontend-engine', async (importOriginal) => {
     ...actual,
     schemas: {
       business: {
-        sbi: {
-          validate: mockValidate
-        }
+        sbi: 'sbi-schema'
       }
     },
     utils: {
@@ -57,11 +54,6 @@ describe('search sbi routes', () => {
     }
 
     request = {
-      yar: {
-        get: vi.fn(),
-        set: vi.fn(),
-        clear: vi.fn()
-      },
       auth: {
         credentials: {
           email: 'test@example.com'
@@ -85,75 +77,44 @@ describe('search sbi routes', () => {
       expect(getSearchSbi.path).toBe('/search-sbi')
     })
 
-    describe('when no SBI is in session', () => {
-      beforeEach(() => {
-        request.yar.get.mockReturnValue(undefined)
-      })
+    test('validates the sbi query param against the sbi schema', () => {
+      expect(getSearchSbi.options.validate.query).toBe('sbi-schema')
+    })
 
+    test('failAction renders the search page with a bad request status', () => {
+      const result = getSearchSbi.options.validate.failAction(request, h)
+
+      expect(h.view).toHaveBeenCalledWith('search/search-sbi')
+      expect(responseStub.code).toHaveBeenCalledWith(constants.statusCodes.BAD_REQUEST)
+      expect(responseStub.takeover).toHaveBeenCalled()
+      expect(result).toBe(responseStub)
+    })
+
+    describe('when no SBI is in the query', () => {
       test('it renders the search page with no page data', async () => {
         await getSearchSbi.handler(request, h)
 
-        expect(request.yar.get).toHaveBeenCalledWith('searchSbi')
         expect(h.view).toHaveBeenCalledWith('search/search-sbi')
         expect(fetchSbiSearchDetailsService).not.toHaveBeenCalled()
         expect(searchSbiPresenter).not.toHaveBeenCalled()
-        expect(request.yar.clear).not.toHaveBeenCalled()
-      })
-
-      describe('when a valid SBI is provided as a query param', () => {
-        const details = { info: { businessName: 'Herberts Lawn Mowing' } }
-        const pageData = { resultText: '1 result for "106705779"' }
-
-        beforeEach(() => {
-          request.query = { sbi: '106705779' }
-          mockValidate.mockReturnValue({ value: { sbi: '106705779' } })
-          fetchSbiSearchDetailsService.mockResolvedValue(details)
-          searchSbiPresenter.mockReturnValue(pageData)
-        })
-
-        test('it fetches details, presents them and clears session state', async () => {
-          await getSearchSbi.handler(request, h)
-
-          expect(fetchSbiSearchDetailsService).toHaveBeenCalledWith('106705779', 'test@example.com')
-          expect(searchSbiPresenter).toHaveBeenCalledWith(details, '106705779')
-          expect(request.yar.clear).toHaveBeenCalledWith('searchSbi')
-          expect(h.view).toHaveBeenCalledWith('search/search-sbi', pageData)
-        })
-      })
-
-      describe('when an invalid SBI is provided as a query param', () => {
-        beforeEach(() => {
-          request.query = { sbi: 'not-an-sbi' }
-          mockValidate.mockReturnValue({ error: { details: [] } })
-        })
-
-        test('it renders the search page with no page data', async () => {
-          await getSearchSbi.handler(request, h)
-
-          expect(h.view).toHaveBeenCalledWith('search/search-sbi')
-          expect(fetchSbiSearchDetailsService).not.toHaveBeenCalled()
-        })
       })
     })
 
-    describe('when an SBI is in session', () => {
-      const searchState = { sbi: '106705779' }
+    describe('when an SBI is in the query', () => {
       const details = { info: { businessName: 'Herberts Lawn Mowing' } }
       const pageData = { resultText: '1 result for "106705779"' }
 
       beforeEach(() => {
-        request.yar.get.mockReturnValue(searchState)
+        request.query = { sbi: '106705779' }
         fetchSbiSearchDetailsService.mockResolvedValue(details)
         searchSbiPresenter.mockReturnValue(pageData)
       })
 
-      test('it fetches details, presents them and clears session state', async () => {
+      test('it fetches details and presents them', async () => {
         await getSearchSbi.handler(request, h)
 
-        expect(request.yar.get).toHaveBeenCalledWith('searchSbi')
         expect(fetchSbiSearchDetailsService).toHaveBeenCalledWith('106705779', 'test@example.com')
         expect(searchSbiPresenter).toHaveBeenCalledWith(details, '106705779')
-        expect(request.yar.clear).toHaveBeenCalledWith('searchSbi')
         expect(h.view).toHaveBeenCalledWith('search/search-sbi', pageData)
       })
     })
@@ -165,18 +126,8 @@ describe('search sbi routes', () => {
       expect(postSearchSbi.path).toBe('/search-sbi')
     })
 
-    describe('when the submitted SBI is empty after trimming', () => {
-      beforeEach(() => {
-        request.payload = { sbi: '   ' }
-      })
-
-      test('it redirects back to /search-sbi without validating', async () => {
-        await postSearchSbi.handler(request, h)
-
-        expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
-        expect(mockValidate).not.toHaveBeenCalled()
-        expect(request.yar.set).not.toHaveBeenCalled()
-      })
+    test('validates the sbi payload against the sbi schema', () => {
+      expect(postSearchSbi.options.validate.payload).toBe('sbi-schema')
     })
 
     describe('when validation fails', () => {
@@ -192,7 +143,6 @@ describe('search sbi routes', () => {
 
       beforeEach(() => {
         request.payload = { sbi: 'abc123' }
-        mockValidate.mockReturnValue({ error: validationError })
         mockFormatValidationErrors.mockReturnValue({
           sbi: {
             text: 'SBI must be 9 digits'
@@ -200,10 +150,9 @@ describe('search sbi routes', () => {
         })
       })
 
-      test('it renders the view with formatted errors and bad request status', async () => {
-        await postSearchSbi.handler(request, h)
+      test('it renders the view with formatted errors and bad request status', () => {
+        const result = postSearchSbi.options.validate.failAction(request, h, validationError)
 
-        expect(mockValidate).toHaveBeenCalledWith({ sbi: 'abc123' })
         expect(mockFormatValidationErrors).toHaveBeenCalledWith(validationError.details)
         expect(h.view).toHaveBeenCalledWith('search/search-sbi', {
           sbi: 'abc123',
@@ -217,22 +166,31 @@ describe('search sbi routes', () => {
         })
         expect(responseStub.code).toHaveBeenCalledWith(constants.statusCodes.BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()
-        expect(request.yar.set).not.toHaveBeenCalled()
+        expect(result).toBe(responseStub)
       })
     })
 
-    describe('when validation succeeds', () => {
+    describe('when the submitted SBI is empty', () => {
       beforeEach(() => {
-        request.payload = { sbi: ' 106705779 ' }
-        mockValidate.mockReturnValue({ value: { sbi: '106705779' } })
+        request.payload = { sbi: '' }
       })
 
-      test('it trims input, stores SBI in session and redirects', async () => {
+      test('it redirects back to /search-sbi', async () => {
         await postSearchSbi.handler(request, h)
 
-        expect(mockValidate).toHaveBeenCalledWith({ sbi: '106705779' })
-        expect(request.yar.set).toHaveBeenCalledWith('searchSbi', { sbi: '106705779' })
         expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+      })
+    })
+
+    describe('when a valid SBI is submitted', () => {
+      beforeEach(() => {
+        request.payload = { sbi: '106705779' }
+      })
+
+      test('it redirects with the SBI as a query param', async () => {
+        await postSearchSbi.handler(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-sbi?sbi=106705779')
       })
     })
   })

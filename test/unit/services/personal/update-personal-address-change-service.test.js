@@ -2,7 +2,7 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 
 // Things we need to mock
-import { constants, mutations, services } from '@defra/fcp-sfd-frontend-engine'
+import { mutations, services } from '@defra/fcp-sfd-frontend-engine'
 import { fetchPersonalChangeService } from '../../../../src/services/personal/fetch-personal-change-service.js'
 import { flashNotification } from '../../../../src/utils/notifications/flash-notification.js'
 import { updateDalService } from '../../../../src/services/DAL/update-dal-service.js'
@@ -148,7 +148,7 @@ describe('updatePersonalAddressChangeService', () => {
       expect(flashNotification).toHaveBeenCalledWith(
         yar,
         'Success',
-        constants.successMessages.PERSONAL_ADDRESS
+        'You have updated your personal address'
       )
     })
 

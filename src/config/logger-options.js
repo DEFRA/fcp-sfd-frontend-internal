@@ -17,6 +17,52 @@ const formatters = {
   'pino-pretty': { transport: { target: 'pino-pretty' } }
 }
 
+// CRN is half of a login credential, so only the last 4 digits may be logged
+const maskValue = (value) => {
+  if (!value || value.length <= 4) {
+    return '****'
+  }
+
+  // Calculate how many asterisks we need (length - 4)
+  const asteriskCount = value.length - 4
+  const asterisks = '*'.repeat(asteriskCount)
+
+  // Get the last 4 characters
+  const lastFourChars = value.slice(-4)
+
+  // Combine masked part with visible part
+  return asterisks + lastFourChars
+}
+
+const maskSensitivePath = (path, params = {}) => {
+  // If there's a CRN in the params, mask it in the path
+  if (params.crn) {
+    const maskedCrn = maskValue(params.crn)
+
+    return path.replaceAll(params.crn, maskedCrn)
+  }
+
+  return path
+}
+
+const maskSensitiveParams = (params = {}) => {
+  // Create a copy of params so we don't modify the original
+  const maskedParams = { ...params }
+
+  // If there's a CRN, mask it
+  if (maskedParams.crn) {
+    maskedParams.crn = maskValue(maskedParams.crn)
+  }
+
+  return maskedParams
+}
+
+// Mask CRN in the response completion message so it doesn't leak there
+const requestCompleteMessage = (request, responseTime) => {
+  const statusCode = request.raw.res.headersSent ? request.raw.res.statusCode : '-'
+  return `[response] ${request.method} ${maskSensitivePath(request.path, request.params)} ${statusCode} (${responseTime}ms)`
+}
+
 export const loggerOptions = {
   enabled: logConfig.enabled,
   ignorePaths: isLocal ? ['/health', '/public', '/favicon.ico'] : ['/health'],
@@ -25,18 +71,27 @@ export const loggerOptions = {
     remove: true
   },
   level: logConfig.level,
-  // Local development logger settings
-  ...(isLocal && {
-    serializers: {
-      req: req => ({
-        method: req.method,
-        url: req.url
-      }),
-      res: res => ({
-        statusCode: res.statusCode
-      })
-    }
-  }),
+  // Receive the raw hapi request in serializers so route params are available to mask
+  wrapSerializers: false,
+  customRequestCompleteMessage: requestCompleteMessage,
+  serializers: isLocal
+    ? {
+        // Local development logger settings
+        req: req => ({
+          method: req.method,
+          url: maskSensitivePath(req.path, req.params)
+        }),
+        res: res => ({
+          statusCode: res.statusCode
+        })
+      }
+    : {
+        req: req => ({
+          method: req.method,
+          url: maskSensitivePath(req.path, req.params),
+          params: maskSensitiveParams(req.params)
+        })
+      },
   ...formatters[logConfig.format],
   nesting: true,
   mixin: () => {

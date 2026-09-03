@@ -45,12 +45,12 @@
 
         <div class="govuk-button-group">
           {{ govukButton({ text: "Search", preventDoubleClick: true }) }}
-          <a class="govuk-link" href="/change-search-criteria">Change search criteria</a>
+          <a class="govuk-link" href="{{ changeSearchCriteriaLink }}">Change search criteria</a>
         </div>
 
         {% if showClear %}
           <p class="govuk-body">
-            <a class="govuk-link govuk-link--no-visited-state" href="/search-crn">Clear search</a>
+            <a class="govuk-link govuk-link--no-visited-state" href="{{ clearSearchLink }}">Clear search</a>
           </p>
         {% endif %}
 

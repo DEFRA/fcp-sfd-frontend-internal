@@ -5,6 +5,7 @@
 
 import { paginationPresenter } from '../pagination-presenter.js'
 import { BUSINESS_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const businessOverviewPresenter = (businessDetails, page) => {
   const customers = businessDetails?.customers ?? []
@@ -28,7 +29,7 @@ const businessOverviewPresenter = (businessDetails, page) => {
     breadcrumbs: [
       {
         text: 'Search results',
-        href: `/search-sbi?sbi=${businessDetails?.sbi}`
+        href: `${SEARCH_SBI}?sbi=${businessDetails?.sbi}`
       }
     ]
   }

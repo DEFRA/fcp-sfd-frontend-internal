@@ -4,6 +4,7 @@
  */
 
 import { formatAddressLines } from '../base-presenter.js'
+import { SEARCH_SBI, CHANGE_SEARCH_CRITERIA } from '../../constants/search-links.js'
 
 const searchSbiPresenter = (businessDetails, payload) => {
   const { addressLines, postcode } = formatAddressLines(businessDetails?.address)
@@ -17,7 +18,8 @@ const searchSbiPresenter = (businessDetails, payload) => {
     businessVendorNumber: businessDetails?.info?.vendorNumber || '',
     businessAddress: addressLines,
     businessPostcode: postcode,
-    clearSearchLink: '/search-sbi',
+    changeSearchCriteriaLink: CHANGE_SEARCH_CRITERIA,
+    clearSearchLink: SEARCH_SBI,
     resultText,
     showResults: true,
     showBusinessDetails: Boolean(businessDetails),

@@ -2,6 +2,7 @@ import { getSignOutUrl } from '../../auth/get-sign-out-url.js'
 import { validateState } from '../../auth/state.js'
 import { verifyToken } from '../../auth/verify-token.js'
 import { config } from '../../config/index.js'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const signIn = {
   method: 'GET',
@@ -10,7 +11,7 @@ const signIn = {
     auth: 'entra'
   },
   handler: function (_request, h) {
-    return h.redirect('/search-sbi')
+    return h.redirect(SEARCH_SBI)
   }
 }
 
@@ -54,7 +55,7 @@ const signInOidc = {
 
     request.yar.clear('redirect')
 
-    return h.redirect('/search-sbi')
+    return h.redirect(SEARCH_SBI)
   }
 }
 

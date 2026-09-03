@@ -4,6 +4,7 @@
  */
 
 import { formatAddressLines } from '../base-presenter.js'
+import { SEARCH_CRN, CHANGE_SEARCH_CRITERIA } from '../../constants/search-links.js'
 
 const searchCrnPresenter = (customerDetails, payload) => {
   const { addressLines, postcode } = formatAddressLines(customerDetails?.address)
@@ -12,7 +13,8 @@ const searchCrnPresenter = (customerDetails, payload) => {
     : `0 results for "${payload}"`
 
   return {
-    clearSearchLink: '/search-crn',
+    changeSearchCriteriaLink: CHANGE_SEARCH_CRITERIA,
+    clearSearchLink: SEARCH_CRN,
     customerName: customerDetails?.info?.customerName || '',
     customerAddress: addressLines,
     customerPostcode: postcode,

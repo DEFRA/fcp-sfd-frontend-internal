@@ -1,6 +1,7 @@
 import { schemas, services, constants } from '@defra/fcp-sfd-frontend-engine'
 import { fetchBusinessChangeService } from '../services/business/fetch-business-change-service.js'
 import { BUSINESS_LEGAL_STATUS_SESSION_FIELDS } from '../constants/business-legal-status-session-fields.js'
+import { SEARCH_SBI, SEARCH_CRN } from '../constants/search-links.js'
 
 /**
  * Creates a Hapi pre-handler that validates a CRN and checks the interrupted journey session.
@@ -76,7 +77,7 @@ export const validateSbi = {
 
     // The schema allows '' (used by the search routes), but a path param must always have a real value
     if (validation.error || !validation.value.sbi) {
-      return h.redirect('/search-sbi').takeover()
+      return h.redirect(SEARCH_SBI).takeover()
     }
 
     // Mutate params with the Joi-coerced value to ensure downstream handlers
@@ -94,7 +95,7 @@ export const validateCrn = {
 
     // The schema allows '' (used by the search routes), but a path param must always have a real value
     if (validation.error || !validation.value.crn) {
-      return h.redirect('/search-crn').takeover()
+      return h.redirect(SEARCH_CRN).takeover()
     }
 
     // Mutate params with the Joi-coerced value to ensure downstream handlers

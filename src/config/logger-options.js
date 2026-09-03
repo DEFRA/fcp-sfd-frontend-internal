@@ -18,20 +18,18 @@ const formatters = {
 }
 
 // CRN is half of a login credential, so only the last 4 digits may be logged
+const VISIBLE_CHAR_COUNT = 4
+
 const maskValue = (value) => {
-  if (!value || value.length <= 4) {
+  if (!value || value.length <= VISIBLE_CHAR_COUNT) {
     return '****'
   }
 
-  // Calculate how many asterisks we need (length - 4)
-  const asteriskCount = value.length - 4
+  const asteriskCount = value.length - VISIBLE_CHAR_COUNT
   const asterisks = '*'.repeat(asteriskCount)
+  const visibleChars = value.slice(-VISIBLE_CHAR_COUNT)
 
-  // Get the last 4 characters
-  const lastFourChars = value.slice(-4)
-
-  // Combine masked part with visible part
-  return asterisks + lastFourChars
+  return asterisks + visibleChars
 }
 
 const maskSensitivePath = (path, params) => {

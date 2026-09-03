@@ -37,6 +37,8 @@ describe('personalAddressSelectPresenter', () => {
         manualAddressLink: '/customer/1234567890/account-address-enter',
         pageTitle: 'Choose your personal address',
         metaDescription: 'Choose the address for your personal account.',
+        userName: null,
+        crn: '1234567890',
         postcode: 'SW1A 1AA',
         displayAddresses: expect.any(Array)
       })

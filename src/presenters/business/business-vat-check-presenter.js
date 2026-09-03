@@ -14,6 +14,7 @@ const businessVatCheckPresenter = (data) => {
     changeLink: BUSINESS_CHANGE_LINKS.businessVat(data.info.sbi),
     pageTitle: 'Check your VAT registration number is correct before submitting',
     metaDescription: 'Check the VAT registration number for your business is correct.',
+    businessName: data.info.businessName ?? null,
     vatNumber: data.changeBusinessVat ?? data.info.vat ?? null,
     sbi
   }

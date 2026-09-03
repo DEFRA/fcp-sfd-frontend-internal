@@ -12,6 +12,7 @@ const businessVatRemovePresenter = (data, payload) => {
     backLink: sbi ? `/business/${sbi}/details` : SEARCH_SBI,
     pageTitle: 'Are you sure you want to remove your VAT registration number?',
     metaDescription: 'Are you sure you want to remove your VAT registration number?',
+    businessName: data.info?.businessName ?? null,
     confirmRemove: payload ?? null,
     vatNumber: data.info?.vat ?? null,
     sbi: data.info?.sbi ?? null

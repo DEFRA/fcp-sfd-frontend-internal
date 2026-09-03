@@ -45,6 +45,8 @@ describe('personalAddressCheckPresenter', () => {
         changeLink: '/customer/1234567890/account-address-enter',
         pageTitle: 'Check your personal address is correct before submitting',
         metaDescription: 'Check the address for your personal account is correct.',
+        userName: null,
+        crn: '1234567890',
         address: [
           '10 Skirbeck Way',
           'Lonely Lane',

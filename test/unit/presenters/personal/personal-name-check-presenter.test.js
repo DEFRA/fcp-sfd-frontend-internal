@@ -31,6 +31,7 @@ describe('personalNameCheckPresenter', () => {
         pageTitle: 'Check your name is correct before submitting',
         metaDescription: 'Check the full name for your personal account is correct.',
         userName: 'John Doe',
+        crn,
         fullName: 'John M Doe'
       })
     })

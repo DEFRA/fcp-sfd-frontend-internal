@@ -17,6 +17,10 @@ describe('Cookies endpoint', () => {
     expect(cookies.path).toBe('/cookies')
   })
 
+  test('should not require authentication', () => {
+    expect(cookies.options.auth).toBe(false)
+  })
+
   test('should render the cookies view with correct data', () => {
     const mockRequest = {
       info: {

@@ -30,6 +30,7 @@ describe('personalDobCheckPresenter', () => {
         pageTitle: 'Check your date of birth is correct before submitting',
         metaDescription: 'Check the date of birth for your personal account is correct.',
         userName: 'Alfred Waldron',
+        crn,
         changeLink: `/customer/${crn}/account-date-of-birth-change`,
         dateOfBirth: '25 June 1984'
       })

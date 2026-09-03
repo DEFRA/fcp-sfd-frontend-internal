@@ -12,6 +12,7 @@ const businessVatChangePresenter = (data, payload) => {
     backLink: sbi ? `/business/${sbi}/details` : SEARCH_SBI,
     pageTitle: 'What is your VAT registration number?',
     metaDescription: 'Update the VAT registration number for your business.',
+    businessName: data.info.businessName ?? null,
     vatNumber: payload ?? data.changeBusinessVat ?? data.info.vat,
     sbi: data.info.sbi ?? null
   }

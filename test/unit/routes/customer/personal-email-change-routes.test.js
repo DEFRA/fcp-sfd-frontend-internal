@@ -159,6 +159,7 @@ const getPageData = () => {
     pageTitle: 'What is your personal email address?',
     metaDescription: 'Update the email address for your personal account.',
     userName: 'John Doe',
+    crn: '1234567890',
     personalEmail: 'new-email@test.com'
   }
 }
@@ -169,6 +170,7 @@ const getPageDataError = () => {
     pageTitle: 'What is your personal email address?',
     metaDescription: 'Update the email address for your personal account.',
     userName: 'John Doe',
+    crn: '1234567890',
     personalEmail: 'new-email@test.com',
     errors: {
       personalEmail: {

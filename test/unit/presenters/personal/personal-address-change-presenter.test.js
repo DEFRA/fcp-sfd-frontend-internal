@@ -20,6 +20,8 @@ describe('personalAddressChangePresenter', () => {
         manualAddressLink: '/customer/1234567890/account-address-enter',
         pageTitle: 'What is your personal address?',
         metaDescription: 'Update the address for your personal account.',
+        userName: null,
+        crn: '1234567890',
         postcode: 'SW1A 1AA'
       })
     })

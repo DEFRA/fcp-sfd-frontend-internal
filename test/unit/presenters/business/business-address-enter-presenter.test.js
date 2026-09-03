@@ -49,6 +49,8 @@ describe('businessAddressEnterPresenter', () => {
         backLink: '/business/123456789/business-address-change',
         pageTitle: 'Enter your business address',
         metaDescription: 'Enter the address for your business.',
+        businessName: 'Agile Farm Ltd',
+        sbi: '123456789',
         address: {
           line1: '10 Skirbeck Way',
           line2: 'Lonely Lane',

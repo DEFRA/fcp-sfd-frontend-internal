@@ -17,6 +17,10 @@ describe('Contact us endpoint', () => {
     expect(contactUs.path).toBe('/contact-help')
   })
 
+  test('should not require authentication', () => {
+    expect(contactUs.options.auth).toBe(false)
+  })
+
   test('should render the contact-us view with correct data', () => {
     const mockRequest = {
       info: {

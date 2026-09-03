@@ -24,7 +24,11 @@ vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
       CHARITY_REGISTRATION_LEGAL_STATUS_CODES: ['102101'],
       COMPANY_REGISTRATION_LEGAL_STATUS_CODES: ['102105']
     },
-    successMessages: { BUSINESS_LEGAL_STATUS: 'You have updated your business legal status' }
+    successMessages: {
+      BUSINESS_LEGAL_STATUS: 'You have updated your business legal status',
+      BUSINESS_COMPANY_REGISTRATION_NUMBER: 'You have updated your company registration number',
+      BUSINESS_CHARITY_REGISTRATION_NUMBER: 'You have updated your charity commission registration number'
+    }
   }
 }))
 
@@ -146,7 +150,65 @@ describe('updateBusinessLegalStatusChangeService', () => {
     })
   })
 
-  describe('when there is no pending legal status change', () => {
+  describe('when the legal status requires a registration number that is only present on the fetched details', () => {
+    describe('and the business is a company', () => {
+      beforeEach(() => {
+        mockFetchBusinessChangeService.mockResolvedValue({
+          changeBusinessLegalStatus: '102105',
+          info: { sbi: '107183280', registrationNumbers: { companiesHouse: '87654321' } }
+        })
+      })
+
+      test('sends the fetched registration number when none is pending in session', async () => {
+        await updateBusinessLegalStatusChangeService(yar, credentials)
+
+        expect(mockUpdateDalService).toHaveBeenNthCalledWith(
+          2,
+          'update-business-registration-numbers-mutation',
+          {
+            input: {
+              sbi: '107183280',
+              registrationNumbers: {
+                companiesHouse: '87654321',
+                charityCommission: null
+              }
+            }
+          },
+          credentials.email
+        )
+      })
+    })
+
+    describe('and the business is a charity', () => {
+      beforeEach(() => {
+        mockFetchBusinessChangeService.mockResolvedValue({
+          changeBusinessLegalStatus: '102101',
+          info: { sbi: '107183280', registrationNumbers: { charityCommission: '7654321' } }
+        })
+      })
+
+      test('sends the fetched registration number when none is pending in session', async () => {
+        await updateBusinessLegalStatusChangeService(yar, credentials)
+
+        expect(mockUpdateDalService).toHaveBeenNthCalledWith(
+          2,
+          'update-business-registration-numbers-mutation',
+          {
+            input: {
+              sbi: '107183280',
+              registrationNumbers: {
+                companiesHouse: null,
+                charityCommission: '7654321'
+              }
+            }
+          },
+          credentials.email
+        )
+      })
+    })
+  })
+
+  describe('when neither the legal status nor the registration number have changed', () => {
     beforeEach(() => {
       mockFetchBusinessChangeService.mockResolvedValue({ info: { sbi: '107183280' } })
     })
@@ -157,6 +219,103 @@ describe('updateBusinessLegalStatusChangeService', () => {
       expect(mockUpdateDalService).not.toHaveBeenCalled()
       expect(yar.clear).not.toHaveBeenCalled()
       expect(mockFlashNotification).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('when a registration number is present in session but the current legal status does not require one', () => {
+    beforeEach(() => {
+      mockFetchBusinessChangeService.mockResolvedValue({
+        changeBusinessCompanyRegistrationNumber: '87654321',
+        info: { sbi: '107183280', legalStatusCode: '102199' }
+      })
+    })
+
+    test('returns early without calling the DAL, clearing session or notifying', async () => {
+      await updateBusinessLegalStatusChangeService(yar, credentials)
+
+      expect(mockUpdateDalService).not.toHaveBeenCalled()
+      expect(yar.clear).not.toHaveBeenCalled()
+      expect(mockFlashNotification).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('when only the registration number has changed', () => {
+    beforeEach(() => {
+      mockUpdateDalService.mockReset()
+      mockUpdateDalService.mockResolvedValue({ data: { updateBusinessRegistrationNumbers: { success: true } } })
+    })
+
+    describe('and the business is a company', () => {
+      beforeEach(() => {
+        mockFetchBusinessChangeService.mockResolvedValue({
+          changeBusinessCompanyRegistrationNumber: '87654321',
+          // The legal status is unchanged, so its code comes from the fetched details as a number
+          info: { sbi: '107183280', legalStatusCode: 102105 }
+        })
+      })
+
+      test('sends only the registration numbers mutation', async () => {
+        await updateBusinessLegalStatusChangeService(yar, credentials)
+
+        expect(mockUpdateDalService).toHaveBeenCalledTimes(1)
+        expect(mockUpdateDalService).toHaveBeenCalledWith(
+          'update-business-registration-numbers-mutation',
+          {
+            input: {
+              sbi: '107183280',
+              registrationNumbers: {
+                companiesHouse: '87654321',
+                charityCommission: null
+              }
+            }
+          },
+          credentials.email
+        )
+      })
+
+      test('clears the session and notifies with the company registration number message', async () => {
+        await updateBusinessLegalStatusChangeService(yar, credentials)
+
+        expect(yar.clear).toHaveBeenCalledWith('businessDetailsUpdate')
+        expect(mockFlashNotification).toHaveBeenCalledWith(
+          yar,
+          'Success',
+          'You have updated your company registration number'
+        )
+      })
+    })
+
+    describe('and the business is a charity', () => {
+      beforeEach(() => {
+        mockFetchBusinessChangeService.mockResolvedValue({
+          changeBusinessCharityCommissionRegistrationNumber: '7654321',
+          info: { sbi: '107183280', legalStatusCode: 102101 }
+        })
+      })
+
+      test('sends the charity number and notifies with the charity registration number message', async () => {
+        await updateBusinessLegalStatusChangeService(yar, credentials)
+
+        expect(mockUpdateDalService).toHaveBeenCalledWith(
+          'update-business-registration-numbers-mutation',
+          {
+            input: {
+              sbi: '107183280',
+              registrationNumbers: {
+                companiesHouse: null,
+                charityCommission: '7654321'
+              }
+            }
+          },
+          credentials.email
+        )
+
+        expect(mockFlashNotification).toHaveBeenCalledWith(
+          yar,
+          'Success',
+          'You have updated your charity commission registration number'
+        )
+      })
     })
   })
 

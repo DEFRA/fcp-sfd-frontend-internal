@@ -36,6 +36,7 @@ describe('personalDobChangePresenter', () => {
         pageTitle: 'What is your date of birth?',
         metaDescription: 'Update the date of birth for your personal account.',
         userName: 'Alfred Waldron',
+        crn,
         hint: 'For example, 31 3 1980',
         day: '1',
         month: '5',

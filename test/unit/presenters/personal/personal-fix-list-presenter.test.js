@@ -43,6 +43,8 @@ describe('personalFixListPresenter', () => {
         backLink: `/customer/${crn}/details/fix?source=phone`,
         pageTitle: 'Your personal details to update',
         metaDescription: 'Your personal details to update.',
+        userName: null,
+        crn,
         sections: ['name', 'dob', 'address', 'phone', 'email'],
         name: {
           first: 'Alfred',

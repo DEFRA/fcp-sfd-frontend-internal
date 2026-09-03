@@ -12,7 +12,8 @@ describe('businessVatChangePresenter', () => {
     data = {
       info: {
         sbi: '123456789',
-        vat: 'GB123456789'
+        vat: 'GB123456789',
+        businessName: 'Agile Farm Ltd'
       },
       contact: {
         email: 'test@test.com'
@@ -28,6 +29,7 @@ describe('businessVatChangePresenter', () => {
         backLink: '/business/123456789/details',
         pageTitle: 'What is your VAT registration number?',
         metaDescription: 'Update the VAT registration number for your business.',
+        businessName: 'Agile Farm Ltd',
         sbi: '123456789',
         vatNumber: 'GB123456789'
       })

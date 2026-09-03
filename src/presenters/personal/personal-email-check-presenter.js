@@ -12,6 +12,7 @@ const personalEmailCheckPresenter = (personalDetails, crn) => {
     pageTitle: 'Check your personal email address is correct before submitting',
     metaDescription: 'Check the email address for your personal account is correct.',
     userName: personalDetails.info.userName ?? null,
+    crn: crn ?? null,
     personalEmail: personalDetails.changePersonalEmail ?? personalDetails.contact.email
   }
 }

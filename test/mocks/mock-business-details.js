@@ -50,6 +50,11 @@ const mappedData = {
     traderNumber: '010203040506070880980',
     vendorNumber: '694523',
     legalStatus: 'Sole Proprietorship',
+    legalStatusCode: 102111,
+    registrationNumbers: {
+      companiesHouse: null,
+      charityCommission: null
+    },
     type: 'Not Specified',
     countyParishHoldingNumbers: [{ cphNumber: '12/123/1234' }]
   },

@@ -1,8 +1,11 @@
 // Test framework dependencies
 import { describe, test, expect, beforeEach, vi } from 'vitest'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 // Thing under test
 import { businessDetailsPresenter } from '../../../../src/presenters/business/business-details-presenter.js'
+
+const { LEGAL_STATUS } = constants.business
 
 describe('businessDetailsPresenter', () => {
   let data
@@ -19,6 +22,8 @@ describe('businessDetailsPresenter', () => {
         traderNumber: '123456',
         vendorNumber: '654321',
         legalStatus: 'Sole Proprietorship',
+        legalStatusCode: LEGAL_STATUS.soleProprietorship.code,
+        registrationNumbers: { companiesHouse: null, charityCommission: null },
         type: 'Not Specified',
         countyParishHoldingNumbers: [{ cphNumber: '12/123/1234' }]
       },
@@ -307,6 +312,97 @@ describe('businessDetailsPresenter', () => {
 
       expect(result.businessType.value).toBe('Not added')
       expect(result.businessType.action).toBe('Add')
+    })
+  })
+
+  describe('legalStatusRegistrationNumber', () => {
+    describe('when the legal status is a charity', () => {
+      beforeEach(() => {
+        data.info.legalStatusCode = LEGAL_STATUS.charitableIncorporatedOrganisation.code
+        data.info.registrationNumbers = { companiesHouse: null, charityCommission: '12345678' }
+      })
+
+      test('returns the charity label and the charity commission number', () => {
+        const result = businessDetailsPresenter(data, sbi)
+
+        expect(result.legalStatusRegistrationNumber).toEqual({
+          label: 'Charity commission registration number',
+          value: '12345678',
+          action: 'Change',
+          changeLink: `/business/${sbi}/business-legal-status-enter`
+        })
+      })
+
+      test('returns "Not added" and an "Add" action when the charity commission number is absent', () => {
+        data.info.registrationNumbers.charityCommission = null
+        const result = businessDetailsPresenter(data, sbi)
+
+        expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
+        expect(result.legalStatusRegistrationNumber.action).toBe('Add')
+        expect(result.legalStatusRegistrationNumber.changeLink).toBe(`/business/${sbi}/business-legal-status-enter`)
+      })
+
+      test('matches the legal status when the code is a number rather than a string', () => {
+        data.info.legalStatusCode = Number(LEGAL_STATUS.charitableIncorporatedOrganisation.code)
+        const result = businessDetailsPresenter(data, sbi)
+
+        expect(result.legalStatusRegistrationNumber.label).toBe('Charity commission registration number')
+      })
+    })
+
+    describe('when the legal status is a company', () => {
+      beforeEach(() => {
+        data.info.legalStatusCode = LEGAL_STATUS.privateLimitedCompany.code
+        data.info.registrationNumbers = { companiesHouse: 'SC123456', charityCommission: null }
+      })
+
+      test('returns the company label and the companies house number', () => {
+        const result = businessDetailsPresenter(data, sbi)
+
+        expect(result.legalStatusRegistrationNumber).toEqual({
+          label: 'Company registration number',
+          value: 'SC123456',
+          action: 'Change',
+          changeLink: `/business/${sbi}/business-legal-status-enter`
+        })
+      })
+
+      test('returns "Not added" and an "Add" action when the companies house number is absent', () => {
+        data.info.registrationNumbers.companiesHouse = null
+        const result = businessDetailsPresenter(data, sbi)
+
+        expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
+        expect(result.legalStatusRegistrationNumber.action).toBe('Add')
+        expect(result.legalStatusRegistrationNumber.changeLink).toBe(`/business/${sbi}/business-legal-status-enter`)
+      })
+
+      test('matches the legal status when the code is a number rather than a string', () => {
+        data.info.legalStatusCode = Number(LEGAL_STATUS.privateLimitedCompany.code)
+        const result = businessDetailsPresenter(data, sbi)
+
+        expect(result.legalStatusRegistrationNumber.label).toBe('Company registration number')
+      })
+    })
+
+    test('returns null when the legal status does not hold a registration number', () => {
+      const result = businessDetailsPresenter(data, sbi)
+
+      expect(result.legalStatusRegistrationNumber).toBeNull()
+    })
+
+    test('returns null when the legal status code is absent', () => {
+      data.info.legalStatusCode = null
+      const result = businessDetailsPresenter(data, sbi)
+
+      expect(result.legalStatusRegistrationNumber).toBeNull()
+    })
+
+    test('returns "Not added" when the registration numbers are absent entirely', () => {
+      data.info.legalStatusCode = LEGAL_STATUS.charitableIncorporatedOrganisation.code
+      delete data.info.registrationNumbers
+      const result = businessDetailsPresenter(data, sbi)
+
+      expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
     })
   })
 })

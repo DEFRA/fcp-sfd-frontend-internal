@@ -24,7 +24,11 @@ vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
       CHARITY_REGISTRATION_LEGAL_STATUS_CODES: ['102101'],
       COMPANY_REGISTRATION_LEGAL_STATUS_CODES: ['102105']
     },
-    successMessages: { BUSINESS_LEGAL_STATUS: 'You have updated your business legal status' }
+    successMessages: {
+      BUSINESS_LEGAL_STATUS: 'You have updated your business legal status',
+      BUSINESS_COMPANY_REGISTRATION_NUMBER: 'You have updated your company registration number',
+      BUSINESS_CHARITY_REGISTRATION_NUMBER: 'You have updated your charity commission registration number'
+    }
   }
 }))
 

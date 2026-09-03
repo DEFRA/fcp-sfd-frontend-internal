@@ -13,7 +13,10 @@ const getBusinessLegalStatusEnter = {
     pre: [validateSbi]
   },
   handler: async (request, h) => {
-    const { yar, auth } = request
+    const { params, yar, auth } = request
+    const { sbi } = params
+
+    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
     const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
     const pageData = businessLegalStatusEnterPresenter(businessDetails)
@@ -31,6 +34,8 @@ const postBusinessLegalStatusEnter = {
   handler: async (request, h) => {
     const { params, yar, auth, payload } = request
     const { sbi } = params
+
+    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
     const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
     const legalStatusCode = businessDetails.changeBusinessLegalStatus ?? businessDetails.info?.legalStatusCode

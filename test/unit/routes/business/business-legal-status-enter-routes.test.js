@@ -66,6 +66,12 @@ describe('business legal status enter', () => {
       ])
     })
 
+    test('persists the sbi in session', async () => {
+      await getBusinessLegalStatusEnter.handler(request, h)
+
+      expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
+    })
+
     test('should render business-legal-status-enter view with page data', async () => {
       await getBusinessLegalStatusEnter.handler(request, h)
 
@@ -101,6 +107,19 @@ describe('business legal status enter', () => {
           '1234567'
         )
         expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-check')
+      })
+
+      test('persists the sbi in session', async () => {
+        validateBusinessRegistrationNumberService.mockReturnValue({
+          error: undefined,
+          value: { charityCommissionRegistrationNumber: '1234567' },
+          payloadField: 'charityCommissionRegistrationNumber',
+          sessionField: 'changeBusinessCharityCommissionRegistrationNumber'
+        })
+
+        await postBusinessLegalStatusEnter.handler(request, h)
+
+        expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
       })
     })
 

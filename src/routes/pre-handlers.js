@@ -118,14 +118,14 @@ export const validateLegalStatusRegistrationNumber = {
 
     const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
 
-    const legalStatusCode = String(businessDetails.changeBusinessLegalStatus ?? businessDetails.info?.legalStatusCode ?? '')
+    const legalStatusCode = resolveLegalStatusCode(businessDetails)
 
     const isCharity = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
     const isCompany = constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
 
     if (isCharity || isCompany) {
-      const charityNumber = businessDetails.changeBusinessCharityCommissionRegistrationNumber
-      const companyNumber = businessDetails.changeBusinessCompanyRegistrationNumber
+      const charityNumber = businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? businessDetails.info?.registrationNumbers?.charityCommission
+      const companyNumber = businessDetails.changeBusinessCompanyRegistrationNumber ?? businessDetails.info?.registrationNumbers?.companiesHouse
 
       const charityRequired = isCharity && !charityNumber
       const companyRequired = isCompany && !companyNumber
@@ -138,3 +138,7 @@ export const validateLegalStatusRegistrationNumber = {
     return h.continue
   }
 }
+
+// Falls back to the fetched status when the session holds no pending legal status change
+const resolveLegalStatusCode = (businessDetails) =>
+  String(businessDetails.changeBusinessLegalStatus ?? businessDetails.info?.legalStatusCode ?? '')

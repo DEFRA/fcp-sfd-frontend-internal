@@ -86,6 +86,15 @@ describe('businessLegalStatusEnterPresenter', () => {
   })
 
   describe('the "backLink" property', () => {
+    test('it returns to the business details page when there is no in-progress legal status change', () => {
+      delete data.changeBusinessLegalStatus
+      data.info.legalStatusCode = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES[0]
+
+      const result = businessLegalStatusEnterPresenter(data, payload)
+
+      expect(result.backLink).toEqual('/business/106705779/details')
+    })
+
     test('it falls back to the search page when the sbi is missing', () => {
       delete data.info.sbi
 

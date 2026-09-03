@@ -562,5 +562,27 @@ describe('pre-handlers', () => {
       expect(result).toBe(h.continue)
       expect(h.redirect).not.toHaveBeenCalled()
     })
+
+    test('it returns h.continue when the session charity number is cleared but a fetched charity number is present', async () => {
+      fetchBusinessChangeService.mockResolvedValue({
+        info: { sbi: '106705779', legalStatusCode: '102101', registrationNumbers: { charityCommission: '1234567' } }
+      })
+
+      const result = await validateLegalStatusRegistrationNumber.method(request, h)
+
+      expect(result).toBe(h.continue)
+      expect(h.redirect).not.toHaveBeenCalled()
+    })
+
+    test('it returns h.continue when the session company number is cleared but a fetched company number is present', async () => {
+      fetchBusinessChangeService.mockResolvedValue({
+        info: { sbi: '106705779', legalStatusCode: '102105', registrationNumbers: { companiesHouse: '12345678' } }
+      })
+
+      const result = await validateLegalStatusRegistrationNumber.method(request, h)
+
+      expect(result).toBe(h.continue)
+      expect(h.redirect).not.toHaveBeenCalled()
+    })
   })
 })

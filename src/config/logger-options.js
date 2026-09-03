@@ -34,9 +34,9 @@ const maskValue = (value) => {
   return asterisks + lastFourChars
 }
 
-const maskSensitivePath = (path, params = {}) => {
-  // If there's a CRN in the params, mask it in the path
-  if (params.crn) {
+const maskSensitivePath = (path, params) => {
+  // params can be null (not just undefined) e.g. on unmatched routes, so guard explicitly
+  if (params?.crn) {
     const maskedCrn = maskValue(params.crn)
 
     return path.replaceAll(params.crn, maskedCrn)
@@ -45,7 +45,7 @@ const maskSensitivePath = (path, params = {}) => {
   return path
 }
 
-const maskSensitiveParams = (params = {}) => {
+const maskSensitiveParams = (params) => {
   // Create a copy of params so we don't modify the original
   const maskedParams = { ...params }
 

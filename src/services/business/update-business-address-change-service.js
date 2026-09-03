@@ -7,7 +7,7 @@
  * @module updateBusinessAddressChangeService
  */
 
-import { mutations, services } from '@defra/fcp-sfd-frontend-engine'
+import { constants, mutations, services } from '@defra/fcp-sfd-frontend-engine'
 
 import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
@@ -26,7 +26,7 @@ const updateBusinessAddressChangeService = async (yar, credentials) => {
 
   yar.clear('businessDetailsUpdate')
 
-  flashNotification(yar, 'Success', 'You have updated your business address')
+  flashNotification(yar, 'Success', constants.successMessages.BUSINESS_ADDRESS)
 }
 
 /**

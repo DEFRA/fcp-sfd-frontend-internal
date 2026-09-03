@@ -236,6 +236,14 @@
       {% endif %}
     {% endset %}
 
+    {% set legalStatusRegistrationNumberDisplay %}
+      {% if legalStatusRegistrationNumber.value === 'Not added' %}
+        <span class="govuk-hint display-inline">{{ legalStatusRegistrationNumber.value }}</span>
+      {% else %}
+        <span>{{ legalStatusRegistrationNumber.value }}</span>
+      {% endif %}
+    {% endset %}
+
     {% set businessTypeDisplay %}
       {% if businessType.value === 'Not added' %}
         <span class="govuk-hint display-inline">{{ businessType.value }}</span>
@@ -255,6 +263,19 @@
       ]
     } %}
 
+    {% if legalStatusRegistrationNumber %}
+      {% set legalStatusRegistrationNumberActions = {
+        items: [
+          {
+            href: legalStatusRegistrationNumber.changeLink,
+            text: legalStatusRegistrationNumber.action,
+            visuallyHiddenText: legalStatusRegistrationNumber.label,
+            classes: "govuk-link--no-visited-state"
+          }
+        ]
+      } %}
+    {% endif %}
+
     {% set businessTypeActions = {
       items: [
         {
@@ -266,19 +287,32 @@
       ]
     } %}
 
+    {% set additionalDetailsRows = [
+      {
+        key: { text: "Business legal status" },
+        value: { html: businessLegalStatusDisplay },
+        actions: businessLegalStatusActions
+      }
+    ] %}
+
+    {% if legalStatusRegistrationNumber %}
+      {% set _ = additionalDetailsRows.push({
+          key: { text: legalStatusRegistrationNumber.label },
+          value: { html: legalStatusRegistrationNumberDisplay },
+          actions: legalStatusRegistrationNumberActions
+        })
+      %}
+    {% endif %}
+
+    {% set _ = additionalDetailsRows.push({
+        key: { text: "Business type" },
+        value: { html: businessTypeDisplay },
+        actions: businessTypeActions
+      })
+    %}
+
     {{ govukSummaryList({
-      rows: [
-        {
-          key: { text: "Business legal status" },
-          value: { html: businessLegalStatusDisplay },
-          actions: businessLegalStatusActions
-        },
-        {
-          key: { text: "Business type" },
-          value: { html: businessTypeDisplay },
-          actions: businessTypeActions
-        }
-      ]
+      rows: additionalDetailsRows
     }) }}
 
   </div>

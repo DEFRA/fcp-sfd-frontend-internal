@@ -53,7 +53,7 @@ const businessLegalStatusEnterPresenter = (data, payload) => {
   }
 
   return {
-    backLink: sbi ? `/business/${sbi}/business-legal-status-change` : SEARCH_SBI,
+    backLink: setBackLink(data, sbi),
     pageTitle: content.pageTitle,
     metaDescription: content.metaDescription,
     businessName: data.info?.businessName ?? null,
@@ -62,6 +62,18 @@ const businessLegalStatusEnterPresenter = (data, payload) => {
     hintText: content.hintText,
     registrationNumber: payload?.[content.field] ?? sessionValue ?? fetchedValue ?? null
   }
+}
+
+// Without a legal status change in the session the user reached this page directly from the business
+// details page, via the change link on the registration number, so send them back there
+const setBackLink = (data, sbi) => {
+  if (!sbi) {
+    return SEARCH_SBI
+  }
+
+  return data.changeBusinessLegalStatus
+    ? `/business/${sbi}/business-legal-status-change`
+    : `/business/${sbi}/details`
 }
 
 export { businessLegalStatusEnterPresenter }

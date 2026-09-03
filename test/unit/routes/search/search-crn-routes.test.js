@@ -12,8 +12,7 @@ import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { searchCrnRoutes } from '../../../../src/routes/search/search-crn-routes.js'
 const [getSearchCrn, postSearchCrn] = searchCrnRoutes
 
-const { mockValidate, mockFormatValidationErrors } = vi.hoisted(() => ({
-  mockValidate: vi.fn(),
+const { mockFormatValidationErrors } = vi.hoisted(() => ({
   mockFormatValidationErrors: vi.fn()
 }))
 
@@ -23,9 +22,7 @@ vi.mock('@defra/fcp-sfd-frontend-engine', async (importOriginal) => {
     ...actual,
     schemas: {
       customer: {
-        crn: {
-          validate: mockValidate
-        }
+        crn: 'crn-schema'
       }
     },
     utils: {
@@ -57,16 +54,12 @@ describe('search crn routes', () => {
     }
 
     request = {
-      yar: {
-        get: vi.fn(),
-        set: vi.fn(),
-        clear: vi.fn()
-      },
       auth: {
         credentials: {
           email: 'test@example.com'
         }
       },
+      query: {},
       payload: {
         crn: '1234567890'
       }
@@ -84,40 +77,44 @@ describe('search crn routes', () => {
       expect(getSearchCrn.path).toBe('/search-crn')
     })
 
-    describe('when no CRN is in session', () => {
-      beforeEach(() => {
-        request.yar.get.mockReturnValue(undefined)
-      })
+    test('validates the crn query param against the crn schema', () => {
+      expect(getSearchCrn.options.validate.query).toBe('crn-schema')
+    })
 
+    test('failAction renders the search page with a bad request status', () => {
+      const result = getSearchCrn.options.validate.failAction(request, h)
+
+      expect(h.view).toHaveBeenCalledWith('search/search-crn')
+      expect(responseStub.code).toHaveBeenCalledWith(constants.statusCodes.BAD_REQUEST)
+      expect(responseStub.takeover).toHaveBeenCalled()
+      expect(result).toBe(responseStub)
+    })
+
+    describe('when no CRN is in the query', () => {
       test('it renders the search page with no page data', async () => {
         await getSearchCrn.handler(request, h)
 
-        expect(request.yar.get).toHaveBeenCalledWith('searchCrn')
         expect(h.view).toHaveBeenCalledWith('search/search-crn')
         expect(fetchCrnSearchDetailsService).not.toHaveBeenCalled()
         expect(searchCrnPresenter).not.toHaveBeenCalled()
-        expect(request.yar.clear).not.toHaveBeenCalled()
       })
     })
 
-    describe('when a CRN is in session', () => {
-      const searchState = { crn: '1234567890' }
+    describe('when a CRN is in the query', () => {
       const details = { info: { customerName: 'Jane Smith' } }
       const pageData = { resultText: '1 result for "1234567890"' }
 
       beforeEach(() => {
-        request.yar.get.mockReturnValue(searchState)
+        request.query = { crn: '1234567890' }
         fetchCrnSearchDetailsService.mockResolvedValue(details)
         searchCrnPresenter.mockReturnValue(pageData)
       })
 
-      test('it fetches details, presents them and clears session state', async () => {
+      test('it fetches details and presents them', async () => {
         await getSearchCrn.handler(request, h)
 
-        expect(request.yar.get).toHaveBeenCalledWith('searchCrn')
         expect(fetchCrnSearchDetailsService).toHaveBeenCalledWith('1234567890', 'test@example.com')
         expect(searchCrnPresenter).toHaveBeenCalledWith(details, '1234567890')
-        expect(request.yar.clear).toHaveBeenCalledWith('searchCrn')
         expect(h.view).toHaveBeenCalledWith('search/search-crn', pageData)
       })
     })
@@ -129,18 +126,8 @@ describe('search crn routes', () => {
       expect(postSearchCrn.path).toBe('/search-crn')
     })
 
-    describe('when the submitted CRN is empty after trimming', () => {
-      beforeEach(() => {
-        request.payload = { crn: '   ' }
-      })
-
-      test('it redirects back to /search-crn without validating', async () => {
-        await postSearchCrn.handler(request, h)
-
-        expect(h.redirect).toHaveBeenCalledWith('/search-crn')
-        expect(mockValidate).not.toHaveBeenCalled()
-        expect(request.yar.set).not.toHaveBeenCalled()
-      })
+    test('validates the crn payload against the crn schema', () => {
+      expect(postSearchCrn.options.validate.payload).toBe('crn-schema')
     })
 
     describe('when validation fails', () => {
@@ -156,7 +143,6 @@ describe('search crn routes', () => {
 
       beforeEach(() => {
         request.payload = { crn: 'abc123' }
-        mockValidate.mockReturnValue({ error: validationError })
         mockFormatValidationErrors.mockReturnValue({
           crn: {
             text: 'Enter the full CRN'
@@ -164,10 +150,9 @@ describe('search crn routes', () => {
         })
       })
 
-      test('it renders the view with formatted errors and bad request status', async () => {
-        await postSearchCrn.handler(request, h)
+      test('it renders the view with formatted errors and bad request status', () => {
+        const result = postSearchCrn.options.validate.failAction(request, h, validationError)
 
-        expect(mockValidate).toHaveBeenCalledWith({ crn: 'abc123' })
         expect(mockFormatValidationErrors).toHaveBeenCalledWith(validationError.details)
         expect(h.view).toHaveBeenCalledWith('search/search-crn', {
           crn: 'abc123',
@@ -181,22 +166,31 @@ describe('search crn routes', () => {
         })
         expect(responseStub.code).toHaveBeenCalledWith(constants.statusCodes.BAD_REQUEST)
         expect(responseStub.takeover).toHaveBeenCalled()
-        expect(request.yar.set).not.toHaveBeenCalled()
+        expect(result).toBe(responseStub)
       })
     })
 
-    describe('when validation succeeds', () => {
+    describe('when the submitted CRN is empty', () => {
       beforeEach(() => {
-        request.payload = { crn: ' 1234567890 ' }
-        mockValidate.mockReturnValue({ value: { crn: '1234567890' } })
+        request.payload = { crn: '' }
       })
 
-      test('it trims input, stores CRN in session and redirects', async () => {
+      test('it redirects back to /search-crn', async () => {
         await postSearchCrn.handler(request, h)
 
-        expect(mockValidate).toHaveBeenCalledWith({ crn: '1234567890' })
-        expect(request.yar.set).toHaveBeenCalledWith('searchCrn', { crn: '1234567890' })
         expect(h.redirect).toHaveBeenCalledWith('/search-crn')
+      })
+    })
+
+    describe('when a valid CRN is submitted', () => {
+      beforeEach(() => {
+        request.payload = { crn: '1234567890' }
+      })
+
+      test('it redirects with the CRN as a query param', async () => {
+        await postSearchCrn.handler(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/search-crn?crn=1234567890')
       })
     })
   })

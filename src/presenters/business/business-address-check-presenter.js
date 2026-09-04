@@ -6,8 +6,8 @@
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
-const businessAddressCheckPresenter = (businessDetails) => {
-  const { changeBusinessAddress, address, info } = businessDetails
+const businessAddressCheckPresenter = (data) => {
+  const { changeBusinessAddress, address, info } = data
   const sbi = info?.sbi
 
   // Determine the appropriate address page based on how the address was entered.

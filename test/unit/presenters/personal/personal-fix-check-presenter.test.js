@@ -6,10 +6,10 @@ import { personalFixCheckPresenter } from '../../../../src/presenters/personal/p
 
 describe('personalFixCheckPresenter', () => {
   const crn = '123456'
-  let personalDetails
+  let data
 
   beforeEach(() => {
-    personalDetails = {
+    data = {
       orderedSectionsToFix: ['name', 'dob', 'address', 'phone', 'email'],
       changePersonalName: {
         first: 'Alfred',
@@ -42,7 +42,7 @@ describe('personalFixCheckPresenter', () => {
 
   describe('when provided with personal fix data', () => {
     test('it correctly presents the data', () => {
-      const result = personalFixCheckPresenter(personalDetails, crn)
+      const result = personalFixCheckPresenter(data, crn)
 
       expect(result).toEqual({
         backLink: `/customer/${crn}/details/fix-list`,
@@ -73,11 +73,11 @@ describe('personalFixCheckPresenter', () => {
   describe('the "fullName" property', () => {
     describe('when changePersonalName is missing', () => {
       beforeEach(() => {
-        delete personalDetails.changePersonalName
+        delete data.changePersonalName
       })
 
       test('it should return null', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.fullName).toBeNull()
       })
@@ -85,14 +85,14 @@ describe('personalFixCheckPresenter', () => {
 
     describe('when middle name is missing', () => {
       beforeEach(() => {
-        personalDetails.changePersonalName = {
+        data.changePersonalName = {
           first: 'John',
           last: 'Smith'
         }
       })
 
       test('it should exclude empty values from the formatted name', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.fullName).toEqual('John Smith')
       })
@@ -102,11 +102,11 @@ describe('personalFixCheckPresenter', () => {
   describe('the "dateOfBirth" property', () => {
     describe('when changePersonalDob is missing', () => {
       beforeEach(() => {
-        delete personalDetails.changePersonalDob
+        delete data.changePersonalDob
       })
 
       test('it should return null', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.dateOfBirth).toBeNull()
       })
@@ -114,11 +114,11 @@ describe('personalFixCheckPresenter', () => {
 
     describe('when day or month are single digits', () => {
       beforeEach(() => {
-        personalDetails.changePersonalDob = { day: '5', month: '7', year: '1982' }
+        data.changePersonalDob = { day: '5', month: '7', year: '1982' }
       })
 
       test('it pads single digits with leading zeros', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.dateOfBirth).toEqual('5 July 1982')
       })
@@ -128,11 +128,11 @@ describe('personalFixCheckPresenter', () => {
   describe('the "personalEmail" property', () => {
     describe('when changePersonalEmail is missing', () => {
       beforeEach(() => {
-        delete personalDetails.changePersonalEmail
+        delete data.changePersonalEmail
       })
 
       test('it should return null', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.personalEmail).toBeNull()
       })
@@ -140,11 +140,11 @@ describe('personalFixCheckPresenter', () => {
 
     describe('when personalEmail is missing from changePersonalEmail', () => {
       beforeEach(() => {
-        personalDetails.changePersonalEmail = {}
+        data.changePersonalEmail = {}
       })
 
       test('it should return null', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.personalEmail).toBeNull()
       })
@@ -154,25 +154,25 @@ describe('personalFixCheckPresenter', () => {
   describe('the "address" property', () => {
     describe('when changePersonalAddress is missing', () => {
       beforeEach(() => {
-        delete personalDetails.changePersonalAddress
+        delete data.changePersonalAddress
       })
 
       test('it should return null', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.address).toBeNull()
       })
     })
 
     test('it filters out empty address values', () => {
-      const result = personalFixCheckPresenter(personalDetails, crn)
+      const result = personalFixCheckPresenter(data, crn)
 
       expect(result.address).not.toContain('')
     })
 
     describe('when all address fields are populated', () => {
       test('it returns all non-empty address fields in order', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.address).toEqual([
           '1 Test Street',
@@ -186,7 +186,7 @@ describe('personalFixCheckPresenter', () => {
 
     describe('when only some address fields are populated', () => {
       beforeEach(() => {
-        personalDetails.changePersonalAddress = {
+        data.changePersonalAddress = {
           address1: '5 High Street',
           address2: '',
           address3: '',
@@ -198,7 +198,7 @@ describe('personalFixCheckPresenter', () => {
       })
 
       test('it returns only the non-empty fields', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.address).toEqual([
           '5 High Street',
@@ -212,11 +212,11 @@ describe('personalFixCheckPresenter', () => {
   describe('the "personalTelephone" property', () => {
     describe('when changePersonalPhoneNumbers is missing', () => {
       beforeEach(() => {
-        delete personalDetails.changePersonalPhoneNumbers
+        delete data.changePersonalPhoneNumbers
       })
 
       test('it should return null values for both numbers', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.personalTelephone).toEqual({
           telephone: null,
@@ -227,13 +227,13 @@ describe('personalFixCheckPresenter', () => {
 
     describe('when only telephone is provided', () => {
       beforeEach(() => {
-        personalDetails.changePersonalPhoneNumbers = {
+        data.changePersonalPhoneNumbers = {
           personalTelephone: '0123456789'
         }
       })
 
       test('it should return the telephone and null for mobile', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.personalTelephone).toEqual({
           telephone: '0123456789',
@@ -244,13 +244,13 @@ describe('personalFixCheckPresenter', () => {
 
     describe('when only mobile is provided', () => {
       beforeEach(() => {
-        personalDetails.changePersonalPhoneNumbers = {
+        data.changePersonalPhoneNumbers = {
           personalMobile: '07123456789'
         }
       })
 
       test('it should return null for telephone and the mobile', () => {
-        const result = personalFixCheckPresenter(personalDetails, crn)
+        const result = personalFixCheckPresenter(data, crn)
 
         expect(result.personalTelephone).toEqual({
           telephone: null,
@@ -262,7 +262,7 @@ describe('personalFixCheckPresenter', () => {
 
   describe('the "sections" property', () => {
     test('it returns the orderedSectionsToFix array', () => {
-      const result = personalFixCheckPresenter(personalDetails, crn)
+      const result = personalFixCheckPresenter(data, crn)
 
       expect(result.sections).toEqual(['name', 'dob', 'address', 'phone', 'email'])
     })
@@ -270,13 +270,13 @@ describe('personalFixCheckPresenter', () => {
 
   describe('the "backLink" property', () => {
     test('it includes the crn in the URL', () => {
-      const result = personalFixCheckPresenter(personalDetails, crn)
+      const result = personalFixCheckPresenter(data, crn)
 
       expect(result.backLink).toEqual(`/customer/${crn}/details/fix-list`)
     })
 
     test('it falls back to the search page when the crn is missing', () => {
-      const result = personalFixCheckPresenter(personalDetails, undefined)
+      const result = personalFixCheckPresenter(data, undefined)
 
       expect(result.backLink).toEqual('/search-crn')
     })
@@ -284,7 +284,7 @@ describe('personalFixCheckPresenter', () => {
 
   describe('the "changeLink" property', () => {
     test('it includes the crn in the URL', () => {
-      const result = personalFixCheckPresenter(personalDetails, crn)
+      const result = personalFixCheckPresenter(data, crn)
 
       expect(result.changeLink).toEqual(`/customer/${crn}/details/fix-list`)
     })

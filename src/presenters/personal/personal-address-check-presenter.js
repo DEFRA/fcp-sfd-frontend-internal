@@ -6,8 +6,8 @@
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
-const personalAddressCheckPresenter = (personalDetails) => {
-  const { changePersonalAddress, address, crn, info } = personalDetails
+const personalAddressCheckPresenter = (data) => {
+  const { changePersonalAddress, address, crn, info } = data
 
   // Determine the appropriate address page based on how the address was entered.
   // Postcode lookup uses the select page, manual entry uses the enter page.

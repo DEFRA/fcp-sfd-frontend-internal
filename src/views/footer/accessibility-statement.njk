@@ -2,7 +2,7 @@
 {% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink %}
 
 {% block beforeContent %}
-  {{ appBackSignOutLink(backLink, true) }}
+  {{ appBackSignOutLink(backLink, sendReferrer=true) }}
 {% endblock %}
 
 {% block content %}

@@ -5,10 +5,10 @@
 
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
-const personalPhoneNumbersCheckPresenter = (personalDetails, crn) => {
-  const phoneNumbers = personalDetails.changePersonalPhoneNumbers ?? {
-    personalTelephone: personalDetails.contact.telephone,
-    personalMobile: personalDetails.contact.mobile
+const personalPhoneNumbersCheckPresenter = (data, crn) => {
+  const phoneNumbers = data.changePersonalPhoneNumbers ?? {
+    personalTelephone: data.contact.telephone,
+    personalMobile: data.contact.mobile
   }
 
   return {
@@ -16,7 +16,7 @@ const personalPhoneNumbersCheckPresenter = (personalDetails, crn) => {
     changeLink: `/customer/${crn}/account-phone-numbers-change`,
     pageTitle: 'Check your personal phone numbers are correct before submitting',
     metaDescription: 'Check the phone numbers for your personal account are correct.',
-    userName: personalDetails.info.userName ?? null,
+    userName: data.info.userName ?? null,
     crn: crn ?? null,
     personalTelephone: {
       telephone: phoneNumbers.personalTelephone ?? null,

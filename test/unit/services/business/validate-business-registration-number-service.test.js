@@ -33,10 +33,10 @@ describe('validateBusinessRegistrationNumberService', () => {
       expect(result.error.details[0].message).toBe('Enter the charity commission registration number')
     })
 
-    test('it returns an error when the number is not 7 or 8 digits', () => {
+    test('it returns an error when the number is not 6 to 8 digits', () => {
       const result = validateBusinessRegistrationNumberService(legalStatusCode, { charityCommissionRegistrationNumber: '123' })
 
-      expect(result.error.details[0].message).toBe('Charity commission registration number must be 7 or 8 numbers')
+      expect(result.error.details[0].message).toBe('Charity commission registration number must be 6 to 8 numbers')
     })
   })
 

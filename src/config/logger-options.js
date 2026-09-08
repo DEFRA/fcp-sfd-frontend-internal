@@ -45,18 +45,16 @@ const formatters = {
  *    - Calls maskSensitivePath() again on the URL
  *    - Creates message: `"[response] GET /customer/******4934/details 200 (45ms)"`
  *
- * 6. Final log serialization (in production):
- *    - serializers.request() runs with now-populated request.params
- *    - Calls maskSensitiveParams() to mask params.crn field
- *    - Structured log has masked CRN in both url field AND params.crn field
+ * 6. Log sent to stdout/Elasticsearch:
+ *    - CRN fully masked in the message and url fields (via maskSensitivePath at onRequest time)
+ *    - Note: params in the log will be empty {} because serializers.req ran during onRequest
+ *      before route matching (maskSensitiveParams is called but has nothing to mask)
  *
- * 7. Log sent to stdout/Elasticsearch:
- *    - CRN fully masked everywhere: message, url, params
- *
- * Architecture: URL-based masking (not params-based) is necessary because the req
- * serializer runs during onRequest, before route matching. The regex approach
- * (maskSensitivePath) ensures CRN is masked at the earliest possible point, using
- * the URL path string shape instead of waiting for request.params to be populated.
+ * Key architectural insight: hapi-pino serializers run once during onRequest, not again
+ * after route matching. Therefore, URL-based masking (via regex on the path string) is
+ * the primary mechanism that ensures CRN is masked regardless of request lifecycle timing.
+ * maskSensitiveParams() remains for defense-in-depth and extensibility, but will receive
+ * empty params in practice.
  */
 
 // CRN is half of a login credential, so only the last 4 digits may be logged
@@ -95,7 +93,9 @@ const maskSensitiveParams = (params) => {
   // Create a copy of params so we don't modify the original
   const maskedParams = { ...params }
 
-  // If there's a CRN, mask it
+  // If there's a CRN, mask it. Note: in practice, params will be empty {} because
+  // serializers.req runs during onRequest before route matching. This function remains
+  // for defense-in-depth and to handle any future scenarios where params may be populated.
   if (maskedParams.crn) {
     maskedParams.crn = maskValue(maskedParams.crn)
   }

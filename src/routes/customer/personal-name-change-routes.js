@@ -14,8 +14,8 @@ const getPersonalNameChange = {
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
-
     const email = auth.credentials?.email
+
     const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalName')
     const pageData = personalNameChangePresenter(personalDetails, undefined, crn)
 
@@ -34,8 +34,8 @@ const postPersonalNameChange = {
       failAction: async (request, h, err) => {
         const { params, auth, yar, payload } = request
         const { crn } = params
-
         const email = auth.credentials?.email
+
         const errors = utils.formatValidationErrors(err.details || [])
         const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalName')
         const pageData = personalNameChangePresenter(personalDetails, payload, crn)

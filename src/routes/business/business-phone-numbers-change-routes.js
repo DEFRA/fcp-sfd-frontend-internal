@@ -13,10 +13,11 @@ const getBusinessPhoneNumbersChange = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
-    const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessPhoneNumbers')
+    const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessPhoneNumbers')
     const pageData = businessPhoneNumbersChangePresenter(businessDetails)
 
     return h.view('business/business-phone-numbers-change', pageData)
@@ -35,23 +36,25 @@ const postBusinessPhoneNumbersChange = {
       },
       failAction: async (request, h, err) => {
         const { yar, auth, payload } = request
+        const email = auth.credentials?.email
 
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessPhoneNumbers')
+        const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessPhoneNumbers')
         const pageData = businessPhoneNumbersChangePresenter(businessDetails, payload)
 
         return h.view('business/business-phone-numbers-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
       }
     },
     handler: async (request, h) => {
-      const { sbi } = request.params
+      const { params, yar, payload } = request
+      const { sbi } = params
 
-      request.payload = {
-        businessTelephone: request.payload.businessTelephone ?? null,
-        businessMobile: request.payload.businessMobile ?? null
+      const phoneNumbers = {
+        businessTelephone: payload.businessTelephone ?? null,
+        businessMobile: payload.businessMobile ?? null
       }
 
-      setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessPhoneNumbers', request.payload)
+      setSessionData(yar, 'businessDetailsUpdate', 'changeBusinessPhoneNumbers', phoneNumbers)
 
       return h.redirect(`/business/${sbi}/business-phone-numbers-check`)
     }

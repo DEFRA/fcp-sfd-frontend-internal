@@ -59,7 +59,7 @@ describe('business legal status check', () => {
     test('it calls fetchBusinessChangeService with credentials and the legal status session fields', async () => {
       await getBusinessLegalStatusCheck.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, [
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email, [
         'changeBusinessLegalStatus',
         'changeBusinessCharityCommissionRegistrationNumber',
         'changeBusinessCompanyRegistrationNumber'
@@ -89,7 +89,7 @@ describe('business legal status check', () => {
     test('it calls updateBusinessLegalStatusChangeService and redirects to business details', async () => {
       await postBusinessLegalStatusCheck.handler(request, h)
 
-      expect(updateBusinessLegalStatusChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials)
+      expect(updateBusinessLegalStatusChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email)
       expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
     })
   })

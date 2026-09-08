@@ -14,8 +14,8 @@ const getPersonalDobChange = {
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
-
     const email = auth.credentials?.email
+
     const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalDob')
     const pageData = personalDobChangePresenter(personalDetails, undefined, crn)
 
@@ -36,8 +36,8 @@ const postPersonalDobChange = {
       failAction: async (request, h, err) => {
         const { params, auth, yar, payload } = request
         const { crn } = params
-
         const email = auth.credentials?.email
+
         const errors = utils.formatValidationErrors(err.details || [])
         const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalDob')
         const pageData = personalDobChangePresenter(personalDetails, payload, crn)

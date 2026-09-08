@@ -14,10 +14,11 @@ const getBusinessVatRemove = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
-    const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
+    const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessVat')
     const pageData = businessVatRemovePresenter(businessDetails)
 
     return h.view('business/business-vat-registration-remove', pageData)
@@ -36,9 +37,10 @@ const postBusinessVatRemove = {
       },
       failAction: async (request, h, err) => {
         const { yar, auth, payload } = request
+        const email = auth.credentials?.email
 
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
+        const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessVat')
         const pageData = businessVatRemovePresenter(businessDetails, payload?.confirmRemove)
 
         return h.view('business/business-vat-registration-remove', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
@@ -46,12 +48,14 @@ const postBusinessVatRemove = {
     }
   },
   handler: async (request, h) => {
-    const { sbi } = request.params
+    const { params, yar, auth, payload } = request
+    const { sbi } = params
+    const email = auth.credentials?.email
 
-    if (request.payload.confirmRemove === 'yes') {
-      await updateBusinessVatRemoveService(request.yar, request.auth.credentials)
+    if (payload.confirmRemove === 'yes') {
+      await updateBusinessVatRemoveService(yar, email)
     } else {
-      request.yar.clear('businessDetailsUpdate')
+      yar.clear('businessDetailsUpdate')
     }
 
     return h.redirect(`/business/${sbi}/details`)

@@ -33,12 +33,12 @@ const { updateBusinessVatChangeService } = await import('../../../../src/service
 
 describe('updateBusinessVatChangeService', () => {
   let yar
-  let credentials
+  let email
 
   beforeEach(() => {
     vi.clearAllMocks()
 
-    credentials = { email: 'test.user@defra.gov.uk' }
+    email = 'test.user@defra.gov.uk'
 
     yar = {
       clear: vi.fn()
@@ -51,29 +51,29 @@ describe('updateBusinessVatChangeService', () => {
   })
 
   test('fetches the pending VAT change from session', async () => {
-    await updateBusinessVatChangeService(yar, credentials)
+    await updateBusinessVatChangeService(yar, email)
 
-    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, credentials, 'changeBusinessVat')
+    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, email, 'changeBusinessVat')
   })
 
   test('persists the updated VAT number via the DAL', async () => {
-    await updateBusinessVatChangeService(yar, credentials)
+    await updateBusinessVatChangeService(yar, email)
 
     expect(mockUpdateDalService).toHaveBeenCalledWith(
       'update-business-vat-mutation',
       { input: { vat: 'GB987654321', sbi: '107183280' } },
-      credentials.email
+      email
     )
   })
 
   test('clears the cached business details from session', async () => {
-    await updateBusinessVatChangeService(yar, credentials)
+    await updateBusinessVatChangeService(yar, email)
 
     expect(yar.clear).toHaveBeenCalledWith('businessDetailsUpdate')
   })
 
   test('displays a success flash notification', async () => {
-    await updateBusinessVatChangeService(yar, credentials)
+    await updateBusinessVatChangeService(yar, email)
 
     expect(mockFlashNotification).toHaveBeenCalledWith(yar, 'Success', 'You have updated your VAT registration number')
   })
@@ -84,7 +84,7 @@ describe('updateBusinessVatChangeService', () => {
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {
-      await updateBusinessVatChangeService(yar, credentials)
+      await updateBusinessVatChangeService(yar, email)
 
       expect(mockUpdateDalService).not.toHaveBeenCalled()
       expect(yar.clear).not.toHaveBeenCalled()
@@ -98,7 +98,7 @@ describe('updateBusinessVatChangeService', () => {
     })
 
     test('propagates the error and leaves the session intact', async () => {
-      await expect(updateBusinessVatChangeService(yar, credentials)).rejects.toThrow('DAL error from mutation')
+      await expect(updateBusinessVatChangeService(yar, email)).rejects.toThrow('DAL error from mutation')
 
       expect(yar.clear).not.toHaveBeenCalled()
       expect(mockFlashNotification).not.toHaveBeenCalled()

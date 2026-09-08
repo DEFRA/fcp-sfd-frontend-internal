@@ -13,13 +13,13 @@ const { fetchBusinessChangeService } = await import('../../../../src/services/bu
 
 describe('fetchBusinessChangeService', () => {
   let yar
-  let credentials
+  let email
   let businessDetails
 
   beforeEach(() => {
     vi.clearAllMocks()
 
-    credentials = { email: 'test.user@defra.gov.uk' }
+    email = 'test.user@defra.gov.uk'
     businessDetails = { info: { sbi: '106705779' }, contact: { email: 'old@example.com' } }
 
     yar = {
@@ -30,7 +30,7 @@ describe('fetchBusinessChangeService', () => {
   })
 
   test('fetches business details using the sbi from session and email from credentials', async () => {
-    await fetchBusinessChangeService(yar, credentials, 'changeBusinessEmail')
+    await fetchBusinessChangeService(yar, email, 'changeBusinessEmail')
 
     expect(yar.get).toHaveBeenCalledWith('businessDetailsUpdate')
     expect(mockFetchBusinessDetailsService).toHaveBeenCalledWith('106705779', 'test.user@defra.gov.uk')
@@ -39,7 +39,7 @@ describe('fetchBusinessChangeService', () => {
   test('merges a single in-progress change field from session into the details', async () => {
     yar.get.mockReturnValue({ sbi: '106705779', changeBusinessEmail: 'new@example.com' })
 
-    const result = await fetchBusinessChangeService(yar, credentials, 'changeBusinessEmail')
+    const result = await fetchBusinessChangeService(yar, email, 'changeBusinessEmail')
 
     expect(result.changeBusinessEmail).toBe('new@example.com')
   })
@@ -51,7 +51,7 @@ describe('fetchBusinessChangeService', () => {
       changeBusinessName: 'New Name'
     })
 
-    const result = await fetchBusinessChangeService(yar, credentials, ['changeBusinessEmail', 'changeBusinessName'])
+    const result = await fetchBusinessChangeService(yar, email, ['changeBusinessEmail', 'changeBusinessName'])
 
     expect(result.changeBusinessEmail).toBe('new@example.com')
     expect(result.changeBusinessName).toBe('New Name')
@@ -60,7 +60,7 @@ describe('fetchBusinessChangeService', () => {
   test('does not add a field when it is not present in session', async () => {
     yar.get.mockReturnValue({ sbi: '106705779' })
 
-    const result = await fetchBusinessChangeService(yar, credentials, 'changeBusinessEmail')
+    const result = await fetchBusinessChangeService(yar, email, 'changeBusinessEmail')
 
     expect(result.changeBusinessEmail).toBeUndefined()
   })
@@ -68,7 +68,7 @@ describe('fetchBusinessChangeService', () => {
   test('defaults to an empty session object when nothing is stored', async () => {
     yar.get.mockReturnValue(undefined)
 
-    await fetchBusinessChangeService(yar, credentials, 'changeBusinessEmail')
+    await fetchBusinessChangeService(yar, email, 'changeBusinessEmail')
 
     expect(mockFetchBusinessDetailsService).toHaveBeenCalledWith(undefined, 'test.user@defra.gov.uk')
   })

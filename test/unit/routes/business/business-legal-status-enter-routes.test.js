@@ -59,7 +59,7 @@ describe('business legal status enter', () => {
     test('it calls fetchBusinessChangeService with credentials and the legal status session fields', async () => {
       await getBusinessLegalStatusEnter.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, [
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email, [
         'changeBusinessLegalStatus',
         'changeBusinessCharityCommissionRegistrationNumber',
         'changeBusinessCompanyRegistrationNumber'

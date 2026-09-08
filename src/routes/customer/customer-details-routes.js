@@ -12,11 +12,11 @@ const getCustomerDetails = {
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
+    const email = auth.credentials?.email
 
     yar.clear('personalDetailsUpdate')
     yar.clear('personalDetailsValidation')
 
-    const email = auth.credentials?.email
     const personalDetails = await fetchPersonalDetailsService(crn, email)
     const { hasValidPersonalDetails, sectionsNeedingUpdate } = validatePersonalDetailsService(personalDetails)
 

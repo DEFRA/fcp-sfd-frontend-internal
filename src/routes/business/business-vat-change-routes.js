@@ -13,10 +13,11 @@ const getBusinessVatChange = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
-    const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
+    const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessVat')
     const pageData = businessVatChangePresenter(businessDetails)
 
     return h.view('business/business-vat-registration-number-change', pageData)
@@ -35,18 +36,20 @@ const postBusinessVatChange = {
       },
       failAction: async (request, h, err) => {
         const { yar, auth, payload } = request
+        const email = auth.credentials?.email
 
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
+        const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessVat')
         const pageData = businessVatChangePresenter(businessDetails, payload.vatNumber)
 
         return h.view('business/business-vat-registration-number-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
       }
     },
     handler: async (request, h) => {
-      const { sbi } = request.params
+      const { params, yar, payload } = request
+      const { sbi } = params
 
-      setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessVat', request.payload.vatNumber)
+      setSessionData(yar, 'businessDetailsUpdate', 'changeBusinessVat', payload.vatNumber)
 
       return h.redirect(`/business/${sbi}/business-vat-registration-number-check`)
     }

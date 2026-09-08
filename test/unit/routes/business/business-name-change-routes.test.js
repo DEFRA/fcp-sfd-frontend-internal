@@ -72,7 +72,7 @@ describe('business name change routes', () => {
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessNameChange.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessName')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email, 'changeBusinessName')
       expect(businessNameChangePresenter).toHaveBeenCalledWith(businessDetails)
       expect(h.view).toHaveBeenCalledWith('business/business-name-change', pageData)
     })

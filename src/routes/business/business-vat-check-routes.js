@@ -12,10 +12,11 @@ const getBusinessVatCheck = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
-    const businessVatChange = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessVat')
+    const businessVatChange = await fetchBusinessChangeService(yar, email, 'changeBusinessVat')
     const pageData = businessVatCheckPresenter(businessVatChange)
 
     return h.view('business/business-vat-registration-number-check', pageData)
@@ -31,8 +32,9 @@ const postBusinessVatCheck = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    await updateBusinessVatChangeService(yar, auth.credentials)
+    await updateBusinessVatChangeService(yar, email)
 
     return h.redirect(`/business/${sbi}/details`)
   }

@@ -13,6 +13,7 @@ const getBusinessLegalStatusChange = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
     // Any previously entered registration number belongs to a legal status the user may now be changing away from
     const sessionData = { ...yar.get('businessDetailsUpdate') }
@@ -21,7 +22,7 @@ const getBusinessLegalStatusChange = {
 
     yar.set('businessDetailsUpdate', { ...sessionData, sbi })
 
-    const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessLegalStatus')
+    const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessLegalStatus')
     const pageData = businessLegalStatusChangePresenter(businessDetails)
 
     return h.view('business/business-legal-status-change', pageData)
@@ -40,9 +41,10 @@ const postBusinessLegalStatusChange = {
       },
       failAction: async (request, h, err) => {
         const { yar, auth, payload } = request
+        const email = auth.credentials?.email
 
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessLegalStatus')
+        const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessLegalStatus')
         const pageData = businessLegalStatusChangePresenter(businessDetails, payload.businessLegalStatus)
 
         return h.view('business/business-legal-status-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
@@ -50,10 +52,11 @@ const postBusinessLegalStatusChange = {
     }
   },
   handler: async (request, h) => {
-    const { sbi } = request.params
-    const { businessLegalStatus } = request.payload
+    const { params, yar, payload } = request
+    const { sbi } = params
+    const { businessLegalStatus } = payload
 
-    setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessLegalStatus', businessLegalStatus)
+    setSessionData(yar, 'businessDetailsUpdate', 'changeBusinessLegalStatus', businessLegalStatus)
 
     // Only these statuses require a registration number, so route the rest straight to the check page
     const requiresRegistrationNumber = [

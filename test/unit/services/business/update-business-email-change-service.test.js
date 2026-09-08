@@ -33,12 +33,12 @@ const { updateBusinessEmailChangeService } = await import('../../../../src/servi
 
 describe('updateBusinessEmailChangeService', () => {
   let yar
-  let credentials
+  let email
 
   beforeEach(() => {
     vi.clearAllMocks()
 
-    credentials = { email: 'test.user@defra.gov.uk' }
+    email = 'test.user@defra.gov.uk'
 
     yar = {
       clear: vi.fn()
@@ -51,29 +51,29 @@ describe('updateBusinessEmailChangeService', () => {
   })
 
   test('fetches the pending business email change from session', async () => {
-    await updateBusinessEmailChangeService(yar, credentials)
+    await updateBusinessEmailChangeService(yar, email)
 
-    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, credentials, 'changeBusinessEmail')
+    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, email, 'changeBusinessEmail')
   })
 
   test('persists the updated email via the DAL', async () => {
-    await updateBusinessEmailChangeService(yar, credentials)
+    await updateBusinessEmailChangeService(yar, email)
 
     expect(mockUpdateDalService).toHaveBeenCalledWith(
       'update-business-email-mutation',
       { input: { email: { address: 'new@example.com' }, sbi: '107183280' } },
-      credentials.email
+      email
     )
   })
 
   test('clears the cached business details from session', async () => {
-    await updateBusinessEmailChangeService(yar, credentials)
+    await updateBusinessEmailChangeService(yar, email)
 
     expect(yar.clear).toHaveBeenCalledWith('businessDetailsUpdate')
   })
 
   test('displays a success flash notification', async () => {
-    await updateBusinessEmailChangeService(yar, credentials)
+    await updateBusinessEmailChangeService(yar, email)
 
     expect(mockFlashNotification).toHaveBeenCalledWith(yar, 'Success', 'You have updated your business email address')
   })
@@ -84,7 +84,7 @@ describe('updateBusinessEmailChangeService', () => {
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {
-      await updateBusinessEmailChangeService(yar, credentials)
+      await updateBusinessEmailChangeService(yar, email)
 
       expect(mockUpdateDalService).not.toHaveBeenCalled()
       expect(yar.clear).not.toHaveBeenCalled()

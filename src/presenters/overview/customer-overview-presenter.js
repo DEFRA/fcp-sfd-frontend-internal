@@ -8,25 +8,25 @@ import { buildEntityBreadcrumbs } from '../base-presenter.js'
 import { CUSTOMER_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
-const customerOverviewPresenter = (customerDetails, page) => {
-  const businesses = customerDetails?.businesses ?? []
+const customerOverviewPresenter = (data, page) => {
+  const businesses = data?.businesses ?? []
 
   const { sortedBusinesses, totalBusinesses } = sortAndCountBusinesses(businesses)
   const requestedPageNumber = normalisePageNumber(page)
   const currentPage = clampPageNumber(requestedPageNumber, totalBusinesses)
   const pagedBusinesses = paginateBusinesses(sortedBusinesses, currentPage)
-  const routeURL = `/customer/${customerDetails?.info?.crn}`
+  const routeURL = `/customer/${data?.info?.crn}`
 
   const pagination = paginationPresenter(totalBusinesses, currentPage, routeURL, pagedBusinesses.length, 'businesses')
 
   return {
-    customerName: customerDetails?.info?.customerName || '',
-    personalDetailsLink: customerDetails?.info?.crn ? `/customer/${customerDetails.info.crn}/details` : SEARCH_CRN,
-    crn: customerDetails?.info?.crn || '',
+    customerName: data?.info?.customerName || '',
+    personalDetailsLink: data?.info?.crn ? `/customer/${data.info.crn}/details` : SEARCH_CRN,
+    crn: data?.info?.crn || '',
     hasBusinesses: totalBusinesses > 0,
     businesses: formatBusinesses(pagedBusinesses),
     pagination,
-    breadcrumbs: buildEntityBreadcrumbs('crn', customerDetails?.info?.crn, customerDetails?.info?.customerName)
+    breadcrumbs: buildEntityBreadcrumbs('crn', data?.info?.crn, data?.info?.customerName)
   }
 }
 

@@ -6,7 +6,7 @@
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
-const personalFixCheckPresenter = (personalDetails, crn) => {
+const personalFixCheckPresenter = (data, crn) => {
   const {
     orderedSectionsToFix,
     changePersonalName,
@@ -14,13 +14,13 @@ const personalFixCheckPresenter = (personalDetails, crn) => {
     changePersonalEmail,
     changePersonalAddress,
     changePersonalPhoneNumbers
-  } = personalDetails
+  } = data
 
   return {
     backLink: crn ? `/customer/${crn}/details/fix-list` : SEARCH_CRN,
     pageTitle: 'Check your details are correct before submitting',
     metaDescription: 'Check your details are correct before submitting',
-    userName: personalDetails.info?.userName ?? null,
+    userName: data.info?.userName ?? null,
     crn: crn ?? null,
     changeLink: `/customer/${crn}/details/fix-list`,
     sections: orderedSectionsToFix,

@@ -24,7 +24,7 @@ describe('businessLegalStatusEnterPresenter', () => {
       expect(result.backLink).toEqual('/business/106705779/business-legal-status-change')
       expect(result.pageTitle).toBe('Enter the charity commission registration number')
       expect(result.metaDescription).toBe('Enter the Charity Commission registration number for this business.')
-      expect(result.hintText).toBe('This is 7 or 8 numbers, for example, 12345678.')
+      expect(result.hintText).toBe('This is 6 to 8 numbers, for example, 12345678.')
       expect(result.field).toBe('charityCommissionRegistrationNumber')
     })
 

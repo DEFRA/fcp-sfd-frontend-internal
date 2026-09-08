@@ -8,7 +8,7 @@ import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const REGISTRATION_CONTENT = {
   charity: {
-    hintText: 'This is 7 or 8 numbers, for example, 12345678.',
+    hintText: 'This is 6 to 8 numbers, for example, 12345678.',
     pageTitle: 'Enter the charity commission registration number',
     metaDescription: 'Enter the Charity Commission registration number for this business.',
     field: 'charityCommissionRegistrationNumber'

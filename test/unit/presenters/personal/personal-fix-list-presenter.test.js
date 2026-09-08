@@ -6,11 +6,11 @@ import { personalFixListPresenter } from '../../../../src/presenters/personal/pe
 
 describe('personalFixListPresenter', () => {
   const crn = '123456'
-  let personalDetails
+  let data
   let payload
 
   beforeEach(() => {
-    personalDetails = {
+    data = {
       source: 'phone',
       orderedSectionsToFix: ['name', 'dob', 'address', 'phone', 'email'],
       info: {
@@ -37,7 +37,7 @@ describe('personalFixListPresenter', () => {
 
   describe('when provided with personal fix list data', () => {
     test('it correctly presents the data', () => {
-      const result = personalFixListPresenter(personalDetails, payload, crn)
+      const result = personalFixListPresenter(data, payload, crn)
 
       expect(result).toEqual({
         backLink: `/customer/${crn}/details/fix?source=phone`,
@@ -67,13 +67,13 @@ describe('personalFixListPresenter', () => {
 
   describe('the "backLink" property', () => {
     test('it includes the crn and source in the URL', () => {
-      const result = personalFixListPresenter(personalDetails, payload, crn)
+      const result = personalFixListPresenter(data, payload, crn)
 
       expect(result.backLink).toEqual(`/customer/${crn}/details/fix?source=phone`)
     })
 
     test('it falls back to the search page when the crn is missing', () => {
-      const result = personalFixListPresenter(personalDetails, payload, undefined)
+      const result = personalFixListPresenter(data, payload, undefined)
 
       expect(result.backLink).toEqual('/search-crn')
     })
@@ -90,7 +90,7 @@ describe('personalFixListPresenter', () => {
       })
 
       test('it should return the payload as the "name" property', () => {
-        const result = personalFixListPresenter(personalDetails, payload, crn)
+        const result = personalFixListPresenter(data, payload, crn)
 
         expect(result.name).toEqual({
           first: 'New',
@@ -102,7 +102,7 @@ describe('personalFixListPresenter', () => {
 
     describe('when provided with changed personal name data', () => {
       beforeEach(() => {
-        personalDetails.changePersonalName = {
+        data.changePersonalName = {
           first: 'Changed',
           middle: 'Person',
           last: 'Name'
@@ -110,7 +110,7 @@ describe('personalFixListPresenter', () => {
       })
 
       test('it should return the changed personal name as the "name" property', () => {
-        const result = personalFixListPresenter(personalDetails, payload, crn)
+        const result = personalFixListPresenter(data, payload, crn)
 
         expect(result.name).toEqual({
           first: 'Changed',
@@ -132,7 +132,7 @@ describe('personalFixListPresenter', () => {
       })
 
       test('it should return the payload as the "dateOfBirth" property', () => {
-        const result = personalFixListPresenter(personalDetails, payload, crn)
+        const result = personalFixListPresenter(data, payload, crn)
 
         expect(result.dateOfBirth).toEqual({
           day: '10',
@@ -144,7 +144,7 @@ describe('personalFixListPresenter', () => {
 
     describe('when provided with changed date of birth data', () => {
       beforeEach(() => {
-        personalDetails.changePersonalDob = {
+        data.changePersonalDob = {
           day: '5',
           month: '6',
           year: '1985'
@@ -152,7 +152,7 @@ describe('personalFixListPresenter', () => {
       })
 
       test('it should return the changed date of birth as the "dateOfBirth" property', () => {
-        const result = personalFixListPresenter(personalDetails, payload, crn)
+        const result = personalFixListPresenter(data, payload, crn)
 
         expect(result.dateOfBirth).toEqual({
           day: '5',
@@ -178,7 +178,7 @@ describe('personalFixListPresenter', () => {
       })
 
       test('it should return the payload as the "address" property', () => {
-        const result = personalFixListPresenter(personalDetails, payload, crn)
+        const result = personalFixListPresenter(data, payload, crn)
 
         expect(result.address).toEqual({
           address1: '1 Test Street',
@@ -194,7 +194,7 @@ describe('personalFixListPresenter', () => {
 
     describe('when provided with changed personal address data', () => {
       beforeEach(() => {
-        personalDetails.changePersonalAddress = {
+        data.changePersonalAddress = {
           address1: '2 Changed Road',
           address2: 'Changed Area',
           address3: '',
@@ -206,7 +206,7 @@ describe('personalFixListPresenter', () => {
       })
 
       test('it should return the changed personal address as the "address" property', () => {
-        const result = personalFixListPresenter(personalDetails, payload, crn)
+        const result = personalFixListPresenter(data, payload, crn)
 
         expect(result.address).toEqual({
           address1: '2 Changed Road',
@@ -222,12 +222,12 @@ describe('personalFixListPresenter', () => {
 
     describe('when no payload and no changed address is provided', () => {
       beforeEach(() => {
-        delete personalDetails.changePersonalAddress
+        delete data.changePersonalAddress
         payload = null
       })
 
       test('it should return null as the "address" property', () => {
-        const result = personalFixListPresenter(personalDetails, payload, crn)
+        const result = personalFixListPresenter(data, payload, crn)
 
         expect(result.address).toBeNull()
       })
@@ -247,7 +247,7 @@ describe('personalFixListPresenter', () => {
     })
 
     test('it sorts errors by section and field order', () => {
-      const result = personalFixListPresenter(personalDetails, payload, crn, errors)
+      const result = personalFixListPresenter(data, payload, crn, errors)
 
       expect(result.errors).toEqual([
         { field: 'first', message: 'Enter your first name' },

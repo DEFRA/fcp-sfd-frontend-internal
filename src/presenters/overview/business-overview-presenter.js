@@ -7,26 +7,26 @@ import { paginationPresenter } from '../pagination-presenter.js'
 import { buildEntityBreadcrumbs } from '../base-presenter.js'
 import { BUSINESS_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 
-const businessOverviewPresenter = (businessDetails, page) => {
-  const customers = businessDetails?.customers ?? []
+const businessOverviewPresenter = (data, page) => {
+  const customers = data?.customers ?? []
 
   const { sortedCustomers, totalCustomers } = sortAndCountCustomers(customers)
   const requestedPageNumber = normalisePageNumber(page)
   const currentPage = clampPageNumber(requestedPageNumber, totalCustomers)
   const pagedCustomers = paginateCustomers(sortedCustomers, currentPage)
-  const routeURL = `/business/${businessDetails?.sbi}`
+  const routeURL = `/business/${data?.sbi}`
 
   const pagination = paginationPresenter(totalCustomers, currentPage, routeURL, pagedCustomers.length, 'customers')
 
   return {
     pageTitle: 'Business overview',
-    sbi: businessDetails?.sbi || '',
-    businessName: businessDetails?.businessName || '',
-    businessDetailsLink: `/business/${businessDetails?.sbi}/details`,
+    sbi: data?.sbi || '',
+    businessName: data?.businessName || '',
+    businessDetailsLink: `/business/${data?.sbi}/details`,
     hasCustomers: totalCustomers > 0,
     customers: formatCustomers(pagedCustomers),
     pagination,
-    breadcrumbs: buildEntityBreadcrumbs('sbi', businessDetails?.sbi, businessDetails?.businessName)
+    breadcrumbs: buildEntityBreadcrumbs('sbi', data?.sbi, data?.businessName)
   }
 }
 

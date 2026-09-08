@@ -1,4 +1,5 @@
-{% macro appBackSignOutLink(href) %}
+{# sendReferrer must only be set on pages whose back link needs the Referer header to chain correctly (e.g. footer pages) - it overrides the site-wide no-referrer policy #}
+{% macro appBackSignOutLink(href, sendReferrer=false) %}
   {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
   <div class="govuk-grid-row sub-header-container govuk-!-padding-top-3">
@@ -7,7 +8,8 @@
         {{ govukBackLink({
           text: "Back",
           href: href,
-          classes: "govuk-!-margin-top-0"
+          classes: "govuk-!-margin-top-0",
+          attributes: { referrerpolicy: "same-origin" } if sendReferrer else {}
         }) }}
       </div>
     {% endif %}

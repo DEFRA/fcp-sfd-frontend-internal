@@ -13,10 +13,11 @@ const getBusinessEmailChange = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
-    const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessEmail')
+    const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessEmail')
     const pageData = businessEmailChangePresenter(businessDetails)
 
     return h.view('business/business-email-change', pageData)
@@ -35,18 +36,20 @@ const postBusinessEmailChange = {
       },
       failAction: async (request, h, err) => {
         const { yar, auth, payload } = request
+        const email = auth.credentials?.email
 
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessEmail')
+        const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessEmail')
         const pageData = businessEmailChangePresenter(businessDetails, payload.businessEmail)
 
         return h.view('business/business-email-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
       }
     },
     handler: async (request, h) => {
-      const { sbi } = request.params
+      const { params, yar, payload } = request
+      const { sbi } = params
 
-      setSessionData(request.yar, 'businessDetailsUpdate', 'changeBusinessEmail', request.payload.businessEmail)
+      setSessionData(yar, 'businessDetailsUpdate', 'changeBusinessEmail', payload.businessEmail)
 
       return h.redirect(`/business/${sbi}/business-email-check`)
     }

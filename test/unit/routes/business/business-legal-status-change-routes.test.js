@@ -55,7 +55,7 @@ describe('business legal status change', () => {
     test('it calls fetchBusinessChangeService with credentials and changeBusinessLegalStatus', async () => {
       await getBusinessLegalStatusChange.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessLegalStatus')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email, 'changeBusinessLegalStatus')
     })
 
     test('should render business-legal-status-change view with page data', async () => {

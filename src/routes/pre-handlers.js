@@ -116,8 +116,9 @@ export const validateLegalStatusRegistrationNumber = {
   method: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    const businessDetails = await fetchBusinessChangeService(yar, auth.credentials, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
+    const businessDetails = await fetchBusinessChangeService(yar, email, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
 
     const legalStatusCode = resolveLegalStatusCode(businessDetails)
 

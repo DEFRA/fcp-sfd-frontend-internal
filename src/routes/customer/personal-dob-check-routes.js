@@ -12,8 +12,8 @@ const getPersonalDobCheck = {
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
-
     const email = auth.credentials?.email
+
     const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalDob')
     const pageData = personalDobCheckPresenter(personalDetails, crn)
 
@@ -30,8 +30,8 @@ const postPersonalDobCheck = {
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
-
     const email = auth.credentials?.email
+
     await updatePersonalDobChangeService(yar, crn, email)
 
     return h.redirect(`/customer/${crn}/details`)

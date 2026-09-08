@@ -72,7 +72,7 @@ describe('business phone numbers change routes', () => {
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessPhoneNumbersChange.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessPhoneNumbers')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email, 'changeBusinessPhoneNumbers')
       expect(businessPhoneNumbersChangePresenter).toHaveBeenCalledWith(businessDetails)
       expect(h.view).toHaveBeenCalledWith('business/business-phone-numbers-change', pageData)
     })
@@ -108,7 +108,7 @@ describe('business phone numbers change routes', () => {
 
       await postBusinessPhoneNumbersChange.options.validate.failAction(request, h, err)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessPhoneNumbers')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email, 'changeBusinessPhoneNumbers')
       expect(businessPhoneNumbersChangePresenter).toHaveBeenCalledWith(businessDetails, request.payload)
     })
 

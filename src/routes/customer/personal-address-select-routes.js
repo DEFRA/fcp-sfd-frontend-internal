@@ -14,8 +14,8 @@ const getPersonalAddressSelect = {
   handler: async (request, h) => {
     const { yar, auth, params } = request
     const { crn } = params
-
     const email = auth.credentials?.email
+
     const personalDetails = await fetchPersonalChangeService(yar, crn, email, ['changePersonalPostcode', 'changePersonalAddresses', 'changePersonalAddress'])
 
     if (!personalDetails.changePersonalPostcode || !personalDetails.changePersonalAddresses) {

@@ -8,12 +8,12 @@ import { fetchBusinessDetailsService } from './fetch-business-details-service.js
  * the fresh business details with that new name included (changeBusinessName).
  *
  * @param {object} yar - The hapi `request.yar` object
- * @param {object} credentials - The user's credentials
+ * @param {string} email - The authenticated user's email
  * @param {string|string[]} fields - The input field(s) the user has updated that we want to fetch (if exists)
  */
-const fetchBusinessChangeService = async (yar, credentials, fields) => {
+const fetchBusinessChangeService = async (yar, email, fields) => {
   const sessionData = yar.get('businessDetailsUpdate') || {}
-  const businessDetails = await fetchBusinessDetailsService(sessionData.sbi, credentials.email)
+  const businessDetails = await fetchBusinessDetailsService(sessionData.sbi, email)
 
   // Normalize to array
   const fieldsToCheck = Array.isArray(fields) ? fields : [fields]

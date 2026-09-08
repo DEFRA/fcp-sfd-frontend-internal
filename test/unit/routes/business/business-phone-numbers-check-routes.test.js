@@ -68,7 +68,7 @@ describe('business phone numbers check routes', () => {
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessPhoneNumbersCheck.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessPhoneNumbers')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email, 'changeBusinessPhoneNumbers')
       expect(businessPhoneNumbersCheckPresenter).toHaveBeenCalledWith(businessPhoneNumbersChange)
       expect(h.view).toHaveBeenCalledWith('business/business-phone-numbers-check', pageData)
     })
@@ -118,7 +118,7 @@ describe('business phone numbers check routes', () => {
     test('updates the phone numbers and redirects to the business details page for the sbi', async () => {
       await postBusinessPhoneNumbersCheck.handler(request, h)
 
-      expect(updateBusinessPhoneNumbersChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials)
+      expect(updateBusinessPhoneNumbersChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email)
       expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
     })
 

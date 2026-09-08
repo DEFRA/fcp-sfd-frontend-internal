@@ -17,8 +17,8 @@ import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 import { BUSINESS_LEGAL_STATUS_SESSION_FIELDS } from '../../constants/business-legal-status-session-fields.js'
 
-const updateBusinessLegalStatusChangeService = async (yar, credentials) => {
-  const businessDetails = await fetchBusinessChangeService(yar, credentials, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
+const updateBusinessLegalStatusChangeService = async (yar, email) => {
+  const businessDetails = await fetchBusinessChangeService(yar, email, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
 
   const legalStatusChanged = Boolean(businessDetails.changeBusinessLegalStatus)
 
@@ -64,14 +64,14 @@ const updateBusinessLegalStatusChangeService = async (yar, credentials) => {
       }
     }
 
-    const legalStatusResponse = await updateDalService(mutations.updateBusinessLegalStatus, legalStatusVariables, credentials.email)
+    const legalStatusResponse = await updateDalService(mutations.updateBusinessLegalStatus, legalStatusVariables, email)
     assertMutationSuccess(legalStatusResponse, 'updateBusinessLegalStatus')
   }
 
   const registrationNumbersResponse = await updateDalService(
     mutations.updateBusinessRegistrationNumbers,
     registrationNumbersVariables,
-    credentials.email
+    email
   )
   assertMutationSuccess(registrationNumbersResponse, 'updateBusinessRegistrationNumbers')
 

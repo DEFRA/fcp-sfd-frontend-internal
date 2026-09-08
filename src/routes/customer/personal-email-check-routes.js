@@ -12,8 +12,8 @@ const getPersonalEmailCheck = {
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
-
     const email = auth.credentials?.email
+
     const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalEmail')
     const pageData = personalEmailCheckPresenter(personalDetails, crn)
 
@@ -30,8 +30,8 @@ const postPersonalEmailCheck = {
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
-
     const email = auth.credentials?.email
+
     await updatePersonalEmailChangeService(yar, crn, email)
 
     return h.redirect(`/customer/${crn}/details`)

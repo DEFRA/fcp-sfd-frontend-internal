@@ -11,8 +11,9 @@ const getBusinessAddressCheck = {
   },
   handler: async (request, h) => {
     const { yar, auth } = request
+    const email = auth.credentials?.email
 
-    const businessAddressChange = await fetchBusinessChangeService(yar, auth.credentials, 'changeBusinessAddress')
+    const businessAddressChange = await fetchBusinessChangeService(yar, email, 'changeBusinessAddress')
     const pageData = businessAddressCheckPresenter(businessAddressChange)
 
     return h.view('business/business-address-check', pageData)
@@ -28,8 +29,9 @@ const postBusinessAddressCheck = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    await updateBusinessAddressChangeService(yar, auth.credentials)
+    await updateBusinessAddressChangeService(yar, email)
 
     return h.redirect(`/business/${sbi}/details`)
   }

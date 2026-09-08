@@ -61,7 +61,7 @@ describe('business email check routes', () => {
     test('fetches the business change details, presents them and renders the page', async () => {
       await getBusinessEmailCheck.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials, 'changeBusinessEmail')
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email, 'changeBusinessEmail')
       expect(businessEmailCheckPresenter).toHaveBeenCalledWith(businessEmailChange)
       expect(h.view).toHaveBeenCalledWith('business/business-email-check', pageData)
     })
@@ -82,7 +82,7 @@ describe('business email check routes', () => {
     test('updates the email and redirects to the business details page for the sbi', async () => {
       await postBusinessEmailCheck.handler(request, h)
 
-      expect(updateBusinessEmailChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials)
+      expect(updateBusinessEmailChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email)
       expect(h.redirect).toHaveBeenCalledWith('/business/106705779/details')
     })
   })

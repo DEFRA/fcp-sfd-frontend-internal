@@ -15,8 +15,8 @@ const getPersonalAddressChange = {
   handler: async (request, h) => {
     const { yar, auth, params } = request
     const { crn } = params
-
     const email = auth.credentials?.email
+
     const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalPostcode')
     const pageData = personalAddressChangePresenter(personalDetails)
 
@@ -36,6 +36,7 @@ const postPersonalAddressChange = {
         const { yar, auth, payload, params } = request
         const { crn } = params
         const email = auth.credentials?.email
+
         const pageData = await personalAddressChangeErrorService(yar, crn, email, payload.postcode, err.details)
 
         return h.view('personal/personal-address-change', pageData).code(constants.statusCodes.BAD_REQUEST).takeover()

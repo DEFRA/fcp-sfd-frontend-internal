@@ -12,8 +12,8 @@ const getPersonalPhoneNumbersCheck = {
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
-
     const email = auth.credentials?.email
+
     const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalPhoneNumbers')
     const pageData = personalPhoneNumbersCheckPresenter(personalDetails, crn)
 
@@ -30,8 +30,8 @@ const postPersonalPhoneNumbersCheck = {
   handler: async (request, h) => {
     const { params, auth, yar } = request
     const { crn } = params
-
     const email = auth.credentials?.email
+
     await updatePersonalPhoneNumbersChangeService(yar, crn, email)
 
     return h.redirect(`/customer/${crn}/details`)

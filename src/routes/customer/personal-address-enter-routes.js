@@ -13,8 +13,8 @@ const getPersonalAddressEnter = {
   handler: async (request, h) => {
     const { yar, auth, params } = request
     const { crn } = params
-
     const email = auth.credentials?.email
+
     const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalAddress')
     const pageData = personalAddressEnterPresenter(personalDetails)
 
@@ -33,8 +33,8 @@ const postPersonalAddressEnter = {
       failAction: async (request, h, err) => {
         const { params, yar, auth, payload } = request
         const { crn } = params
-
         const email = auth.credentials?.email
+
         const errors = utils.formatValidationErrors(err.details || [])
         const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalAddress')
         const pageData = personalAddressEnterPresenter(personalDetails, payload)

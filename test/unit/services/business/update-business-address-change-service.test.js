@@ -23,12 +23,12 @@ const { updateBusinessAddressChangeService } = await import('../../../../src/ser
 
 describe('updateBusinessAddressChangeService', () => {
   let yar
-  let credentials
+  let email
 
   beforeEach(() => {
     vi.clearAllMocks()
 
-    credentials = { email: 'test.user@defra.gov.uk' }
+    email = 'test.user@defra.gov.uk'
 
     yar = {
       clear: vi.fn()
@@ -46,23 +46,23 @@ describe('updateBusinessAddressChangeService', () => {
   })
 
   test('fetches the pending business address change from session', async () => {
-    await updateBusinessAddressChangeService(yar, credentials)
+    await updateBusinessAddressChangeService(yar, email)
 
-    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, credentials, 'changeBusinessAddress')
+    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, email, 'changeBusinessAddress')
   })
 
   test('persists the updated address via the DAL', async () => {
-    await updateBusinessAddressChangeService(yar, credentials)
+    await updateBusinessAddressChangeService(yar, email)
 
     expect(mockUpdateDalService).toHaveBeenCalledWith(
       expect.any(String),
       expect.any(Object),
-      credentials.email
+      email
     )
   })
 
   test('builds the correct mutation variables for manual address entry', async () => {
-    await updateBusinessAddressChangeService(yar, credentials)
+    await updateBusinessAddressChangeService(yar, email)
 
     const variables = mockUpdateDalService.mock.calls[0][1]
     expect(variables.input.sbi).toBe('107183280')
@@ -82,7 +82,7 @@ describe('updateBusinessAddressChangeService', () => {
       info: { sbi: '107183280' }
     })
 
-    await updateBusinessAddressChangeService(yar, credentials)
+    await updateBusinessAddressChangeService(yar, email)
 
     const variables = mockUpdateDalService.mock.calls[0][1]
     expect(variables.input.address.withUprn).toBeDefined()
@@ -90,13 +90,13 @@ describe('updateBusinessAddressChangeService', () => {
   })
 
   test('clears the cached business details from session', async () => {
-    await updateBusinessAddressChangeService(yar, credentials)
+    await updateBusinessAddressChangeService(yar, email)
 
     expect(yar.clear).toHaveBeenCalledWith('businessDetailsUpdate')
   })
 
   test('displays a success flash notification', async () => {
-    await updateBusinessAddressChangeService(yar, credentials)
+    await updateBusinessAddressChangeService(yar, email)
 
     expect(mockFlashNotification).toHaveBeenCalledWith(yar, 'Success', 'You have updated your business address')
   })
@@ -107,7 +107,7 @@ describe('updateBusinessAddressChangeService', () => {
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {
-      await updateBusinessAddressChangeService(yar, credentials)
+      await updateBusinessAddressChangeService(yar, email)
 
       expect(mockUpdateDalService).not.toHaveBeenCalled()
       expect(yar.clear).not.toHaveBeenCalled()

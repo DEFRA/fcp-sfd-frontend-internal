@@ -13,10 +13,11 @@ const getBusinessLegalStatusCheck = {
   handler: async (request, h) => {
     const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
     yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
 
-    const businessLegalStatusChange = await fetchBusinessChangeService(yar, auth.credentials, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
+    const businessLegalStatusChange = await fetchBusinessChangeService(yar, email, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
     const pageData = businessLegalStatusCheckPresenter(businessLegalStatusChange)
 
     return h.view('business/business-legal-status-check', pageData)
@@ -30,10 +31,11 @@ const postBusinessLegalStatusCheck = {
     pre: [validateSbi, validateLegalStatusRegistrationNumber]
   },
   handler: async (request, h) => {
-    const { params } = request
+    const { params, yar, auth } = request
     const { sbi } = params
+    const email = auth.credentials?.email
 
-    await updateBusinessLegalStatusChangeService(request.yar, request.auth.credentials)
+    await updateBusinessLegalStatusChangeService(yar, email)
 
     return h.redirect(`/business/${sbi}/details`)
   }

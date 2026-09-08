@@ -15,12 +15,14 @@ See `../testing/SKILL.md` for testing patterns and conventions.
 - New code has unit tests covering the happy path and key error paths.
 - Test names describe the behaviour being verified.
 - Coverage does not decrease; target is 90% minimum (SonarCloud quality gate).
+- Route handlers include tests for validation failure, CSRF, and auth where applicable.
 - Do not run the test suite as part of a review. Inspect test files and, if runtime verification is needed, ask the author to run `npm run docker:test`. Never suggest host `vitest` or `npm test`.
 
 ## 3. Security
 
 - No secrets, API keys, or tokens are committed.
 - User input is validated and sanitised.
+- Dependencies are from trusted sources with no known vulnerabilities.
 - Logging does not contain PII (names, addresses, emails, NI numbers, bank details).
 - SonarCloud security hotspots are reviewed and resolved.
 - No new vulnerabilities or code smells are introduced (SonarWay profile).

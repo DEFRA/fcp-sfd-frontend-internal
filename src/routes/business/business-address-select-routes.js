@@ -16,7 +16,7 @@ const getBusinessAddressSelect = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    const businessDetails = await fetchBusinessChangeService(yar, email, ['changeBusinessPostcode', 'changeBusinessAddresses', 'changeBusinessAddress'])
+    const businessDetails = await fetchBusinessChangeService(yar, sbi, email, ['changeBusinessPostcode', 'changeBusinessAddresses', 'changeBusinessAddress'])
 
     if (!businessDetails.changeBusinessPostcode || !businessDetails.changeBusinessAddresses) {
       return h.redirect(`/business/${sbi}/business-address-change`)
@@ -37,11 +37,12 @@ const postBusinessAddressSelect = {
       payload: schemas.osPlaces.addresses,
       options: { abortEarly: false },
       failAction: async (request, h, err) => {
-        const { yar, auth } = request
+        const { yar, auth, params } = request
+        const { sbi } = params
         const email = auth.credentials?.email
 
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessChangeService(yar, email, ['changeBusinessPostcode', 'changeBusinessAddresses'])
+        const businessDetails = await fetchBusinessChangeService(yar, sbi, email, ['changeBusinessPostcode', 'changeBusinessAddresses'])
         const pageData = businessAddressSelectPresenter(businessDetails)
 
         return h.view('business/business-address-select', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()
@@ -53,7 +54,7 @@ const postBusinessAddressSelect = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessAddresses')
+    const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessAddresses')
 
     const selectedAddress = (businessDetails.changeBusinessAddresses ?? []).find((address) => {
       // Concatenate UPRN and displayAddress to create a unique identifier.

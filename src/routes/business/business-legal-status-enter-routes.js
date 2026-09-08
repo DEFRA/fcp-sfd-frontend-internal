@@ -17,9 +17,7 @@ const getBusinessLegalStatusEnter = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessDetails = await fetchBusinessChangeService(yar, email, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
+    const businessDetails = await fetchBusinessChangeService(yar, sbi, email, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
     const pageData = businessLegalStatusEnterPresenter(businessDetails)
 
     return h.view('business/business-legal-status-enter', pageData)
@@ -37,9 +35,7 @@ const postBusinessLegalStatusEnter = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessDetails = await fetchBusinessChangeService(yar, email, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
+    const businessDetails = await fetchBusinessChangeService(yar, sbi, email, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
     const legalStatusCode = businessDetails.changeBusinessLegalStatus ?? businessDetails.info?.legalStatusCode
     const { error, value, payloadField, sessionField } = validateBusinessRegistrationNumberService(legalStatusCode, payload)
 

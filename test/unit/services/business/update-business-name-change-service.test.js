@@ -33,11 +33,13 @@ const { updateBusinessNameChangeService } = await import('../../../../src/servic
 
 describe('updateBusinessNameChangeService', () => {
   let yar
+  let sbi
   let email
 
   beforeEach(() => {
     vi.clearAllMocks()
 
+    sbi = '107183280'
     email = 'test.user@defra.gov.uk'
 
     yar = {
@@ -51,13 +53,13 @@ describe('updateBusinessNameChangeService', () => {
   })
 
   test('fetches the pending business name change from session', async () => {
-    await updateBusinessNameChangeService(yar, email)
+    await updateBusinessNameChangeService(yar, sbi, email)
 
-    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, email, 'changeBusinessName')
+    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, sbi, email, 'changeBusinessName')
   })
 
   test('persists the updated name via the DAL', async () => {
-    await updateBusinessNameChangeService(yar, email)
+    await updateBusinessNameChangeService(yar, sbi, email)
 
     expect(mockUpdateDalService).toHaveBeenCalledWith(
       'update-business-name-mutation',
@@ -67,13 +69,13 @@ describe('updateBusinessNameChangeService', () => {
   })
 
   test('clears the cached business details from session', async () => {
-    await updateBusinessNameChangeService(yar, email)
+    await updateBusinessNameChangeService(yar, sbi, email)
 
     expect(yar.clear).toHaveBeenCalledWith('businessDetailsUpdate')
   })
 
   test('displays a success flash notification', async () => {
-    await updateBusinessNameChangeService(yar, email)
+    await updateBusinessNameChangeService(yar, sbi, email)
 
     expect(mockFlashNotification).toHaveBeenCalledWith(yar, 'Success', 'You have updated your business name')
   })
@@ -84,7 +86,7 @@ describe('updateBusinessNameChangeService', () => {
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {
-      await updateBusinessNameChangeService(yar, email)
+      await updateBusinessNameChangeService(yar, sbi, email)
 
       expect(mockUpdateDalService).not.toHaveBeenCalled()
       expect(yar.clear).not.toHaveBeenCalled()
@@ -98,7 +100,7 @@ describe('updateBusinessNameChangeService', () => {
     })
 
     test('propagates the error without clearing session or notifying', async () => {
-      await expect(updateBusinessNameChangeService(yar, email)).rejects.toThrow('DAL unavailable')
+      await expect(updateBusinessNameChangeService(yar, sbi, email)).rejects.toThrow('DAL unavailable')
 
       expect(yar.clear).not.toHaveBeenCalled()
       expect(mockFlashNotification).not.toHaveBeenCalled()

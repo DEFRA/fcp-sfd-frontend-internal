@@ -67,7 +67,7 @@ describe('business address change', () => {
       test('it calls fetchBusinessChangeService with credentials and changeBusinessPostcode', async () => {
         await getBusinessAddressChange.handler(request, h)
 
-        expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email, 'changeBusinessPostcode')
+        expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, 'changeBusinessPostcode')
       })
 
       test('should render business-address-change view with page data', async () => {
@@ -127,6 +127,7 @@ describe('business address change', () => {
 
         expect(businessAddressChangeErrorService).toHaveBeenCalledWith(
           request.yar,
+          '106705779',
           request.auth.credentials.email,
           'SW1A 1AA',
           [{ message: 'Postcode not found' }]
@@ -151,6 +152,7 @@ describe('business address change', () => {
 
         expect(businessAddressChangeErrorService).toHaveBeenCalledWith(
           request.yar,
+          '106705779',
           request.auth.credentials.email,
           'SW1A 1AA',
           validationError.details

@@ -33,11 +33,13 @@ const { updateBusinessEmailChangeService } = await import('../../../../src/servi
 
 describe('updateBusinessEmailChangeService', () => {
   let yar
+  let sbi
   let email
 
   beforeEach(() => {
     vi.clearAllMocks()
 
+    sbi = '107183280'
     email = 'test.user@defra.gov.uk'
 
     yar = {
@@ -51,13 +53,13 @@ describe('updateBusinessEmailChangeService', () => {
   })
 
   test('fetches the pending business email change from session', async () => {
-    await updateBusinessEmailChangeService(yar, email)
+    await updateBusinessEmailChangeService(yar, sbi, email)
 
-    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, email, 'changeBusinessEmail')
+    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, sbi, email, 'changeBusinessEmail')
   })
 
   test('persists the updated email via the DAL', async () => {
-    await updateBusinessEmailChangeService(yar, email)
+    await updateBusinessEmailChangeService(yar, sbi, email)
 
     expect(mockUpdateDalService).toHaveBeenCalledWith(
       'update-business-email-mutation',
@@ -67,13 +69,13 @@ describe('updateBusinessEmailChangeService', () => {
   })
 
   test('clears the cached business details from session', async () => {
-    await updateBusinessEmailChangeService(yar, email)
+    await updateBusinessEmailChangeService(yar, sbi, email)
 
     expect(yar.clear).toHaveBeenCalledWith('businessDetailsUpdate')
   })
 
   test('displays a success flash notification', async () => {
-    await updateBusinessEmailChangeService(yar, email)
+    await updateBusinessEmailChangeService(yar, sbi, email)
 
     expect(mockFlashNotification).toHaveBeenCalledWith(yar, 'Success', 'You have updated your business email address')
   })
@@ -84,7 +86,7 @@ describe('updateBusinessEmailChangeService', () => {
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {
-      await updateBusinessEmailChangeService(yar, email)
+      await updateBusinessEmailChangeService(yar, sbi, email)
 
       expect(mockUpdateDalService).not.toHaveBeenCalled()
       expect(yar.clear).not.toHaveBeenCalled()

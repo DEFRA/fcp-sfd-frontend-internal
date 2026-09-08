@@ -17,8 +17,8 @@ import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 import { BUSINESS_LEGAL_STATUS_SESSION_FIELDS } from '../../constants/business-legal-status-session-fields.js'
 
-const updateBusinessLegalStatusChangeService = async (yar, email) => {
-  const businessDetails = await fetchBusinessChangeService(yar, email, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
+const updateBusinessLegalStatusChangeService = async (yar, sbi, email) => {
+  const businessDetails = await fetchBusinessChangeService(yar, sbi, email, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
 
   const legalStatusChanged = Boolean(businessDetails.changeBusinessLegalStatus)
 
@@ -39,8 +39,6 @@ const updateBusinessLegalStatusChangeService = async (yar, email) => {
   if (!legalStatusChanged && !registrationNumberChanged) {
     return
   }
-
-  const sbi = businessDetails.info.sbi
 
   const { companiesHouseNumber, charityCommissionNumber } = resolveRegistrationNumbers(businessDetails, requiresRegistrationNumber)
 

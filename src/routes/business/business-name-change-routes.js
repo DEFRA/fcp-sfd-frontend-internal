@@ -15,9 +15,7 @@ const getBusinessNameChange = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessName')
+    const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessName')
     const pageData = businessNameChangePresenter(businessDetails)
 
     return h.view('business/business-name-change', pageData)
@@ -35,11 +33,12 @@ const postBusinessNameChange = {
         abortEarly: false
       },
       failAction: async (request, h, err) => {
-        const { yar, auth, payload } = request
+        const { yar, auth, payload, params } = request
+        const { sbi } = params
         const email = auth.credentials?.email
 
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessName')
+        const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessName')
         const pageData = businessNameChangePresenter(businessDetails, payload.businessName)
 
         return h.view('business/business-name-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()

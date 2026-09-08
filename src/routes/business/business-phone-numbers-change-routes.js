@@ -15,9 +15,7 @@ const getBusinessPhoneNumbersChange = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessPhoneNumbers')
+    const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessPhoneNumbers')
     const pageData = businessPhoneNumbersChangePresenter(businessDetails)
 
     return h.view('business/business-phone-numbers-change', pageData)
@@ -35,11 +33,12 @@ const postBusinessPhoneNumbersChange = {
         abortEarly: false
       },
       failAction: async (request, h, err) => {
-        const { yar, auth, payload } = request
+        const { yar, auth, payload, params } = request
+        const { sbi } = params
         const email = auth.credentials?.email
 
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessPhoneNumbers')
+        const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessPhoneNumbers')
         const pageData = businessPhoneNumbersChangePresenter(businessDetails, payload)
 
         return h.view('business/business-phone-numbers-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()

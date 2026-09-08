@@ -14,9 +14,7 @@ const getBusinessNameCheck = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessNameChange = await fetchBusinessChangeService(yar, email, 'changeBusinessName')
+    const businessNameChange = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessName')
     const pageData = businessNameCheckPresenter(businessNameChange)
 
     return h.view('business/business-name-check', pageData)
@@ -34,9 +32,7 @@ const postBusinessNameCheck = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    await updateBusinessNameChangeService(yar, email)
+    await updateBusinessNameChangeService(yar, sbi, email)
 
     return h.redirect(`/business/${sbi}/details`)
   }

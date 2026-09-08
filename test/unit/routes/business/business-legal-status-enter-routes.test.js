@@ -59,17 +59,11 @@ describe('business legal status enter', () => {
     test('it calls fetchBusinessChangeService with credentials and the legal status session fields', async () => {
       await getBusinessLegalStatusEnter.handler(request, h)
 
-      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, request.auth.credentials.email, [
+      expect(fetchBusinessChangeService).toHaveBeenCalledWith(request.yar, '106705779', request.auth.credentials.email, [
         'changeBusinessLegalStatus',
         'changeBusinessCharityCommissionRegistrationNumber',
         'changeBusinessCompanyRegistrationNumber'
       ])
-    })
-
-    test('persists the sbi in session', async () => {
-      await getBusinessLegalStatusEnter.handler(request, h)
-
-      expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
     })
 
     test('should render business-legal-status-enter view with page data', async () => {
@@ -107,19 +101,6 @@ describe('business legal status enter', () => {
           '1234567'
         )
         expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-check')
-      })
-
-      test('persists the sbi in session', async () => {
-        validateBusinessRegistrationNumberService.mockReturnValue({
-          error: undefined,
-          value: { charityCommissionRegistrationNumber: '1234567' },
-          payloadField: 'charityCommissionRegistrationNumber',
-          sessionField: 'changeBusinessCharityCommissionRegistrationNumber'
-        })
-
-        await postBusinessLegalStatusEnter.handler(request, h)
-
-        expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
       })
     })
 

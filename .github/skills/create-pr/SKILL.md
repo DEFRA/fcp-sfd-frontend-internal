@@ -1,22 +1,12 @@
-# Generate GitHub PR Metadata and Create PR
+---
+name: create-pr
+description: Analyse the current git branch, commits, and diff to generate a branch name, PR title, and PR description, then create the branch, commit, and open a draft PR. Use when asked to create a PR, open a pull request, or prepare a branch for review.
+argument-hint: "[FLS2-ticket] [jira-url]"
+---
+
+# Generate GitHub PR metadata and create PR
 
 Analyse the current git branch, commits, and diff to produce a branch name, PR title, and PR description — then create the branch, commit, and open the PR.
-
-## Prerequisites (first-time setup)
-
-To use the optional Jira ticket creation feature, add your credentials to `~/.claude/settings.json` under an `env` block:
-
-```json
-{
-  "env": {
-    "JIRA_BASE_URL": "https://eaflood.atlassian.net",
-    "JIRA_EMAIL": "your.name@defra.gov.uk",
-    "JIRA_TOKEN": "your-jira-api-token"
-  }
-}
-```
-
-Generate your API token at https://id.atlassian.com/manage-profile/security/api-tokens. This is a personal global config file — never commit credentials to the repo.
 
 ## Step 1: Gather git context
 
@@ -44,32 +34,17 @@ Look for ticket patterns in branch name, commits, or $ARGUMENTS:
 
 ## Step 2b: Create Jira ticket (if none detected and user wants one)
 
-If the user says they don't have a ticket but would like one created, create it via the Jira REST API:
+If the user says they don't have a ticket but wants one created, load `.github/skills/create-jira-ticket/SKILL.md` and follow that workflow.
 
-- Uses env vars: `$JIRA_EMAIL`, `$JIRA_TOKEN`, `$JIRA_BASE_URL`
-- Project key: FLS2
-- Issue type: inferred from change classification (Task for refactors/chores, Story for features, Bug for fixes)
-- Summary: derived from the PR title
-- Description: ADF-formatted summary of changes + link to PR once created
+Inputs to pass into the Jira workflow:
 
-**Auth:** Basic auth with base64-encoded `"$JIRA_EMAIL:$JIRA_TOKEN"`
-**Endpoint:** `POST $JIRA_BASE_URL/rest/api/3/issue`
+- Issue type inferred from this skill's change classification rules (Task for refactors/chores, Story for features, Bug for fixes)
+- Ticket summary derived from the candidate PR title
+- One-paragraph description of the change and why
+- Change bullets that will also be used in the PR description
+- Optional epic keyword from the user
 
-```bash
-curl -s -X POST "$JIRA_BASE_URL/rest/api/3/issue" \
-  -H "Authorization: Basic $(echo -n "$JIRA_EMAIL:$JIRA_TOKEN" | base64)" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "fields": {
-      "project": { "key": "FLS2" },
-      "summary": "<ticket title>",
-      "description": { "type": "doc", "version": 1, "content": [...] },
-      "issuetype": { "name": "<Task|Story|Bug>" }
-    }
-  }'
-```
-
-After creation, use the returned ticket key (e.g. FLS2-42) to prefix the branch name and PR title as normal.
+If the Jira workflow returns a ticket key (e.g. `FLS2-42`), use it to prefix branch name and PR title as normal. Include the Jira URL at the top of the PR description.
 
 ## Step 3: Classify the change
 
@@ -128,12 +103,16 @@ https://eaflood.atlassian.net/browse/FLS2-<ticket>
 | Medium | Summary paragraph + structured `## Changes` bullets |
 | Large / architectural | Summary + Changes + Behaviour + Testing where applicable |
 
-## Step 5: Create branch, commit, and open PR
+## Step 5: Confirm before writing to the remote
+
+Before touching origin or opening a PR, **stop and show the user** the generated branch name, commit message, PR title, and PR description body. Ask for explicit confirmation to proceed. Do not run the push or `gh pr create` until the user approves.
+
+## Step 6: Create branch, commit, and open PR (after confirmation)
 
 1. Create and switch to the generated branch name
 2. Stage and commit changes with message: `<Description>` (title-cased, no ticket prefix — ever)
 3. Push branch to origin with `-u`
-4. Run `gh pr create --draft` with the generated title and description body
+4. Run `gh pr create --draft --assignee @me` with the generated title and description body. `@me` assigns the PR to whoever runs the skill.
 
 ## Rules
 

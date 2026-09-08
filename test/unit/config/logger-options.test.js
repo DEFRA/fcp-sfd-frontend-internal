@@ -82,6 +82,32 @@ describe('logger-options', () => {
 
       expect(result.url).toBe('/health')
     })
+
+    test('masks crn from the url even when params is empty, matching hapi-pino\'s onRequest timing', () => {
+      // hapi-pino builds the child logger binding on 'onRequest', before hapi has matched the
+      // route, so request.params is always {} at that point in real traffic
+      const request = buildRequest('/customer/1234567890/details', {})
+
+      const result = loggerOptions.serializers.req(request)
+
+      expect(result.url).toBe('/customer/******7890/details')
+    })
+
+    test('masks crn from the url when params is null, matching hapi-pino\'s onRequest timing', () => {
+      const request = buildRequest('/customer/1234567890/details', null)
+
+      const result = loggerOptions.serializers.req(request)
+
+      expect(result.url).toBe('/customer/******7890/details')
+    })
+
+    test('masks crn in a path with no trailing segment', () => {
+      const request = buildRequest('/customer/1234567890', {})
+
+      const result = loggerOptions.serializers.req(request)
+
+      expect(result.url).toBe('/customer/******7890')
+    })
   })
 
   describe('customRequestCompleteMessage', () => {
@@ -96,6 +122,19 @@ describe('logger-options', () => {
       const message = loggerOptions.customRequestCompleteMessage(request, 12)
 
       expect(message).toBe('[response] get /customer/******7890/details 200 (12ms)')
+    })
+
+    test('shows "-" as the status code when the response headers have not been sent', () => {
+      const request = {
+        method: 'get',
+        path: '/health',
+        params: {},
+        raw: { res: { headersSent: false, statusCode: 200 } }
+      }
+
+      const message = loggerOptions.customRequestCompleteMessage(request, 5)
+
+      expect(message).toBe('[response] get /health - (5ms)')
     })
   })
 
@@ -144,6 +183,14 @@ describe('logger-options', () => {
       const result = nonLocalLoggerOptions.serializers.req(request)
 
       expect(result.params).toEqual({ sbi: '123456789' })
+    })
+
+    test('masks crn from the url even when params is empty, matching hapi-pino\'s onRequest timing', () => {
+      const request = { method: 'get', path: '/customer/1234567890/details', params: {} }
+
+      const result = nonLocalLoggerOptions.serializers.req(request)
+
+      expect(result.url).toBe('/customer/******7890/details')
     })
   })
 })

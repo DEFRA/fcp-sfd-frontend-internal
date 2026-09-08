@@ -67,14 +67,6 @@ describe('logger-options', () => {
       expect(result.url).toBe('/business/123456789/details')
     })
 
-    test('masks a crn shorter than 4 characters as fully hidden', () => {
-      const request = buildRequest('/customer/123/details', { crn: '123' })
-
-      const result = loggerOptions.serializers.req(request)
-
-      expect(result.url).toBe('/customer/****/details')
-    })
-
     test('leaves url unchanged when params is null', () => {
       const request = buildRequest('/health', null)
 

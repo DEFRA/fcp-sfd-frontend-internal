@@ -43,7 +43,7 @@ const formatters = {
  * 5. Response is sent:
  *    - customRequestCompleteMessage() builds final message string
  *    - Calls maskSensitivePath() again on the URL
- *    - Creates message: `"[response] GET /customer/******4934/details 200 (45ms)"`
+ *    - Creates message: `"[response] get /customer/******4934/details 200 (45ms)"`
  *
  * 6. Log sent to stdout/Elasticsearch:
  *    - CRN fully masked in the message and url fields (via maskSensitivePath at onRequest time)
@@ -61,8 +61,8 @@ const formatters = {
 const VISIBLE_CHAR_COUNT = 4
 
 const maskValue = (value) => {
-  if (!value || value.length <= VISIBLE_CHAR_COUNT) {
-    return '****'
+  if (!value) {
+    return value
   }
 
   const asteriskCount = value.length - VISIBLE_CHAR_COUNT

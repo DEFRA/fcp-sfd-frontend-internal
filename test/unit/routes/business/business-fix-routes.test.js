@@ -89,6 +89,23 @@ describe('business fix routes', () => {
         expect(h.view).toHaveBeenCalledWith('business/business-fix.njk', getPageData())
       })
     })
+
+    describe('when there is no valid session data to fix', () => {
+      beforeEach(() => {
+        h = {
+          redirect: vi.fn()
+        }
+
+        services.initialiseFixJourney.mockReturnValue(null)
+      })
+
+      test('it redirects to the business details page without fetching business data', async () => {
+        await getBusinessFix.handler(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith(`/business/${sbi}/details`)
+        expect(fetchBusinessFixService).not.toHaveBeenCalled()
+      })
+    })
   })
 
   describe('POST /business/{sbi}/details/fix', () => {

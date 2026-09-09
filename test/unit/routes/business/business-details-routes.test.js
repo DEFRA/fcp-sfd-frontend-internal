@@ -4,6 +4,7 @@ import { describe, test, expect, beforeEach, vi } from 'vitest'
 // Things we need to mock
 import { fetchBusinessDetailsService } from '../../../../src/services/business/fetch-business-details-service.js'
 import { businessDetailsPresenter } from '../../../../src/presenters/business/business-details-presenter.js'
+import { validateBusinessDetailsService } from '../../../../src/services/business/validate-business-details-service.js'
 
 // Thing under test
 import { businessDetailsRoutes } from '../../../../src/routes/business/business-details-routes.js'
@@ -19,12 +20,21 @@ vi.mock('../../../../src/presenters/business/business-details-presenter.js', () 
   businessDetailsPresenter: vi.fn()
 }))
 
+vi.mock('../../../../src/services/business/validate-business-details-service.js', () => ({
+  validateBusinessDetailsService: vi.fn()
+}))
+
 describe('business details routes', () => {
   let request
   let h
 
   beforeEach(() => {
     vi.clearAllMocks()
+
+    validateBusinessDetailsService.mockReturnValue({
+      hasValidBusinessDetails: true,
+      sectionsNeedingUpdate: []
+    })
 
     request = {
       params: { sbi: '106705779' },
@@ -33,6 +43,7 @@ describe('business details routes', () => {
       },
       yar: {
         set: vi.fn(),
+        clear: vi.fn(),
         flash: vi.fn().mockReturnValue([])
       }
     }
@@ -62,7 +73,7 @@ describe('business details routes', () => {
         await getBusinessDetails.handler(request, h)
 
         expect(fetchBusinessDetailsService).toHaveBeenCalledWith('106705779', 'test.user@defra.gov.uk')
-        expect(businessDetailsPresenter).toHaveBeenCalledWith(businessDetails, '106705779', request.yar)
+        expect(businessDetailsPresenter).toHaveBeenCalledWith(businessDetails, '106705779', request.yar, true, [])
         expect(h.view).toHaveBeenCalledWith('business/business-details', pageData)
       })
 
@@ -70,6 +81,44 @@ describe('business details routes', () => {
         await getBusinessDetails.handler(request, h)
 
         expect(request.yar.set).toHaveBeenCalledWith('businessDetailsUpdate', { sbi: '106705779' })
+      })
+
+      test('clears any stale interrupter journey session', async () => {
+        await getBusinessDetails.handler(request, h)
+
+        expect(request.yar.clear).toHaveBeenCalledWith('businessDetailsValidation')
+      })
+
+      test('does not seed the interrupter journey session when the details are valid', async () => {
+        await getBusinessDetails.handler(request, h)
+
+        expect(request.yar.set).not.toHaveBeenCalledWith('businessDetailsValidation', expect.anything())
+      })
+    })
+
+    describe('when the business details are invalid', () => {
+      beforeEach(() => {
+        fetchBusinessDetailsService.mockResolvedValue({})
+        businessDetailsPresenter.mockReturnValue({})
+        validateBusinessDetailsService.mockReturnValue({
+          hasValidBusinessDetails: false,
+          sectionsNeedingUpdate: ['name', 'email']
+        })
+      })
+
+      test('seeds the interrupter journey session with the sections needing update', async () => {
+        await getBusinessDetails.handler(request, h)
+
+        expect(request.yar.set).toHaveBeenCalledWith('businessDetailsValidation', {
+          businessDetailsValid: false,
+          sectionsNeedingUpdate: ['name', 'email']
+        })
+      })
+
+      test('passes the validation result to the presenter', async () => {
+        await getBusinessDetails.handler(request, h)
+
+        expect(businessDetailsPresenter).toHaveBeenCalledWith({}, '106705779', request.yar, false, ['name', 'email'])
       })
     })
 

@@ -5,6 +5,16 @@ import { constants } from '@defra/fcp-sfd-frontend-engine'
 // Thing under test
 import { businessDetailsPresenter } from '../../../../src/presenters/business/business-details-presenter.js'
 
+// Mock dependencies
+import { config } from '../../../../src/config/index.js'
+
+// Mock imports
+vi.mock('../../../../src/config/index.js', () => ({
+  config: {
+    get: vi.fn()
+  }
+}))
+
 const { LEGAL_STATUS } = constants.business
 
 describe('businessDetailsPresenter', () => {
@@ -12,6 +22,11 @@ describe('businessDetailsPresenter', () => {
   let sbi
 
   beforeEach(() => {
+    vi.clearAllMocks()
+
+    // Default: interrupter OFF
+    config.get.mockReturnValue(false)
+
     sbi = '106705779'
 
     data = {
@@ -403,6 +418,88 @@ describe('businessDetailsPresenter', () => {
       const result = businessDetailsPresenter(data, sbi)
 
       expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
+    })
+  })
+
+  describe('the change link properties', () => {
+    describe('when the business details interrupter is disabled', () => {
+      test('all change links should point to their standard change link', () => {
+        const result = businessDetailsPresenter(data, sbi, null, false, ['name', 'email'])
+
+        expect(result.businessName.changeLink).toBe(`/business/${sbi}/name-change`)
+        expect(result.businessAddress.changeLink).toBe(`/business/${sbi}/address-change`)
+        expect(result.businessTelephone.changeLink).toBe(`/business/${sbi}/phone-numbers-change`)
+        expect(result.businessEmail.changeLink).toBe(`/business/${sbi}/email-change`)
+        expect(result.vatNumber.changeLink.items[0].href).toBe(`/business/${sbi}/vat-registration-number-change`)
+        expect(result.vatNumber.changeLink.items[1].href).toBe(`/business/${sbi}/vat-registration-remove`)
+      })
+    })
+
+    describe('when the business details interrupter is enabled', () => {
+      beforeEach(() => {
+        config.get.mockReturnValue(true)
+      })
+
+      describe('and all details are valid', () => {
+        test('all change links should point to their standard change link', () => {
+          const result = businessDetailsPresenter(data, sbi, null, true, [])
+
+          expect(result.businessName.changeLink).toBe(`/business/${sbi}/name-change`)
+          expect(result.businessAddress.changeLink).toBe(`/business/${sbi}/address-change`)
+          expect(result.businessTelephone.changeLink).toBe(`/business/${sbi}/phone-numbers-change`)
+          expect(result.businessEmail.changeLink).toBe(`/business/${sbi}/email-change`)
+          expect(result.vatNumber.changeLink.items[0].href).toBe(`/business/${sbi}/vat-registration-number-change`)
+        })
+      })
+
+      describe('and only the name is invalid', () => {
+        test('all links except the name point to the interrupter journey', () => {
+          const result = businessDetailsPresenter(data, sbi, null, false, ['name'])
+
+          expect(result.businessName.changeLink).toBe(`/business/${sbi}/name-change`)
+          expect(result.businessAddress.changeLink).toBe(`/business/${sbi}/details/fix?source=address`)
+          expect(result.businessTelephone.changeLink).toBe(`/business/${sbi}/details/fix?source=phone`)
+          expect(result.businessEmail.changeLink).toBe(`/business/${sbi}/details/fix?source=email`)
+          expect(result.vatNumber.changeLink.items[0].href).toBe(`/business/${sbi}/details/fix?source=vat`)
+        })
+      })
+
+      describe('and only the vat is invalid', () => {
+        test('the vat keeps its standard change and remove links', () => {
+          const result = businessDetailsPresenter(data, sbi, null, false, ['vat'])
+
+          expect(result.vatNumber.changeLink.items[0].href).toBe(`/business/${sbi}/vat-registration-number-change`)
+          expect(result.vatNumber.changeLink.items[1].href).toBe(`/business/${sbi}/vat-registration-remove`)
+          expect(result.businessName.changeLink).toBe(`/business/${sbi}/details/fix?source=name`)
+        })
+      })
+
+      describe('and multiple sections are invalid', () => {
+        test('every link points to the interrupter journey', () => {
+          const result = businessDetailsPresenter(data, sbi, null, false, ['name', 'email'])
+
+          expect(result.businessName.changeLink).toBe(`/business/${sbi}/details/fix?source=name`)
+          expect(result.businessAddress.changeLink).toBe(`/business/${sbi}/details/fix?source=address`)
+          expect(result.businessTelephone.changeLink).toBe(`/business/${sbi}/details/fix?source=phone`)
+          expect(result.businessEmail.changeLink).toBe(`/business/${sbi}/details/fix?source=email`)
+        })
+
+        test('both vat actions point to the interrupter journey', () => {
+          const result = businessDetailsPresenter(data, sbi, null, false, ['name', 'email'])
+
+          expect(result.vatNumber.changeLink.items[0].href).toBe(`/business/${sbi}/details/fix?source=vat`)
+          expect(result.vatNumber.changeLink.items[1].href).toBe(`/business/${sbi}/details/fix?source=vat`)
+        })
+
+        test('the vat add link points to the interrupter journey when no vat number exists', () => {
+          data.info.vat = null
+
+          const result = businessDetailsPresenter(data, sbi, null, false, ['name', 'email'])
+
+          expect(result.vatNumber.action).toBe('Add')
+          expect(result.vatNumber.changeLink).toBe(`/business/${sbi}/details/fix?source=vat`)
+        })
+      })
     })
   })
 })

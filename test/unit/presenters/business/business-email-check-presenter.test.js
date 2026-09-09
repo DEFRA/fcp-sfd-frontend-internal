@@ -19,8 +19,8 @@ describe('businessEmailCheckPresenter', () => {
       const result = businessEmailCheckPresenter(data)
 
       expect(result).toEqual({
-        backLink: '/business/106705779/business-email-change',
-        changeLink: '/business/106705779/business-email-change',
+        backLink: '/business/106705779/email-change',
+        changeLink: '/business/106705779/email-change',
         pageTitle: 'Check your business email address is correct before submitting',
         metaDescription: 'Check the email address for your business is correct.',
         userName: null,
@@ -36,7 +36,7 @@ describe('businessEmailCheckPresenter', () => {
       test('it returns the business email change page', () => {
         const result = businessEmailCheckPresenter(data)
 
-        expect(result.backLink).toEqual('/business/106705779/business-email-change')
+        expect(result.backLink).toEqual('/business/106705779/email-change')
       })
     })
 

@@ -7,7 +7,7 @@ import { validateSbi } from '../pre-handlers.js'
 
 const getBusinessAddressSelect = {
   method: 'GET',
-  path: '/business/{sbi}/business-address-select',
+  path: '/business/{sbi}/address-select',
   options: {
     pre: [validateSbi]
   },
@@ -19,7 +19,7 @@ const getBusinessAddressSelect = {
     const businessDetails = await fetchBusinessChangeService(yar, sbi, email, ['changeBusinessPostcode', 'changeBusinessAddresses', 'changeBusinessAddress'])
 
     if (!businessDetails.changeBusinessPostcode || !businessDetails.changeBusinessAddresses) {
-      return h.redirect(`/business/${sbi}/business-address-change`)
+      return h.redirect(`/business/${sbi}/address-change`)
     }
 
     const pageData = businessAddressSelectPresenter(businessDetails)
@@ -30,7 +30,7 @@ const getBusinessAddressSelect = {
 
 const postBusinessAddressSelect = {
   method: 'POST',
-  path: '/business/{sbi}/business-address-select',
+  path: '/business/{sbi}/address-select',
   options: {
     pre: [validateSbi],
     validate: {
@@ -64,14 +64,14 @@ const postBusinessAddressSelect = {
     })
 
     if (!selectedAddress) {
-      return h.redirect(`/business/${sbi}/business-address-select`).takeover()
+      return h.redirect(`/business/${sbi}/address-select`).takeover()
     }
 
     selectedAddress.postcodeLookup = true
 
     setSessionData(yar, 'businessDetailsUpdate', 'changeBusinessAddress', selectedAddress)
 
-    return h.redirect(`/business/${sbi}/business-address-check`)
+    return h.redirect(`/business/${sbi}/address-check`)
   }
 }
 

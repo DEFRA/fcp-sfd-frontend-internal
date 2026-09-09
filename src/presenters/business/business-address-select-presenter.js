@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the `/business/{sbi}/business-address-select` page
+ * Formats data ready for presenting in the `/business/{sbi}/address-select` page
  * @module businessAddressSelectPresenter
  */
 
@@ -10,9 +10,9 @@ const businessAddressSelectPresenter = (data) => {
   const sbi = data.info?.sbi
 
   return {
-    backLink: sbi ? `/business/${sbi}/business-address-change` : SEARCH_SBI,
-    postcodeChangeLink: `/business/${sbi}/business-address-change`,
-    manualAddressLink: `/business/${sbi}/business-address-enter`,
+    backLink: sbi ? `/business/${sbi}/address-change` : SEARCH_SBI,
+    postcodeChangeLink: `/business/${sbi}/address-change`,
+    manualAddressLink: `/business/${sbi}/address-enter`,
     pageTitle: 'Choose your business address',
     metaDescription: 'Choose the address for your business.',
     businessName: data.info?.businessName ?? null,

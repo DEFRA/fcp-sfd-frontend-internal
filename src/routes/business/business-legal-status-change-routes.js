@@ -6,7 +6,7 @@ import { validateSbi } from '../pre-handlers.js'
 
 const getBusinessLegalStatusChange = {
   method: 'GET',
-  path: '/business/{sbi}/business-legal-status-change',
+  path: '/business/{sbi}/legal-status-change',
   options: {
     pre: [validateSbi]
   },
@@ -31,7 +31,7 @@ const getBusinessLegalStatusChange = {
 
 const postBusinessLegalStatusChange = {
   method: 'POST',
-  path: '/business/{sbi}/business-legal-status-change',
+  path: '/business/{sbi}/legal-status-change',
   options: {
     pre: [validateSbi],
     validate: {
@@ -65,7 +65,7 @@ const postBusinessLegalStatusChange = {
       ...constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES
     ].includes(businessLegalStatus)
 
-    const nextPage = requiresRegistrationNumber ? 'business-legal-status-enter' : 'business-legal-status-check'
+    const nextPage = requiresRegistrationNumber ? 'legal-status-enter' : 'legal-status-check'
 
     return h.redirect(`/business/${sbi}/${nextPage}`)
   }

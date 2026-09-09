@@ -6,7 +6,7 @@ import { BUSINESS_LEGAL_STATUS_SESSION_FIELDS } from '../../constants/business-l
 
 const getBusinessLegalStatusCheck = {
   method: 'GET',
-  path: '/business/{sbi}/business-legal-status-check',
+  path: '/business/{sbi}/legal-status-check',
   options: {
     pre: [validateSbi, validateLegalStatusRegistrationNumber]
   },
@@ -24,7 +24,7 @@ const getBusinessLegalStatusCheck = {
 
 const postBusinessLegalStatusCheck = {
   method: 'POST',
-  path: '/business/{sbi}/business-legal-status-check',
+  path: '/business/{sbi}/legal-status-check',
   options: {
     pre: [validateSbi, validateLegalStatusRegistrationNumber]
   },

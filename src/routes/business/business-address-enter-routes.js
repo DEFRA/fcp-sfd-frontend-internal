@@ -6,7 +6,7 @@ import { validateSbi } from '../pre-handlers.js'
 
 const getBusinessAddressEnter = {
   method: 'GET',
-  path: '/business/{sbi}/business-address-enter',
+  path: '/business/{sbi}/address-enter',
   options: {
     pre: [validateSbi]
   },
@@ -24,7 +24,7 @@ const getBusinessAddressEnter = {
 
 const postBusinessAddressEnter = {
   method: 'POST',
-  path: '/business/{sbi}/business-address-enter',
+  path: '/business/{sbi}/address-enter',
   options: {
     pre: [validateSbi],
     validate: {
@@ -49,7 +49,7 @@ const postBusinessAddressEnter = {
 
     setSessionData(yar, 'businessDetailsUpdate', 'changeBusinessAddress', payload)
 
-    return h.redirect(`/business/${sbi}/business-address-check`)
+    return h.redirect(`/business/${sbi}/address-check`)
   }
 }
 

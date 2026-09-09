@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the `/business/{sbi}/business-address-enter` page
+ * Formats data ready for presenting in the `/business/{sbi}/address-enter` page
  * @module businessAddressEnterPresenter
  */
 
@@ -10,7 +10,7 @@ const businessAddressEnterPresenter = (data, payload) => {
   const sbi = data.info?.sbi
 
   return {
-    backLink: sbi ? `/business/${sbi}/business-address-change` : SEARCH_SBI,
+    backLink: sbi ? `/business/${sbi}/address-change` : SEARCH_SBI,
     pageTitle: 'Enter your business address',
     metaDescription: 'Enter the address for your business.',
     businessName: data.info?.businessName ?? null,

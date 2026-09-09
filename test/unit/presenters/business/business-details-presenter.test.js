@@ -119,7 +119,7 @@ describe('businessDetailsPresenter', () => {
 
       expect(result.businessName.value).toBe('Herberts Lawn Mowing')
       expect(result.businessName.action).toBe('Change')
-      expect(result.businessName.changeLink).toBe('/business/106705779/business-name-change')
+      expect(result.businessName.changeLink).toBe('/business/106705779/name-change')
     })
 
     test('returns "Not added" and "Add" action when business name is absent', () => {
@@ -137,7 +137,7 @@ describe('businessDetailsPresenter', () => {
 
       expect(Array.isArray(result.businessAddress.value)).toBe(true)
       expect(result.businessAddress.action).toBe('Change')
-      expect(result.businessAddress.changeLink).toBe(`/business/${sbi}/business-address-change`)
+      expect(result.businessAddress.changeLink).toBe(`/business/${sbi}/address-change`)
     })
 
     test('returns "Not added" and "Add" action when address has no content', () => {
@@ -156,7 +156,7 @@ describe('businessDetailsPresenter', () => {
       expect(result.businessTelephone.telephone).toBe('01234567890')
       expect(result.businessTelephone.mobile).toBe('07700900000')
       expect(result.businessTelephone.action).toBe('Change')
-      expect(result.businessTelephone.changeLink).toBe('/business/106705779/business-phone-numbers-change')
+      expect(result.businessTelephone.changeLink).toBe('/business/106705779/phone-numbers-change')
     })
 
     test('returns "Not added" placeholders and "Add" action when both are absent', () => {
@@ -176,7 +176,7 @@ describe('businessDetailsPresenter', () => {
 
       expect(result.businessEmail.value).toBe('test@example.com')
       expect(result.businessEmail.action).toBe('Change')
-      expect(result.businessEmail.changeLink).toBe('/business/106705779/business-email-change')
+      expect(result.businessEmail.changeLink).toBe('/business/106705779/email-change')
     })
 
     test('returns "Not added" and "Add" action when email is absent', () => {
@@ -197,13 +197,13 @@ describe('businessDetailsPresenter', () => {
       expect(result.vatNumber.changeLink).toEqual({
         items: [
           {
-            href: `/business/${sbi}/business-vat-registration-number-change`,
+            href: `/business/${sbi}/vat-registration-number-change`,
             text: 'Change',
             visuallyHiddenText: 'VAT registration number',
             classes: 'govuk-link--no-visited-state'
           },
           {
-            href: `/business/${sbi}/business-vat-registration-remove`,
+            href: `/business/${sbi}/vat-registration-remove`,
             text: 'Remove',
             visuallyHiddenText: 'VAT registration number',
             classes: 'govuk-link--no-visited-state'
@@ -218,7 +218,7 @@ describe('businessDetailsPresenter', () => {
 
       expect(result.vatNumber.value).toBe('No number added')
       expect(result.vatNumber.action).toBe('Add')
-      expect(result.vatNumber.changeLink).toBe(`/business/${sbi}/business-vat-registration-number-change`)
+      expect(result.vatNumber.changeLink).toBe(`/business/${sbi}/vat-registration-number-change`)
     })
   })
 
@@ -285,7 +285,7 @@ describe('businessDetailsPresenter', () => {
 
       expect(result.businessLegalStatus.value).toBe('Sole Proprietorship')
       expect(result.businessLegalStatus.action).toBe('Change')
-      expect(result.businessLegalStatus.changeLink).toBe(`/business/${sbi}/business-legal-status-change`)
+      expect(result.businessLegalStatus.changeLink).toBe(`/business/${sbi}/legal-status-change`)
     })
 
     test('returns "Not added" and "Add" action when legal status is absent', () => {
@@ -329,7 +329,7 @@ describe('businessDetailsPresenter', () => {
           label: 'Charity commission registration number',
           value: '12345678',
           action: 'Change',
-          changeLink: `/business/${sbi}/business-legal-status-enter`
+          changeLink: `/business/${sbi}/legal-status-enter`
         })
       })
 
@@ -339,7 +339,7 @@ describe('businessDetailsPresenter', () => {
 
         expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
         expect(result.legalStatusRegistrationNumber.action).toBe('Add')
-        expect(result.legalStatusRegistrationNumber.changeLink).toBe(`/business/${sbi}/business-legal-status-enter`)
+        expect(result.legalStatusRegistrationNumber.changeLink).toBe(`/business/${sbi}/legal-status-enter`)
       })
 
       test('matches the legal status when the code is a number rather than a string', () => {
@@ -363,7 +363,7 @@ describe('businessDetailsPresenter', () => {
           label: 'Company registration number',
           value: 'SC123456',
           action: 'Change',
-          changeLink: `/business/${sbi}/business-legal-status-enter`
+          changeLink: `/business/${sbi}/legal-status-enter`
         })
       })
 
@@ -373,7 +373,7 @@ describe('businessDetailsPresenter', () => {
 
         expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
         expect(result.legalStatusRegistrationNumber.action).toBe('Add')
-        expect(result.legalStatusRegistrationNumber.changeLink).toBe(`/business/${sbi}/business-legal-status-enter`)
+        expect(result.legalStatusRegistrationNumber.changeLink).toBe(`/business/${sbi}/legal-status-enter`)
       })
 
       test('matches the legal status when the code is a number rather than a string', () => {

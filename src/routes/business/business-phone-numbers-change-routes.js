@@ -6,7 +6,7 @@ import { validateSbi } from '../pre-handlers.js'
 
 const getBusinessPhoneNumbersChange = {
   method: 'GET',
-  path: '/business/{sbi}/business-phone-numbers-change',
+  path: '/business/{sbi}/phone-numbers-change',
   options: {
     pre: [validateSbi]
   },
@@ -24,7 +24,7 @@ const getBusinessPhoneNumbersChange = {
 
 const postBusinessPhoneNumbersChange = {
   method: 'POST',
-  path: '/business/{sbi}/business-phone-numbers-change',
+  path: '/business/{sbi}/phone-numbers-change',
   options: {
     pre: [validateSbi],
     validate: {
@@ -55,7 +55,7 @@ const postBusinessPhoneNumbersChange = {
 
       setSessionData(yar, 'businessDetailsUpdate', 'changeBusinessPhoneNumbers', phoneNumbers)
 
-      return h.redirect(`/business/${sbi}/business-phone-numbers-check`)
+      return h.redirect(`/business/${sbi}/phone-numbers-check`)
     }
   }
 }

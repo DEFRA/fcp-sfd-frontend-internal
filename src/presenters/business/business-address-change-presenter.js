@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the `/business/{sbi}/business-address-change` page
+ * Formats data ready for presenting in the `/business/{sbi}/address-change` page
  * @module businessAddressChangePresenter
  */
 
@@ -10,7 +10,7 @@ const businessAddressChangePresenter = (data, payload) => {
 
   return {
     backLink: sbi ? `/business/${sbi}/details` : SEARCH_SBI,
-    manualAddressLink: `/business/${sbi}/business-address-enter`,
+    manualAddressLink: `/business/${sbi}/address-enter`,
     pageTitle: 'What is your business address?',
     metaDescription: 'Update the address for your business.',
     businessName: data.info?.businessName ?? null,

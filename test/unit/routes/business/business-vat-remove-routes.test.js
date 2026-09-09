@@ -53,10 +53,10 @@ describe('business VAT remove routes', () => {
     businessVatRemovePresenter.mockReturnValue(pageData)
   })
 
-  describe('GET /business/{sbi}/business-vat-registration-remove', () => {
+  describe('GET /business/{sbi}/vat-registration-remove', () => {
     test('should have the correct method and path configured', () => {
       expect(getBusinessVatRemove.method).toBe('GET')
-      expect(getBusinessVatRemove.path).toBe('/business/{sbi}/business-vat-registration-remove')
+      expect(getBusinessVatRemove.path).toBe('/business/{sbi}/vat-registration-remove')
     })
 
     test('should guard the route with the sbi pre-handler', () => {
@@ -72,10 +72,10 @@ describe('business VAT remove routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-vat-registration-remove', () => {
+  describe('POST /business/{sbi}/vat-registration-remove', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessVatRemove.method).toBe('POST')
-      expect(postBusinessVatRemove.path).toBe('/business/{sbi}/business-vat-registration-remove')
+      expect(postBusinessVatRemove.path).toBe('/business/{sbi}/vat-registration-remove')
     })
 
     test('should guard the route with the sbi pre-handler', () => {
@@ -111,7 +111,7 @@ describe('business VAT remove routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-vat-registration-remove validation failAction', () => {
+  describe('POST /business/{sbi}/vat-registration-remove validation failAction', () => {
     test('re-fetches the details and re-presents the page with the error summary banner', async () => {
       const err = {
         details: [

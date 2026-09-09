@@ -51,10 +51,10 @@ describe('business VAT check routes', () => {
     businessVatCheckPresenter.mockReturnValue(pageData)
   })
 
-  describe('GET /business/{sbi}/business-vat-registration-number-check', () => {
+  describe('GET /business/{sbi}/vat-registration-number-check', () => {
     test('should have the correct method and path configured', () => {
       expect(getBusinessVatCheck.method).toBe('GET')
-      expect(getBusinessVatCheck.path).toBe('/business/{sbi}/business-vat-registration-number-check')
+      expect(getBusinessVatCheck.path).toBe('/business/{sbi}/vat-registration-number-check')
     })
 
     test('should guard the route with the sbi pre-handler', () => {
@@ -70,10 +70,10 @@ describe('business VAT check routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-vat-registration-number-check', () => {
+  describe('POST /business/{sbi}/vat-registration-number-check', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessVatCheck.method).toBe('POST')
-      expect(postBusinessVatCheck.path).toBe('/business/{sbi}/business-vat-registration-number-check')
+      expect(postBusinessVatCheck.path).toBe('/business/{sbi}/vat-registration-number-check')
     })
 
     test('should guard the route with the sbi pre-handler', () => {

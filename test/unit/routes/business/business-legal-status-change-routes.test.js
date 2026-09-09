@@ -46,10 +46,10 @@ describe('business legal status change', () => {
     fetchBusinessChangeService.mockResolvedValue(getMockData())
   })
 
-  describe('GET /business/{sbi}/business-legal-status-change', () => {
+  describe('GET /business/{sbi}/legal-status-change', () => {
     test('should have the correct method and path configured', () => {
       expect(getBusinessLegalStatusChange.method).toBe('GET')
-      expect(getBusinessLegalStatusChange.path).toBe('/business/{sbi}/business-legal-status-change')
+      expect(getBusinessLegalStatusChange.path).toBe('/business/{sbi}/legal-status-change')
     })
 
     test('it calls fetchBusinessChangeService with credentials and changeBusinessLegalStatus', async () => {
@@ -92,10 +92,10 @@ describe('business legal status change', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-legal-status-change', () => {
+  describe('POST /business/{sbi}/legal-status-change', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessLegalStatusChange.method).toBe('POST')
-      expect(postBusinessLegalStatusChange.path).toBe('/business/{sbi}/business-legal-status-change')
+      expect(postBusinessLegalStatusChange.path).toBe('/business/{sbi}/legal-status-change')
     })
 
     describe('when a legal status requiring a charity registration number is selected', () => {
@@ -110,7 +110,7 @@ describe('business legal status change', () => {
           'changeBusinessLegalStatus',
           request.payload.businessLegalStatus
         )
-        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-enter')
+        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/legal-status-enter')
       })
     })
 
@@ -120,7 +120,7 @@ describe('business legal status change', () => {
 
         await postBusinessLegalStatusChange.handler(request, h)
 
-        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-enter')
+        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/legal-status-enter')
       })
     })
 
@@ -130,7 +130,7 @@ describe('business legal status change', () => {
 
         await postBusinessLegalStatusChange.handler(request, h)
 
-        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-check')
+        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/legal-status-check')
       })
     })
 

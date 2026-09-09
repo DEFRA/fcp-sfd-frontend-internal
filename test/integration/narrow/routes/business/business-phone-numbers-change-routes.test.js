@@ -18,7 +18,7 @@ const { createServer } = await import('../../../../../src/server.js')
 
 describe('business phone numbers change route', () => {
   const sbi = '106705779'
-  const path = `/business/${sbi}/business-phone-numbers-change`
+  const path = `/business/${sbi}/phone-numbers-change`
   const credentials = { sessionId: 'session-id' }
   let server
 
@@ -54,7 +54,7 @@ describe('business phone numbers change route', () => {
     return { crumbValue, cookie: `crumb=${crumbValue}` }
   }
 
-  describe('GET /business/{sbi}/business-phone-numbers-change', () => {
+  describe('GET /business/{sbi}/phone-numbers-change', () => {
     test('returns 200 and renders the business phone numbers change view when authenticated', async () => {
       fetchBusinessChangeService.mockResolvedValue({
         info: { sbi, businessName: 'Herberts Lawn Mowing' },
@@ -71,7 +71,7 @@ describe('business phone numbers change route', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-phone-numbers-change', () => {
+  describe('POST /business/{sbi}/phone-numbers-change', () => {
     test('is rejected with 403 when the CSRF crumb is missing', async () => {
       const response = await server.inject({
         method: 'POST',
@@ -95,7 +95,7 @@ describe('business phone numbers change route', () => {
       })
 
       expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
-      expect(response.headers.location).toBe(`/business/${sbi}/business-phone-numbers-check`)
+      expect(response.headers.location).toBe(`/business/${sbi}/phone-numbers-check`)
     })
 
     test('redirects to the business phone numbers check page when only the mobile is provided', async () => {
@@ -110,7 +110,7 @@ describe('business phone numbers change route', () => {
       })
 
       expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
-      expect(response.headers.location).toBe(`/business/${sbi}/business-phone-numbers-check`)
+      expect(response.headers.location).toBe(`/business/${sbi}/phone-numbers-check`)
     })
 
     test('redirects to the business phone numbers check page when only the telephone is provided', async () => {
@@ -125,7 +125,7 @@ describe('business phone numbers change route', () => {
       })
 
       expect(response.statusCode).toBe(HTTP_STATUS_FOUND)
-      expect(response.headers.location).toBe(`/business/${sbi}/business-phone-numbers-check`)
+      expect(response.headers.location).toBe(`/business/${sbi}/phone-numbers-check`)
     })
 
     test('re-renders the view with errors when neither number is provided', async () => {

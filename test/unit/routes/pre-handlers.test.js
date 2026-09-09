@@ -520,7 +520,7 @@ describe('pre-handlers', () => {
 
       await validateLegalStatusRegistrationNumber.method(request, h)
 
-      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-enter')
+      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/legal-status-enter')
       expect(takeoverMock).toHaveBeenCalled()
     })
 
@@ -533,7 +533,7 @@ describe('pre-handlers', () => {
 
       await validateLegalStatusRegistrationNumber.method(request, h)
 
-      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-enter')
+      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/legal-status-enter')
       expect(takeoverMock).toHaveBeenCalled()
     })
 

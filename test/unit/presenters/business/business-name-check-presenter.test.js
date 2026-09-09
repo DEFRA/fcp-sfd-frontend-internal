@@ -18,8 +18,8 @@ describe('businessNameCheckPresenter', () => {
       const result = businessNameCheckPresenter(data)
 
       expect(result).toEqual({
-        backLink: '/business/106705779/business-name-change',
-        changeLink: '/business/106705779/business-name-change',
+        backLink: '/business/106705779/name-change',
+        changeLink: '/business/106705779/name-change',
         pageTitle: 'Check your business name is correct before submitting',
         metaDescription: 'Check the name for your business is correct.',
         userName: null,
@@ -34,7 +34,7 @@ describe('businessNameCheckPresenter', () => {
       test('it returns the business name change page', () => {
         const result = businessNameCheckPresenter(data)
 
-        expect(result.backLink).toEqual('/business/106705779/business-name-change')
+        expect(result.backLink).toEqual('/business/106705779/name-change')
       })
     })
 

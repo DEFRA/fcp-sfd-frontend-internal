@@ -1,5 +1,5 @@
 /**
- * Validates a business registration number submitted on the `/business/{sbi}/business-legal-status-enter` page
+ * Validates a business registration number submitted on the `/business/{sbi}/legal-status-enter` page
  * @module validateBusinessRegistrationNumberService
  */
 

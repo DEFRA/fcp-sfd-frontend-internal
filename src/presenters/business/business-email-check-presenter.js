@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the `business-email-check` page
+ * Formats data ready for presenting in the `email-check` page
  * @module businessEmailCheckPresenter
  */
 

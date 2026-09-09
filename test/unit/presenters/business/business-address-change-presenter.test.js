@@ -23,7 +23,7 @@ describe('businessAddressChangePresenter', () => {
 
       expect(result).toEqual({
         backLink: '/business/106705779/details',
-        manualAddressLink: '/business/106705779/business-address-enter',
+        manualAddressLink: '/business/106705779/address-enter',
         pageTitle: 'What is your business address?',
         metaDescription: 'Update the address for your business.',
         businessName: 'Herberts Lawn Mowing',

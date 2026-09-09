@@ -35,7 +35,7 @@ describe('business email check routes', () => {
       params: { sbi: '106705779' },
       yar: { get: vi.fn().mockReturnValue({ sbi: '106705779' }), set: vi.fn() },
       auth: { credentials: { email: 'test.user@defra.gov.uk' } },
-      info: { referrer: 'https://example.com/business/106705779/business-email-change' }
+      info: { referrer: 'https://example.com/business/106705779/email-change' }
     }
 
     h = {
@@ -44,7 +44,7 @@ describe('business email check routes', () => {
     }
   })
 
-  describe('GET /business/{sbi}/business-email-check', () => {
+  describe('GET /business/{sbi}/email-check', () => {
     const businessEmailChange = { info: { sbi: '106705779' } }
     const pageData = { pageTitle: 'Check your business email address is correct before submitting' }
 
@@ -55,7 +55,7 @@ describe('business email check routes', () => {
 
     test('should have the correct method and path configured', () => {
       expect(getBusinessEmailCheck.method).toBe('GET')
-      expect(getBusinessEmailCheck.path).toBe('/business/{sbi}/business-email-check')
+      expect(getBusinessEmailCheck.path).toBe('/business/{sbi}/email-check')
     })
 
     test('fetches the business change details, presents them and renders the page', async () => {
@@ -67,10 +67,10 @@ describe('business email check routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-email-check', () => {
+  describe('POST /business/{sbi}/email-check', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessEmailCheck.method).toBe('POST')
-      expect(postBusinessEmailCheck.path).toBe('/business/{sbi}/business-email-check')
+      expect(postBusinessEmailCheck.path).toBe('/business/{sbi}/email-check')
     })
 
     test('updates the email and redirects to the business details page for the sbi', async () => {

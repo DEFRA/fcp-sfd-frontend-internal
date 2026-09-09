@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the `business-name-check` page
+ * Formats data ready for presenting in the `name-check` page
  * @module businessNameCheckPresenter
  */
 

@@ -51,7 +51,7 @@ describe('business name change routes', () => {
     }
   })
 
-  describe('GET /business/{sbi}/business-name-change', () => {
+  describe('GET /business/{sbi}/name-change', () => {
     const businessDetails = { info: { sbi: '106705779' } }
     const pageData = { pageTitle: 'What is your business name?' }
 
@@ -62,7 +62,7 @@ describe('business name change routes', () => {
 
     test('should have the correct method and path configured', () => {
       expect(getBusinessNameChange.method).toBe('GET')
-      expect(getBusinessNameChange.path).toBe('/business/{sbi}/business-name-change')
+      expect(getBusinessNameChange.path).toBe('/business/{sbi}/name-change')
     })
 
     test('guards the route with the shared validateSbi pre-handler', () => {
@@ -88,7 +88,7 @@ describe('business name change routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-name-change validation failAction', () => {
+  describe('POST /business/{sbi}/name-change validation failAction', () => {
     const businessDetails = { info: { sbi: '106705779' } }
     const pageData = { pageTitle: 'What is your business name?' }
 
@@ -122,10 +122,10 @@ describe('business name change routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-name-change', () => {
+  describe('POST /business/{sbi}/name-change', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessNameChange.method).toBe('POST')
-      expect(postBusinessNameChange.path).toBe('/business/{sbi}/business-name-change')
+      expect(postBusinessNameChange.path).toBe('/business/{sbi}/name-change')
     })
 
     test('guards the route with the shared validateSbi pre-handler', () => {
@@ -136,7 +136,7 @@ describe('business name change routes', () => {
       await postBusinessNameChange.options.handler(request, h)
 
       expect(setSessionData).toHaveBeenCalledWith(request.yar, 'businessDetailsUpdate', 'changeBusinessName', 'New Farm Ltd')
-      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-name-check')
+      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/name-check')
     })
   })
 })

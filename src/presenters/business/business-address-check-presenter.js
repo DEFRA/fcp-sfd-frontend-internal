@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the `/business/{sbi}/business-address-check` page
+ * Formats data ready for presenting in the `/business/{sbi}/address-check` page
  * @module businessAddressCheckPresenter
  */
 
@@ -12,7 +12,7 @@ const businessAddressCheckPresenter = (data) => {
 
   // Determine the appropriate address page based on how the address was entered.
   // Postcode lookup uses the select page, manual entry uses the enter page.
-  const addressPage = changeBusinessAddress?.postcodeLookup ? 'business-address-select' : 'business-address-enter'
+  const addressPage = changeBusinessAddress?.postcodeLookup ? 'address-select' : 'address-enter'
 
   return {
     backLink: sbi ? `/business/${sbi}/${addressPage}` : SEARCH_SBI,

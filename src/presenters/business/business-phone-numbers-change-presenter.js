@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting on the `/business/{sbi}/business-phone-numbers-change` page
+ * Formats data ready for presenting on the `/business/{sbi}/phone-numbers-change` page
  * @module businessPhoneNumbersChangePresenter
  */
 

@@ -133,7 +133,7 @@ export const validateLegalStatusRegistrationNumber = {
       const companyRequired = isCompany && !companyNumber
 
       if (charityRequired || companyRequired) {
-        return h.redirect(`/business/${sbi}/business-legal-status-enter`).takeover()
+        return h.redirect(`/business/${sbi}/legal-status-enter`).takeover()
       }
     }
 

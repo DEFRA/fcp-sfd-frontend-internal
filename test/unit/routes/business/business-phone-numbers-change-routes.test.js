@@ -51,7 +51,7 @@ describe('business phone numbers change routes', () => {
     }
   })
 
-  describe('GET /business/{sbi}/business-phone-numbers-change', () => {
+  describe('GET /business/{sbi}/phone-numbers-change', () => {
     const businessDetails = { info: { sbi: '106705779' } }
     const pageData = { pageTitle: 'What are your business phone numbers?' }
 
@@ -62,7 +62,7 @@ describe('business phone numbers change routes', () => {
 
     test('should have the correct method and path configured', () => {
       expect(getBusinessPhoneNumbersChange.method).toBe('GET')
-      expect(getBusinessPhoneNumbersChange.path).toBe('/business/{sbi}/business-phone-numbers-change')
+      expect(getBusinessPhoneNumbersChange.path).toBe('/business/{sbi}/phone-numbers-change')
     })
 
     test('guards the route with the shared validateSbi pre-handler', () => {
@@ -88,7 +88,7 @@ describe('business phone numbers change routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-phone-numbers-change validation failAction', () => {
+  describe('POST /business/{sbi}/phone-numbers-change validation failAction', () => {
     const businessDetails = { info: { sbi: '106705779' } }
     const pageData = { pageTitle: 'What are your business phone numbers?' }
 
@@ -131,10 +131,10 @@ describe('business phone numbers change routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-phone-numbers-change', () => {
+  describe('POST /business/{sbi}/phone-numbers-change', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessPhoneNumbersChange.method).toBe('POST')
-      expect(postBusinessPhoneNumbersChange.path).toBe('/business/{sbi}/business-phone-numbers-change')
+      expect(postBusinessPhoneNumbersChange.path).toBe('/business/{sbi}/phone-numbers-change')
     })
 
     test('guards the route with the shared validateSbi pre-handler', () => {
@@ -148,7 +148,7 @@ describe('business phone numbers change routes', () => {
         businessTelephone: '01234567890',
         businessMobile: '07123456789'
       })
-      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-phone-numbers-check')
+      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/phone-numbers-check')
     })
 
     test('stores null for phone numbers that were not submitted', async () => {

@@ -43,7 +43,7 @@ describe('business address select', () => {
     }
   })
 
-  describe('GET /business/{sbi}/business-address-select', () => {
+  describe('GET /business/{sbi}/address-select', () => {
     describe('when a request is valid', () => {
       beforeEach(() => {
         fetchBusinessChangeService.mockResolvedValue(getMockData())
@@ -51,7 +51,7 @@ describe('business address select', () => {
 
       test('should have the correct method and path configured', () => {
         expect(getBusinessAddressSelect.method).toBe('GET')
-        expect(getBusinessAddressSelect.path).toBe('/business/{sbi}/business-address-select')
+        expect(getBusinessAddressSelect.path).toBe('/business/{sbi}/address-select')
       })
 
       test('it fetches business change service with multiple fields', async () => {
@@ -85,7 +85,7 @@ describe('business address select', () => {
       test('it redirects back to address-change', async () => {
         await getBusinessAddressSelect.handler(request, h)
 
-        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-address-change')
+        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/address-change')
       })
     })
 
@@ -97,7 +97,7 @@ describe('business address select', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-address-select', () => {
+  describe('POST /business/{sbi}/address-select', () => {
     const selectedAddress = { uprn: '1001', displayAddress: '123 Test Street' }
 
     beforeEach(() => {
@@ -110,7 +110,7 @@ describe('business address select', () => {
 
     test('should have the correct method and path configured', () => {
       expect(postBusinessAddressSelect.method).toBe('POST')
-      expect(postBusinessAddressSelect.path).toBe('/business/{sbi}/business-address-select')
+      expect(postBusinessAddressSelect.path).toBe('/business/{sbi}/address-select')
     })
 
     describe('and the validation passes', () => {
@@ -118,7 +118,7 @@ describe('business address select', () => {
         await postBusinessAddressSelect.handler(request, h)
 
         expect(setSessionData).toHaveBeenCalled()
-        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-address-check')
+        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/address-check')
       })
 
       test('it adds postcodeLookup flag to the selected address', async () => {
@@ -137,7 +137,7 @@ describe('business address select', () => {
       test('it redirects back to address-select', async () => {
         await postBusinessAddressSelect.handler(request, h)
 
-        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-address-select')
+        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/address-select')
       })
     })
 

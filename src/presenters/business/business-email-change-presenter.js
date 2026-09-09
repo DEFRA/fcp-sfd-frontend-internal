@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the `business-email-change` page
+ * Formats data ready for presenting in the `email-change` page
  * @module businessEmailChangePresenter
  */
 

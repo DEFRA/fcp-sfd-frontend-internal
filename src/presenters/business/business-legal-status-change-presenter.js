@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the `business-legal-status-change` page
+ * Formats data ready for presenting in the `legal-status-change` page
  * @module businessLegalStatusChangePresenter
  */
 

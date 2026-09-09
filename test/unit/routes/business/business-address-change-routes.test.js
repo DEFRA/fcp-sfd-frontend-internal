@@ -53,7 +53,7 @@ describe('business address change', () => {
     }
   })
 
-  describe('GET /business/{sbi}/business-address-change', () => {
+  describe('GET /business/{sbi}/address-change', () => {
     describe('when a request is valid', () => {
       beforeEach(() => {
         fetchBusinessChangeService.mockResolvedValue(getMockData())
@@ -61,7 +61,7 @@ describe('business address change', () => {
 
       test('should have the correct method and path configured', () => {
         expect(getBusinessAddressChange.method).toBe('GET')
-        expect(getBusinessAddressChange.path).toBe('/business/{sbi}/business-address-change')
+        expect(getBusinessAddressChange.path).toBe('/business/{sbi}/address-change')
       })
 
       test('it calls fetchBusinessChangeService with credentials and changeBusinessPostcode', async () => {
@@ -89,7 +89,7 @@ describe('business address change', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-address-change', () => {
+  describe('POST /business/{sbi}/address-change', () => {
     beforeEach(() => {
       request.payload = { postcode: 'SW1A 1AA' }
       fetchBusinessChangeService.mockResolvedValue(getMockData())
@@ -99,7 +99,7 @@ describe('business address change', () => {
 
     test('should have the correct method and path configured', () => {
       expect(postBusinessAddressChange.method).toBe('POST')
-      expect(postBusinessAddressChange.path).toBe('/business/{sbi}/business-address-change')
+      expect(postBusinessAddressChange.path).toBe('/business/{sbi}/address-change')
     })
 
     describe('and the validation passes', () => {
@@ -113,7 +113,7 @@ describe('business address change', () => {
           request.payload
         )
         expect(addressLookupService).toHaveBeenCalledWith('SW1A 1AA', request.yar, 'business')
-        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-address-select')
+        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/address-select')
       })
     })
 

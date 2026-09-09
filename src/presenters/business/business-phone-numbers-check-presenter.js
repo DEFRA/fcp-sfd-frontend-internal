@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting on the `/business-phone-numbers-check` page
+ * Formats data ready for presenting on the `/phone-numbers-check` page
  * @module businessPhoneNumbersCheckPresenter
  */
 

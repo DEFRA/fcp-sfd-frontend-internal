@@ -45,10 +45,10 @@ describe('business legal status check', () => {
     fetchBusinessChangeService.mockResolvedValue(getMockData())
   })
 
-  describe('GET /business/{sbi}/business-legal-status-check', () => {
+  describe('GET /business/{sbi}/legal-status-check', () => {
     test('should have the correct method and path configured', () => {
       expect(getBusinessLegalStatusCheck.method).toBe('GET')
-      expect(getBusinessLegalStatusCheck.path).toBe('/business/{sbi}/business-legal-status-check')
+      expect(getBusinessLegalStatusCheck.path).toBe('/business/{sbi}/legal-status-check')
     })
 
     test('has pre-handlers for sbi validation and registration number validation', () => {
@@ -75,10 +75,10 @@ describe('business legal status check', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-legal-status-check', () => {
+  describe('POST /business/{sbi}/legal-status-check', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessLegalStatusCheck.method).toBe('POST')
-      expect(postBusinessLegalStatusCheck.path).toBe('/business/{sbi}/business-legal-status-check')
+      expect(postBusinessLegalStatusCheck.path).toBe('/business/{sbi}/legal-status-check')
     })
 
     test('has pre-handlers for sbi validation and registration number validation', () => {

@@ -13,3 +13,4 @@ coverage
 .public
 CLAUDE.local.md
 .claude/settings.local.json
+.github/prompts

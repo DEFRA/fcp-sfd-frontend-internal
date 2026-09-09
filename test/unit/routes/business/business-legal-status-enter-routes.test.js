@@ -50,10 +50,10 @@ describe('business legal status enter', () => {
     fetchBusinessChangeService.mockResolvedValue(getMockData())
   })
 
-  describe('GET /business/{sbi}/business-legal-status-enter', () => {
+  describe('GET /business/{sbi}/legal-status-enter', () => {
     test('should have the correct method and path configured', () => {
       expect(getBusinessLegalStatusEnter.method).toBe('GET')
-      expect(getBusinessLegalStatusEnter.path).toBe('/business/{sbi}/business-legal-status-enter')
+      expect(getBusinessLegalStatusEnter.path).toBe('/business/{sbi}/legal-status-enter')
     })
 
     test('it calls fetchBusinessChangeService with credentials and the legal status session fields', async () => {
@@ -80,7 +80,7 @@ describe('business legal status enter', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-legal-status-enter', () => {
+  describe('POST /business/{sbi}/legal-status-enter', () => {
     describe('and the number is valid', () => {
       test('it sets the registration number in session and redirects to check', async () => {
         request.payload = { charityCommissionRegistrationNumber: '1234567' }
@@ -100,7 +100,7 @@ describe('business legal status enter', () => {
           'changeBusinessCharityCommissionRegistrationNumber',
           '1234567'
         )
-        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-legal-status-check')
+        expect(h.redirect).toHaveBeenCalledWith('/business/106705779/legal-status-check')
       })
     })
 

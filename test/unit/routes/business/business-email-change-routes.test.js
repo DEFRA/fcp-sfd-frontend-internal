@@ -45,7 +45,7 @@ describe('business email change routes', () => {
     }
   })
 
-  describe('GET /business/{sbi}/business-email-change', () => {
+  describe('GET /business/{sbi}/email-change', () => {
     const businessDetails = { info: { sbi: '106705779' } }
     const pageData = { pageTitle: 'What is your business email address?' }
 
@@ -56,7 +56,7 @@ describe('business email change routes', () => {
 
     test('should have the correct method and path configured', () => {
       expect(getBusinessEmailChange.method).toBe('GET')
-      expect(getBusinessEmailChange.path).toBe('/business/{sbi}/business-email-change')
+      expect(getBusinessEmailChange.path).toBe('/business/{sbi}/email-change')
     })
 
     test('fetches the business change details, presents them and renders the page', async () => {
@@ -68,7 +68,7 @@ describe('business email change routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-email-change validation failAction', () => {
+  describe('POST /business/{sbi}/email-change validation failAction', () => {
     const businessDetails = { info: { sbi: '106705779' } }
     const pageData = { pageTitle: 'What is your business email address?' }
 
@@ -86,17 +86,17 @@ describe('business email change routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-email-change', () => {
+  describe('POST /business/{sbi}/email-change', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessEmailChange.method).toBe('POST')
-      expect(postBusinessEmailChange.path).toBe('/business/{sbi}/business-email-change')
+      expect(postBusinessEmailChange.path).toBe('/business/{sbi}/email-change')
     })
 
     test('stores the submitted email in session and redirects to the check page', async () => {
       await postBusinessEmailChange.options.handler(request, h)
 
       expect(setSessionData).toHaveBeenCalledWith(request.yar, 'businessDetailsUpdate', 'changeBusinessEmail', 'new@example.com')
-      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-email-check')
+      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/email-check')
     })
   })
 })

@@ -28,8 +28,8 @@ describe('businessLegalStatusCheckPresenter', () => {
     test('the back link and legal status change link point to the change page', () => {
       const result = businessLegalStatusCheckPresenter(data)
 
-      expect(result.backLink).toEqual('/business/106705779/business-legal-status-change')
-      expect(result.legalStatusChangeLink).toBe('/business/106705779/business-legal-status-change')
+      expect(result.backLink).toEqual('/business/106705779/legal-status-change')
+      expect(result.legalStatusChangeLink).toBe('/business/106705779/legal-status-change')
     })
 
     test('no registration number is displayed', () => {
@@ -44,7 +44,7 @@ describe('businessLegalStatusCheckPresenter', () => {
 
       const result = businessLegalStatusCheckPresenter(data)
 
-      expect(result.legalStatusChangeLink).toBe('/business/106705779/business-legal-status-change')
+      expect(result.legalStatusChangeLink).toBe('/business/106705779/legal-status-change')
       expect(result.registrationNumberLabel).toBeNull()
     })
   })
@@ -58,14 +58,14 @@ describe('businessLegalStatusCheckPresenter', () => {
     test('the back link points to the enter page, but the legal status change link still points to the change page', () => {
       const result = businessLegalStatusCheckPresenter(data)
 
-      expect(result.backLink).toEqual('/business/106705779/business-legal-status-enter')
-      expect(result.legalStatusChangeLink).toBe('/business/106705779/business-legal-status-change')
+      expect(result.backLink).toEqual('/business/106705779/legal-status-enter')
+      expect(result.legalStatusChangeLink).toBe('/business/106705779/legal-status-change')
     })
 
     test('the registration number change link points to the enter page', () => {
       const result = businessLegalStatusCheckPresenter(data)
 
-      expect(result.registrationNumberChangeLink).toBe('/business/106705779/business-legal-status-enter')
+      expect(result.registrationNumberChangeLink).toBe('/business/106705779/legal-status-enter')
     })
 
     test('the charity registration number is played back', () => {
@@ -94,14 +94,14 @@ describe('businessLegalStatusCheckPresenter', () => {
     test('the back link points to the enter page, but the legal status change link still points to the change page', () => {
       const result = businessLegalStatusCheckPresenter(data)
 
-      expect(result.backLink).toEqual('/business/106705779/business-legal-status-enter')
-      expect(result.legalStatusChangeLink).toBe('/business/106705779/business-legal-status-change')
+      expect(result.backLink).toEqual('/business/106705779/legal-status-enter')
+      expect(result.legalStatusChangeLink).toBe('/business/106705779/legal-status-change')
     })
 
     test('the registration number change link points to the enter page', () => {
       const result = businessLegalStatusCheckPresenter(data)
 
-      expect(result.registrationNumberChangeLink).toBe('/business/106705779/business-legal-status-enter')
+      expect(result.registrationNumberChangeLink).toBe('/business/106705779/legal-status-enter')
     })
 
     test('the company registration number is played back', () => {

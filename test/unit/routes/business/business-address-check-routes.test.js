@@ -43,7 +43,7 @@ describe('business address check', () => {
     }
   })
 
-  describe('GET /business/{sbi}/business-address-check', () => {
+  describe('GET /business/{sbi}/address-check', () => {
     describe('when a request is valid', () => {
       beforeEach(() => {
         fetchBusinessChangeService.mockResolvedValue(getMockData())
@@ -51,7 +51,7 @@ describe('business address check', () => {
 
       test('should have the correct method and path configured', () => {
         expect(getBusinessAddressCheck.method).toBe('GET')
-        expect(getBusinessAddressCheck.path).toBe('/business/{sbi}/business-address-check')
+        expect(getBusinessAddressCheck.path).toBe('/business/{sbi}/address-check')
       })
 
       test('it calls fetchBusinessChangeService with credentials and changeBusinessAddress', async () => {
@@ -78,14 +78,14 @@ describe('business address check', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-address-check', () => {
+  describe('POST /business/{sbi}/address-check', () => {
     beforeEach(() => {
       fetchBusinessChangeService.mockResolvedValue(getMockData())
     })
 
     test('should have the correct method and path configured', () => {
       expect(postBusinessAddressCheck.method).toBe('POST')
-      expect(postBusinessAddressCheck.path).toBe('/business/{sbi}/business-address-check')
+      expect(postBusinessAddressCheck.path).toBe('/business/{sbi}/address-check')
     })
 
     test('it calls updateBusinessAddressChangeService', async () => {

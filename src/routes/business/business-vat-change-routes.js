@@ -6,7 +6,7 @@ import { businessVatChangePresenter } from '../../presenters/business/business-v
 
 const getBusinessVatChange = {
   method: 'GET',
-  path: '/business/{sbi}/business-vat-registration-number-change',
+  path: '/business/{sbi}/vat-registration-number-change',
   options: {
     pre: [validateSbi]
   },
@@ -24,7 +24,7 @@ const getBusinessVatChange = {
 
 const postBusinessVatChange = {
   method: 'POST',
-  path: '/business/{sbi}/business-vat-registration-number-change',
+  path: '/business/{sbi}/vat-registration-number-change',
   options: {
     pre: [validateSbi],
     validate: {
@@ -50,7 +50,7 @@ const postBusinessVatChange = {
 
       setSessionData(yar, 'businessDetailsUpdate', 'changeBusinessVat', payload.vatNumber)
 
-      return h.redirect(`/business/${sbi}/business-vat-registration-number-check`)
+      return h.redirect(`/business/${sbi}/vat-registration-number-check`)
     }
   }
 }

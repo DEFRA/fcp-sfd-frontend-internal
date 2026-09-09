@@ -5,7 +5,7 @@ import { validateSbi } from '../pre-handlers.js'
 
 const getBusinessVatCheck = {
   method: 'GET',
-  path: '/business/{sbi}/business-vat-registration-number-check',
+  path: '/business/{sbi}/vat-registration-number-check',
   options: {
     pre: [validateSbi]
   },
@@ -23,7 +23,7 @@ const getBusinessVatCheck = {
 
 const postBusinessVatCheck = {
   method: 'POST',
-  path: '/business/{sbi}/business-vat-registration-number-check',
+  path: '/business/{sbi}/vat-registration-number-check',
   options: {
     pre: [validateSbi]
   },

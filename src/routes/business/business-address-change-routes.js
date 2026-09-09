@@ -8,7 +8,7 @@ import { validateSbi } from '../pre-handlers.js'
 
 const getBusinessAddressChange = {
   method: 'GET',
-  path: '/business/{sbi}/business-address-change',
+  path: '/business/{sbi}/address-change',
   options: {
     pre: [validateSbi]
   },
@@ -26,7 +26,7 @@ const getBusinessAddressChange = {
 
 const postBusinessAddressChange = {
   method: 'POST',
-  path: '/business/{sbi}/business-address-change',
+  path: '/business/{sbi}/address-change',
   options: {
     pre: [validateSbi],
     validate: {
@@ -57,7 +57,7 @@ const postBusinessAddressChange = {
       return h.view('business/business-address-change', pageData).code(constants.statusCodes.BAD_REQUEST).takeover()
     }
 
-    return h.redirect(`/business/${sbi}/business-address-select`)
+    return h.redirect(`/business/${sbi}/address-select`)
   }
 }
 

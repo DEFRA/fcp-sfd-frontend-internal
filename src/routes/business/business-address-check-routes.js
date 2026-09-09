@@ -5,7 +5,7 @@ import { validateSbi } from '../pre-handlers.js'
 
 const getBusinessAddressCheck = {
   method: 'GET',
-  path: '/business/{sbi}/business-address-check',
+  path: '/business/{sbi}/address-check',
   options: {
     pre: [validateSbi]
   },
@@ -23,7 +23,7 @@ const getBusinessAddressCheck = {
 
 const postBusinessAddressCheck = {
   method: 'POST',
-  path: '/business/{sbi}/business-address-check',
+  path: '/business/{sbi}/address-check',
   options: {
     pre: [validateSbi]
   },

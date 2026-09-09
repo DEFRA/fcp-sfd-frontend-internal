@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the `/business/{sbi}/business-legal-status-enter` page
+ * Formats data ready for presenting in the `/business/{sbi}/legal-status-enter` page
  * @module businessLegalStatusEnterPresenter
  */
 
@@ -22,7 +22,7 @@ const REGISTRATION_CONTENT = {
 }
 
 /**
- * Formats data for the `charity` or `company` variant of the `/business/{sbi}/business-legal-status-enter` page
+ * Formats data for the `charity` or `company` variant of the `/business/{sbi}/legal-status-enter` page
  *
  * This single page is shared by two journeys, chosen by the legal status the user picked on the
  * change page: a Charity Commission registration number, or a Companies House registration number.
@@ -72,7 +72,7 @@ const setBackLink = (data, sbi) => {
   }
 
   return data.changeBusinessLegalStatus
-    ? `/business/${sbi}/business-legal-status-change`
+    ? `/business/${sbi}/legal-status-change`
     : `/business/${sbi}/details`
 }
 

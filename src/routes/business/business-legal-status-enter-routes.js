@@ -8,7 +8,7 @@ import { BUSINESS_LEGAL_STATUS_SESSION_FIELDS } from '../../constants/business-l
 
 const getBusinessLegalStatusEnter = {
   method: 'GET',
-  path: '/business/{sbi}/business-legal-status-enter',
+  path: '/business/{sbi}/legal-status-enter',
   options: {
     pre: [validateSbi]
   },
@@ -26,7 +26,7 @@ const getBusinessLegalStatusEnter = {
 
 const postBusinessLegalStatusEnter = {
   method: 'POST',
-  path: '/business/{sbi}/business-legal-status-enter',
+  path: '/business/{sbi}/legal-status-enter',
   options: {
     pre: [validateSbi]
   },
@@ -48,7 +48,7 @@ const postBusinessLegalStatusEnter = {
 
     setSessionData(yar, 'businessDetailsUpdate', sessionField, value[payloadField])
 
-    return h.redirect(`/business/${sbi}/business-legal-status-check`)
+    return h.redirect(`/business/${sbi}/legal-status-check`)
   }
 }
 

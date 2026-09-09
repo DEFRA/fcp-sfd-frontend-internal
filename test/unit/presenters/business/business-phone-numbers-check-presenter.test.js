@@ -29,8 +29,8 @@ describe('businessPhoneNumbersCheckPresenter', () => {
       const result = businessPhoneNumbersCheckPresenter(data)
 
       expect(result).toEqual({
-        backLink: '/business/106705779/business-phone-numbers-change',
-        changeLink: '/business/106705779/business-phone-numbers-change',
+        backLink: '/business/106705779/phone-numbers-change',
+        changeLink: '/business/106705779/phone-numbers-change',
         pageTitle: 'Check your business phone numbers are correct before submitting',
         metaDescription: 'Check the phone numbers for your business are correct.',
         userName: null,
@@ -47,7 +47,7 @@ describe('businessPhoneNumbersCheckPresenter', () => {
       test('it returns the business phone numbers change page', () => {
         const result = businessPhoneNumbersCheckPresenter(data)
 
-        expect(result.backLink).toEqual('/business/106705779/business-phone-numbers-change')
+        expect(result.backLink).toEqual('/business/106705779/phone-numbers-change')
       })
     })
 

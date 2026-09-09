@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting on the `/business-vat-registration-number-check` page
+ * Formats data ready for presenting on the `/vat-registration-number-check` page
  * @module businessVatCheckPresenter
  */
 

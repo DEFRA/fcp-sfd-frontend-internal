@@ -54,9 +54,9 @@ describe('businessAddressSelectPresenter', () => {
       const result = businessAddressSelectPresenter(data)
 
       expect(result).toEqual({
-        backLink: '/business/123456789/business-address-change',
-        postcodeChangeLink: '/business/123456789/business-address-change',
-        manualAddressLink: '/business/123456789/business-address-enter',
+        backLink: '/business/123456789/address-change',
+        postcodeChangeLink: '/business/123456789/address-change',
+        manualAddressLink: '/business/123456789/address-enter',
         pageTitle: 'Choose your business address',
         metaDescription: 'Choose the address for your business.',
         businessName: 'Agile Farm Ltd',

@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting on the `/business-vat-registration-number-change` page
+ * Formats data ready for presenting on the `/vat-registration-number-change` page
  * @module businessVatChangePresenter
  */
 

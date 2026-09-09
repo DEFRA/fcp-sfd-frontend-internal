@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the `business-legal-status-check` page
+ * Formats data ready for presenting in the `legal-status-check` page
  * @module businessLegalStatusCheckPresenter
  */
 
@@ -30,18 +30,18 @@ const businessLegalStatusCheckPresenter = (data) => {
 
 const setLinks = (isCharity, isCompany, sbi) => {
   if (sbi) {
-    const legalStatusChangeLink = `/business/${sbi}/business-legal-status-change`
-    const registrationNumberChangeLink = `/business/${sbi}/business-legal-status-enter`
+    const legalStatusChangeLink = `/business/${sbi}/legal-status-change`
+    const registrationNumberChangeLink = `/business/${sbi}/legal-status-enter`
 
     if (isCharity || isCompany) {
       return {
-        backLink: `/business/${sbi}/business-legal-status-enter`,
+        backLink: `/business/${sbi}/legal-status-enter`,
         legalStatusChangeLink,
         registrationNumberChangeLink
       }
     }
     return {
-      backLink: `/business/${sbi}/business-legal-status-change`,
+      backLink: `/business/${sbi}/legal-status-change`,
       legalStatusChangeLink,
       registrationNumberChangeLink
     }

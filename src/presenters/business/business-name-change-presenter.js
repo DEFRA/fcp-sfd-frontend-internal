@@ -1,5 +1,5 @@
 /**
- * Formats data ready for presenting in the `business-name-change` page
+ * Formats data ready for presenting in the `name-change` page
  * @module businessNameChangePresenter
  */
 

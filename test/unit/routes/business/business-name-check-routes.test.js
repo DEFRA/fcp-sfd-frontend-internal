@@ -38,7 +38,7 @@ describe('business name check routes', () => {
       params: { sbi: '106705779' },
       yar: { get: vi.fn().mockReturnValue({ sbi: '106705779' }), set: vi.fn() },
       auth: { credentials: { email: 'test.user@defra.gov.uk' } },
-      info: { referrer: 'https://example.com/business/106705779/business-name-change' }
+      info: { referrer: 'https://example.com/business/106705779/name-change' }
     }
 
     h = {
@@ -47,7 +47,7 @@ describe('business name check routes', () => {
     }
   })
 
-  describe('GET /business/{sbi}/business-name-check', () => {
+  describe('GET /business/{sbi}/name-check', () => {
     const businessNameChange = { info: { sbi: '106705779' } }
     const pageData = { pageTitle: 'Check your business name is correct before submitting' }
 
@@ -58,7 +58,7 @@ describe('business name check routes', () => {
 
     test('should have the correct method and path configured', () => {
       expect(getBusinessNameCheck.method).toBe('GET')
-      expect(getBusinessNameCheck.path).toBe('/business/{sbi}/business-name-check')
+      expect(getBusinessNameCheck.path).toBe('/business/{sbi}/name-check')
     })
 
     test('guards the route with the shared validateSbi pre-handler', () => {
@@ -84,10 +84,10 @@ describe('business name check routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-name-check', () => {
+  describe('POST /business/{sbi}/name-check', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessNameCheck.method).toBe('POST')
-      expect(postBusinessNameCheck.path).toBe('/business/{sbi}/business-name-check')
+      expect(postBusinessNameCheck.path).toBe('/business/{sbi}/name-check')
     })
 
     test('guards the route with the shared validateSbi pre-handler', () => {

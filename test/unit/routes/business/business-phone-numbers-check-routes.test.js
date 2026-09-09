@@ -38,7 +38,7 @@ describe('business phone numbers check routes', () => {
       params: { sbi: '106705779' },
       yar: { get: vi.fn().mockReturnValue({ sbi: '106705779' }), set: vi.fn() },
       auth: { credentials: { email: 'test.user@defra.gov.uk' } },
-      info: { referrer: 'https://example.com/business/106705779/business-phone-numbers-change' }
+      info: { referrer: 'https://example.com/business/106705779/phone-numbers-change' }
     }
 
     h = {
@@ -47,7 +47,7 @@ describe('business phone numbers check routes', () => {
     }
   })
 
-  describe('GET /business/{sbi}/business-phone-numbers-check', () => {
+  describe('GET /business/{sbi}/phone-numbers-check', () => {
     const businessPhoneNumbersChange = { info: { sbi: '106705779' } }
     const pageData = { pageTitle: 'Check your business phone numbers are correct before submitting' }
 
@@ -58,7 +58,7 @@ describe('business phone numbers check routes', () => {
 
     test('should have the correct method and path configured', () => {
       expect(getBusinessPhoneNumbersCheck.method).toBe('GET')
-      expect(getBusinessPhoneNumbersCheck.path).toBe('/business/{sbi}/business-phone-numbers-check')
+      expect(getBusinessPhoneNumbersCheck.path).toBe('/business/{sbi}/phone-numbers-check')
     })
 
     test('guards the route with the shared validateSbi pre-handler', () => {
@@ -84,10 +84,10 @@ describe('business phone numbers check routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-phone-numbers-check', () => {
+  describe('POST /business/{sbi}/phone-numbers-check', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessPhoneNumbersCheck.method).toBe('POST')
-      expect(postBusinessPhoneNumbersCheck.path).toBe('/business/{sbi}/business-phone-numbers-check')
+      expect(postBusinessPhoneNumbersCheck.path).toBe('/business/{sbi}/phone-numbers-check')
     })
 
     test('guards the route with the shared validateSbi pre-handler', () => {

@@ -46,7 +46,7 @@ describe('businessAddressEnterPresenter', () => {
       const result = businessAddressEnterPresenter(data, payload)
 
       expect(result).toEqual({
-        backLink: '/business/123456789/business-address-change',
+        backLink: '/business/123456789/address-change',
         pageTitle: 'Enter your business address',
         metaDescription: 'Enter the address for your business.',
         businessName: 'Agile Farm Ltd',

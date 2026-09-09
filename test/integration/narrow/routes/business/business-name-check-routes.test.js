@@ -19,7 +19,7 @@ const { createServer } = await import('../../../../../src/server.js')
 
 describe('business name check route', () => {
   const sbi = '106705779'
-  const path = `/business/${sbi}/business-name-check`
+  const path = `/business/${sbi}/name-check`
   let server
 
   beforeAll(async () => {
@@ -35,7 +35,7 @@ describe('business name check route', () => {
     }
   })
 
-  describe('GET /business/{sbi}/business-name-check', () => {
+  describe('GET /business/{sbi}/name-check', () => {
     test('returns 200 and renders the business name check view when authenticated', async () => {
       fetchBusinessChangeService.mockResolvedValue({
         info: { sbi, businessName: 'Herberts Lawn Mowing' },
@@ -58,7 +58,7 @@ describe('business name check route', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-name-check', () => {
+  describe('POST /business/{sbi}/name-check', () => {
     test('is rejected with 403 when the CSRF crumb is missing', async () => {
       const response = await server.inject({
         method: 'POST',

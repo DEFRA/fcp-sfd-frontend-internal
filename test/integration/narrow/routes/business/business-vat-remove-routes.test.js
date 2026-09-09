@@ -23,7 +23,7 @@ const { createServer } = await import('../../../../../src/server.js')
 
 describe('business VAT remove route', () => {
   const sbi = '106705779'
-  const path = `/business/${sbi}/business-vat-registration-remove`
+  const path = `/business/${sbi}/vat-registration-remove`
   const credentials = { sessionId: 'session-id' }
   const businessDetails = { info: { sbi, businessName: 'Herberts Lawn Mowing', vat: 'GB123456789' } }
   let server
@@ -57,7 +57,7 @@ describe('business VAT remove route', () => {
     return { crumbValue, cookie: `crumb=${crumbValue}` }
   }
 
-  describe('GET /business/{sbi}/business-vat-registration-remove', () => {
+  describe('GET /business/{sbi}/vat-registration-remove', () => {
     test('returns 200 and renders the business VAT remove view when authenticated', async () => {
       fetchBusinessChangeService.mockResolvedValue(businessDetails)
 
@@ -94,7 +94,7 @@ describe('business VAT remove route', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-vat-registration-remove', () => {
+  describe('POST /business/{sbi}/vat-registration-remove', () => {
     test('is rejected with 403 when the CSRF crumb is missing', async () => {
       const response = await server.inject({
         method: 'POST',

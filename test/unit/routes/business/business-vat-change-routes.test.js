@@ -51,10 +51,10 @@ describe('business VAT change routes', () => {
     businessVatChangePresenter.mockReturnValue(pageData)
   })
 
-  describe('GET /business/{sbi}/business-vat-registration-number-change', () => {
+  describe('GET /business/{sbi}/vat-registration-number-change', () => {
     test('should have the correct method and path configured', () => {
       expect(getBusinessVatChange.method).toBe('GET')
-      expect(getBusinessVatChange.path).toBe('/business/{sbi}/business-vat-registration-number-change')
+      expect(getBusinessVatChange.path).toBe('/business/{sbi}/vat-registration-number-change')
     })
 
     test('fetches the business change details, presents them and renders the page', async () => {
@@ -66,21 +66,21 @@ describe('business VAT change routes', () => {
     })
   })
 
-  describe('POST /business/{sbi}/business-vat-registration-number-change', () => {
+  describe('POST /business/{sbi}/vat-registration-number-change', () => {
     test('should have the correct method and path configured', () => {
       expect(postBusinessVatChange.method).toBe('POST')
-      expect(postBusinessVatChange.path).toBe('/business/{sbi}/business-vat-registration-number-change')
+      expect(postBusinessVatChange.path).toBe('/business/{sbi}/vat-registration-number-change')
     })
 
     test('stores the submitted VAT number in session and redirects to the check page', async () => {
       await postBusinessVatChange.options.handler(request, h)
 
       expect(setSessionData).toHaveBeenCalledWith(request.yar, 'businessDetailsUpdate', 'changeBusinessVat', 'GB123456789')
-      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/business-vat-registration-number-check')
+      expect(h.redirect).toHaveBeenCalledWith('/business/106705779/vat-registration-number-check')
     })
   })
 
-  describe('POST /business/{sbi}/business-vat-registration-number-change validation failAction', () => {
+  describe('POST /business/{sbi}/vat-registration-number-change validation failAction', () => {
     test('re-fetches details and re-presents the page with the submitted VAT number and referrer', async () => {
       const err = {
         details: [

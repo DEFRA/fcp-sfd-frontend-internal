@@ -44,8 +44,8 @@ describe('businessAddressCheckPresenter', () => {
       const result = businessAddressCheckPresenter(data)
 
       expect(result).toEqual({
-        backLink: '/business/123456789/business-address-enter',
-        changeLink: '/business/123456789/business-address-enter',
+        backLink: '/business/123456789/address-enter',
+        changeLink: '/business/123456789/address-enter',
         pageTitle: 'Check your business address is correct before submitting',
         metaDescription: 'Check the address for your business is correct.',
         businessName: 'Agile Farm Ltd',
@@ -177,7 +177,7 @@ describe('businessAddressCheckPresenter', () => {
       test('it should return backLink with business-address-select', () => {
         const result = businessAddressCheckPresenter(data)
 
-        expect(result.backLink).toEqual('/business/123456789/business-address-select')
+        expect(result.backLink).toEqual('/business/123456789/address-select')
       })
     })
 
@@ -191,7 +191,7 @@ describe('businessAddressCheckPresenter', () => {
       test('it should return backLink with business-address-enter', () => {
         const result = businessAddressCheckPresenter(data)
 
-        expect(result.backLink).toEqual('/business/123456789/business-address-enter')
+        expect(result.backLink).toEqual('/business/123456789/address-enter')
       })
     })
   })
@@ -207,7 +207,7 @@ describe('businessAddressCheckPresenter', () => {
       test('it should return changeLink with business-address-select', () => {
         const result = businessAddressCheckPresenter(data)
 
-        expect(result.changeLink).toEqual('/business/123456789/business-address-select')
+        expect(result.changeLink).toEqual('/business/123456789/address-select')
       })
     })
 
@@ -221,7 +221,7 @@ describe('businessAddressCheckPresenter', () => {
       test('it should return changeLink with business-address-enter', () => {
         const result = businessAddressCheckPresenter(data)
 
-        expect(result.changeLink).toEqual('/business/123456789/business-address-enter')
+        expect(result.changeLink).toEqual('/business/123456789/address-enter')
       })
     })
   })

@@ -41,11 +41,13 @@ const { updateBusinessPhoneNumbersChangeService } = await import('../../../../sr
 
 describe('updateBusinessPhoneNumbersChangeService', () => {
   let yar
+  let sbi
   let email
 
   beforeEach(() => {
     vi.clearAllMocks()
 
+    sbi = '106705779'
     email = 'test.user@defra.gov.uk'
 
     yar = {
@@ -64,13 +66,13 @@ describe('updateBusinessPhoneNumbersChangeService', () => {
   })
 
   test('fetches the pending business phone numbers change from session', async () => {
-    await updateBusinessPhoneNumbersChangeService(yar, email)
+    await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
-    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, email, 'changeBusinessPhoneNumbers')
+    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, sbi, email, 'changeBusinessPhoneNumbers')
   })
 
   test('persists the updated phone numbers via the DAL', async () => {
-    await updateBusinessPhoneNumbersChangeService(yar, email)
+    await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
     expect(mockUpdateDalService).toHaveBeenCalledWith(
       'update-business-phone-numbers-mutation',
@@ -80,13 +82,13 @@ describe('updateBusinessPhoneNumbersChangeService', () => {
   })
 
   test('clears the cached business details from session', async () => {
-    await updateBusinessPhoneNumbersChangeService(yar, email)
+    await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
     expect(yar.clear).toHaveBeenCalledWith('businessDetailsUpdate')
   })
 
   test('displays a success flash notification', async () => {
-    await updateBusinessPhoneNumbersChangeService(yar, email)
+    await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
     expect(mockFlashNotification).toHaveBeenCalledWith(yar, 'Success', 'You have updated your business phone numbers')
   })
@@ -97,7 +99,7 @@ describe('updateBusinessPhoneNumbersChangeService', () => {
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {
-      await updateBusinessPhoneNumbersChangeService(yar, email)
+      await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
       expect(mockUpdateDalService).not.toHaveBeenCalled()
       expect(yar.clear).not.toHaveBeenCalled()

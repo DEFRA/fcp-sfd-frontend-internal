@@ -20,9 +20,9 @@ const getBusinessLegalStatusChange = {
     delete sessionData.changeBusinessCharityCommissionRegistrationNumber
     delete sessionData.changeBusinessCompanyRegistrationNumber
 
-    yar.set('businessDetailsUpdate', { ...sessionData, sbi })
+    yar.set('businessDetailsUpdate', sessionData)
 
-    const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessLegalStatus')
+    const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessLegalStatus')
     const pageData = businessLegalStatusChangePresenter(businessDetails)
 
     return h.view('business/business-legal-status-change', pageData)
@@ -40,11 +40,12 @@ const postBusinessLegalStatusChange = {
         abortEarly: false
       },
       failAction: async (request, h, err) => {
-        const { yar, auth, payload } = request
+        const { yar, auth, payload, params } = request
+        const { sbi } = params
         const email = auth.credentials?.email
 
         const errors = utils.formatValidationErrors(err.details || [])
-        const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessLegalStatus')
+        const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessLegalStatus')
         const pageData = businessLegalStatusChangePresenter(businessDetails, payload.businessLegalStatus)
 
         return h.view('business/business-legal-status-change', { ...pageData, errors }).code(constants.statusCodes.BAD_REQUEST).takeover()

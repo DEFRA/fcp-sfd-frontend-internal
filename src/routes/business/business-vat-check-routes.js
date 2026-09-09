@@ -14,9 +14,7 @@ const getBusinessVatCheck = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessVatChange = await fetchBusinessChangeService(yar, email, 'changeBusinessVat')
+    const businessVatChange = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessVat')
     const pageData = businessVatCheckPresenter(businessVatChange)
 
     return h.view('business/business-vat-registration-number-check', pageData)
@@ -34,7 +32,7 @@ const postBusinessVatCheck = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    await updateBusinessVatChangeService(yar, email)
+    await updateBusinessVatChangeService(yar, sbi, email)
 
     return h.redirect(`/business/${sbi}/details`)
   }

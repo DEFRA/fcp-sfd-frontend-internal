@@ -14,9 +14,7 @@ const getBusinessPhoneNumbersCheck = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessPhoneNumbersChange = await fetchBusinessChangeService(yar, email, 'changeBusinessPhoneNumbers')
+    const businessPhoneNumbersChange = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessPhoneNumbers')
     const pageData = businessPhoneNumbersCheckPresenter(businessPhoneNumbersChange)
 
     return h.view('business/business-phone-numbers-check', pageData)
@@ -34,7 +32,7 @@ const postBusinessPhoneNumbersCheck = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    await updateBusinessPhoneNumbersChangeService(yar, email)
+    await updateBusinessPhoneNumbersChangeService(yar, sbi, email)
 
     return h.redirect(`/business/${sbi}/details`)
   }

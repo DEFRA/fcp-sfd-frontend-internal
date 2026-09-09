@@ -14,9 +14,7 @@ const getBusinessEmailCheck = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    yar.set('businessDetailsUpdate', { ...yar.get('businessDetailsUpdate'), sbi })
-
-    const businessEmailChange = await fetchBusinessChangeService(yar, email, 'changeBusinessEmail')
+    const businessEmailChange = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessEmail')
     const pageData = businessEmailCheckPresenter(businessEmailChange)
 
     return h.view('business/business-email-check', pageData)
@@ -34,7 +32,7 @@ const postBusinessEmailCheck = {
     const { sbi } = params
     const email = auth.credentials?.email
 
-    await updateBusinessEmailChangeService(yar, email)
+    await updateBusinessEmailChangeService(yar, sbi, email)
 
     return h.redirect(`/business/${sbi}/details`)
   }

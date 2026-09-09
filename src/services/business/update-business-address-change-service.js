@@ -13,8 +13,8 @@ import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 import { updateDalService } from '../DAL/update-dal-service.js'
 
-const updateBusinessAddressChangeService = async (yar, email) => {
-  const businessDetails = await fetchBusinessChangeService(yar, email, 'changeBusinessAddress')
+const updateBusinessAddressChangeService = async (yar, sbi, email) => {
+  const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessAddress')
 
   if (!businessDetails.changeBusinessAddress) {
     return

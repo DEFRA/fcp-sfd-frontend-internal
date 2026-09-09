@@ -41,11 +41,13 @@ const { updateBusinessLegalStatusChangeService } = await import('../../../../src
 
 describe('updateBusinessLegalStatusChangeService', () => {
   let yar
+  let sbi
   let email
 
   beforeEach(() => {
     vi.clearAllMocks()
 
+    sbi = '107183280'
     email = 'test.user@defra.gov.uk'
 
     yar = {
@@ -64,9 +66,9 @@ describe('updateBusinessLegalStatusChangeService', () => {
   })
 
   test('fetches the pending legal status change from session', async () => {
-    await updateBusinessLegalStatusChangeService(yar, email)
+    await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
-    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, email, [
+    expect(mockFetchBusinessChangeService).toHaveBeenCalledWith(yar, sbi, email, [
       'changeBusinessLegalStatus',
       'changeBusinessCharityCommissionRegistrationNumber',
       'changeBusinessCompanyRegistrationNumber'
@@ -74,7 +76,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
   })
 
   test('builds both mutation variables and sends legal status before registration numbers', async () => {
-    await updateBusinessLegalStatusChangeService(yar, email)
+    await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
     expect(mockUpdateDalService).toHaveBeenNthCalledWith(
       1,
@@ -105,13 +107,13 @@ describe('updateBusinessLegalStatusChangeService', () => {
   })
 
   test('clears the cached business details from session', async () => {
-    await updateBusinessLegalStatusChangeService(yar, email)
+    await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
     expect(yar.clear).toHaveBeenCalledWith('businessDetailsUpdate')
   })
 
   test('displays a success flash notification', async () => {
-    await updateBusinessLegalStatusChangeService(yar, email)
+    await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
     expect(mockFlashNotification).toHaveBeenCalledWith(yar, 'Success', 'You have updated your business legal status')
   })
@@ -131,7 +133,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
     })
 
     test('nulls both registration values when they are no longer required', async () => {
-      await updateBusinessLegalStatusChangeService(yar, email)
+      await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
       expect(mockUpdateDalService).toHaveBeenNthCalledWith(
         2,
@@ -160,7 +162,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
       })
 
       test('sends the fetched registration number when none is pending in session', async () => {
-        await updateBusinessLegalStatusChangeService(yar, email)
+        await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
         expect(mockUpdateDalService).toHaveBeenNthCalledWith(
           2,
@@ -188,7 +190,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
       })
 
       test('sends the fetched registration number when none is pending in session', async () => {
-        await updateBusinessLegalStatusChangeService(yar, email)
+        await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
         expect(mockUpdateDalService).toHaveBeenNthCalledWith(
           2,
@@ -214,7 +216,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {
-      await updateBusinessLegalStatusChangeService(yar, email)
+      await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
       expect(mockUpdateDalService).not.toHaveBeenCalled()
       expect(yar.clear).not.toHaveBeenCalled()
@@ -231,7 +233,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {
-      await updateBusinessLegalStatusChangeService(yar, email)
+      await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
       expect(mockUpdateDalService).not.toHaveBeenCalled()
       expect(yar.clear).not.toHaveBeenCalled()
@@ -255,7 +257,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
       })
 
       test('sends only the registration numbers mutation', async () => {
-        await updateBusinessLegalStatusChangeService(yar, email)
+        await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
         expect(mockUpdateDalService).toHaveBeenCalledTimes(1)
         expect(mockUpdateDalService).toHaveBeenCalledWith(
@@ -274,7 +276,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
       })
 
       test('clears the session and notifies with the company registration number message', async () => {
-        await updateBusinessLegalStatusChangeService(yar, email)
+        await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
         expect(yar.clear).toHaveBeenCalledWith('businessDetailsUpdate')
         expect(mockFlashNotification).toHaveBeenCalledWith(
@@ -294,7 +296,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
       })
 
       test('sends the charity number and notifies with the charity registration number message', async () => {
-        await updateBusinessLegalStatusChangeService(yar, email)
+        await updateBusinessLegalStatusChangeService(yar, sbi, email)
 
         expect(mockUpdateDalService).toHaveBeenCalledWith(
           'update-business-registration-numbers-mutation',
@@ -326,7 +328,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
     })
 
     test('propagates the error without clearing session or notifying', async () => {
-      await expect(updateBusinessLegalStatusChangeService(yar, email)).rejects.toThrow('DAL unavailable')
+      await expect(updateBusinessLegalStatusChangeService(yar, sbi, email)).rejects.toThrow('DAL unavailable')
 
       expect(yar.clear).not.toHaveBeenCalled()
       expect(mockFlashNotification).not.toHaveBeenCalled()
@@ -346,7 +348,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
     })
 
     test('throws and does not clear session or notify', async () => {
-      await expect(updateBusinessLegalStatusChangeService(yar, email)).rejects.toThrow(
+      await expect(updateBusinessLegalStatusChangeService(yar, sbi, email)).rejects.toThrow(
         'DAL mutation did not succeed: updateBusinessLegalStatus'
       )
 
@@ -370,7 +372,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
     })
 
     test('throws and does not clear session or notify', async () => {
-      await expect(updateBusinessLegalStatusChangeService(yar, email)).rejects.toThrow(
+      await expect(updateBusinessLegalStatusChangeService(yar, sbi, email)).rejects.toThrow(
         'DAL mutation did not succeed: updateBusinessRegistrationNumbers'
       )
 

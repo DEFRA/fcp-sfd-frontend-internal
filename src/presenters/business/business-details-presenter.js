@@ -23,11 +23,7 @@ const businessDetailsPresenter = (data, sbi, yar, hasValidBusinessDetails, secti
     metaDescription: 'View and update your business details.',
     sbi,
     breadcrumbs: buildEntityBreadcrumbs('sbi', sbi, info.businessName, `/business/${sbi}`),
-    businessName: {
-      value: info.businessName || 'Not added',
-      action: presenters.getActionText(info.businessName),
-      changeLink: changeLinks.name
-    },
+    businessName: buildValueDisplay(info.businessName, 'Not added', changeLinks.name),
     businessAddress: {
       value: hasAddress ? addressLines : 'Not added',
       action: presenters.getActionText(hasAddress),
@@ -39,23 +35,30 @@ const businessDetailsPresenter = (data, sbi, yar, hasValidBusinessDetails, secti
       action: presenters.getActionText(data.contact.landline || data.contact.mobile),
       changeLink: changeLinks.phone
     },
-    businessEmail: {
-      value: contact.email || 'Not added',
-      action: presenters.getActionText(contact.email),
-      changeLink: changeLinks.email
-    },
+    businessEmail: buildValueDisplay(contact.email, 'Not added', changeLinks.email),
     vatNumber: buildVatDisplay(info.vat, sbi, changeLinks.vat),
     tradeNumber: info.traderNumber ?? null,
     vendorRegistrationNumber: info.vendorNumber ?? null,
     countyParishHoldingNumbers,
     countyParishHoldingNumbersText: presenters.formatCphText(countyParishHoldingNumbers.length),
-    businessLegalStatus: {
-      value: info.legalStatus || 'Not added',
-      action: presenters.getActionText(info.legalStatus),
-      changeLink: BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)
-    },
+    businessLegalStatus: buildValueDisplay(info.legalStatus, 'Not added', BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)),
     legalStatusRegistrationNumber: buildLegalStatusRegistrationNumberDisplay(info, sbi),
-    businessType: createEditableValueField(info.type, 'Not added')
+    businessType: buildValueDisplay(info.type, 'Not added', CHANGE_LINK)
+  }
+}
+
+/**
+ * Builds the value, action and changeLink for a simple business details field.
+ *
+ * Most fields on this page just need to show their value (or a fallback like
+ * "Not added"), work out whether the link should say "Add" or "Change", and
+ * link to a change page - this avoids repeating those three lines for every field.
+ */
+const buildValueDisplay = (value, emptyValueText, changeLink) => {
+  return {
+    value: value || emptyValueText,
+    action: presenters.getActionText(value),
+    changeLink
   }
 }
 
@@ -99,14 +102,6 @@ const formatChangeLinks = (sbi, hasValidBusinessDetails, sectionsNeedingUpdate =
     phone: singleSection === 'phone' ? CHANGE_LINKS.phone : fixLink('phone'),
     email: singleSection === 'email' ? CHANGE_LINKS.email : fixLink('email'),
     vat: singleSection === 'vat' ? null : fixLink('vat')
-  }
-}
-
-const createEditableValueField = (value, emptyValueText) => {
-  return {
-    value: value || emptyValueText,
-    action: presenters.getActionText(value),
-    changeLink: CHANGE_LINK
   }
 }
 

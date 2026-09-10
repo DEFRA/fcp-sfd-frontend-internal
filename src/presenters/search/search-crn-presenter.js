@@ -14,7 +14,7 @@ const searchCrnPresenter = (data, payload) => {
 
   return {
     clearSearchLink: SEARCH_CRN,
-    customerName: data?.info?.customerName || '',
+    customerName: data?.customerName || '',
     customerAddress: addressLines,
     customerPostcode: postcode,
     crn: payload ?? '',

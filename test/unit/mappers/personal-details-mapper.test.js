@@ -59,7 +59,7 @@ describe('personalDetailsMapper', () => {
       })
     })
 
-    describe('info.userName', () => {
+    describe('userName', () => {
       beforeEach(() => {
         dalData.customer.info.name = {
           first: 'Software',
@@ -71,11 +71,11 @@ describe('personalDetailsMapper', () => {
       test('it should build the userName correctly', () => {
         const result = mapPersonalDetails(dalData)
 
-        expect(result.info.userName).toEqual('Software Developer')
+        expect(result.userName).toEqual('Software Developer')
       })
     })
 
-    describe('info.fullName', () => {
+    describe('fullName', () => {
       beforeEach(() => {
         dalData.customer.info.name = {
           first: 'Software',
@@ -87,7 +87,7 @@ describe('personalDetailsMapper', () => {
       test('it should build the fullName object correctly', () => {
         const result = mapPersonalDetails(dalData)
 
-        expect(result.info.fullName).toEqual({
+        expect(result.fullName).toEqual({
           first: 'Software',
           last: 'Developer',
           middle: 'Engineer'
@@ -95,7 +95,7 @@ describe('personalDetailsMapper', () => {
       })
     })
 
-    describe('info.fullNameJoined', () => {
+    describe('fullNameJoined', () => {
       beforeEach(() => {
         dalData.customer.info.name = {
           first: 'Software',
@@ -107,18 +107,18 @@ describe('personalDetailsMapper', () => {
       test('it should build the fullNameJoined string correctly', () => {
         const result = mapPersonalDetails(dalData)
 
-        expect(result.info.fullNameJoined).toEqual('Software Engineer Developer')
+        expect(result.fullNameJoined).toEqual('Software Engineer Developer')
       })
 
       test('it should filter out null or undefined middle names', () => {
         dalData.customer.info.name.middle = null
         const result = mapPersonalDetails(dalData)
 
-        expect(result.info.fullNameJoined).toEqual('Software Developer')
+        expect(result.fullNameJoined).toEqual('Software Developer')
       })
     })
 
-    describe('info.dateOfBirth', () => {
+    describe('dateOfBirth', () => {
       describe('when date of birth exists', () => {
         beforeEach(() => {
           dalData.customer.info.dateOfBirth = '1990-01-01'
@@ -127,7 +127,7 @@ describe('personalDetailsMapper', () => {
         test('it should build the date of birth correctly when it exists', () => {
           const result = mapPersonalDetails(dalData)
 
-          expect(result.info.dateOfBirth).toEqual({
+          expect(result.dateOfBirth).toEqual({
             full: '1990-01-01',
             day: '01',
             month: '01',
@@ -144,7 +144,7 @@ describe('personalDetailsMapper', () => {
         test('it should build the date of birth correctly when it does not exist', () => {
           const result = mapPersonalDetails(dalData)
 
-          expect(result.info.dateOfBirth).toEqual({
+          expect(result.dateOfBirth).toEqual({
             full: null,
             day: null,
             month: null,
@@ -159,13 +159,13 @@ describe('personalDetailsMapper', () => {
         dalData.customer.info.name = null
         const result = mapPersonalDetails(dalData)
 
-        expect(result.info.userName).toBeNull()
-        expect(result.info.fullName).toEqual({
+        expect(result.userName).toBeNull()
+        expect(result.fullName).toEqual({
           first: null,
           last: null,
           middle: null
         })
-        expect(result.info.fullNameJoined).toEqual('')
+        expect(result.fullNameJoined).toEqual('')
       })
 
       test('it should handle missing address object gracefully', () => {
@@ -177,15 +177,15 @@ describe('personalDetailsMapper', () => {
         dalData.customer.info.email = null
         const result = mapPersonalDetails(dalData)
 
-        expect(result.contact.email).toBeNull()
+        expect(result.email).toBeNull()
       })
 
       test('it should handle missing phone object gracefully', () => {
         dalData.customer.info.phone = null
         const result = mapPersonalDetails(dalData)
 
-        expect(result.contact.telephone).toBeNull()
-        expect(result.contact.mobile).toBeNull()
+        expect(result.telephone).toBeNull()
+        expect(result.mobile).toBeNull()
       })
     })
 
@@ -214,33 +214,33 @@ describe('personalDetailsMapper', () => {
       test('it should map the email correctly', () => {
         const result = mapPersonalDetails(dalData)
 
-        expect(result.contact.email).toEqual('test@example.com')
+        expect(result.email).toEqual('test@example.com')
       })
 
       test('it should map the telephone correctly', () => {
         const result = mapPersonalDetails(dalData)
 
-        expect(result.contact.telephone).toEqual('01234567890')
+        expect(result.telephone).toEqual('01234567890')
       })
 
       test('it should map the mobile as null when not provided', () => {
         const result = mapPersonalDetails(dalData)
 
-        expect(result.contact.mobile).toBeNull()
+        expect(result.mobile).toBeNull()
       })
 
       test('it should map the mobile when provided', () => {
         dalData.customer.info.phone.mobile = '07700900123'
         const result = mapPersonalDetails(dalData)
 
-        expect(result.contact.mobile).toEqual('07700900123')
+        expect(result.mobile).toEqual('07700900123')
       })
 
       test('it should map telephone as null when not provided', () => {
         dalData.customer.info.phone.landline = null
         const result = mapPersonalDetails(dalData)
 
-        expect(result.contact.telephone).toBeNull()
+        expect(result.telephone).toBeNull()
       })
     })
   })

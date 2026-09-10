@@ -54,10 +54,8 @@ describe('customer overview routes', () => {
 
     describe('when auth credentials contain an email', () => {
       const customerDetails = {
-        info: {
-          crn: '1234567890',
-          customerName: 'Jane Smith'
-        },
+        crn: '1234567890',
+        customerName: 'Jane Smith',
         businesses: []
       }
       const pageData = {
@@ -83,10 +81,8 @@ describe('customer overview routes', () => {
 
     describe('when auth credentials have no email', () => {
       const customerDetails = {
-        info: {
-          crn: '1234567890',
-          customerName: 'Jane Smith'
-        },
+        crn: '1234567890',
+        customerName: 'Jane Smith',
         businesses: []
       }
       const pageData = {

@@ -101,7 +101,7 @@ describe('search crn routes', () => {
     })
 
     describe('when a CRN is in the query', () => {
-      const details = { info: { customerName: 'Jane Smith' } }
+      const details = { customerName: 'Jane Smith' }
       const pageData = { resultText: '1 result for "1234567890"' }
 
       beforeEach(() => {

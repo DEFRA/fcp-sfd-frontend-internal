@@ -39,10 +39,8 @@ describe('updatePersonalNameChangeService', () => {
 
     data = {
       crn,
-      info: {
-        userName: 'John Doe',
-        fullName: { first: 'John', middle: 'M', last: 'Doe' }
-      },
+      userName: 'John Doe',
+      fullName: { first: 'John', middle: 'M', last: 'Doe' },
       changePersonalName: {
         first: 'Jane',
         last: 'Smith',

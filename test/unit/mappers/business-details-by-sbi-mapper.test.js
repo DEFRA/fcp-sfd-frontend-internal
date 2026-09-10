@@ -28,7 +28,7 @@ describe('business details by SBI mapper', () => {
     test('it maps trader number as null', () => {
       const result = mapBusinessDetailsBySbi(rawData)
 
-      expect(result.info.traderNumber).toEqual(null)
+      expect(result.traderNumber).toEqual(null)
     })
   })
 
@@ -40,7 +40,7 @@ describe('business details by SBI mapper', () => {
     test('it maps vendor number as null', () => {
       const result = mapBusinessDetailsBySbi(rawData)
 
-      expect(result.info.vendorNumber).toEqual(null)
+      expect(result.vendorNumber).toEqual(null)
     })
   })
 

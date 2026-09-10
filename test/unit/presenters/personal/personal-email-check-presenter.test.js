@@ -10,16 +10,12 @@ describe('personalEmailCheckPresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: {
-        userName: 'John Doe',
-        fullName: {
-          first: 'John',
-          last: 'Doe'
-        }
+      userName: 'John Doe',
+      fullName: {
+        first: 'John',
+        last: 'Doe'
       },
-      contact: {
-        email: 'test@test.com'
-      }
+      email: 'test@test.com'
     }
   })
 
@@ -56,7 +52,7 @@ describe('personalEmailCheckPresenter', () => {
   describe('the "userName" property', () => {
     describe('when the userName property is missing', () => {
       beforeEach(() => {
-        delete data.info.userName
+        delete data.userName
       })
 
       test('it should return userName as null', () => {

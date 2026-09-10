@@ -38,7 +38,7 @@ describe('searchCrnPresenter', () => {
   describe('the "customerName" property', () => {
     describe('when the customerName property is missing', () => {
       beforeEach(() => {
-        delete data.info.customerName
+        delete data.customerName
       })
 
       test('it should return customerName as an empty string', () => {

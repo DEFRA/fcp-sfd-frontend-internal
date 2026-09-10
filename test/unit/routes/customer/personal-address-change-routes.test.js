@@ -164,7 +164,7 @@ describe('personal address change', () => {
 })
 
 const getMockData = () => ({
-  info: { userName: 'John Doe' },
+  userName: 'John Doe',
   crn: '1234567890',
   changePersonalPostcode: { postcode: 'SW1A 1AA' },
   address: { postcode: 'SW1A 1AA' }

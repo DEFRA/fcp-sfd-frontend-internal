@@ -10,11 +10,11 @@ const personalNameChangePresenter = (data, payload, crn) => {
     backLink: crn ? `/customer/${crn}/details` : SEARCH_CRN,
     pageTitle: 'What is your full name?',
     metaDescription: 'Update the full name for your personal account.',
-    userName: data.info.userName ?? null,
+    userName: data.userName ?? null,
     crn: crn ?? null,
-    first: payload?.first ?? data.changePersonalName?.first ?? data.info.fullName.first,
-    middle: payload?.middle ?? data.changePersonalName?.middle ?? data.info.fullName.middle,
-    last: payload?.last ?? data.changePersonalName?.last ?? data.info.fullName.last
+    first: payload?.first ?? data.changePersonalName?.first ?? data.fullName.first,
+    middle: payload?.middle ?? data.changePersonalName?.middle ?? data.fullName.middle,
+    last: payload?.last ?? data.changePersonalName?.last ?? data.fullName.last
   }
 }
 

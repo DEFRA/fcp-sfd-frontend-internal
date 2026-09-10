@@ -13,9 +13,9 @@ const searchSbiPresenter = (data, payload) => {
     : `0 results for "${payload}"`
 
   return {
-    businessName: data?.info?.businessName || '',
-    businessTraderNumber: data?.info?.traderNumber || '',
-    businessVendorNumber: data?.info?.vendorNumber || '',
+    businessName: data?.businessName || '',
+    businessTraderNumber: data?.traderNumber || '',
+    businessVendorNumber: data?.vendorNumber || '',
     businessAddress: addressLines,
     businessPostcode: postcode,
     clearSearchLink: SEARCH_SBI,

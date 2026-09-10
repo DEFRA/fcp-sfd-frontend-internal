@@ -13,12 +13,10 @@ export const mapBusinessDetailsBySbi = (value) => {
   const info = value?.business?.info ?? {}
 
   return {
-    info: {
-      sbi: value.business.sbi,
-      businessName: info.name,
-      traderNumber: info.traderNumber,
-      vendorNumber: info.vendorNumber
-    },
+    sbi: value.business.sbi,
+    businessName: info.name,
+    traderNumber: info.traderNumber,
+    vendorNumber: info.vendorNumber,
     address: mappers.address(address)
   }
 }

@@ -9,14 +9,10 @@ describe('businessPhoneNumbersCheckPresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: {
-        sbi: '106705779',
-        businessName: 'Agile Farms Ltd'
-      },
-      contact: {
-        landline: '01234 567891',
-        mobile: '01111 111111'
-      },
+      sbi: '106705779',
+      businessName: 'Agile Farms Ltd',
+      landline: '01234 567891',
+      mobile: '01111 111111',
       changeBusinessPhoneNumbers: {
         businessMobile: null,
         businessTelephone: null
@@ -53,7 +49,7 @@ describe('businessPhoneNumbersCheckPresenter', () => {
 
     describe('when the sbi is missing', () => {
       beforeEach(() => {
-        delete data.info.sbi
+        delete data.sbi
       })
 
       test('it falls back to the search page', () => {

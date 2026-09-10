@@ -143,5 +143,6 @@ describe('business legal status enter', () => {
 })
 
 const getMockData = () => ({
-  info: { sbi: '106705779', businessName: 'Herberts Lawn Mowing' }
+  sbi: '106705779',
+  businessName: 'Herberts Lawn Mowing'
 })

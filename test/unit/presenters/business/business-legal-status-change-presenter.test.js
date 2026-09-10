@@ -10,7 +10,8 @@ describe('businessLegalStatusChangePresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: { sbi: '106705779', legalStatusCode: '102111' }
+      sbi: '106705779',
+      legalStatusCode: '102111'
     }
     payload = undefined
   })
@@ -34,7 +35,7 @@ describe('businessLegalStatusChangePresenter', () => {
     })
 
     test('it falls back to the search page when the sbi is missing', () => {
-      delete data.info.sbi
+      delete data.sbi
       const result = businessLegalStatusChangePresenter(data, payload)
 
       expect(result.backLink).toEqual('/search-sbi')
@@ -64,7 +65,7 @@ describe('businessLegalStatusChangePresenter', () => {
     })
 
     test('it is undefined when the legal status has not been specified', () => {
-      delete data.info.legalStatusCode
+      delete data.legalStatusCode
       const result = businessLegalStatusChangePresenter(data, payload)
 
       expect(result.businessLegalStatus).toBeUndefined()
@@ -93,7 +94,7 @@ describe('businessLegalStatusChangePresenter', () => {
     })
 
     test('it matches the code as a string even when the selected value is numeric', () => {
-      data.info.legalStatusCode = 102111
+      data.legalStatusCode = 102111
       const result = businessLegalStatusChangePresenter(data, payload)
 
       const checkedItems = result.businessLegalStatusItems.filter((item) => item.checked)
@@ -103,7 +104,7 @@ describe('businessLegalStatusChangePresenter', () => {
     })
 
     test('it leaves every option unchecked when nothing has been selected', () => {
-      delete data.info.legalStatusCode
+      delete data.legalStatusCode
       const result = businessLegalStatusChangePresenter(data, payload)
 
       const checkedItems = result.businessLegalStatusItems.filter((item) => item.checked)

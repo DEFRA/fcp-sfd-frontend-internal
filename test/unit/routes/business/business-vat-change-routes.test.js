@@ -28,7 +28,7 @@ describe('business VAT change routes', () => {
   let request
   let h
 
-  const businessDetails = { info: { sbi: '106705779' } }
+  const businessDetails = { sbi: '106705779' }
   const pageData = { pageTitle: 'What is your VAT registration number?' }
 
   beforeEach(() => {

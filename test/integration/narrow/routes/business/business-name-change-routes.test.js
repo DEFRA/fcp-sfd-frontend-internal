@@ -33,8 +33,9 @@ describe('business name change route', () => {
   describe('GET /business/{sbi}/name-change', () => {
     test('returns 200 and renders the business name change view when authenticated', async () => {
       fetchBusinessChangeService.mockResolvedValue({
-        info: { sbi, businessName: 'Herberts Lawn Mowing' },
-        contact: { email: null }
+        sbi,
+        businessName: 'Herberts Lawn Mowing',
+        email: null
       })
 
       const response = await server.inject({

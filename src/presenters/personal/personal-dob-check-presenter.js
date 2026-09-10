@@ -7,7 +7,7 @@ import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const personalDobCheckPresenter = (data, crn) => {
-  const { day, month, year } = data.changePersonalDob ?? data.info.dateOfBirth
+  const { day, month, year } = data.changePersonalDob ?? data.dateOfBirth
   // new Date() needs the format YYYY-MM-DD with leading zeros e.g. '1990-04-05' not '1990-4-5'
   const personalDob = new Date(
     `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
@@ -17,7 +17,7 @@ const personalDobCheckPresenter = (data, crn) => {
     backLink: crn ? `/customer/${crn}/account-date-of-birth-change` : SEARCH_CRN,
     pageTitle: 'Check your date of birth is correct before submitting',
     metaDescription: 'Check the date of birth for your personal account is correct.',
-    userName: data.info.userName ?? null,
+    userName: data.userName ?? null,
     crn: crn ?? null,
     changeLink: `/customer/${crn}/account-date-of-birth-change`,
     dateOfBirth: presenters.formatLongDate(personalDob)

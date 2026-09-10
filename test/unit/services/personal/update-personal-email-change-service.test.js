@@ -39,11 +39,9 @@ describe('updatePersonalEmailChangeService', () => {
 
     data = {
       crn,
-      info: {
-        userName: 'John Doe',
-        fullName: { first: 'John', last: 'Doe' }
-      },
-      contact: { email: 'old-email@test.com' },
+      userName: 'John Doe',
+      fullName: { first: 'John', last: 'Doe' },
+      email: 'old-email@test.com',
       changePersonalEmail: 'new-email@test.com'
     }
 

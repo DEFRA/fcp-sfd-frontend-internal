@@ -29,10 +29,8 @@ describe('customer overview details mapper', () => {
     const result = mapCustomerOverviewDetails(rawData)
 
     expect(result).toEqual({
-      info: {
-        crn: '1234567890',
-        customerName: 'Jane Smith'
-      },
+      crn: '1234567890',
+      customerName: 'Jane Smith',
       businesses: [
         { name: 'Smith Farm', sbi: '123456789' },
         { name: 'Smith Orchard', sbi: '987654321' }
@@ -46,7 +44,7 @@ describe('customer overview details mapper', () => {
 
     const result = mapCustomerOverviewDetails(rawData)
 
-    expect(result.info.customerName).toEqual('John Doe')
+    expect(result.customerName).toEqual('John Doe')
   })
 
   describe('when the name object is null', () => {
@@ -57,7 +55,7 @@ describe('customer overview details mapper', () => {
     test('it maps to an empty string when name is missing', () => {
       const result = mapCustomerOverviewDetails(rawData)
 
-      expect(result.info.customerName).toEqual('')
+      expect(result.customerName).toEqual('')
     })
   })
 
@@ -69,7 +67,7 @@ describe('customer overview details mapper', () => {
     test('it returns only the first name trimmed', () => {
       const result = mapCustomerOverviewDetails(rawData)
 
-      expect(result.info.customerName).toEqual('Jane')
+      expect(result.customerName).toEqual('Jane')
     })
   })
 
@@ -81,7 +79,7 @@ describe('customer overview details mapper', () => {
     test('it returns only the last name trimmed', () => {
       const result = mapCustomerOverviewDetails(rawData)
 
-      expect(result.info.customerName).toEqual('Smith')
+      expect(result.customerName).toEqual('Smith')
     })
   })
 

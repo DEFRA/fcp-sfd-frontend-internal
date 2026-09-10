@@ -18,7 +18,7 @@ const personalFixListPresenter = (data, payload, crn, errors = null) => {
     backLink: crn ? `/customer/${crn}/details/fix?source=${data.source}` : SEARCH_CRN,
     pageTitle: 'Your personal details to update',
     metaDescription: 'Your personal details to update.',
-    userName: data.info?.userName ?? null,
+    userName: data.userName ?? null,
     crn: crn ?? null,
     sections: data.orderedSectionsToFix,
     name: formatName(payload, data),
@@ -27,9 +27,9 @@ const personalFixListPresenter = (data, payload, crn, errors = null) => {
       month,
       year
     },
-    personalTelephone: presenters.formatNumber(payload?.personalTelephone, data.changePersonalPhoneNumbers?.personalTelephone, data.contact.telephone),
-    personalMobile: presenters.formatNumber(payload?.personalMobile, data.changePersonalPhoneNumbers?.personalMobile, data.contact.mobile),
-    personalEmail: payload?.personalEmail ?? data.changePersonalEmail?.personalEmail ?? data.contact.email,
+    personalTelephone: presenters.formatNumber(payload?.personalTelephone, data.changePersonalPhoneNumbers?.personalTelephone, data.telephone),
+    personalMobile: presenters.formatNumber(payload?.personalMobile, data.changePersonalPhoneNumbers?.personalMobile, data.mobile),
+    personalEmail: payload?.personalEmail ?? data.changePersonalEmail?.personalEmail ?? data.email,
     address: formatAddress(payload, data.changePersonalAddress),
     errors: sortedErrors
   }
@@ -40,15 +40,15 @@ const formatName = (payload, data) => {
     first:
       payload?.first ??
       data.changePersonalName?.first ??
-      data.info.fullName.first,
+      data.fullName.first,
     middle:
       payload?.middle ??
       data.changePersonalName?.middle ??
-      data.info.fullName.middle,
+      data.fullName.middle,
     last:
       payload?.last ??
       data.changePersonalName?.last ??
-      data.info.fullName.last
+      data.fullName.last
   }
 }
 
@@ -96,9 +96,9 @@ const formatDateOfBirth = (data, payload) => {
   }
 
   return {
-    day: data.changePersonalDob?.day ?? data.info.dateOfBirth.day?.toString() ?? '',
-    month: data.changePersonalDob?.month ?? data.info.dateOfBirth.month?.toString() ?? '',
-    year: data.changePersonalDob?.year ?? data.info.dateOfBirth.year?.toString() ?? ''
+    day: data.changePersonalDob?.day ?? data.dateOfBirth.day?.toString() ?? '',
+    month: data.changePersonalDob?.month ?? data.dateOfBirth.month?.toString() ?? '',
+    year: data.changePersonalDob?.year ?? data.dateOfBirth.year?.toString() ?? ''
   }
 }
 

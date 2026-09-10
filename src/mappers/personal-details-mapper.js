@@ -20,31 +20,27 @@ const mapPersonalDetails = (value) => {
 
   return {
     crn: value.customer.crn ?? null,
-    info: {
-      userName: customerName ? mappers.customerName(customerName).userName : null,
-      fullName: {
-        first: customerName?.first ?? null,
-        last: customerName?.last ?? null,
-        middle: customerName?.middle ?? null
-      },
-      fullNameJoined: [
-        customerName?.first,
-        customerName?.middle,
-        customerName?.last
-      ].filter(Boolean).join(' '),
-      dateOfBirth: {
-        full: customerInfo.dateOfBirth ?? null,
-        day: day ?? null,
-        month: month ?? null,
-        year: year ?? null
-      }
+    userName: customerName ? mappers.customerName(customerName).userName : null,
+    fullName: {
+      first: customerName?.first ?? null,
+      last: customerName?.last ?? null,
+      middle: customerName?.middle ?? null
+    },
+    fullNameJoined: [
+      customerName?.first,
+      customerName?.middle,
+      customerName?.last
+    ].filter(Boolean).join(' '),
+    dateOfBirth: {
+      full: customerInfo.dateOfBirth ?? null,
+      day: day ?? null,
+      month: month ?? null,
+      year: year ?? null
     },
     address: customerInfo.address ? mappers.address(customerInfo.address) : {},
-    contact: {
-      email: customerInfo.email?.address ?? null,
-      telephone: customerInfo.phone?.landline ?? null,
-      mobile: customerInfo.phone?.mobile ?? null
-    }
+    email: customerInfo.email?.address ?? null,
+    telephone: customerInfo.phone?.landline ?? null,
+    mobile: customerInfo.phone?.mobile ?? null
   }
 }
 

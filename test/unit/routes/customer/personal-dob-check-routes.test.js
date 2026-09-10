@@ -90,12 +90,10 @@ describe('personal date of birth check', () => {
 
 const getMockData = () => {
   return {
-    info: {
-      userName: 'John Doe',
-      fullName: {
-        first: 'John',
-        last: 'Doe'
-      }
+    userName: 'John Doe',
+    fullName: {
+      first: 'John',
+      last: 'Doe'
     },
     changePersonalDob: {
       day: '7',

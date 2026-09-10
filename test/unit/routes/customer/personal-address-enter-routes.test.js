@@ -154,7 +154,7 @@ describe('personal address enter', () => {
 })
 
 const getMockData = () => ({
-  info: { userName: 'John Doe' },
+  userName: 'John Doe',
   changePersonalAddress: {
     address1: '123 Test Street',
     city: 'London',

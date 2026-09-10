@@ -22,10 +22,8 @@ describe('fetchPersonalChangeService', () => {
 
     fetchPersonalDetailsService.mockResolvedValue({
       crn: '1234567890',
-      info: {
-        userName: 'John Doe',
-        fullName: { first: 'John', middle: 'M', last: 'Doe' }
-      }
+      userName: 'John Doe',
+      fullName: { first: 'John', middle: 'M', last: 'Doe' }
     })
   })
 

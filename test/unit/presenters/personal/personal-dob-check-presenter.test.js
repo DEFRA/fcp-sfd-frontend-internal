@@ -10,12 +10,10 @@ describe('personalDobCheckPresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: {
-        userName: 'Alfred Waldron',
-        fullName: {
-          first: 'Alfred',
-          last: 'Waldron'
-        }
+      userName: 'Alfred Waldron',
+      fullName: {
+        first: 'Alfred',
+        last: 'Waldron'
       },
       changePersonalDob: { day: '25', month: '06', year: '1984' }
     }
@@ -54,7 +52,7 @@ describe('personalDobCheckPresenter', () => {
   describe('the "userName" property', () => {
     describe('when the userName property is missing', () => {
       beforeEach(() => {
-        delete data.info.userName
+        delete data.userName
       })
 
       test('it should return userName as null', () => {
@@ -68,7 +66,7 @@ describe('personalDobCheckPresenter', () => {
   describe('when there is no changePersonalDob in the session', () => {
     beforeEach(() => {
       delete data.changePersonalDob
-      data.info.dateOfBirth = { day: '01', month: '05', year: '1990' }
+      data.dateOfBirth = { day: '01', month: '05', year: '1990' }
     })
 
     test('it falls back to the date of birth on record', () => {
@@ -78,7 +76,7 @@ describe('personalDobCheckPresenter', () => {
     })
 
     test('it returns null if date of birth on record is incomplete', () => {
-      data.info.dateOfBirth = { day: null, month: '05', year: '1990' }
+      data.dateOfBirth = { day: null, month: '05', year: '1990' }
 
       const result = personalDobCheckPresenter(data, crn)
 

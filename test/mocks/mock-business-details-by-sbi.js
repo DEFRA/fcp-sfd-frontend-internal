@@ -36,12 +36,10 @@ const getDalData = () => ({
 })
 
 const getMappedData = () => ({
-  info: {
-    sbi: '106705779',
-    businessName: 'Herberts Lawn Mowing',
-    traderNumber: '876432',
-    vendorNumber: '673920'
-  },
+  sbi: '106705779',
+  businessName: 'Herberts Lawn Mowing',
+  traderNumber: '876432',
+  vendorNumber: '673920',
   address: {
     lookup: {
       pafOrganisationName: 'Herberts Lawn Mowing Ltd',

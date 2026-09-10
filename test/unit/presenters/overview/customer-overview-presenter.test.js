@@ -10,10 +10,8 @@ describe('customerOverviewPresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: {
-        crn: '1234567890',
-        customerName: 'Jane Smith'
-      },
+      crn: '1234567890',
+      customerName: 'Jane Smith',
       businesses: [
         { name: 'Beta Farming Co', sbi: '987654321' },
         { name: 'Acme Farm', sbi: '123456789' }
@@ -60,7 +58,7 @@ describe('customerOverviewPresenter', () => {
   describe('the "customerName" property', () => {
     describe('when the customerName property is missing', () => {
       beforeEach(() => {
-        delete data.info.customerName
+        delete data.customerName
       })
 
       test('it should return customerName as an empty string', () => {
@@ -74,7 +72,7 @@ describe('customerOverviewPresenter', () => {
   describe('the "crn" property', () => {
     describe('when the crn property is missing', () => {
       beforeEach(() => {
-        delete data.info.crn
+        delete data.crn
       })
 
       test('it should return crn as an empty string', () => {
@@ -188,7 +186,7 @@ describe('customerOverviewPresenter', () => {
 
     describe('when the customerName property is missing', () => {
       beforeEach(() => {
-        delete data.info.customerName
+        delete data.customerName
       })
 
       test('it should fall back to just the CRN', () => {
@@ -202,7 +200,7 @@ describe('customerOverviewPresenter', () => {
 
     describe('when the crn is missing', () => {
       beforeEach(() => {
-        delete data.info.crn
+        delete data.crn
       })
 
       test('it should link to the search page without a query param and omit the customer breadcrumb', () => {

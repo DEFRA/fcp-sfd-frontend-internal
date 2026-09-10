@@ -13,23 +13,19 @@ describe('personalFixListPresenter', () => {
     data = {
       source: 'phone',
       orderedSectionsToFix: ['name', 'dob', 'address', 'phone', 'email'],
-      info: {
-        fullName: {
-          first: 'Alfred',
-          middle: 'J',
-          last: 'Waldron'
-        },
-        dateOfBirth: {
-          day: 1,
-          month: 2,
-          year: 1990
-        }
+      fullName: {
+        first: 'Alfred',
+        middle: 'J',
+        last: 'Waldron'
       },
-      contact: {
-        telephone: '0123456789',
-        mobile: '07123456789',
-        email: 'test@test.com'
-      }
+      dateOfBirth: {
+        day: 1,
+        month: 2,
+        year: 1990
+      },
+      telephone: '0123456789',
+      mobile: '07123456789',
+      email: 'test@test.com'
     }
 
     payload = null

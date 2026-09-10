@@ -11,17 +11,17 @@ const personalPhoneNumbersChangePresenter = (data, payload, crn) => {
     backLink: crn ? `/customer/${crn}/details` : SEARCH_CRN,
     pageTitle: 'What are your personal phone numbers?',
     metaDescription: 'Update the phone numbers for your personal account.',
-    userName: data.info.userName ?? null,
+    userName: data.userName ?? null,
     crn: crn ?? null,
     personalTelephone: presenters.formatNumber(
       payload?.personalTelephone,
       data.changePersonalPhoneNumbers?.personalTelephone,
-      data.contact.telephone
+      data.telephone
     ),
     personalMobile: presenters.formatNumber(
       payload?.personalMobile,
       data.changePersonalPhoneNumbers?.personalMobile,
-      data.contact.mobile
+      data.mobile
     )
   }
 }

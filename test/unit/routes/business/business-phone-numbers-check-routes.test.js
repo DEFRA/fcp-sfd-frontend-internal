@@ -48,7 +48,7 @@ describe('business phone numbers check routes', () => {
   })
 
   describe('GET /business/{sbi}/phone-numbers-check', () => {
-    const businessPhoneNumbersChange = { info: { sbi: '106705779' } }
+    const businessPhoneNumbersChange = { sbi: '106705779' }
     const pageData = { pageTitle: 'Check your business phone numbers are correct before submitting' }
 
     beforeEach(() => {

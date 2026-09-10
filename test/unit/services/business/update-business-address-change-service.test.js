@@ -43,7 +43,7 @@ describe('updateBusinessAddressChangeService', () => {
         postcode: 'SW1A 1AA',
         country: 'United Kingdom'
       },
-      info: { sbi: '107183280' }
+      sbi: '107183280'
     })
   })
 
@@ -81,7 +81,7 @@ describe('updateBusinessAddressChangeService', () => {
         postcode: 'SW1A 1AA',
         country: 'United Kingdom'
       },
-      info: { sbi: '107183280' }
+      sbi: '107183280'
     })
 
     await updateBusinessAddressChangeService(yar, sbi, email)
@@ -105,7 +105,7 @@ describe('updateBusinessAddressChangeService', () => {
 
   describe('when there is no pending business address change', () => {
     beforeEach(() => {
-      mockFetchBusinessChangeService.mockResolvedValue({ info: { sbi: '107183280' } })
+      mockFetchBusinessChangeService.mockResolvedValue({ sbi: '107183280' })
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {

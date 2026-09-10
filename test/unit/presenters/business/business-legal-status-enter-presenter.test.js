@@ -11,7 +11,7 @@ describe('businessLegalStatusEnterPresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: { sbi: '106705779' },
+      sbi: '106705779',
       changeBusinessLegalStatus: constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES[0]
     }
     payload = undefined
@@ -37,7 +37,7 @@ describe('businessLegalStatusEnterPresenter', () => {
     })
 
     test('it falls back to the fetched charity registration number when no session value exists', () => {
-      data.info.registrationNumbers = { charityCommission: '7654321' }
+      data.registrationNumbers = { charityCommission: '7654321' }
 
       const result = businessLegalStatusEnterPresenter(data, payload)
 
@@ -77,7 +77,7 @@ describe('businessLegalStatusEnterPresenter', () => {
     })
 
     test('it falls back to the fetched company registration number when no session value exists', () => {
-      data.info.registrationNumbers = { companiesHouse: 'AB123456' }
+      data.registrationNumbers = { companiesHouse: 'AB123456' }
 
       const result = businessLegalStatusEnterPresenter(data, payload)
 
@@ -88,7 +88,7 @@ describe('businessLegalStatusEnterPresenter', () => {
   describe('the "backLink" property', () => {
     test('it returns to the business details page when there is no in-progress legal status change', () => {
       delete data.changeBusinessLegalStatus
-      data.info.legalStatusCode = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES[0]
+      data.legalStatusCode = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES[0]
 
       const result = businessLegalStatusEnterPresenter(data, payload)
 
@@ -96,7 +96,7 @@ describe('businessLegalStatusEnterPresenter', () => {
     })
 
     test('it falls back to the search page when the sbi is missing', () => {
-      delete data.info.sbi
+      delete data.sbi
 
       const result = businessLegalStatusEnterPresenter(data, payload)
 

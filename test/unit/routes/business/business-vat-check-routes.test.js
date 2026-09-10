@@ -30,7 +30,7 @@ describe('business VAT check routes', () => {
   let request
   let h
 
-  const businessDetails = { info: { sbi: '106705779' } }
+  const businessDetails = { sbi: '106705779' }
   const pageData = { pageTitle: 'Check your VAT registration number is correct before submitting' }
 
   beforeEach(() => {

@@ -9,11 +9,9 @@ describe('businessVatCheckPresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: {
-        sbi: '123456789',
-        vat: 'GB123456789',
-        businessName: 'Agile Farm Ltd'
-      }
+      sbi: '123456789',
+      vat: 'GB123456789',
+      businessName: 'Agile Farm Ltd'
     }
   })
 
@@ -36,7 +34,7 @@ describe('businessVatCheckPresenter', () => {
   describe('the "backLink" property', () => {
     describe('when the sbi is missing', () => {
       beforeEach(() => {
-        delete data.info.sbi
+        delete data.sbi
       })
 
       test('it falls back to the search page', () => {
@@ -50,7 +48,7 @@ describe('businessVatCheckPresenter', () => {
   describe('the "sbi" property', () => {
     describe('when the sbi (singleBusinessIdentifier) property is missing', () => {
       beforeEach(() => {
-        delete data.info.sbi
+        delete data.sbi
       })
 
       test('it should return sbi as null', () => {
@@ -76,7 +74,7 @@ describe('businessVatCheckPresenter', () => {
 
     describe('when there is no changed vat number and none held against the business', () => {
       beforeEach(() => {
-        delete data.info.vat
+        delete data.vat
       })
 
       test('it should return vatNumber as null', () => {

@@ -46,7 +46,7 @@ describe('business email change routes', () => {
   })
 
   describe('GET /business/{sbi}/email-change', () => {
-    const businessDetails = { info: { sbi: '106705779' } }
+    const businessDetails = { sbi: '106705779' }
     const pageData = { pageTitle: 'What is your business email address?' }
 
     beforeEach(() => {
@@ -69,7 +69,7 @@ describe('business email change routes', () => {
   })
 
   describe('POST /business/{sbi}/email-change validation failAction', () => {
-    const businessDetails = { info: { sbi: '106705779' } }
+    const businessDetails = { sbi: '106705779' }
     const pageData = { pageTitle: 'What is your business email address?' }
 
     beforeEach(() => {

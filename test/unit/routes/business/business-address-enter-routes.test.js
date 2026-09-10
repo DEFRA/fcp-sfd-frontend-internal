@@ -132,7 +132,8 @@ describe('business address enter', () => {
 })
 
 const getMockData = () => ({
-  info: { sbi: '106705779', businessName: 'Herberts Lawn Mowing' },
+  sbi: '106705779',
+  businessName: 'Herberts Lawn Mowing',
   address: {
     line1: '123 Test Street',
     city: 'London',

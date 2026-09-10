@@ -31,7 +31,7 @@ describe('business VAT remove routes', () => {
   let request
   let h
 
-  const businessDetails = { info: { sbi: '106705779', vat: 'GB123456789' } }
+  const businessDetails = { sbi: '106705779', vat: 'GB123456789' }
   const pageData = { pageTitle: 'Are you sure you want to remove your VAT registration number?' }
 
   beforeEach(() => {

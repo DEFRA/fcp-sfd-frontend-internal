@@ -9,11 +9,9 @@ describe('businessVatRemovePresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: {
-        sbi: '123456789',
-        vat: 'GB123456789',
-        businessName: 'Agile Farm Ltd'
-      }
+      sbi: '123456789',
+      vat: 'GB123456789',
+      businessName: 'Agile Farm Ltd'
     }
   })
 
@@ -54,7 +52,7 @@ describe('businessVatRemovePresenter', () => {
   describe('the "sbi" property', () => {
     describe('when the sbi (singleBusinessIdentifier) property is missing', () => {
       beforeEach(() => {
-        delete data.info.sbi
+        delete data.sbi
       })
 
       test('it should return sbi as null', () => {
@@ -68,7 +66,7 @@ describe('businessVatRemovePresenter', () => {
   describe('the "vatNumber" property', () => {
     describe('when the vat property is missing', () => {
       beforeEach(() => {
-        delete data.info.vat
+        delete data.vat
       })
 
       test('it should return vatNumber as null', () => {
@@ -80,7 +78,7 @@ describe('businessVatRemovePresenter', () => {
 
     describe('when the vat property is null', () => {
       beforeEach(() => {
-        data.info.vat = null
+        data.vat = null
       })
 
       test('it should return vatNumber as null', () => {
@@ -103,9 +101,9 @@ describe('businessVatRemovePresenter', () => {
     })
   })
 
-  describe('when the "info" property is missing', () => {
+  describe('when the business details are missing', () => {
     beforeEach(() => {
-      delete data.info
+      data = {}
     })
 
     test('it should not throw and should fall back to the search page', () => {

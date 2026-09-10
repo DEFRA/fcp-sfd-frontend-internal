@@ -474,6 +474,33 @@ describe('businessDetailsPresenter', () => {
         })
       })
 
+      describe('and only the address is invalid', () => {
+        test('the address keeps its standard change link and other links point to the interrupter journey', () => {
+          const result = businessDetailsPresenter(data, sbi, null, false, ['address'])
+
+          expect(result.businessAddress.changeLink).toBe(`/business/${sbi}/address-change`)
+          expect(result.businessName.changeLink).toBe(`/business/${sbi}/details/fix?source=name`)
+        })
+      })
+
+      describe('and only the phone is invalid', () => {
+        test('the phone keeps its standard change link and other links point to the interrupter journey', () => {
+          const result = businessDetailsPresenter(data, sbi, null, false, ['phone'])
+
+          expect(result.businessTelephone.changeLink).toBe(`/business/${sbi}/phone-numbers-change`)
+          expect(result.businessName.changeLink).toBe(`/business/${sbi}/details/fix?source=name`)
+        })
+      })
+
+      describe('and only the email is invalid', () => {
+        test('the email keeps its standard change link and other links point to the interrupter journey', () => {
+          const result = businessDetailsPresenter(data, sbi, null, false, ['email'])
+
+          expect(result.businessEmail.changeLink).toBe(`/business/${sbi}/email-change`)
+          expect(result.businessName.changeLink).toBe(`/business/${sbi}/details/fix?source=name`)
+        })
+      })
+
       describe('and multiple sections are invalid', () => {
         test('every link points to the interrupter journey', () => {
           const result = businessDetailsPresenter(data, sbi, null, false, ['name', 'email'])

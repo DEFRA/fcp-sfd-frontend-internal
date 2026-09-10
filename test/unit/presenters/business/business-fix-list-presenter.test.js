@@ -117,6 +117,45 @@ describe('businessFixListPresenter', () => {
     })
   })
 
+  describe('when there is a changed business address and no payload', () => {
+    beforeEach(() => {
+      data.changeBusinessAddress = {
+        address1: '2 Changed Road',
+        address2: 'Changed Area',
+        address3: '',
+        city: 'Changedville',
+        county: 'Changedshire',
+        postcode: 'CH2 2NG',
+        country: 'UK'
+      }
+    })
+
+    test('it returns the changed business address as the "address" property', () => {
+      const result = businessFixListPresenter(data, null, sbi, null)
+
+      expect(result.address).toEqual({
+        address1: '2 Changed Road',
+        address2: 'Changed Area',
+        address3: '',
+        city: 'Changedville',
+        county: 'Changedshire',
+        postcode: 'CH2 2NG',
+        country: 'UK'
+      })
+    })
+  })
+
+  describe('when the business name is missing', () => {
+    test('it returns null for the "businessName" and "changeBusinessName" properties', () => {
+      data.info.businessName = undefined
+
+      const result = businessFixListPresenter(data, null, sbi, null)
+
+      expect(result.businessName).toBeNull()
+      expect(result.changeBusinessName).toBeNull()
+    })
+  })
+
   describe('the "errors" property', () => {
     test('it returns null when there are no errors', () => {
       const result = businessFixListPresenter(data, null, sbi, null)

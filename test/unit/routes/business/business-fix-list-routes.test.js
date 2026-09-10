@@ -100,6 +100,20 @@ describe('business fix list routes', () => {
         expect(h.view).toHaveBeenCalledWith('business/business-fix-list.njk', { page: 'data' })
       })
     })
+
+    describe('when there is no validation session data', () => {
+      beforeEach(() => {
+        request.yar.get = vi.fn(() => undefined)
+        fetchBusinessFixService.mockResolvedValue({ some: 'data' })
+        businessFixListPresenter.mockReturnValue({ page: 'data' })
+      })
+
+      test('it defaults to an empty session object', async () => {
+        await getBusinessFixList.handler(request, h)
+
+        expect(fetchBusinessFixService).toHaveBeenCalledWith(sbi, email, {})
+      })
+    })
   })
 
   describe('POST /business/{sbi}/details/fix-list', () => {
@@ -171,6 +185,14 @@ describe('business fix list routes', () => {
         await postBusinessFixList.handler(request, h)
 
         expect(fetchBusinessFixService).toHaveBeenCalledWith(sbi, email, sessionData)
+      })
+
+      test('it defaults to an empty array when there are no validation error details', async () => {
+        services.validateFixDetails.mockReturnValue({ error: {} })
+
+        await postBusinessFixList.handler(request, h)
+
+        expect(utils.formatValidationErrors).toHaveBeenCalledWith([])
       })
 
       test('it returns the page with the error summary banner, without redirecting', async () => {

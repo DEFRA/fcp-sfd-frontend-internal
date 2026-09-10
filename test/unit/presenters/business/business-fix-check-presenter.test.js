@@ -46,6 +46,26 @@ describe('businessFixCheckPresenter', () => {
     })
   })
 
+  describe('when the business name is missing', () => {
+    test('it returns null as the "businessName" property', () => {
+      data.info.businessName = undefined
+
+      const result = businessFixCheckPresenter(data, sbi)
+
+      expect(result.businessName).toBeNull()
+    })
+  })
+
+  describe('when there is no changed business name', () => {
+    test('it returns null as the "changeBusinessName" property', () => {
+      delete data.changeBusinessName
+
+      const result = businessFixCheckPresenter(data, sbi)
+
+      expect(result.changeBusinessName).toBeNull()
+    })
+  })
+
   describe('the "address" property', () => {
     beforeEach(() => {
       data.changeBusinessAddress = {
@@ -83,6 +103,16 @@ describe('businessFixCheckPresenter', () => {
       const result = businessFixCheckPresenter(data, sbi)
 
       expect(result.businessTelephone).toEqual({ telephone: '01234567890', mobile: '' })
+    })
+  })
+
+  describe('when there is no changed business email', () => {
+    test('it returns null as the "businessEmail" property', () => {
+      delete data.changeBusinessEmail
+
+      const result = businessFixCheckPresenter(data, sbi)
+
+      expect(result.businessEmail).toBeNull()
     })
   })
 

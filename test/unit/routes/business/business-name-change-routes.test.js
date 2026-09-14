@@ -52,7 +52,7 @@ describe('business name change routes', () => {
   })
 
   describe('GET /business/{sbi}/name-change', () => {
-    const businessDetails = { info: { sbi: '106705779' } }
+    const businessDetails = { sbi: '106705779' }
     const pageData = { pageTitle: 'What is your business name?' }
 
     beforeEach(() => {
@@ -89,7 +89,7 @@ describe('business name change routes', () => {
   })
 
   describe('POST /business/{sbi}/name-change validation failAction', () => {
-    const businessDetails = { info: { sbi: '106705779' } }
+    const businessDetails = { sbi: '106705779' }
     const pageData = { pageTitle: 'What is your business name?' }
 
     beforeEach(() => {

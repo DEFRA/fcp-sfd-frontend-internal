@@ -38,7 +38,8 @@ describe('business name check route', () => {
   describe('GET /business/{sbi}/name-check', () => {
     test('returns 200 and renders the business name check view when authenticated', async () => {
       fetchBusinessChangeService.mockResolvedValue({
-        info: { sbi, businessName: 'Herberts Lawn Mowing' },
+        sbi,
+        businessName: 'Herberts Lawn Mowing',
         changeBusinessName: 'New Farm Ltd'
       })
 

@@ -9,7 +9,8 @@ describe('businessNameCheckPresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: { sbi: '106705779', businessName: 'Herberts Lawn Mowing' }
+      sbi: '106705779',
+      businessName: 'Herberts Lawn Mowing'
     }
   })
 
@@ -40,7 +41,7 @@ describe('businessNameCheckPresenter', () => {
 
     describe('when the sbi is missing', () => {
       beforeEach(() => {
-        delete data.info.sbi
+        delete data.sbi
       })
 
       test('it falls back to the search page', () => {

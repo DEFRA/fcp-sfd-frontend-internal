@@ -48,7 +48,7 @@ describe('updateBusinessNameChangeService', () => {
 
     mockFetchBusinessChangeService.mockResolvedValue({
       changeBusinessName: 'New Farm Ltd',
-      info: { sbi: '107183280' }
+      sbi: '107183280'
     })
   })
 
@@ -82,7 +82,7 @@ describe('updateBusinessNameChangeService', () => {
 
   describe('when there is no pending business name change', () => {
     beforeEach(() => {
-      mockFetchBusinessChangeService.mockResolvedValue({ info: { sbi: '107183280' } })
+      mockFetchBusinessChangeService.mockResolvedValue({ sbi: '107183280' })
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {

@@ -43,21 +43,19 @@ const dalData = {
 }
 
 const mappedData = {
-  info: {
-    sbi: '107183280',
-    businessName: 'HENLEY, RE',
-    vat: 'GB123456789',
-    traderNumber: '010203040506070880980',
-    vendorNumber: '694523',
-    legalStatus: 'Sole Proprietorship',
-    legalStatusCode: 102111,
-    registrationNumbers: {
-      companiesHouse: null,
-      charityCommission: null
-    },
-    type: 'Not Specified',
-    countyParishHoldingNumbers: [{ cphNumber: '12/123/1234' }]
+  sbi: '107183280',
+  businessName: 'HENLEY, RE',
+  vat: 'GB123456789',
+  traderNumber: '010203040506070880980',
+  vendorNumber: '694523',
+  legalStatus: 'Sole Proprietorship',
+  legalStatusCode: 102111,
+  registrationNumbers: {
+    companiesHouse: null,
+    charityCommission: null
   },
+  type: 'Not Specified',
+  countyParishHoldingNumbers: [{ cphNumber: '12/123/1234' }],
   address: {
     lookup: {
       flatName: 'THE COACH HOUSE',
@@ -77,11 +75,9 @@ const mappedData = {
     postcode: 'CO9 3LS',
     country: 'United Kingdom'
   },
-  contact: {
-    email: 'henleyrej@eryelnehk.com.test',
-    landline: '01234031859',
-    mobile: null
-  },
+  email: 'henleyrej@eryelnehk.com.test',
+  landline: '01234031859',
+  mobile: null,
   customer: {
     fullName: 'Mrs. Ingrid Jerimire Klaufichious Limouhetta Mortimious Neuekind Orpheus Perimillian Quixillotrio Reviticlese Cook'
   }

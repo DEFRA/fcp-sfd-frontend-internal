@@ -38,8 +38,10 @@ describe('business phone numbers change route', () => {
   // The crumb (CSRF) cookie is issued on a GET and must be echoed back on the POST.
   const getCrumb = async () => {
     fetchBusinessChangeService.mockResolvedValue({
-      info: { sbi, businessName: 'Herberts Lawn Mowing' },
-      contact: { landline: '01234 567891', mobile: null }
+      sbi,
+      businessName: 'Herberts Lawn Mowing',
+      landline: '01234 567891',
+      mobile: null
     })
 
     const response = await server.inject({
@@ -57,8 +59,10 @@ describe('business phone numbers change route', () => {
   describe('GET /business/{sbi}/phone-numbers-change', () => {
     test('returns 200 and renders the business phone numbers change view when authenticated', async () => {
       fetchBusinessChangeService.mockResolvedValue({
-        info: { sbi, businessName: 'Herberts Lawn Mowing' },
-        contact: { landline: '01234 567891', mobile: null }
+        sbi,
+        businessName: 'Herberts Lawn Mowing',
+        landline: '01234 567891',
+        mobile: null
       })
 
       const response = await server.inject({

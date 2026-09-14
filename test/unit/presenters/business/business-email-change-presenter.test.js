@@ -10,8 +10,9 @@ describe('businessEmailChangePresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: { sbi: '106705779', businessName: 'Herberts Lawn Mowing' },
-      contact: { email: 'test@example.com' }
+      sbi: '106705779',
+      businessName: 'Herberts Lawn Mowing',
+      email: 'test@example.com'
     }
     payload = undefined
   })
@@ -43,7 +44,7 @@ describe('businessEmailChangePresenter', () => {
 
     describe('when the sbi is missing', () => {
       beforeEach(() => {
-        delete data.info.sbi
+        delete data.sbi
       })
 
       test('it falls back to the search page', () => {

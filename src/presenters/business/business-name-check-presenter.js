@@ -7,7 +7,7 @@ import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const businessNameCheckPresenter = (data) => {
-  const sbi = data.info?.sbi ?? null
+  const sbi = data.sbi ?? null
   const changeLink = sbi ? BUSINESS_CHANGE_LINKS.businessName(sbi) : SEARCH_SBI
 
   return {
@@ -16,7 +16,7 @@ const businessNameCheckPresenter = (data) => {
     pageTitle: 'Check your business name is correct before submitting',
     metaDescription: 'Check the name for your business is correct.',
     userName: data.customer?.userName ?? null,
-    businessName: data.changeBusinessName ?? data.info?.businessName ?? null,
+    businessName: data.changeBusinessName ?? data.businessName ?? null,
     sbi
   }
 }

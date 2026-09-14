@@ -57,22 +57,18 @@ describe('fetchBusinessDetailsService', () => {
     }
 
     mappedData = {
-      info: {
-        sbi: '106705779',
-        businessName: 'Herberts Lawn Mowing',
-        vat: 'GB123456789',
-        traderNumber: '123456',
-        vendorNumber: '654321',
-        legalStatus: 'Sole Proprietorship',
-        type: 'Not Specified',
-        countyParishHoldingNumbers: []
-      },
+      sbi: '106705779',
+      businessName: 'Herberts Lawn Mowing',
+      vat: 'GB123456789',
+      traderNumber: '123456',
+      vendorNumber: '654321',
+      legalStatus: 'Sole Proprietorship',
+      type: 'Not Specified',
+      countyParishHoldingNumbers: [],
       address: {},
-      contact: {
-        email: 'test@example.com',
-        landline: '01234567890',
-        mobile: null
-      }
+      email: 'test@example.com',
+      landline: '01234567890',
+      mobile: null
     }
   })
 

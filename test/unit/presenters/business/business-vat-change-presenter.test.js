@@ -10,14 +10,10 @@ describe('businessVatChangePresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: {
-        sbi: '123456789',
-        vat: 'GB123456789',
-        businessName: 'Agile Farm Ltd'
-      },
-      contact: {
-        email: 'test@test.com'
-      }
+      sbi: '123456789',
+      vat: 'GB123456789',
+      businessName: 'Agile Farm Ltd',
+      email: 'test@test.com'
     }
   })
 
@@ -47,7 +43,7 @@ describe('businessVatChangePresenter', () => {
 
     describe('when the sbi is missing', () => {
       beforeEach(() => {
-        delete data.info.sbi
+        delete data.sbi
       })
 
       test('it falls back to the search page', () => {
@@ -61,7 +57,7 @@ describe('businessVatChangePresenter', () => {
   describe('the "sbi" property', () => {
     describe('when the sbi (singleBusinessIdentifier) property is missing', () => {
       beforeEach(() => {
-        delete data.info.sbi
+        delete data.sbi
       })
 
       test('it should return sbi as null', () => {

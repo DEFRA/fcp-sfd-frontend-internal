@@ -22,7 +22,7 @@ const updateBusinessPhoneNumbersChangeService = async (yar, sbi, email) => {
 
   const { businessTelephone, businessMobile } = businessDetails.changeBusinessPhoneNumbers
 
-  const variables = utils.buildUpdateBusinessPhoneNumbersVariables(businessTelephone, businessMobile, businessDetails.info.sbi)
+  const variables = utils.buildUpdateBusinessPhoneNumbersVariables(businessTelephone, businessMobile, businessDetails.sbi)
 
   await updateDalService(mutations.updateBusinessPhoneNumbers, variables, email)
 

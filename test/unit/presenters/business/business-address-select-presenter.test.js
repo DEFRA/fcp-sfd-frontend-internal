@@ -9,10 +9,8 @@ describe('businessAddressSelectPresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: {
-        businessName: 'Agile Farm Ltd',
-        sbi: '123456789'
-      },
+      businessName: 'Agile Farm Ltd',
+      sbi: '123456789',
       changeBusinessPostcode: {
         postcode: 'SK22 1DL'
       },

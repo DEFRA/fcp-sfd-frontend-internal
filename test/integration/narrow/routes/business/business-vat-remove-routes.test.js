@@ -25,7 +25,7 @@ describe('business VAT remove route', () => {
   const sbi = '106705779'
   const path = `/business/${sbi}/vat-registration-remove`
   const credentials = { sessionId: 'session-id' }
-  const businessDetails = { info: { sbi, businessName: 'Herberts Lawn Mowing', vat: 'GB123456789' } }
+  const businessDetails = { sbi, businessName: 'Herberts Lawn Mowing', vat: 'GB123456789' }
   let server
 
   beforeAll(async () => {

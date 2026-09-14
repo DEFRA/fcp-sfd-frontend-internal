@@ -20,7 +20,7 @@ const mapPersonalDetails = (value) => {
 
   return {
     crn: value.customer.crn ?? null,
-    userName: customerName ? mappers.customerName(customerName).userName : null,
+    userName: customerName ? mappers.customerName(customerName) : null,
     fullName: {
       first: customerName?.first ?? null,
       last: customerName?.last ?? null,

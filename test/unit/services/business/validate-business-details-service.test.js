@@ -30,7 +30,7 @@ describe('validateBusinessDetailsService', () => {
 
   describe('when the business name is missing', () => {
     beforeEach(() => {
-      businessDetails.info.businessName = null
+      businessDetails.businessName = null
     })
 
     test('returns hasValidBusinessDetails as false', () => {
@@ -48,8 +48,8 @@ describe('validateBusinessDetailsService', () => {
 
   describe('when both phone numbers are missing', () => {
     beforeEach(() => {
-      businessDetails.contact.landline = null
-      businessDetails.contact.mobile = null
+      businessDetails.landline = null
+      businessDetails.mobile = null
     })
 
     test('returns the phone section as needing update', () => {
@@ -61,7 +61,7 @@ describe('validateBusinessDetailsService', () => {
 
   describe('when the email is invalid', () => {
     beforeEach(() => {
-      businessDetails.contact.email = 'not-an-email'
+      businessDetails.email = 'not-an-email'
     })
 
     test('returns the email section as needing update', () => {
@@ -73,8 +73,8 @@ describe('validateBusinessDetailsService', () => {
 
   describe('when multiple sections are invalid', () => {
     beforeEach(() => {
-      businessDetails.info.businessName = null
-      businessDetails.contact.email = 'not-an-email'
+      businessDetails.businessName = null
+      businessDetails.email = 'not-an-email'
     })
 
     test('returns all affected sections', () => {
@@ -87,7 +87,7 @@ describe('validateBusinessDetailsService', () => {
 
   describe('when the vat number is not nine digits', () => {
     beforeEach(() => {
-      businessDetails.info.vat = 'GB123456789'
+      businessDetails.vat = 'GB123456789'
     })
 
     test('returns the vat section as needing update', () => {
@@ -99,7 +99,7 @@ describe('validateBusinessDetailsService', () => {
 
   describe('when the vat number is missing', () => {
     beforeEach(() => {
-      businessDetails.info.vat = null
+      businessDetails.vat = null
     })
 
     test('it does not flag the vat section, because vat is optional', () => {

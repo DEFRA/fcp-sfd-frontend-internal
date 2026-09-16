@@ -12,15 +12,11 @@ describe('businessFixListPresenter', () => {
     data = {
       source: 'name',
       orderedSectionsToFix: ['name', 'email'],
-      info: {
-        businessName: 'Herberts Lawn Mowing',
-        vat: '123456789'
-      },
-      contact: {
-        email: 'herbert@example.com',
-        landline: '01234567890',
-        mobile: '07700900000'
-      }
+      businessName: 'Herberts Lawn Mowing',
+      vat: '123456789',
+      email: 'herbert@example.com',
+      landline: '01234567890',
+      mobile: '07700900000'
     }
   })
 
@@ -147,7 +143,7 @@ describe('businessFixListPresenter', () => {
 
   describe('when the business name is missing', () => {
     test('it returns null for the "businessName" and "changeBusinessName" properties', () => {
-      data.info.businessName = undefined
+      data.businessName = undefined
 
       const result = businessFixListPresenter(data, null, sbi, null)
 

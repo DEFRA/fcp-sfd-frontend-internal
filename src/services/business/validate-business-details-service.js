@@ -70,11 +70,11 @@ const getSchemasToValidate = (hasUprn) => {
  */
 const mapBusinessDetails = (businessDetails, hasUprn) => {
   const flatBusinessDetails = {
-    businessName: businessDetails.info?.businessName ?? '',
-    businessEmail: businessDetails.contact?.email ?? '',
-    businessTelephone: businessDetails.contact?.landline ?? '',
-    businessMobile: businessDetails.contact?.mobile ?? '',
-    vatNumber: businessDetails.info?.vat ?? ''
+    businessName: businessDetails.businessName ?? '',
+    businessEmail: businessDetails.email ?? '',
+    businessTelephone: businessDetails.landline ?? '',
+    businessMobile: businessDetails.mobile ?? '',
+    vatNumber: businessDetails.vat ?? ''
   }
 
   if (!hasUprn) {

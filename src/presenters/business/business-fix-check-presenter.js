@@ -19,7 +19,7 @@ const businessFixCheckPresenter = (data, sbi) => {
     backLink: sbi ? `/business/${sbi}/details/fix-list` : SEARCH_SBI,
     pageTitle: 'Check your details are correct before submitting',
     metaDescription: 'Check your details are correct before submitting',
-    businessName: data.info?.businessName ?? null,
+    businessName: data.businessName ?? null,
     sbi: sbi ?? null,
     changeLink: `/business/${sbi}/details/fix-list`,
     sections: orderedSectionsToFix,

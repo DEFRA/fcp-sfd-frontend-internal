@@ -16,7 +16,7 @@ const businessFixPresenter = (data, sbi) => {
     backLink: sbi ? `/business/${sbi}/details` : SEARCH_SBI,
     pageTitle: 'Update your business details',
     metaDescription: 'Update your business details.',
-    businessName: data.info?.businessName ?? null,
+    businessName: data.businessName ?? null,
     sbi: sbi ?? null,
     updateText: buildUpdateText(orderedSectionsToFix, source),
     listOfErrors: hasMultipleErrors ? buildListOfErrors(orderedSectionsToFix, source) : []

@@ -13,27 +13,27 @@ const businessFixListPresenter = (data, payload, sbi, errors = null) => {
     backLink: sbi ? `/business/${sbi}/details/fix?source=${data.source}` : SEARCH_SBI,
     pageTitle: 'Your business details to update',
     metaDescription: 'Your business details to update.',
-    businessName: data.info?.businessName ?? null,
+    businessName: data.businessName ?? null,
     sbi: sbi ?? null,
     sections: data.orderedSectionsToFix,
     changeBusinessName: resolveFixValue(
       payload?.businessName,
       data.changeBusinessName?.businessName,
-      data.info?.businessName ?? null
+      data.businessName ?? null
     ),
     businessTelephone: presenters.formatNumber(
       payload?.businessTelephone,
       data.changeBusinessPhoneNumbers?.businessTelephone,
-      data.contact.landline
+      data.landline
     ),
     businessMobile: presenters.formatNumber(
       payload?.businessMobile,
       data.changeBusinessPhoneNumbers?.businessMobile,
-      data.contact.mobile
+      data.mobile
     ),
-    businessEmail: resolveFixValue(payload?.businessEmail, data.changeBusinessEmail?.businessEmail, data.contact.email),
+    businessEmail: resolveFixValue(payload?.businessEmail, data.changeBusinessEmail?.businessEmail, data.email),
     address: formatAddress(payload, data.changeBusinessAddress),
-    vatNumber: resolveFixValue(payload?.vatNumber, data.changeBusinessVat?.vatNumber, data.info?.vat),
+    vatNumber: resolveFixValue(payload?.vatNumber, data.changeBusinessVat?.vatNumber, data.vat),
     errors: buildSortedErrors(errors, data.orderedSectionsToFix, BUSINESS_SECTION_FIELD_ORDER)
   }
 }

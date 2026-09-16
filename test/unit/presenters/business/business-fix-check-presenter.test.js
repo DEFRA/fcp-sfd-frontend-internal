@@ -11,7 +11,7 @@ describe('businessFixCheckPresenter', () => {
   beforeEach(() => {
     data = {
       orderedSectionsToFix: ['name', 'email'],
-      info: { businessName: 'Herberts Lawn Mowing' },
+      businessName: 'Herberts Lawn Mowing',
       changeBusinessName: { businessName: 'Herberts Hedge Trimming' },
       changeBusinessEmail: { businessEmail: 'new@example.com' }
     }
@@ -48,7 +48,7 @@ describe('businessFixCheckPresenter', () => {
 
   describe('when the business name is missing', () => {
     test('it returns null as the "businessName" property', () => {
-      data.info.businessName = undefined
+      data.businessName = undefined
 
       const result = businessFixCheckPresenter(data, sbi)
 

@@ -13,7 +13,7 @@ describe('businessFixPresenter', () => {
       data = {
         source: 'name',
         orderedSectionsToFix: ['name'],
-        info: { businessName: 'Herberts Lawn Mowing' }
+        businessName: 'Herberts Lawn Mowing'
       }
     })
 

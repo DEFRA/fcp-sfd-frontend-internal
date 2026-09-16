@@ -25,6 +25,7 @@ describe('businessNameCheckPresenter', () => {
         metaDescription: 'Check the name for your business is correct.',
         userName: null,
         businessName: 'Herberts Lawn Mowing',
+        changeBusinessName: 'Herberts Lawn Mowing',
         sbi: '106705779'
       })
     })
@@ -53,7 +54,7 @@ describe('businessNameCheckPresenter', () => {
     })
   })
 
-  describe('the "businessName" property', () => {
+  describe('the "changeBusinessName" property', () => {
     describe('when there is an in-progress change', () => {
       beforeEach(() => {
         data.changeBusinessName = 'New Farm Ltd'
@@ -62,7 +63,13 @@ describe('businessNameCheckPresenter', () => {
       test('it uses the in-progress change name', () => {
         const result = businessNameCheckPresenter(data)
 
-        expect(result.businessName).toBe('New Farm Ltd')
+        expect(result.changeBusinessName).toBe('New Farm Ltd')
+      })
+
+      test('it leaves the "businessName" property as the current business name', () => {
+        const result = businessNameCheckPresenter(data)
+
+        expect(result.businessName).toBe('Herberts Lawn Mowing')
       })
     })
 
@@ -70,7 +77,7 @@ describe('businessNameCheckPresenter', () => {
       test('it falls back to the current business name', () => {
         const result = businessNameCheckPresenter(data)
 
-        expect(result.businessName).toBe('Herberts Lawn Mowing')
+        expect(result.changeBusinessName).toBe('Herberts Lawn Mowing')
       })
     })
   })
@@ -102,10 +109,11 @@ describe('businessNameCheckPresenter', () => {
       data = {}
     })
 
-    test('it defaults businessName and sbi to null and falls back to the search page', () => {
+    test('it defaults businessName, changeBusinessName and sbi to null and falls back to the search page', () => {
       const result = businessNameCheckPresenter(data)
 
       expect(result.businessName).toBeNull()
+      expect(result.changeBusinessName).toBeNull()
       expect(result.sbi).toBeNull()
       expect(result.backLink).toEqual('/search-sbi')
       expect(result.changeLink).toBe('/search-sbi')

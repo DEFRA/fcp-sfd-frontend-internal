@@ -6,6 +6,8 @@
 import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
+const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
+
 const REGISTRATION_CONTENT = {
   charity: {
     hintText: 'This is 6 to 8 numbers, for example, 12345678.',
@@ -72,7 +74,7 @@ const setBackLink = (data, sbi) => {
   }
 
   return data.changeBusinessLegalStatus
-    ? `/business/${sbi}/legal-status-change`
+    ? BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)
     : `/business/${sbi}/details`
 }
 

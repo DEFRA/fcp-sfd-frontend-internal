@@ -57,7 +57,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
     mockFetchBusinessChangeService.mockResolvedValue({
       changeBusinessLegalStatus: '102105',
       changeBusinessCompanyRegistrationNumber: '12345678',
-      info: { sbi: '107183280' }
+      sbi: '107183280'
     })
 
     mockUpdateDalService
@@ -124,7 +124,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
         changeBusinessLegalStatus: '102111',
         changeBusinessCompanyRegistrationNumber: '12345678',
         changeBusinessCharityCommissionRegistrationNumber: '7654321',
-        info: { sbi: '107183280' }
+        sbi: '107183280'
       })
 
       mockUpdateDalService
@@ -157,7 +157,8 @@ describe('updateBusinessLegalStatusChangeService', () => {
       beforeEach(() => {
         mockFetchBusinessChangeService.mockResolvedValue({
           changeBusinessLegalStatus: '102105',
-          info: { sbi: '107183280', registrationNumbers: { companiesHouse: '87654321' } }
+          sbi: '107183280',
+          registrationNumbers: { companiesHouse: '87654321' }
         })
       })
 
@@ -185,7 +186,8 @@ describe('updateBusinessLegalStatusChangeService', () => {
       beforeEach(() => {
         mockFetchBusinessChangeService.mockResolvedValue({
           changeBusinessLegalStatus: '102101',
-          info: { sbi: '107183280', registrationNumbers: { charityCommission: '7654321' } }
+          sbi: '107183280',
+          registrationNumbers: { charityCommission: '7654321' }
         })
       })
 
@@ -212,7 +214,7 @@ describe('updateBusinessLegalStatusChangeService', () => {
 
   describe('when neither the legal status nor the registration number have changed', () => {
     beforeEach(() => {
-      mockFetchBusinessChangeService.mockResolvedValue({ info: { sbi: '107183280' } })
+      mockFetchBusinessChangeService.mockResolvedValue({ sbi: '107183280' })
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {
@@ -228,7 +230,8 @@ describe('updateBusinessLegalStatusChangeService', () => {
     beforeEach(() => {
       mockFetchBusinessChangeService.mockResolvedValue({
         changeBusinessCompanyRegistrationNumber: '87654321',
-        info: { sbi: '107183280', legalStatusCode: '102199' }
+        sbi: '107183280',
+        legalStatusCode: '102199'
       })
     })
 
@@ -252,7 +255,8 @@ describe('updateBusinessLegalStatusChangeService', () => {
         mockFetchBusinessChangeService.mockResolvedValue({
           changeBusinessCompanyRegistrationNumber: '87654321',
           // The legal status is unchanged, so its code comes from the fetched details as a number
-          info: { sbi: '107183280', legalStatusCode: 102105 }
+          sbi: '107183280',
+          legalStatusCode: 102105
         })
       })
 
@@ -291,7 +295,8 @@ describe('updateBusinessLegalStatusChangeService', () => {
       beforeEach(() => {
         mockFetchBusinessChangeService.mockResolvedValue({
           changeBusinessCharityCommissionRegistrationNumber: '7654321',
-          info: { sbi: '107183280', legalStatusCode: 102101 }
+          sbi: '107183280',
+          legalStatusCode: 102101
         })
       })
 

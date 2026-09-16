@@ -26,7 +26,7 @@ describe('customer details by CRN mapper', () => {
 
     const result = mapCustomerDetailsByCrn(rawData)
 
-    expect(result.info.customerName).toEqual('John Doe')
+    expect(result.customerName).toEqual('John Doe')
   })
 
   describe('when the address has no lookup fields', () => {
@@ -100,7 +100,7 @@ describe('customer details by CRN mapper', () => {
     test('it maps name fields to undefined without crashing', () => {
       const result = mapCustomerDetailsByCrn(rawData)
 
-      expect(result.info.customerName).toEqual('undefined undefined')
+      expect(result.customerName).toEqual('undefined undefined')
     })
   })
 

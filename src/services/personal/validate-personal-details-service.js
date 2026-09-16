@@ -68,15 +68,15 @@ const getSchemasToValidate = (hasUprn) => {
  */
 const mapPersonalDetails = (personalDetails, hasUprn) => {
   const flatPersonalDetails = {
-    first: personalDetails.info?.fullName?.first ?? '',
-    last: personalDetails.info?.fullName?.last ?? '',
-    middle: personalDetails.info?.fullName?.middle ?? '',
-    day: personalDetails.info?.dateOfBirth?.day ?? '',
-    month: personalDetails.info?.dateOfBirth?.month ?? '',
-    year: personalDetails.info?.dateOfBirth?.year ?? '',
-    personalEmail: personalDetails.contact?.email ?? '',
-    personalTelephone: personalDetails.contact?.telephone ?? '',
-    personalMobile: personalDetails.contact?.mobile ?? ''
+    first: personalDetails.fullName?.first ?? '',
+    last: personalDetails.fullName?.last ?? '',
+    middle: personalDetails.fullName?.middle ?? '',
+    day: personalDetails.dateOfBirth?.day ?? '',
+    month: personalDetails.dateOfBirth?.month ?? '',
+    year: personalDetails.dateOfBirth?.year ?? '',
+    personalEmail: personalDetails.email ?? '',
+    personalTelephone: personalDetails.telephone ?? '',
+    personalMobile: personalDetails.mobile ?? ''
   }
 
   if (!hasUprn) {

@@ -35,8 +35,8 @@ const REGISTRATION_CONTENT = {
  * @returns {object} Page data for the view, including `field` (the form field name for this variant)
  */
 const businessLegalStatusEnterPresenter = (data, payload) => {
-  const sbi = data.info?.sbi
-  const legalStatusCode = String(data.changeBusinessLegalStatus ?? data.info?.legalStatusCode ?? '')
+  const sbi = data.sbi
+  const legalStatusCode = String(data.changeBusinessLegalStatus ?? data.legalStatusCode ?? '')
   const isCharity = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
 
   // There are far more legal status codes that use the company registration number than the charity registration
@@ -44,19 +44,19 @@ const businessLegalStatusEnterPresenter = (data, payload) => {
   // to the charity variant.
   let content = REGISTRATION_CONTENT.company
   let sessionValue = data.changeBusinessCompanyRegistrationNumber
-  let fetchedValue = data.info?.registrationNumbers?.companiesHouse
+  let fetchedValue = data.registrationNumbers?.companiesHouse
 
   if (isCharity) {
     content = REGISTRATION_CONTENT.charity
     sessionValue = data.changeBusinessCharityCommissionRegistrationNumber
-    fetchedValue = data.info?.registrationNumbers?.charityCommission
+    fetchedValue = data.registrationNumbers?.charityCommission
   }
 
   return {
     backLink: setBackLink(data, sbi),
     pageTitle: content.pageTitle,
     metaDescription: content.metaDescription,
-    businessName: data.info?.businessName ?? null,
+    businessName: data.businessName ?? null,
     sbi: sbi ?? null,
     field: content.field,
     hintText: content.hintText,

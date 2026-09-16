@@ -52,7 +52,7 @@ describe('business phone numbers change routes', () => {
   })
 
   describe('GET /business/{sbi}/phone-numbers-change', () => {
-    const businessDetails = { info: { sbi: '106705779' } }
+    const businessDetails = { sbi: '106705779' }
     const pageData = { pageTitle: 'What are your business phone numbers?' }
 
     beforeEach(() => {
@@ -89,7 +89,7 @@ describe('business phone numbers change routes', () => {
   })
 
   describe('POST /business/{sbi}/phone-numbers-change validation failAction', () => {
-    const businessDetails = { info: { sbi: '106705779' } }
+    const businessDetails = { sbi: '106705779' }
     const pageData = { pageTitle: 'What are your business phone numbers?' }
 
     beforeEach(() => {

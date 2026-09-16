@@ -15,18 +15,18 @@ const customerOverviewPresenter = (data, page) => {
   const requestedPageNumber = normalisePageNumber(page)
   const currentPage = clampPageNumber(requestedPageNumber, totalBusinesses)
   const pagedBusinesses = paginateBusinesses(sortedBusinesses, currentPage)
-  const routeURL = `/customer/${data?.info?.crn}`
+  const routeURL = `/customer/${data?.crn}`
 
   const pagination = paginationPresenter(totalBusinesses, currentPage, routeURL, pagedBusinesses.length, 'businesses')
 
   return {
-    customerName: data?.info?.customerName || '',
-    personalDetailsLink: data?.info?.crn ? `/customer/${data.info.crn}/details` : SEARCH_CRN,
-    crn: data?.info?.crn || '',
+    customerName: data?.customerName || '',
+    personalDetailsLink: data?.crn ? `/customer/${data.crn}/details` : SEARCH_CRN,
+    crn: data?.crn || '',
     hasBusinesses: totalBusinesses > 0,
     businesses: formatBusinesses(pagedBusinesses),
     pagination,
-    breadcrumbs: buildEntityBreadcrumbs('crn', data?.info?.crn, data?.info?.customerName)
+    breadcrumbs: buildEntityBreadcrumbs('crn', data?.crn, data?.customerName)
   }
 }
 

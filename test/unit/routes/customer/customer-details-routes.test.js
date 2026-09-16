@@ -133,18 +133,14 @@ describe('customer details', () => {
 
 const getMockPersonalDetails = () => ({
   crn: '1234567890',
-  info: {
-    userName: 'John Doe',
-    dateOfBirth: { full: '1990-01-01' },
-    fullNameJoined: 'John M Doe'
-  },
+  userName: 'John Doe',
+  dateOfBirth: { full: '1990-01-01' },
+  fullNameJoined: 'John M Doe',
   address: {
     lookup: { uprn: '12345' }
   },
-  contact: {
-    email: 'test@example.com',
-    telephone: '01234567890'
-  }
+  email: 'test@example.com',
+  telephone: '01234567890'
 })
 
 const getMockPageData = () => ({

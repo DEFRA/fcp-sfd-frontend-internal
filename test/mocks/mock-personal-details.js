@@ -47,20 +47,18 @@ const getDalData = () => ({
 
 const getMappedData = () => ({
   crn: '123456890',
-  info: {
-    userName: 'John Doe',
-    fullName: {
-      first: 'John',
-      last: 'Doe',
-      middle: 'M'
-    },
-    fullNameJoined: 'John M Doe',
-    dateOfBirth: {
-      full: '1990-01-01',
-      day: '01',
-      month: '01',
-      year: '1990'
-    }
+  userName: 'John Doe',
+  fullName: {
+    first: 'John',
+    last: 'Doe',
+    middle: 'M'
+  },
+  fullNameJoined: 'John M Doe',
+  dateOfBirth: {
+    full: '1990-01-01',
+    day: '01',
+    month: '01',
+    year: '1990'
   },
   address: {
     lookup: {
@@ -85,11 +83,9 @@ const getMappedData = () => ({
     postcode: 'CO9 3LS',
     country: 'United Kingdom'
   },
-  contact: {
-    email: 'test@example.com',
-    telephone: '01234567890',
-    mobile: null
-  }
+  email: 'test@example.com',
+  telephone: '01234567890',
+  mobile: null
 })
 
 export {

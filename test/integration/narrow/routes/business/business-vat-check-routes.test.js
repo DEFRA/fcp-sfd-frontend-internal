@@ -38,7 +38,8 @@ describe('business VAT check route', () => {
   describe('GET /business/{sbi}/vat-registration-number-check', () => {
     test('returns 200 and renders the VAT check view when authenticated', async () => {
       fetchBusinessChangeService.mockResolvedValue({
-        info: { sbi, vat: 'GB123456789' },
+        sbi,
+        vat: 'GB123456789',
         changeBusinessVat: 'GB987654321'
       })
 

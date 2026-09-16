@@ -10,7 +10,9 @@ describe('businessLegalStatusCheckPresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: { sbi: '106705779', legalStatusCode: '102111', legalStatus: 'Sole proprietorship' }
+      sbi: '106705779',
+      legalStatusCode: '102111',
+      legalStatus: 'Sole proprietorship'
     }
   })
 
@@ -40,7 +42,7 @@ describe('businessLegalStatusCheckPresenter', () => {
     })
 
     test('it does not require a registration number when no legal status code is available at all', () => {
-      delete data.info.legalStatusCode
+      delete data.legalStatusCode
 
       const result = businessLegalStatusCheckPresenter(data)
 
@@ -77,7 +79,7 @@ describe('businessLegalStatusCheckPresenter', () => {
 
     test('it falls back to the fetched charity registration number when no session value exists', () => {
       delete data.changeBusinessCharityCommissionRegistrationNumber
-      data.info.registrationNumbers = { charityCommission: '7654321' }
+      data.registrationNumbers = { charityCommission: '7654321' }
 
       const result = businessLegalStatusCheckPresenter(data)
 
@@ -113,7 +115,7 @@ describe('businessLegalStatusCheckPresenter', () => {
 
     test('it falls back to the fetched company registration number when no session value exists', () => {
       delete data.changeBusinessCompanyRegistrationNumber
-      data.info.registrationNumbers = { companiesHouse: 'AB123456' }
+      data.registrationNumbers = { companiesHouse: 'AB123456' }
 
       const result = businessLegalStatusCheckPresenter(data)
 
@@ -123,7 +125,7 @@ describe('businessLegalStatusCheckPresenter', () => {
 
   describe('the "backLink" property', () => {
     test('it falls back to the search page when the sbi is missing', () => {
-      delete data.info.sbi
+      delete data.sbi
 
       const result = businessLegalStatusCheckPresenter(data)
 
@@ -133,7 +135,7 @@ describe('businessLegalStatusCheckPresenter', () => {
 
   describe('when the sbi is missing', () => {
     test('the legal status and registration number change links also fall back to the search page', () => {
-      delete data.info.sbi
+      delete data.sbi
 
       const result = businessLegalStatusCheckPresenter(data)
 
@@ -160,8 +162,8 @@ describe('businessLegalStatusCheckPresenter', () => {
     })
 
     test('it is null when there is no session change and no fetched legal status text', () => {
-      delete data.info.legalStatus
-      delete data.info.legalStatusCode
+      delete data.legalStatus
+      delete data.legalStatusCode
 
       const result = businessLegalStatusCheckPresenter(data)
 

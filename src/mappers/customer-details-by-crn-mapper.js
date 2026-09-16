@@ -14,10 +14,8 @@ export const mapCustomerDetailsByCrn = (value) => {
   const address = info?.address ?? {}
 
   return {
-    info: {
-      crn: value.customer.crn,
-      customerName: `${name.first} ${name.last}`
-    },
+    crn: value.customer.crn,
+    customerName: `${name.first} ${name.last}`,
     address: mappers.address(address)
   }
 }

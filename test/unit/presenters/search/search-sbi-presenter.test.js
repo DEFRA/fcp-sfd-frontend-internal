@@ -40,7 +40,7 @@ describe('searchSbiPresenter', () => {
   describe('the "businessName" property', () => {
     describe('when the businessName property is missing', () => {
       beforeEach(() => {
-        delete data.info.businessName
+        delete data.businessName
       })
 
       test('it should return businessName as an empty string', () => {
@@ -54,7 +54,7 @@ describe('searchSbiPresenter', () => {
   describe('the "businessTraderNumber" property', () => {
     describe('when the traderNumber property is missing', () => {
       beforeEach(() => {
-        delete data.info.traderNumber
+        delete data.traderNumber
       })
 
       test('it should return businessTraderNumber as an empty string', () => {
@@ -68,7 +68,7 @@ describe('searchSbiPresenter', () => {
   describe('the "businessVendorNumber" property', () => {
     describe('when the vendorNumber property is missing', () => {
       beforeEach(() => {
-        delete data.info.vendorNumber
+        delete data.vendorNumber
       })
 
       test('it should return businessVendorNumber as an empty string', () => {

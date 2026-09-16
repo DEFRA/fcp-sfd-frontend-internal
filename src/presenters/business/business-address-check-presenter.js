@@ -7,8 +7,7 @@ import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const businessAddressCheckPresenter = (data) => {
-  const { changeBusinessAddress, address, info } = data
-  const sbi = info?.sbi
+  const { changeBusinessAddress, address, sbi } = data
 
   // Determine the appropriate address page based on how the address was entered.
   // Postcode lookup uses the select page, manual entry uses the enter page.
@@ -19,7 +18,7 @@ const businessAddressCheckPresenter = (data) => {
     changeLink: `/business/${sbi}/${addressPage}`,
     pageTitle: 'Check your business address is correct before submitting',
     metaDescription: 'Check the address for your business is correct.',
-    businessName: info?.businessName ?? null,
+    businessName: data.businessName ?? null,
     sbi: sbi ?? null,
     address: formatAddress(changeBusinessAddress, address)
   }

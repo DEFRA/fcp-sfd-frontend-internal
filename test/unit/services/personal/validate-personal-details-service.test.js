@@ -30,7 +30,7 @@ describe('validatePersonalDetailsService', () => {
 
   describe('when personal details are invalid', () => {
     beforeEach(() => {
-      personalDetails.info.fullName.first = ''
+      personalDetails.fullName.first = ''
     })
 
     test('returns hasValidPersonalDetails as false', () => {
@@ -48,8 +48,8 @@ describe('validatePersonalDetailsService', () => {
 
   describe('when multiple schema errors map to the same section', () => {
     beforeEach(() => {
-      personalDetails.info.fullName.first = ''
-      personalDetails.info.fullName.last = ''
+      personalDetails.fullName.first = ''
+      personalDetails.fullName.last = ''
     })
 
     test('only returns the section once', () => {
@@ -61,8 +61,8 @@ describe('validatePersonalDetailsService', () => {
 
   describe('when multiple sections are invalid', () => {
     beforeEach(() => {
-      personalDetails.info.fullName.first = ''
-      personalDetails.contact.email = 'not-an-email'
+      personalDetails.fullName.first = ''
+      personalDetails.email = 'not-an-email'
     })
 
     test('returns all affected sections', () => {
@@ -74,8 +74,8 @@ describe('validatePersonalDetailsService', () => {
 
   describe('when both telephone and mobile are missing', () => {
     beforeEach(() => {
-      personalDetails.contact.telephone = null
-      personalDetails.contact.mobile = null
+      personalDetails.telephone = null
+      personalDetails.mobile = null
     })
 
     test('maps the error to the phone section', () => {
@@ -87,7 +87,7 @@ describe('validatePersonalDetailsService', () => {
 
   describe('when only a telephone number is provided', () => {
     beforeEach(() => {
-      personalDetails.contact.mobile = null
+      personalDetails.mobile = null
     })
 
     test('does not flag the phone section', () => {
@@ -99,7 +99,7 @@ describe('validatePersonalDetailsService', () => {
 
   describe('when only a mobile number is provided', () => {
     beforeEach(() => {
-      personalDetails.contact.telephone = null
+      personalDetails.telephone = null
     })
 
     test('does not flag the phone section', () => {
@@ -138,9 +138,9 @@ describe('validatePersonalDetailsService', () => {
 
   describe('when date of birth is completely missing', () => {
     beforeEach(() => {
-      personalDetails.info.dateOfBirth.day = ''
-      personalDetails.info.dateOfBirth.month = ''
-      personalDetails.info.dateOfBirth.year = ''
+      personalDetails.dateOfBirth.day = ''
+      personalDetails.dateOfBirth.month = ''
+      personalDetails.dateOfBirth.year = ''
     })
 
     test('maps the error to the dob section', () => {
@@ -152,9 +152,9 @@ describe('validatePersonalDetailsService', () => {
 
   describe('when date of birth is invalid', () => {
     beforeEach(() => {
-      personalDetails.info.dateOfBirth.day = '31'
-      personalDetails.info.dateOfBirth.month = '2'
-      personalDetails.info.dateOfBirth.year = '2020'
+      personalDetails.dateOfBirth.day = '31'
+      personalDetails.dateOfBirth.month = '2'
+      personalDetails.dateOfBirth.year = '2020'
     })
 
     test('maps the error to the dob section', () => {
@@ -166,9 +166,9 @@ describe('validatePersonalDetailsService', () => {
 
   describe('when date of birth is in the future', () => {
     beforeEach(() => {
-      personalDetails.info.dateOfBirth.day = '1'
-      personalDetails.info.dateOfBirth.month = '1'
-      personalDetails.info.dateOfBirth.year = '3000'
+      personalDetails.dateOfBirth.day = '1'
+      personalDetails.dateOfBirth.month = '1'
+      personalDetails.dateOfBirth.year = '3000'
     })
 
     test('maps the error to the dob section', () => {

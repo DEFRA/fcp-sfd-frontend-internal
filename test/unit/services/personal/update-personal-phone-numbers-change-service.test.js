@@ -39,11 +39,10 @@ describe('updatePersonalPhoneNumbersChangeService', () => {
 
     data = {
       crn,
-      info: {
-        userName: 'John Doe',
-        fullName: { first: 'John', last: 'Doe' }
-      },
-      contact: { telephone: '01111111111', mobile: '02222222222' },
+      userName: 'John Doe',
+      fullName: { first: 'John', last: 'Doe' },
+      telephone: '01111111111',
+      mobile: '02222222222',
       changePersonalPhoneNumbers: {
         personalTelephone: '09876543210',
         personalMobile: '07123456789'

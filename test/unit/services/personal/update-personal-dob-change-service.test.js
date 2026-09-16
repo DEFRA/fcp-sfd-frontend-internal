@@ -39,10 +39,8 @@ describe('updatePersonalDobChangeService', () => {
 
     data = {
       crn,
-      info: {
-        userName: 'John Doe',
-        fullName: { first: 'John', last: 'Doe' }
-      },
+      userName: 'John Doe',
+      fullName: { first: 'John', last: 'Doe' },
       changePersonalDob: {
         day: '23',
         month: '07',

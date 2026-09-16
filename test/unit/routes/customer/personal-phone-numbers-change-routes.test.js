@@ -166,17 +166,13 @@ describe('personal phone numbers change', () => {
 
 const getMockData = () => {
   return {
-    info: {
-      userName: 'John Doe',
-      fullName: {
-        first: 'John',
-        last: 'Doe'
-      }
+    userName: 'John Doe',
+    fullName: {
+      first: 'John',
+      last: 'Doe'
     },
-    contact: {
-      telephone: '01111111111',
-      mobile: '02222222222'
-    }
+    telephone: '01111111111',
+    mobile: '02222222222'
   }
 }
 

@@ -36,10 +36,8 @@ const getDalData = () => ({
 })
 
 const getMappedData = () => ({
-  info: {
-    crn: '1234567890',
-    customerName: 'Jane Smith'
-  },
+  crn: '1234567890',
+  customerName: 'Jane Smith',
   address: {
     lookup: {
       buildingNumberRange: '12',

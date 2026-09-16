@@ -7,8 +7,8 @@ import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const businessLegalStatusCheckPresenter = (data) => {
-  const sbi = data.info?.sbi
-  const legalStatusCode = String(data.changeBusinessLegalStatus ?? data.info?.legalStatusCode ?? '')
+  const sbi = data.sbi
+  const legalStatusCode = String(data.changeBusinessLegalStatus ?? data.legalStatusCode ?? '')
   const { isCharity, isCompany } = isCharityOrCompany(legalStatusCode)
 
   const { backLink, legalStatusChangeLink, registrationNumberChangeLink } = setLinks(isCharity, isCompany, sbi)
@@ -20,9 +20,9 @@ const businessLegalStatusCheckPresenter = (data) => {
     registrationNumberChangeLink,
     pageTitle: 'Check your business legal status is correct before submitting',
     metaDescription: 'Check the legal status of this business is correct.',
-    businessName: data.info?.businessName ?? null,
+    businessName: data.businessName ?? null,
     sbi: sbi ?? null,
-    businessLegalStatus: getLegalStatusText(data.changeBusinessLegalStatus ?? data.info?.legalStatusCode) ?? null,
+    businessLegalStatus: getLegalStatusText(data.changeBusinessLegalStatus ?? data.legalStatusCode) ?? null,
     registrationNumberLabel: getRegistrationNumberLabel(isCharity, isCompany),
     registrationNumber: getRegistrationNumber(data, isCharity, isCompany)
   }
@@ -74,11 +74,11 @@ const getRegistrationNumberLabel = (isCharity, isCompany) => {
 
 const getRegistrationNumber = (data, isCharity, isCompany) => {
   if (isCharity) {
-    return data.changeBusinessCharityCommissionRegistrationNumber ?? data.info?.registrationNumbers?.charityCommission ?? null
+    return data.changeBusinessCharityCommissionRegistrationNumber ?? data.registrationNumbers?.charityCommission ?? null
   }
 
   if (isCompany) {
-    return data.changeBusinessCompanyRegistrationNumber ?? data.info?.registrationNumbers?.companiesHouse ?? null
+    return data.changeBusinessCompanyRegistrationNumber ?? data.registrationNumbers?.companiesHouse ?? null
   }
 
   return null

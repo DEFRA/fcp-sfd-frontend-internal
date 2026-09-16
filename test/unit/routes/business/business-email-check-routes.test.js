@@ -45,7 +45,7 @@ describe('business email check routes', () => {
   })
 
   describe('GET /business/{sbi}/email-check', () => {
-    const businessEmailChange = { info: { sbi: '106705779' } }
+    const businessEmailChange = { sbi: '106705779' }
     const pageData = { pageTitle: 'Check your business email address is correct before submitting' }
 
     beforeEach(() => {

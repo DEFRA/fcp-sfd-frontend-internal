@@ -22,7 +22,7 @@ describe('fetchBusinessChangeService', () => {
 
     sbi = '106705779'
     email = 'test.user@defra.gov.uk'
-    businessDetails = { info: { sbi: '106705779' }, contact: { email: 'old@example.com' } }
+    businessDetails = { sbi: '106705779', email: 'old@example.com' }
 
     yar = {
       get: vi.fn().mockReturnValue({})

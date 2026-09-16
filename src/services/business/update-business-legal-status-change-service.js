@@ -24,7 +24,7 @@ const updateBusinessLegalStatusChangeService = async (yar, sbi, email) => {
 
   // The registration number can be changed on its own from the business details page, leaving the legal
   // status untouched, so fall back to the fetched status when the session holds no change for it
-  const legalStatusCode = businessDetails.changeBusinessLegalStatus ?? businessDetails.info?.legalStatusCode
+  const legalStatusCode = businessDetails.changeBusinessLegalStatus ?? businessDetails.legalStatusCode
 
   const isCharity = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(String(legalStatusCode))
   const isCompany = constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(String(legalStatusCode))
@@ -84,12 +84,10 @@ const resolveRegistrationNumbers = (businessDetails, requiresRegistrationNumber)
     return { companiesHouseNumber: null, charityCommissionNumber: null }
   }
 
-  const { info } = businessDetails
-
   // Fall back to the fetched value so an unchanged, already-stored number isn't wiped out
   return {
-    companiesHouseNumber: businessDetails.changeBusinessCompanyRegistrationNumber ?? info?.registrationNumbers?.companiesHouse ?? null,
-    charityCommissionNumber: businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? info?.registrationNumbers?.charityCommission ?? null
+    companiesHouseNumber: businessDetails.changeBusinessCompanyRegistrationNumber ?? businessDetails.registrationNumbers?.companiesHouse ?? null,
+    charityCommissionNumber: businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? businessDetails.registrationNumbers?.charityCommission ?? null
   }
 }
 

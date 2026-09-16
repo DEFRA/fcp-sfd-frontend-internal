@@ -10,10 +10,8 @@ describe('businessAddressEnterPresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: {
-        businessName: 'Agile Farm Ltd',
-        sbi: '123456789'
-      },
+      businessName: 'Agile Farm Ltd',
+      sbi: '123456789',
       address: {
         lookup: {
           pafOrganisationName: null,

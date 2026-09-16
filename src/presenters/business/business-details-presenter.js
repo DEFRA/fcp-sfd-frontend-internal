@@ -11,9 +11,9 @@ import { buildEntityBreadcrumbs } from '../base-presenter.js'
 const CHANGE_LINK = '#'
 
 const businessDetailsPresenter = (data, sbi, yar, hasValidBusinessDetails, sectionsNeedingUpdate) => {
-  const { info, address, contact } = data
+  const { businessName, address, email, landline, mobile, vat, traderNumber, vendorNumber, legalStatus, type } = data
   const changeLinks = formatChangeLinks(sbi, hasValidBusinessDetails, sectionsNeedingUpdate)
-  const countyParishHoldingNumbers = presenters.formatCph(info.countyParishHoldingNumbers)
+  const countyParishHoldingNumbers = presenters.formatCph(data.countyParishHoldingNumbers)
   const addressLines = presenters.formatBusinessAddress(address)
   const hasAddress = addressLines.length > 0
 
@@ -22,28 +22,28 @@ const businessDetailsPresenter = (data, sbi, yar, hasValidBusinessDetails, secti
     pageTitle: 'View and update your business details',
     metaDescription: 'View and update your business details.',
     sbi,
-    breadcrumbs: buildEntityBreadcrumbs('sbi', sbi, info.businessName, `/business/${sbi}`),
-    businessName: buildValueDisplay(info.businessName, 'Not added', changeLinks.name),
+    breadcrumbs: buildEntityBreadcrumbs('sbi', sbi, businessName, `/business/${sbi}`),
+    businessName: buildValueDisplay(businessName, 'Not added', changeLinks.name),
     businessAddress: {
       value: hasAddress ? addressLines : 'Not added',
       action: presenters.getActionText(hasAddress),
       changeLink: changeLinks.address
     },
     businessTelephone: {
-      telephone: data.contact.landline || 'Not added',
-      mobile: data.contact.mobile || 'Not added',
-      action: presenters.getActionText(data.contact.landline || data.contact.mobile),
+      telephone: landline || 'Not added',
+      mobile: mobile || 'Not added',
+      action: presenters.getActionText(landline || mobile),
       changeLink: changeLinks.phone
     },
-    businessEmail: buildValueDisplay(contact.email, 'Not added', changeLinks.email),
-    vatNumber: buildVatDisplay(info.vat, sbi, changeLinks.vat),
-    tradeNumber: info.traderNumber ?? null,
-    vendorRegistrationNumber: info.vendorNumber ?? null,
+    businessEmail: buildValueDisplay(email, 'Not added', changeLinks.email),
+    vatNumber: buildVatDisplay(vat, sbi, changeLinks.vat),
+    tradeNumber: traderNumber ?? null,
+    vendorRegistrationNumber: vendorNumber ?? null,
     countyParishHoldingNumbers,
     countyParishHoldingNumbersText: presenters.formatCphText(countyParishHoldingNumbers.length),
-    businessLegalStatus: buildValueDisplay(info.legalStatus, 'Not added', BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)),
-    legalStatusRegistrationNumber: buildLegalStatusRegistrationNumberDisplay(info, sbi),
-    businessType: buildValueDisplay(info.type, 'Not added', CHANGE_LINK)
+    businessLegalStatus: buildValueDisplay(legalStatus, 'Not added', BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)),
+    legalStatusRegistrationNumber: buildLegalStatusRegistrationNumberDisplay(data, sbi),
+    businessType: buildValueDisplay(type, 'Not added', CHANGE_LINK)
   }
 }
 
@@ -156,10 +156,10 @@ const buildVatDisplay = (vatNumber, sbi, vatFixLink) => {
  * change link goes straight to the enter page, letting the number be corrected
  * without going through the legal status journey.
  */
-const buildLegalStatusRegistrationNumberDisplay = (info, sbi) => {
+const buildLegalStatusRegistrationNumberDisplay = (data, sbi) => {
   // The DAL returns the legal status code as a number, the engine codes are strings
-  const legalStatusCode = String(info.legalStatusCode ?? '')
-  const registrationNumbers = info.registrationNumbers ?? {}
+  const legalStatusCode = String(data.legalStatusCode ?? '')
+  const registrationNumbers = data.registrationNumbers ?? {}
 
   let label
   let number

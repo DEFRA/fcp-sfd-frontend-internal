@@ -48,7 +48,7 @@ describe('business name check routes', () => {
   })
 
   describe('GET /business/{sbi}/name-check', () => {
-    const businessNameChange = { info: { sbi: '106705779' } }
+    const businessNameChange = { sbi: '106705779' }
     const pageData = { pageTitle: 'Check your business name is correct before submitting' }
 
     beforeEach(() => {

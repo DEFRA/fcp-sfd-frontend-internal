@@ -499,7 +499,8 @@ describe('pre-handlers', () => {
       }
 
       fetchBusinessChangeService.mockResolvedValue({
-        info: { sbi: '106705779', legalStatusCode: '102111' },
+        sbi: '106705779',
+        legalStatusCode: '102111',
         changeBusinessLegalStatus: '102111'
       })
     })
@@ -513,7 +514,8 @@ describe('pre-handlers', () => {
 
     test('it redirects to enter page when charity status is selected but no charity number is present', async () => {
       fetchBusinessChangeService.mockResolvedValue({
-        info: { sbi: '106705779', legalStatusCode: '102111' },
+        sbi: '106705779',
+        legalStatusCode: '102111',
         changeBusinessLegalStatus: '102101',
         changeBusinessCharityCommissionRegistrationNumber: null
       })
@@ -526,7 +528,8 @@ describe('pre-handlers', () => {
 
     test('it redirects to enter page when company status is selected but no company number is present', async () => {
       fetchBusinessChangeService.mockResolvedValue({
-        info: { sbi: '106705779', legalStatusCode: '102111' },
+        sbi: '106705779',
+        legalStatusCode: '102111',
         changeBusinessLegalStatus: '102105',
         changeBusinessCompanyRegistrationNumber: null
       })
@@ -539,7 +542,8 @@ describe('pre-handlers', () => {
 
     test('it returns h.continue when charity status is selected and charity number is present', async () => {
       fetchBusinessChangeService.mockResolvedValue({
-        info: { sbi: '106705779', legalStatusCode: '102111' },
+        sbi: '106705779',
+        legalStatusCode: '102111',
         changeBusinessLegalStatus: '102101',
         changeBusinessCharityCommissionRegistrationNumber: '1234567'
       })
@@ -552,7 +556,8 @@ describe('pre-handlers', () => {
 
     test('it returns h.continue when company status is selected and company number is present', async () => {
       fetchBusinessChangeService.mockResolvedValue({
-        info: { sbi: '106705779', legalStatusCode: '102111' },
+        sbi: '106705779',
+        legalStatusCode: '102111',
         changeBusinessLegalStatus: '102105',
         changeBusinessCompanyRegistrationNumber: '12345678'
       })
@@ -565,7 +570,9 @@ describe('pre-handlers', () => {
 
     test('it returns h.continue when the session charity number is cleared but a fetched charity number is present', async () => {
       fetchBusinessChangeService.mockResolvedValue({
-        info: { sbi: '106705779', legalStatusCode: '102101', registrationNumbers: { charityCommission: '1234567' } }
+        sbi: '106705779',
+        legalStatusCode: '102101',
+        registrationNumbers: { charityCommission: '1234567' }
       })
 
       const result = await validateLegalStatusRegistrationNumber.method(request, h)
@@ -576,7 +583,9 @@ describe('pre-handlers', () => {
 
     test('it returns h.continue when the session company number is cleared but a fetched company number is present', async () => {
       fetchBusinessChangeService.mockResolvedValue({
-        info: { sbi: '106705779', legalStatusCode: '102105', registrationNumbers: { companiesHouse: '12345678' } }
+        sbi: '106705779',
+        legalStatusCode: '102105',
+        registrationNumbers: { companiesHouse: '12345678' }
       })
 
       const result = await validateLegalStatusRegistrationNumber.method(request, h)

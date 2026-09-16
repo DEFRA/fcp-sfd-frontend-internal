@@ -12,9 +12,9 @@ const personalNameCheckPresenter = (data, crn) => {
     changeLink: `/customer/${crn}/account-name-change`,
     pageTitle: 'Check your name is correct before submitting',
     metaDescription: 'Check the full name for your personal account is correct.',
-    userName: data.info.userName ?? null,
+    userName: data.userName ?? null,
     crn: crn ?? null,
-    fullName: utils.formatFullName(data.changePersonalName ?? data.info.fullName)
+    fullName: utils.formatFullName(data.changePersonalName ?? data.fullName)
   }
 }
 

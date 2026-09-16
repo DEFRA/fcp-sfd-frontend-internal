@@ -36,7 +36,7 @@ const postBusinessLegalStatusEnter = {
     const email = auth.credentials?.email
 
     const businessDetails = await fetchBusinessChangeService(yar, sbi, email, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
-    const legalStatusCode = businessDetails.changeBusinessLegalStatus ?? businessDetails.info?.legalStatusCode
+    const legalStatusCode = businessDetails.changeBusinessLegalStatus ?? businessDetails.legalStatusCode
     const { error, value, payloadField, sessionField } = validateBusinessRegistrationNumberService(legalStatusCode, payload)
 
     if (error) {

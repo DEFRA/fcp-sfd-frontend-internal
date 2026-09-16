@@ -78,7 +78,7 @@ describe('business address select', () => {
     describe('when postcode or addresses are missing', () => {
       beforeEach(() => {
         fetchBusinessChangeService.mockResolvedValue({
-          info: { sbi: '106705779' }
+          sbi: '106705779'
         })
       })
 
@@ -162,7 +162,8 @@ describe('business address select', () => {
 })
 
 const getMockData = () => ({
-  info: { sbi: '106705779', businessName: 'Herberts Lawn Mowing' },
+  sbi: '106705779',
+  businessName: 'Herberts Lawn Mowing',
   changeBusinessPostcode: { postcode: 'SW1A 1AA' },
   changeBusinessAddresses: [
     { uprn: '1001', displayAddress: '123 Test Street' }

@@ -144,13 +144,11 @@ describe('personal name change', () => {
 
 const getMockData = () => {
   return {
-    info: {
-      userName: 'John Doe',
-      fullName: {
-        first: 'John',
-        middle: 'M',
-        last: 'Doe'
-      }
+    userName: 'John Doe',
+    fullName: {
+      first: 'John',
+      middle: 'M',
+      last: 'Doe'
     }
   }
 }

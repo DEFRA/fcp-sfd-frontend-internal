@@ -59,9 +59,7 @@ describe('updateBusinessPhoneNumbersChangeService', () => {
         businessMobile: '09876 543210',
         businessTelephone: '01111 111111'
       },
-      info: {
-        sbi: '106705779'
-      }
+      sbi: '106705779'
     })
   })
 
@@ -95,7 +93,7 @@ describe('updateBusinessPhoneNumbersChangeService', () => {
 
   describe('when there is no pending business phone numbers change', () => {
     beforeEach(() => {
-      mockFetchBusinessChangeService.mockResolvedValue({ info: { sbi: '106705779' } })
+      mockFetchBusinessChangeService.mockResolvedValue({ sbi: '106705779' })
     })
 
     test('returns early without calling the DAL, clearing session or notifying', async () => {

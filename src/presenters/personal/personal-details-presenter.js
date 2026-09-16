@@ -9,18 +9,18 @@ import { buildEntityBreadcrumbs } from '../base-presenter.js'
 
 const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNeedingUpdate) => {
   const changeLinks = formatChangeLinks(data.crn, hasValidPersonalDetails, sectionsNeedingUpdate)
-  const { action: dobAction, formattedDob } = formatDob(data.info.dateOfBirth.full)
+  const { action: dobAction, formattedDob } = formatDob(data.dateOfBirth.full)
 
   return {
-    breadcrumbs: buildEntityBreadcrumbs('crn', data.crn, data.info.userName, `/customer/${data.crn}`),
+    breadcrumbs: buildEntityBreadcrumbs('crn', data.crn, data.userName, `/customer/${data.crn}`),
     notification: yar ? yar.flash('notification')[0] : null,
     pageTitle: 'View and update your personal details',
     metaDescription: 'View and update your personal details.',
-    userName: data.info.userName ?? null,
+    userName: data.userName ?? null,
     crn: data.crn,
     personalName: {
-      fullName: data.info.fullNameJoined,
-      action: getActionText(data.info.fullNameJoined),
+      fullName: data.fullNameJoined,
+      action: getActionText(data.fullNameJoined),
       changeLink: changeLinks.name
     },
     dob: {
@@ -34,14 +34,14 @@ const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNe
       changeLink: changeLinks.address
     },
     personalTelephone: {
-      telephone: data.contact.telephone || 'Not added',
-      mobile: data.contact.mobile || 'Not added',
-      action: getActionText(data.contact.telephone || data.contact.mobile),
+      telephone: data.telephone || 'Not added',
+      mobile: data.mobile || 'Not added',
+      action: getActionText(data.telephone || data.mobile),
       changeLink: changeLinks.phone
     },
     personalEmail: {
-      email: data.contact.email || 'Not added',
-      action: getActionText(data.contact.email),
+      email: data.email || 'Not added',
+      action: getActionText(data.email),
       changeLink: changeLinks.email
     }
   }

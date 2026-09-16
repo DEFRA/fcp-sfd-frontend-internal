@@ -101,7 +101,7 @@ describe('search sbi routes', () => {
     })
 
     describe('when an SBI is in the query', () => {
-      const details = { info: { businessName: 'Herberts Lawn Mowing' } }
+      const details = { businessName: 'Herberts Lawn Mowing' }
       const pageData = { resultText: '1 result for "106705779"' }
 
       beforeEach(() => {

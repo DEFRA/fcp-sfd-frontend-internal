@@ -13,7 +13,7 @@ const personalAddressEnterPresenter = (data, payload) => {
     backLink: crn ? `/customer/${crn}/account-address-change` : SEARCH_CRN,
     pageTitle: 'Enter your personal address',
     metaDescription: 'Enter the address for your personal account.',
-    userName: data.info?.userName ?? null,
+    userName: data.userName ?? null,
     crn: crn ?? null,
     address: formatAddress(payload, data.changePersonalAddress, data.address)
   }

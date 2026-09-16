@@ -10,7 +10,8 @@ describe('businessAddressChangePresenter', () => {
 
   beforeEach(() => {
     data = {
-      info: { sbi: '106705779', businessName: 'Herberts Lawn Mowing' },
+      sbi: '106705779',
+      businessName: 'Herberts Lawn Mowing',
       changeBusinessPostcode: { postcode: 'SW1A 1AA' },
       address: { postcode: 'SW1A 1AA' }
     }

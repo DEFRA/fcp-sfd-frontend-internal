@@ -126,8 +126,8 @@ export const validateLegalStatusRegistrationNumber = {
     const isCompany = constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
 
     if (isCharity || isCompany) {
-      const charityNumber = businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? businessDetails.info?.registrationNumbers?.charityCommission
-      const companyNumber = businessDetails.changeBusinessCompanyRegistrationNumber ?? businessDetails.info?.registrationNumbers?.companiesHouse
+      const charityNumber = businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? businessDetails.registrationNumbers?.charityCommission
+      const companyNumber = businessDetails.changeBusinessCompanyRegistrationNumber ?? businessDetails.registrationNumbers?.companiesHouse
 
       const charityRequired = isCharity && !charityNumber
       const companyRequired = isCompany && !companyNumber
@@ -143,4 +143,4 @@ export const validateLegalStatusRegistrationNumber = {
 
 // Falls back to the fetched status when the session holds no pending legal status change
 const resolveLegalStatusCode = (businessDetails) =>
-  String(businessDetails.changeBusinessLegalStatus ?? businessDetails.info?.legalStatusCode ?? '')
+  String(businessDetails.changeBusinessLegalStatus ?? businessDetails.legalStatusCode ?? '')

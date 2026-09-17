@@ -3,14 +3,16 @@
  * @module businessAddressEnterPresenter
  */
 
-import { presenters } from '@defra/fcp-sfd-frontend-engine'
+import { constants, presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
+
+const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
 
 const businessAddressEnterPresenter = (data, payload) => {
   const sbi = data.sbi
 
   return {
-    backLink: sbi ? `/business/${sbi}/address-change` : SEARCH_SBI,
+    backLink: sbi ? BUSINESS_CHANGE_LINKS.businessAddress(sbi) : SEARCH_SBI,
     pageTitle: 'Enter your business address',
     metaDescription: 'Enter the address for your business.',
     businessName: data.businessName ?? null,

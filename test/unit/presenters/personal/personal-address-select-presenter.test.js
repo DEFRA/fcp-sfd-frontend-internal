@@ -5,16 +5,21 @@ import { describe, test, expect, vi } from 'vitest'
 import { personalAddressSelectPresenter } from '../../../../src/presenters/personal/personal-address-select-presenter.js'
 
 // Mocks
-vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
-  presenters: {
-    formatDisplayAddresses: vi.fn((addresses, selected) => {
-      return addresses.map((addr) => ({
-        ...addr,
-        selected: `${addr.uprn}${addr.displayAddress}` === `${selected?.uprn}${selected?.displayAddress}`
-      }))
-    })
+vi.mock('@defra/fcp-sfd-frontend-engine', async (importOriginal) => {
+  const actual = await importOriginal()
+
+  return {
+    ...actual,
+    presenters: {
+      formatDisplayAddresses: vi.fn((addresses, selected) => {
+        return addresses.map((addr) => ({
+          ...addr,
+          selected: `${addr.uprn}${addr.displayAddress}` === `${selected?.uprn}${selected?.displayAddress}`
+        }))
+      })
+    }
   }
-}))
+})
 
 describe('personalAddressSelectPresenter', () => {
   describe('when given valid data', () => {

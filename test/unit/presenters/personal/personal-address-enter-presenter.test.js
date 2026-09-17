@@ -5,12 +5,17 @@ import { describe, test, expect, vi } from 'vitest'
 import { personalAddressEnterPresenter } from '../../../../src/presenters/personal/personal-address-enter-presenter.js'
 
 // Mocks
-vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
-  presenters: {
-    formatChangedAddress: vi.fn((addr) => addr),
-    formatOriginalAddress: vi.fn((addr) => addr)
+vi.mock('@defra/fcp-sfd-frontend-engine', async (importOriginal) => {
+  const actual = await importOriginal()
+
+  return {
+    ...actual,
+    presenters: {
+      formatChangedAddress: vi.fn((addr) => addr),
+      formatOriginalAddress: vi.fn((addr) => addr)
+    }
   }
-}))
+})
 
 describe('personalAddressEnterPresenter', () => {
   describe('when given valid data', () => {

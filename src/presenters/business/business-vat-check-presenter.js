@@ -3,8 +3,10 @@
  * @module businessVatCheckPresenter
  */
 
-import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
+
+const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
 
 const businessVatCheckPresenter = (data) => {
   const sbi = data.sbi ?? null

@@ -4,8 +4,9 @@
  */
 
 import { constants, presenters } from '@defra/fcp-sfd-frontend-engine'
-import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
 import { buildEntityBreadcrumbs } from '../base-presenter.js'
+
+const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
 
 const CHANGE_LINK = '#'
 
@@ -35,7 +36,7 @@ const businessDetailsPresenter = (data, sbi, yar) => {
       telephone: landline || 'Not added',
       mobile: mobile || 'Not added',
       action: presenters.getActionText(landline || mobile),
-      changeLink: BUSINESS_CHANGE_LINKS.businessTelephone(sbi)
+      changeLink: BUSINESS_CHANGE_LINKS.businessPhone(sbi)
     },
     businessEmail: {
       value: email || 'Not added',

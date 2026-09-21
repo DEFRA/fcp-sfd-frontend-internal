@@ -6,6 +6,8 @@
 import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
+const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
+
 const businessLegalStatusCheckPresenter = (data) => {
   const sbi = data.sbi
   const legalStatusCode = String(data.changeBusinessLegalStatus ?? data.legalStatusCode ?? '')
@@ -30,18 +32,18 @@ const businessLegalStatusCheckPresenter = (data) => {
 
 const setLinks = (isCharity, isCompany, sbi) => {
   if (sbi) {
-    const legalStatusChangeLink = `/business/${sbi}/legal-status-change`
-    const registrationNumberChangeLink = `/business/${sbi}/legal-status-enter`
+    const legalStatusChangeLink = BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)
+    const registrationNumberChangeLink = BUSINESS_CHANGE_LINKS.businessLegalStatusRegistrationNumber(sbi)
 
     if (isCharity || isCompany) {
       return {
-        backLink: `/business/${sbi}/legal-status-enter`,
+        backLink: BUSINESS_CHANGE_LINKS.businessLegalStatusRegistrationNumber(sbi),
         legalStatusChangeLink,
         registrationNumberChangeLink
       }
     }
     return {
-      backLink: `/business/${sbi}/legal-status-change`,
+      backLink: BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi),
       legalStatusChangeLink,
       registrationNumberChangeLink
     }

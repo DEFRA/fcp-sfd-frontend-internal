@@ -4,9 +4,10 @@
  */
 
 import { constants, presenters } from '@defra/fcp-sfd-frontend-engine'
-import { BUSINESS_CHANGE_LINKS } from '../../constants/change-links.js'
 import { config } from '../../config/index.js'
 import { buildEntityBreadcrumbs } from '../base-presenter.js'
+
+const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
 
 const CHANGE_LINK = '#'
 
@@ -80,7 +81,7 @@ const formatChangeLinks = (sbi, hasValidBusinessDetails, sectionsNeedingUpdate =
   const CHANGE_LINKS = {
     name: BUSINESS_CHANGE_LINKS.businessName(sbi),
     address: BUSINESS_CHANGE_LINKS.businessAddress(sbi),
-    phone: BUSINESS_CHANGE_LINKS.businessTelephone(sbi),
+    phone: BUSINESS_CHANGE_LINKS.businessPhone(sbi),
     email: BUSINESS_CHANGE_LINKS.businessEmail(sbi),
     vat: null
   }

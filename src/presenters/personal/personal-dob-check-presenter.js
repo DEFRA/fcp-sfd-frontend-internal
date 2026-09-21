@@ -3,8 +3,10 @@
  * @module personalDobCheckPresenter
  */
 
-import { presenters } from '@defra/fcp-sfd-frontend-engine'
+import { constants, presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_CRN } from '../../constants/search-links.js'
+
+const { PERSONAL: PERSONAL_CHANGE_LINKS } = constants.changeLinks.internal
 
 const personalDobCheckPresenter = (data, crn) => {
   const { day, month, year } = data.changePersonalDob ?? data.dateOfBirth
@@ -14,12 +16,12 @@ const personalDobCheckPresenter = (data, crn) => {
   )
 
   return {
-    backLink: crn ? `/customer/${crn}/account-date-of-birth-change` : SEARCH_CRN,
+    backLink: crn ? PERSONAL_CHANGE_LINKS.personalDateOfBirth(crn) : SEARCH_CRN,
     pageTitle: 'Check your date of birth is correct before submitting',
     metaDescription: 'Check the date of birth for your personal account is correct.',
     userName: data.userName ?? null,
     crn: crn ?? null,
-    changeLink: `/customer/${crn}/account-date-of-birth-change`,
+    changeLink: PERSONAL_CHANGE_LINKS.personalDateOfBirth(crn),
     dateOfBirth: presenters.formatLongDate(personalDob)
   }
 }

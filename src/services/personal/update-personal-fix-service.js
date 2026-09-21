@@ -21,9 +21,13 @@ const updatePersonalFixService = async (crn, sessionData, yar, email) => {
 
   const message = services.buildFixSuccessMessage('personal', personalDetails)
 
-  if (message?.type === 'html') {
+  if (!message) {
+    return
+  }
+
+  if (message.type === 'html') {
     flashNotification(yar, 'Success', null, message.value)
-  } else if (message?.type === 'text') {
+  } else {
     flashNotification(yar, 'Success', message.value)
   }
 }

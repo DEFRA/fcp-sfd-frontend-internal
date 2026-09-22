@@ -27,7 +27,9 @@ export const checkCrnAndInterrupterJourney = (journey) => {
 
       const isValid = services.checkInterrupterJourneySession(yar, journey.journeyKey)
 
-      if (!isValid) {
+      // The session is not scoped by CRN, so confirm it belongs to this customer
+      // to guard against another tab having overwritten it for a different one
+      if (!isValid || yar.get(journey.journeyKey).crn !== crn) {
         return h.redirect(journey.redirectPath.replace('{crn}', crn)).takeover()
       }
 
@@ -61,7 +63,9 @@ export const checkSbiAndInterrupterJourney = (journey) => {
 
       const isValid = services.checkInterrupterJourneySession(yar, journey.journeyKey)
 
-      if (!isValid) {
+      // The session is not scoped by SBI, so confirm it belongs to this business
+      // to guard against another tab having overwritten it for a different one
+      if (!isValid || yar.get(journey.journeyKey).sbi !== sbi) {
         return h.redirect(journey.redirectPath.replace('{sbi}', sbi)).takeover()
       }
 

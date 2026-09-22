@@ -26,7 +26,7 @@ const getBusinessDetails = {
     const { hasValidBusinessDetails, sectionsNeedingUpdate } = validateBusinessDetailsService(businessDetails)
 
     if (!hasValidBusinessDetails) {
-      yar.set('businessDetailsValidation', { businessDetailsValid: false, sectionsNeedingUpdate })
+      yar.set('businessDetailsValidation', { sbi, businessDetailsValid: false, sectionsNeedingUpdate })
     }
 
     const pageData = businessDetailsPresenter(businessDetails, sbi, yar, hasValidBusinessDetails, sectionsNeedingUpdate)

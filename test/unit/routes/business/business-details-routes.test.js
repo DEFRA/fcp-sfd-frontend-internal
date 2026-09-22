@@ -106,10 +106,11 @@ describe('business details routes', () => {
         })
       })
 
-      test('seeds the interrupter journey session with the sections needing update', async () => {
+      test('seeds the interrupter journey session with the sbi and sections needing update', async () => {
         await getBusinessDetails.handler(request, h)
 
         expect(request.yar.set).toHaveBeenCalledWith('businessDetailsValidation', {
+          sbi: '106705779',
           businessDetailsValid: false,
           sectionsNeedingUpdate: ['name', 'email']
         })

@@ -21,7 +21,7 @@ const getCustomerDetails = {
     const { hasValidPersonalDetails, sectionsNeedingUpdate } = validatePersonalDetailsService(personalDetails)
 
     if (!hasValidPersonalDetails) {
-      yar.set('personalDetailsValidation', { personalDetailsValid: false, sectionsNeedingUpdate })
+      yar.set('personalDetailsValidation', { crn, personalDetailsValid: false, sectionsNeedingUpdate })
     }
 
     const pageData = personalDetailsPresenter(personalDetails, yar, hasValidPersonalDetails, sectionsNeedingUpdate)

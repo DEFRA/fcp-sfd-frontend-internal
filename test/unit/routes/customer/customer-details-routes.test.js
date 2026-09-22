@@ -98,7 +98,7 @@ describe('customer details', () => {
         expect(h.view).toHaveBeenCalledWith('personal/personal-details.njk', pageData)
       })
 
-      test('stores validation summary in the session when personal details are invalid', async () => {
+      test('stores validation summary in the session with the crn when personal details are invalid', async () => {
         validatePersonalDetailsService.mockReturnValue({
           hasValidPersonalDetails: false,
           sectionsNeedingUpdate: ['dob', 'address']
@@ -107,6 +107,7 @@ describe('customer details', () => {
         await getCustomerDetails.handler(request, h)
 
         expect(request.yar.set).toHaveBeenCalledWith('personalDetailsValidation', {
+          crn: '1234567890',
           personalDetailsValid: false,
           sectionsNeedingUpdate: ['dob', 'address']
         })

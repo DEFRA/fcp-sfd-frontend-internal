@@ -71,7 +71,8 @@ const buildValueDisplay = (value, emptyValueText, changeLink) => {
  * standard change links are returned.
  *
  * When the interrupter is enabled and details are invalid:
- * - If only one section needs updating, its normal change link is used
+ * - If exactly one section needs updating, that section keeps its standard change
+ *   link and every other row routes through the fix journey
  * - Otherwise, all links point to the business details fix journey
  *
  * VAT is null unless it is routed through the interrupter, because the VAT row

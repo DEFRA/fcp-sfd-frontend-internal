@@ -96,6 +96,22 @@ describe('personalFixPresenter', () => {
           .toEqual('We will ask you to update these details.')
       })
     })
+
+    describe('when an unrecognised source is provided', () => {
+      beforeEach(() => {
+        data = {
+          source: 'not-a-real-section',
+          orderedSectionsToFix: ['name', 'dob', 'email']
+        }
+      })
+
+      test('it returns a generic update message', () => {
+        const result = personalFixPresenter(data, crn)
+
+        expect(result.updateText)
+          .toEqual('We will ask you to update these details.')
+      })
+    })
   })
 
   describe('the "listOfErrors" property', () => {

@@ -70,7 +70,7 @@ const buildUpdateText = (orderedSectionsToFix, source) => {
     return `We will ask you to update ${PERSONAL_UPDATE_TEXT_LABELS[second]} as well as ${PERSONAL_UPDATE_TEXT_LABELS[first]}.`
   }
 
-  if (source) {
+  if (source && PERSONAL_UPDATE_TEXT_LABELS[source]) {
     return `We will ask you to update these details as well as ${PERSONAL_UPDATE_TEXT_LABELS[source]}:`
   }
 

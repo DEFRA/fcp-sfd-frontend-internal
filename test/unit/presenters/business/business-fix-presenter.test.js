@@ -106,6 +106,21 @@ describe('businessFixPresenter', () => {
         expect(result.updateText).toEqual('We will ask you to update these details.')
       })
     })
+
+    describe('when an unrecognised source is provided', () => {
+      beforeEach(() => {
+        data = {
+          source: 'not-a-real-section',
+          orderedSectionsToFix: ['name', 'phone', 'email']
+        }
+      })
+
+      test('it returns the generic update text', () => {
+        const result = businessFixPresenter(data, sbi)
+
+        expect(result.updateText).toEqual('We will ask you to update these details.')
+      })
+    })
   })
 
   describe('the "listOfErrors" property', () => {

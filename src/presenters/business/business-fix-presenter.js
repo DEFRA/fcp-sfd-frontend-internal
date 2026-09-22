@@ -70,7 +70,7 @@ const buildUpdateText = (orderedSectionsToFix, source) => {
     return `We will ask you to update ${BUSINESS_UPDATE_TEXT_LABELS[second]} as well as ${BUSINESS_UPDATE_TEXT_LABELS[first]}.`
   }
 
-  if (source) {
+  if (source && BUSINESS_UPDATE_TEXT_LABELS[source]) {
     return `We will ask you to update these details as well as ${BUSINESS_UPDATE_TEXT_LABELS[source]}:`
   }
 

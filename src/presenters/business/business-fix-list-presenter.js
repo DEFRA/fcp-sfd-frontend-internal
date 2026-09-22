@@ -10,7 +10,7 @@ const businessFixListPresenter = (data, payload, sbi, errors = null) => {
   const { BUSINESS_SECTION_FIELD_ORDER } = constants.interrupterJourney
 
   return {
-    backLink: sbi ? `/business/${sbi}/details/fix?source=${data.source}` : SEARCH_SBI,
+    backLink: buildBackLink(sbi, data.source),
     pageTitle: 'Your business details to update',
     metaDescription: 'Your business details to update.',
     businessName: data.businessName ?? null,
@@ -36,6 +36,17 @@ const businessFixListPresenter = (data, payload, sbi, errors = null) => {
     vatNumber: resolveFixValue(payload?.vatNumber, data.changeBusinessVat?.vatNumber, data.vat),
     errors: buildSortedErrors(errors, data.orderedSectionsToFix, BUSINESS_SECTION_FIELD_ORDER)
   }
+}
+
+/**
+ * Builds the fix-list back link, omitting the source query string when it's missing.
+ */
+const buildBackLink = (sbi, source) => {
+  if (!sbi) {
+    return SEARCH_SBI
+  }
+
+  return source ? `/business/${sbi}/details/fix?source=${source}` : `/business/${sbi}/details/fix`
 }
 
 /**

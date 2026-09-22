@@ -15,7 +15,7 @@ const personalFixListPresenter = (data, payload, crn, errors = null) => {
     : null
 
   return {
-    backLink: crn ? `/customer/${crn}/details/fix?source=${data.source}` : SEARCH_CRN,
+    backLink: buildBackLink(crn, data.source),
     pageTitle: 'Your personal details to update',
     metaDescription: 'Your personal details to update.',
     userName: data.userName ?? null,
@@ -33,6 +33,17 @@ const personalFixListPresenter = (data, payload, crn, errors = null) => {
     address: formatAddress(payload, data.changePersonalAddress),
     errors: sortedErrors
   }
+}
+
+/**
+ * Builds the fix-list back link, omitting the source query string when it's missing.
+ */
+const buildBackLink = (crn, source) => {
+  if (!crn) {
+    return SEARCH_CRN
+  }
+
+  return source ? `/customer/${crn}/details/fix?source=${source}` : `/customer/${crn}/details/fix`
 }
 
 const formatName = (payload, data) => {

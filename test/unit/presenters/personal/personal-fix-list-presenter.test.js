@@ -73,6 +73,14 @@ describe('personalFixListPresenter', () => {
 
       expect(result.backLink).toEqual('/search-crn')
     })
+
+    test('it omits the source query string when the source is missing', () => {
+      data.source = undefined
+
+      const result = personalFixListPresenter(data, payload, crn)
+
+      expect(result.backLink).toEqual(`/customer/${crn}/details/fix`)
+    })
   })
 
   describe('the "name" property', () => {

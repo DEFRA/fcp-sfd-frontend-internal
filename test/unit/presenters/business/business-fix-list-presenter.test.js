@@ -54,6 +54,14 @@ describe('businessFixListPresenter', () => {
 
       expect(result.backLink).toEqual('/search-sbi')
     })
+
+    test('it omits the source query string when the source is missing', () => {
+      data.source = undefined
+
+      const result = businessFixListPresenter(data, null, sbi, null)
+
+      expect(result.backLink).toEqual(`/business/${sbi}/details/fix`)
+    })
   })
 
   describe('when the user has already submitted fixes', () => {

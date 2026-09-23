@@ -27,10 +27,6 @@ vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
   }
 }))
 
-vi.mock('../../../../src/services/personal/build-personal-fix-update-variables-service.js', () => ({
-  buildPersonalFixUpdateVariablesService: vi.fn()
-}))
-
 vi.mock('../../../../src/services/DAL/update-dal-service.js', () => ({
   updateDalService: vi.fn()
 }))

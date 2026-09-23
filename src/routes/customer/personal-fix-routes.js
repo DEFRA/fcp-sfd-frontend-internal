@@ -18,8 +18,9 @@ const getPersonalFix = {
     const sessionData = services.initialiseFixJourney(yar, query.source, 'personal')
 
     // No sections to fix means the journey can't start, e.g. the user has
-    // already submitted and is navigating back
-    if (!sessionData?.orderedSectionsToFix) {
+    // already submitted and is navigating back. A mismatched crn means the
+    // session belongs to a different customer, e.g. from another tab
+    if (!sessionData?.orderedSectionsToFix || sessionData.crn !== crn) {
       return h.redirect(PERSONAL_DETAILS_VALIDATION_JOURNEY.redirectPath.replace('{crn}', crn))
     }
 

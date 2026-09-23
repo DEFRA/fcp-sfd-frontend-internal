@@ -106,6 +106,23 @@ describe('business fix routes', () => {
         expect(fetchBusinessFixService).not.toHaveBeenCalled()
       })
     })
+
+    describe('when the session data belongs to a different sbi', () => {
+      beforeEach(() => {
+        h = {
+          redirect: vi.fn()
+        }
+
+        services.initialiseFixJourney.mockReturnValue({ ...getMockSessionData(), sbi: '999999999' })
+      })
+
+      test('it redirects to the business details page without fetching business data', async () => {
+        await getBusinessFix.handler(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith(`/business/${sbi}/details`)
+        expect(fetchBusinessFixService).not.toHaveBeenCalled()
+      })
+    })
   })
 
   describe('POST /business/{sbi}/details/fix', () => {
@@ -134,6 +151,7 @@ describe('business fix routes', () => {
 
 const getMockSessionData = () => {
   return {
+    sbi: '107183280',
     source: 'name',
     orderedSectionsToFix: ['name', 'email']
   }

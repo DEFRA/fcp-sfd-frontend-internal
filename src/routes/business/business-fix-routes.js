@@ -18,8 +18,9 @@ const getBusinessFix = {
     const sessionData = services.initialiseFixJourney(yar, query.source, 'business')
 
     // No sections to fix means the journey can't start, e.g. the user has
-    // already submitted and is navigating back
-    if (!sessionData?.orderedSectionsToFix) {
+    // already submitted and is navigating back. A mismatched sbi means the
+    // session belongs to a different business, e.g. from another tab
+    if (!sessionData?.orderedSectionsToFix || sessionData.sbi !== sbi) {
       return h.redirect(BUSINESS_DETAILS_VALIDATION_JOURNEY.redirectPath.replace('{sbi}', sbi))
     }
 

@@ -2,6 +2,7 @@ import { services } from '@defra/fcp-sfd-frontend-engine'
 
 import { personalFixPresenter } from '../../presenters/personal/personal-fix-presenter.js'
 import { fetchPersonalFixService } from '../../services/fetch-personal-fix-service.js'
+import { PERSONAL_DETAILS_VALIDATION_JOURNEY } from '../../constants/journeys.js'
 import { validateCrn } from '../pre-handlers.js'
 
 const getPersonalFix = {
@@ -15,6 +16,14 @@ const getPersonalFix = {
     const { crn } = params
 
     const sessionData = services.initialiseFixJourney(yar, query.source, 'personal')
+
+    // No sections to fix means the journey can't start, e.g. the user has
+    // already submitted and is navigating back. A mismatched crn means the
+    // session belongs to a different customer, e.g. from another tab
+    if (!sessionData?.orderedSectionsToFix || sessionData.crn !== crn) {
+      return h.redirect(PERSONAL_DETAILS_VALIDATION_JOURNEY.redirectPath.replace('{crn}', crn))
+    }
+
     const personalDetails = await fetchPersonalFixService(crn, auth.credentials?.email, sessionData)
     const pageData = personalFixPresenter(personalDetails, crn)
 

@@ -1,43 +1,43 @@
 /**
- * Formats data ready for presenting in the `/customer/{crn}/details/fix` page
- * @module personalFixPresenter
+ * Formats data ready for presenting in the `/business/{sbi}/details/fix` page
+ * @module businessFixPresenter
  */
 
 import { constants } from '@defra/fcp-sfd-frontend-engine'
-import { SEARCH_CRN } from '../../constants/search-links.js'
+import { SEARCH_SBI } from '../../constants/search-links.js'
 
-const { PERSONAL_SECTION_ORDER, PERSONAL_UPDATE_TEXT_LABELS, PERSONAL_SECTION_LABELS } = constants.interrupterJourney
+const { BUSINESS_SECTION_ORDER, BUSINESS_UPDATE_TEXT_LABELS, BUSINESS_SECTION_LABELS } = constants.interrupterJourney
 
-const personalFixPresenter = (data, crn) => {
+const businessFixPresenter = (data, sbi) => {
   const { source, orderedSectionsToFix } = data
   const hasMultipleErrors = orderedSectionsToFix.length > 2
 
   return {
-    backLink: crn ? `/customer/${crn}/details` : SEARCH_CRN,
-    pageTitle: 'Update your personal details',
-    metaDescription: 'Update your personal details.',
-    userName: data.userName ?? null,
-    crn: crn ?? null,
+    backLink: sbi ? `/business/${sbi}/details` : SEARCH_SBI,
+    pageTitle: 'Update your business details',
+    metaDescription: 'Update your business details.',
+    businessName: data.businessName ?? null,
+    sbi: sbi ?? null,
     updateText: buildUpdateText(orderedSectionsToFix, source),
     listOfErrors: hasMultipleErrors ? buildListOfErrors(orderedSectionsToFix, source) : []
   }
 }
 
 /**
- * Builds the list of additional personal detail sections the user must fix.
+ * Builds the list of additional business detail sections the user must fix.
  *
  * The list:
- * - follows the display order used on the personal details page
+ * - follows the display order used on the business details page
  * - excludes the section the user selected to start the fix journey (source)
  *
- * Used to populate the bullet list on the personal fix page.
+ * Used to populate the bullet list on the business fix page.
  */
 const buildListOfErrors = (orderedSectionsToFix, source) => {
   const result = []
 
-  for (const field of PERSONAL_SECTION_ORDER) {
+  for (const field of BUSINESS_SECTION_ORDER) {
     if (orderedSectionsToFix.includes(field) && field !== source) {
-      result.push(PERSONAL_SECTION_LABELS[field])
+      result.push(BUSINESS_SECTION_LABELS[field])
     }
   }
 
@@ -45,14 +45,14 @@ const buildListOfErrors = (orderedSectionsToFix, source) => {
 }
 
 /**
- * Builds the introductory text for the personal fix page.
+ * Builds the introductory text for the business fix page.
  *
  * The text depends on:
- * - how many personal detail sections need fixing
+ * - how many business detail sections need fixing
  * - whether the user started the journey from a specific section (source)
  *
  * `source` is the section link the user clicked to begin the fix journey
- * (for example, clicking "Change personal address" sets source to `address`).
+ * (for example, clicking "Change business address" sets source to `address`).
  *
  * Behaviour:
  * - If exactly two sections need fixing, both are named explicitly in the text.
@@ -67,16 +67,16 @@ const buildUpdateText = (orderedSectionsToFix, source) => {
   if (orderedSectionsToFix.length === 2) {
     const [first, second] = orderedSectionsToFix
 
-    return `We will ask you to update ${PERSONAL_UPDATE_TEXT_LABELS[second]} as well as ${PERSONAL_UPDATE_TEXT_LABELS[first]}.`
+    return `We will ask you to update ${BUSINESS_UPDATE_TEXT_LABELS[second]} as well as ${BUSINESS_UPDATE_TEXT_LABELS[first]}.`
   }
 
-  if (source && PERSONAL_UPDATE_TEXT_LABELS[source]) {
-    return `We will ask you to update these details as well as ${PERSONAL_UPDATE_TEXT_LABELS[source]}:`
+  if (source && BUSINESS_UPDATE_TEXT_LABELS[source]) {
+    return `We will ask you to update these details as well as ${BUSINESS_UPDATE_TEXT_LABELS[source]}:`
   }
 
   return 'We will ask you to update these details.'
 }
 
 export {
-  personalFixPresenter
+  businessFixPresenter
 }

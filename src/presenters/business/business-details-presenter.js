@@ -4,14 +4,16 @@
  */
 
 import { constants, presenters } from '@defra/fcp-sfd-frontend-engine'
+import { config } from '../../config/index.js'
 import { buildEntityBreadcrumbs } from '../base-presenter.js'
 
 const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
 
 const CHANGE_LINK = '#'
 
-const businessDetailsPresenter = (data, sbi, yar) => {
+const businessDetailsPresenter = (data, sbi, yar, hasValidBusinessDetails, sectionsNeedingUpdate) => {
   const { businessName, address, email, landline, mobile, vat, traderNumber, vendorNumber, legalStatus, type } = data
+  const changeLinks = formatChangeLinks(sbi, hasValidBusinessDetails, sectionsNeedingUpdate)
   const countyParishHoldingNumbers = presenters.formatCph(data.countyParishHoldingNumbers)
   const addressLines = presenters.formatBusinessAddress(address)
   const hasAddress = addressLines.length > 0
@@ -22,47 +24,86 @@ const businessDetailsPresenter = (data, sbi, yar) => {
     metaDescription: 'View and update your business details.',
     sbi,
     breadcrumbs: buildEntityBreadcrumbs('sbi', sbi, businessName, `/business/${sbi}`),
-    businessName: {
-      value: businessName || 'Not added',
-      action: presenters.getActionText(businessName),
-      changeLink: BUSINESS_CHANGE_LINKS.businessName(sbi)
-    },
+    businessName: buildValueDisplay(businessName, 'Not added', changeLinks.name),
     businessAddress: {
       value: hasAddress ? addressLines : 'Not added',
       action: presenters.getActionText(hasAddress),
-      changeLink: BUSINESS_CHANGE_LINKS.businessAddress(sbi)
+      changeLink: changeLinks.address
     },
     businessTelephone: {
       telephone: landline || 'Not added',
       mobile: mobile || 'Not added',
       action: presenters.getActionText(landline || mobile),
-      changeLink: BUSINESS_CHANGE_LINKS.businessPhone(sbi)
+      changeLink: changeLinks.phone
     },
-    businessEmail: {
-      value: email || 'Not added',
-      action: presenters.getActionText(email),
-      changeLink: BUSINESS_CHANGE_LINKS.businessEmail(sbi)
-    },
-    vatNumber: buildVatDisplay(vat, sbi),
+    businessEmail: buildValueDisplay(email, 'Not added', changeLinks.email),
+    vatNumber: buildVatDisplay(vat, sbi, changeLinks.vat),
     tradeNumber: traderNumber ?? null,
     vendorRegistrationNumber: vendorNumber ?? null,
     countyParishHoldingNumbers,
     countyParishHoldingNumbersText: presenters.formatCphText(countyParishHoldingNumbers.length),
-    businessLegalStatus: {
-      value: legalStatus || 'Not added',
-      action: presenters.getActionText(legalStatus),
-      changeLink: BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)
-    },
+    businessLegalStatus: buildValueDisplay(legalStatus, 'Not added', BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)),
     legalStatusRegistrationNumber: buildLegalStatusRegistrationNumberDisplay(data, sbi),
-    businessType: createEditableValueField(type, 'Not added')
+    businessType: buildValueDisplay(type, 'Not added', CHANGE_LINK)
   }
 }
 
-const createEditableValueField = (value, emptyValueText) => {
+/**
+ * Builds the value, action and changeLink for a simple business details field.
+ *
+ * Most fields on this page just need to show their value (or a fallback like
+ * "Not added"), work out whether the link should say "Add" or "Change", and
+ * link to a change page - this avoids repeating those three lines for every field.
+ */
+const buildValueDisplay = (value, emptyValueText, changeLink) => {
   return {
     value: value || emptyValueText,
     action: presenters.getActionText(value),
-    changeLink: CHANGE_LINK
+    changeLink
+  }
+}
+
+/**
+ * Builds change links for business details based on whether the
+ * business details interrupter is enabled and the validity of the data.
+ *
+ * When the interrupter is disabled or all business details are valid,
+ * standard change links are returned.
+ *
+ * When the interrupter is enabled and details are invalid:
+ * - If exactly one section needs updating, that section keeps its standard change
+ *   link and every other row routes through the fix journey
+ * - Otherwise, all links point to the business details fix journey
+ *
+ * VAT is null unless it is routed through the interrupter, because the VAT row
+ * builds its own add/change/remove links.
+ */
+const formatChangeLinks = (sbi, hasValidBusinessDetails, sectionsNeedingUpdate = []) => {
+  const CHANGE_LINKS = {
+    name: BUSINESS_CHANGE_LINKS.businessName(sbi),
+    address: BUSINESS_CHANGE_LINKS.businessAddress(sbi),
+    phone: BUSINESS_CHANGE_LINKS.businessPhone(sbi),
+    email: BUSINESS_CHANGE_LINKS.businessEmail(sbi),
+    vat: null
+  }
+
+  const businessDetailsInterrupterEnabled = config.get('featureToggle.businessDetailsInterrupterEnabled')
+
+  // Happy path – interrupter off or data is valid
+  if (!businessDetailsInterrupterEnabled || hasValidBusinessDetails || sectionsNeedingUpdate.length === 0) {
+    return CHANGE_LINKS
+  }
+
+  // Interrupter on and data invalid
+  const singleSection = sectionsNeedingUpdate.length === 1 ? sectionsNeedingUpdate[0] : null
+  const fixLink = (section) => `/business/${sbi}/details/fix?source=${section}`
+
+  return {
+    name: singleSection === 'name' ? CHANGE_LINKS.name : fixLink('name'),
+    address: singleSection === 'address' ? CHANGE_LINKS.address : fixLink('address'),
+    phone: singleSection === 'phone' ? CHANGE_LINKS.phone : fixLink('phone'),
+    email: singleSection === 'email' ? CHANGE_LINKS.email : fixLink('email'),
+    vat: singleSection === 'vat' ? null : fixLink('vat')
   }
 }
 
@@ -72,15 +113,18 @@ const createEditableValueField = (value, emptyValueText) => {
  * Unlike other fields, VAT supports two actions once a number exists, so the
  * change link is either a single URL (Add) or an object of summary list action
  * items (Change and Remove). The view handles both shapes.
+ *
+ * When `vatFixLink` is set the interrupter is routing VAT through the fix
+ * journey, so the row keeps its usual actions but every link points there.
  */
-const buildVatDisplay = (vatNumber, sbi) => {
+const buildVatDisplay = (vatNumber, sbi, vatFixLink) => {
   const linkStyling = 'govuk-link--no-visited-state'
 
   if (!vatNumber) {
     return {
       value: 'No number added',
       action: 'Add',
-      changeLink: BUSINESS_CHANGE_LINKS.businessVat(sbi)
+      changeLink: vatFixLink ?? BUSINESS_CHANGE_LINKS.businessVat(sbi)
     }
   }
 
@@ -90,13 +134,13 @@ const buildVatDisplay = (vatNumber, sbi) => {
     changeLink: {
       items: [
         {
-          href: BUSINESS_CHANGE_LINKS.businessVat(sbi),
+          href: vatFixLink ?? BUSINESS_CHANGE_LINKS.businessVat(sbi),
           text: 'Change',
           visuallyHiddenText: 'VAT registration number',
           classes: linkStyling
         },
         {
-          href: BUSINESS_CHANGE_LINKS.businessVatRemove(sbi),
+          href: vatFixLink ?? BUSINESS_CHANGE_LINKS.businessVatRemove(sbi),
           text: 'Remove',
           visuallyHiddenText: 'VAT registration number',
           classes: linkStyling

@@ -287,7 +287,7 @@ describe('pre-handlers', () => {
       }
 
       request = {
-        yar: {},
+        yar: { get: vi.fn() },
         params: { crn: '1234567890' }
       }
     })
@@ -361,6 +361,7 @@ describe('pre-handlers', () => {
       beforeEach(() => {
         schemas.customer.crn.validate.mockReturnValue({ error: null, value: { crn: '1234567890' } })
         services.checkInterrupterJourneySession.mockReturnValue(true)
+        request.yar.get.mockReturnValue({ crn: '1234567890' })
       })
 
       test('it returns h.continue without redirecting', () => {
@@ -370,6 +371,23 @@ describe('pre-handlers', () => {
         expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
         expect(result).toBe(h.continue)
         expect(h.redirect).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('when CRN is valid and journey session is valid but belongs to a different customer', () => {
+      beforeEach(() => {
+        schemas.customer.crn.validate.mockReturnValue({ error: null, value: { crn: '1234567890' } })
+        services.checkInterrupterJourneySession.mockReturnValue(true)
+        request.yar.get.mockReturnValue({ crn: '9999999999' })
+      })
+
+      test('it redirects to the journey redirect path with crn substitution', () => {
+        const preHandler = checkCrnAndInterrupterJourney(journey)
+        const result = preHandler.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/customer/1234567890/details')
+        expect(redirectStub.takeover).toHaveBeenCalled()
+        expect(result).toBe(redirectStub)
       })
     })
   })
@@ -394,7 +412,7 @@ describe('pre-handlers', () => {
       }
 
       request = {
-        yar: {},
+        yar: { get: vi.fn() },
         params: { sbi: '123456789' }
       }
     })
@@ -468,6 +486,7 @@ describe('pre-handlers', () => {
       beforeEach(() => {
         schemas.business.sbi.validate.mockReturnValue({ error: null, value: { sbi: '123456789' } })
         services.checkInterrupterJourneySession.mockReturnValue(true)
+        request.yar.get.mockReturnValue({ sbi: '123456789' })
       })
 
       test('it returns h.continue without redirecting', () => {
@@ -477,6 +496,23 @@ describe('pre-handlers', () => {
         expect(services.checkInterrupterJourneySession).toHaveBeenCalledWith(request.yar, journey.journeyKey)
         expect(result).toBe(h.continue)
         expect(h.redirect).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('when SBI is valid and journey session is valid but belongs to a different business', () => {
+      beforeEach(() => {
+        schemas.business.sbi.validate.mockReturnValue({ error: null, value: { sbi: '123456789' } })
+        services.checkInterrupterJourneySession.mockReturnValue(true)
+        request.yar.get.mockReturnValue({ sbi: '999999999' })
+      })
+
+      test('it redirects to the journey redirect path with sbi substitution', () => {
+        const preHandler = checkSbiAndInterrupterJourney(journey)
+        const result = preHandler.method(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith('/business/123456789/details')
+        expect(redirectStub.takeover).toHaveBeenCalled()
+        expect(result).toBe(redirectStub)
       })
     })
   })

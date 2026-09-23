@@ -88,6 +88,40 @@ describe('personal fix routes', () => {
         expect(h.view).toHaveBeenCalledWith('personal/personal-fix.njk', getPageData())
       })
     })
+
+    describe('when there is no valid session data to fix', () => {
+      beforeEach(() => {
+        h = {
+          redirect: vi.fn()
+        }
+
+        services.initialiseFixJourney.mockReturnValue(null)
+      })
+
+      test('it redirects to the customer details page without fetching personal data', async () => {
+        await getPersonalFix.handler(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith(`/customer/${crn}/details`)
+        expect(fetchPersonalFixService).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('when the session data belongs to a different crn', () => {
+      beforeEach(() => {
+        h = {
+          redirect: vi.fn()
+        }
+
+        services.initialiseFixJourney.mockReturnValue({ ...getMockSessionData(), crn: '123456789' })
+      })
+
+      test('it redirects to the customer details page without fetching personal data', async () => {
+        await getPersonalFix.handler(request, h)
+
+        expect(h.redirect).toHaveBeenCalledWith(`/customer/${crn}/details`)
+        expect(fetchPersonalFixService).not.toHaveBeenCalled()
+      })
+    })
   })
 
   describe('POST /customer/{crn}/details/fix', () => {
@@ -116,6 +150,7 @@ describe('personal fix routes', () => {
 
 const getMockSessionData = () => {
   return {
+    crn: '987654321',
     source: 'name',
     orderedSectionsToFix: ['name', 'email']
   }

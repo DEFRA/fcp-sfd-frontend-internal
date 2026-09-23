@@ -1,0 +1,173 @@
+{% extends 'common/layout.njk' %}
+
+{% from "common/navigation/back-sign-out-link.njk" import appBackSignOutLink with context %}
+{% from "common/sub-header/macro.njk" import subHeader %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block beforeContent %}
+  {{ subHeader(businessName=businessName, sbi=sbi) }}
+  {{ appBackSignOutLink(backLink) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" novalidate>
+        <input type="hidden" name="crumb" value="{{ crumb }}">
+
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+              {{ pageTitle }}
+            </h1>
+          </legend>
+
+        <div class="govuk-!-margin-top-4">
+          {% set rows = [] %}
+
+          {% for section in sections %}
+            {% if section === 'name' %}
+              {% set rowItem = {
+                key: { text: "Business name" },
+                value: { text: changeBusinessName },
+                actions: {
+                  items: [
+                    {
+                      href: changeLink,
+                      text: "Change",
+                      visuallyHiddenText: "business name",
+                      classes: "govuk-link--no-visited-state"
+                    }
+                  ]
+                }
+              } %}
+              {# Push our section into the rows items array #}
+              {% set rows = (rows.push(rowItem), rows) %}
+            {% endif %}
+
+            {% if section === 'address' %}
+              {% set formattedAddress %}
+                {% for addressLine in address %}
+                  <div>{{addressLine}}</div>
+                {% endfor %}
+              {% endset %}
+
+              {% set rowItem = {
+                key: { text: "Business address" },
+                value: { html: formattedAddress },
+                actions: {
+                  items: [
+                    {
+                      href: changeLink,
+                      text: "Change",
+                      visuallyHiddenText: "business address",
+                      classes: "govuk-link--no-visited-state"
+                    }
+                  ]
+                }
+              } %}
+              {# Push our section into the rows items array #}
+              {% set rows = (rows.push(rowItem), rows) %}
+            {% endif %}
+
+            {% if section === 'phone' %}
+              {% set phoneHtml %}
+                <p class="govuk-body">
+                  Telephone:
+                  {% if businessTelephone.telephone %}
+                    {{ businessTelephone.telephone }}
+                  {% else %}
+                    <span class="govuk-hint">
+                      Not added
+                    </span>
+                  {% endif %}
+                  <br>
+                  Mobile:
+                  {% if businessTelephone.mobile %}
+                    {{ businessTelephone.mobile }}
+                  {% else %}
+                    <span class="govuk-hint">
+                      Not added
+                    </span>
+                  {% endif %}
+                </p>
+              {% endset %}
+
+              {% set rowItem = {
+                key: { text: "Business phone numbers" },
+                value: { html: phoneHtml },
+                actions: {
+                  items: [
+                    {
+                      href: changeLink,
+                      text: "Change",
+                      visuallyHiddenText: "business phone numbers",
+                      classes: "govuk-link--no-visited-state"
+                    }
+                  ]
+                }
+              } %}
+
+              {# Push our section into the rows items array #}
+              {% set rows = (rows.push(rowItem), rows) %}
+            {% endif %}
+
+            {% if section === 'email' %}
+              {% set rowItem = {
+                key: { text: "Business email address" },
+                value: { text: businessEmail },
+                actions: {
+                  items: [
+                    {
+                      href: changeLink,
+                      text: "Change",
+                      visuallyHiddenText: "business email",
+                      classes: "govuk-link--no-visited-state"
+                    }
+                  ]
+                }
+              } %}
+              {# Push our section into the rows items array #}
+              {% set rows = (rows.push(rowItem), rows) %}
+            {% endif %}
+
+            {% if section === 'vat' %}
+              {% set displayVatNumber %}
+                {% if vatNumber %}
+                  <span>{{ vatNumber }}</span>
+                {% else %}
+                  <span class="govuk-hint display-inline">No number added</span>
+                {% endif %}
+              {% endset %}
+
+              {% set rowItem = {
+                key: { text: "VAT registration number" },
+                value: { html: displayVatNumber },
+                actions: {
+                  items: [
+                    {
+                      href: changeLink,
+                      text: "Change",
+                      visuallyHiddenText: "VAT registration number",
+                      classes: "govuk-link--no-visited-state"
+                    }
+                  ]
+                }
+              } %}
+              {# Push our section into the rows items array #}
+              {% set rows = (rows.push(rowItem), rows) %}
+            {% endif %}
+          {% endfor %}
+
+          {{ govukSummaryList({
+            rows: rows
+          }) }}
+        </div>
+      </fieldset>
+
+      {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

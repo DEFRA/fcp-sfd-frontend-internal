@@ -27,10 +27,6 @@ vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
   }
 }))
 
-vi.mock('../../../../src/services/personal/build-personal-fix-update-variables-service.js', () => ({
-  buildPersonalFixUpdateVariablesService: vi.fn()
-}))
-
 vi.mock('../../../../src/services/DAL/update-dal-service.js', () => ({
   updateDalService: vi.fn()
 }))
@@ -123,6 +119,18 @@ describe('updatePersonalFixService', () => {
           null,
           '<p>You have updated your personal email address</p>'
         )
+      })
+    })
+
+    describe('when the success message is null', () => {
+      beforeEach(() => {
+        services.buildFixSuccessMessage.mockReturnValue(null)
+      })
+
+      test('it does not flash a notification', async () => {
+        await updatePersonalFixService(crn, sessionData, yar, email)
+
+        expect(flashNotification).not.toHaveBeenCalled()
       })
     })
   })

@@ -7,6 +7,28 @@ const logConfig = config.get('server.log')
 const serviceName = config.get('server.serviceName')
 const serviceVersion = config.get('server.serviceVersion')
 
+/**
+ * Service name overlap with fcp-sfd-frontend - known logging/alerting gotcha.
+ *
+ * This service logs as `fcp-sfd-frontend-internal`, and the external service logs as
+ * `fcp-sfd-frontend`. Because `fcp-sfd-frontend` is a prefix of
+ * `fcp-sfd-frontend-internal`, the default OpenSearch dashboard queries and the
+ * Grafana alert rules that match on service name will match BOTH services.
+ *
+ * Consequences:
+ * - This service's logs appear on the external service's OpenSearch dashboard
+ *   (and vice versa), making it look like one service produced errors it did not.
+ * - Grafana alerts (e.g. 5xx rate) configured for one frontend can be triggered by
+ *   traffic on the other. A prod alert naming fcp-sfd-frontend may actually originate
+ *   from this service.
+ *
+ * When triaging an alert or dashboard spike, confirm the originating service by
+ * checking the `service.name` field on the log entry, and filter it explicitly
+ * (e.g. `service.name: "fcp-sfd-frontend-internal"`) rather than relying on a
+ * substring match.
+ *
+ * This affects any pair of services where one name is a prefix of another, please keep this in mind.
+ */
 const formatters = {
   ecs: {
     ...ecsFormat({

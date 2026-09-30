@@ -9,7 +9,7 @@
  * @module updatePersonalPhoneNumbersChangeService
  */
 
-import { constants, mutations } from '@defra/fcp-sfd-frontend-engine'
+import { constants, mutations, utils } from '@defra/fcp-sfd-frontend-engine'
 
 import { fetchPersonalChangeService } from './fetch-personal-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
@@ -22,15 +22,9 @@ const updatePersonalPhoneNumbersChangeService = async (yar, crn, email) => {
     return
   }
 
-  const variables = {
-    input: {
-      phone: {
-        landline: personalDetails.changePersonalPhoneNumbers.personalTelephone ?? null,
-        mobile: personalDetails.changePersonalPhoneNumbers.personalMobile ?? null
-      },
-      crn: personalDetails.crn
-    }
-  }
+  const { personalTelephone, personalMobile } = personalDetails.changePersonalPhoneNumbers
+
+  const variables = utils.buildUpdateCustomerPhoneVariables(personalTelephone, personalMobile, personalDetails.crn)
 
   await updateDalService(mutations.updateCustomerPhone, variables, email)
 

@@ -14,23 +14,28 @@ vi.mock('../../../../src/services/DAL/update-dal-service.js', () => ({
   updateDalService: mockUpdateDalService
 }))
 
-vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
-  mutations: {
-    updateBusinessLegalStatus: 'update-business-legal-status-mutation',
-    updateBusinessRegistrationNumbers: 'update-business-registration-numbers-mutation'
-  },
-  constants: {
-    business: {
-      CHARITY_REGISTRATION_LEGAL_STATUS_CODES: ['102101'],
-      COMPANY_REGISTRATION_LEGAL_STATUS_CODES: ['102105']
+vi.mock('@defra/fcp-sfd-frontend-engine', async (importOriginal) => {
+  const actual = await importOriginal()
+
+  return {
+    utils: actual.utils,
+    mutations: {
+      updateBusinessLegalStatus: 'update-business-legal-status-mutation',
+      updateBusinessRegistrationNumbers: 'update-business-registration-numbers-mutation'
     },
-    successMessages: {
-      BUSINESS_LEGAL_STATUS: 'You have updated your business legal status',
-      BUSINESS_COMPANY_REGISTRATION_NUMBER: 'You have updated your company registration number',
-      BUSINESS_CHARITY_REGISTRATION_NUMBER: 'You have updated your charity commission registration number'
+    constants: {
+      business: {
+        CHARITY_REGISTRATION_LEGAL_STATUS_CODES: ['102101'],
+        COMPANY_REGISTRATION_LEGAL_STATUS_CODES: ['102105']
+      },
+      successMessages: {
+        BUSINESS_LEGAL_STATUS: 'You have updated your business legal status',
+        BUSINESS_COMPANY_REGISTRATION_NUMBER: 'You have updated your company registration number',
+        BUSINESS_CHARITY_REGISTRATION_NUMBER: 'You have updated your charity commission registration number'
+      }
     }
   }
-}))
+})
 
 vi.mock('../../../../src/utils/notifications/flash-notification.js', () => ({
   flashNotification: mockFlashNotification

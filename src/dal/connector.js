@@ -25,15 +25,44 @@ import { getTokenService } from '../services/DAL/token/get-token-service.js'
 const logger = createLogger()
 
 // Assembles the fetch options for a DAL GraphQL request.
-const buildDalRequest = (bearerToken, email, graphqlQuery, variables) => ({
-  method: 'POST',
-  headers: {
-    'Content-type': 'application/json',
-    Authorization: bearerToken,
-    email
-  },
-  body: JSON.stringify({ query: graphqlQuery, variables })
-})
+const buildDalRequest = (bearerToken, email, graphqlQuery, variables) => {
+  // Without this guard a missing email is sent to the DAL as the literal string 'undefined',
+  // which the upstream Rural Payments API rejects with an unhelpful 403.
+  if (!email) {
+    throw new Error('DAL request is missing the email header identifying the acting user.')
+  }
+
+  return {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+      Authorization: bearerToken,
+      email
+    },
+    body: JSON.stringify({ query: graphqlQuery, variables })
+  }
+}
+
+// Describes the email header without logging it in full, so we can spot a wrong account, wrong domain,
+// stray whitespace or a non-ASCII character in an environment we can't debug directly.
+const describeEmailHeader = (email) => {
+  if (typeof email !== 'string' || email === '') {
+    return { present: false, type: typeof email }
+  }
+
+  const [localPart, domain] = email.split('@')
+
+  return {
+    present: true,
+    localPartInitial: localPart.slice(0, 1),
+    localPartLength: localPart.length,
+    domain,
+    length: email.length,
+    hasWhitespace: /\s/.test(email),
+    hasNonAscii: /[^\x20-\x7E]/.test(email),
+    isAllLowerCase: email === email.toLowerCase()
+  }
+}
 
 // Logs DAL connection failures and returns a 500-formatted DAL response.
 const handleDalFailure = (err) => {
@@ -83,7 +112,7 @@ const executeDalQuery = async (graphqlQuery, variables, tokenCache, email) => {
   const result = handleDalResponse(responseBody)
 
   if (result.errors) {
-    logger.error(result, 'DAL responded with errors')
+    logger.error({ ...result, emailHeader: describeEmailHeader(email) }, 'DAL responded with errors')
   }
 
   return result

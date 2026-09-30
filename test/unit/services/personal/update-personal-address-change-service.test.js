@@ -2,7 +2,7 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 
 // Things we need to mock
-import { mutations, services } from '@defra/fcp-sfd-frontend-engine'
+import { mutations } from '@defra/fcp-sfd-frontend-engine'
 import { fetchPersonalChangeService } from '../../../../src/services/personal/fetch-personal-change-service.js'
 import { flashNotification } from '../../../../src/utils/notifications/flash-notification.js'
 import { updateDalService } from '../../../../src/services/DAL/update-dal-service.js'
@@ -24,19 +24,6 @@ vi.mock('../../../../src/utils/notifications/flash-notification.js', () => ({
 
 vi.mock('../../../../src/services/DAL/update-dal-service.js', () => ({
   updateDalService: vi.fn().mockResolvedValue({})
-}))
-
-vi.mock('@defra/fcp-sfd-frontend-engine', () => ({
-  constants: {
-    successMessages: { PERSONAL_ADDRESS: 'You have updated your personal address' }
-  },
-  mutations: {
-    updateCustomerAddress: 'UPDATE_CUSTOMER_ADDRESS_MUTATION'
-  },
-  services: {
-    buildUprnAddress: vi.fn(),
-    buildManualAddress: vi.fn()
-  }
 }))
 
 describe('updatePersonalAddressChangeService', () => {
@@ -63,47 +50,6 @@ describe('updatePersonalAddressChangeService', () => {
     yar = {
       clear: vi.fn()
     }
-
-    // Mock the address builders
-    services.buildUprnAddress.mockImplementation((change) => ({
-      pafOrganisationName: change.pafOrganisationName || null,
-      buildingNumberRange: change.buildingNumberRange || null,
-      buildingName: change.buildingName || null,
-      flatName: change.flatName || null,
-      street: change.street || null,
-      dependentLocality: change.dependentLocality || null,
-      doubleDependentLocality: change.doubleDependentLocality || null,
-      county: change.county || null,
-      uprn: change.uprn || null,
-      line1: change.line1 || null,
-      line2: change.line2 || null,
-      line3: change.line3 || null,
-      line4: change.line4 || null,
-      line5: change.line5 || null,
-      city: change.city || null,
-      postalCode: change.postcode || null,
-      country: change.country || null
-    }))
-
-    services.buildManualAddress.mockImplementation((change) => ({
-      pafOrganisationName: change.pafOrganisationName || null,
-      buildingNumberRange: change.buildingNumberRange || null,
-      buildingName: change.buildingName || null,
-      flatName: change.flatName || null,
-      street: change.street || null,
-      dependentLocality: change.dependentLocality || null,
-      doubleDependentLocality: change.doubleDependentLocality || null,
-      county: change.county || null,
-      uprn: null,
-      line1: change.address1 || null,
-      line2: change.address2 || null,
-      line3: change.address3 || null,
-      line4: change.address4 || null,
-      line5: change.address5 || null,
-      city: change.city || null,
-      postalCode: change.postcode || null,
-      country: change.country || null
-    }))
   })
 
   describe('when called with a manually entered address', () => {

@@ -9,7 +9,7 @@
  * @module updatePersonalDobChangeService
  */
 
-import { constants, mutations } from '@defra/fcp-sfd-frontend-engine'
+import { constants, mutations, utils } from '@defra/fcp-sfd-frontend-engine'
 
 import { fetchPersonalChangeService } from './fetch-personal-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
@@ -24,13 +24,8 @@ const updatePersonalDobChangeService = async (yar, crn, email) => {
 
   const { day, month, year } = personalDetails.changePersonalDob
 
-  const variables = {
-    input: {
-      // DAL expects dateOfBirth as YYYY-MM-DD e.g. '1990-04-05' not '1990-4-5'
-      dateOfBirth: `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
-      crn
-    }
-  }
+  const variables = utils.buildUpdateCustomerDobVariables(day, month, year, crn)
+
   await updateDalService(mutations.updateCustomerDob, variables, email)
 
   yar.clear('personalDetailsUpdate')

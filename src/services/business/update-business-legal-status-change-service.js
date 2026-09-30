@@ -10,7 +10,7 @@
  * @module updateBusinessLegalStatusChangeService
  */
 
-import { mutations, constants } from '@defra/fcp-sfd-frontend-engine'
+import { mutations, constants, utils } from '@defra/fcp-sfd-frontend-engine'
 
 import { updateDalService } from '../DAL/update-dal-service.js'
 import { fetchBusinessChangeService } from './fetch-business-change-service.js'
@@ -42,25 +42,16 @@ const updateBusinessLegalStatusChangeService = async (yar, sbi, email) => {
 
   const { companiesHouseNumber, charityCommissionNumber } = resolveRegistrationNumbers(businessDetails, requiresRegistrationNumber)
 
-  const registrationNumbersVariables = {
-    input: {
-      sbi,
-      registrationNumbers: {
-        companiesHouse: companiesHouseNumber,
-        charityCommission: charityCommissionNumber
-      }
-    }
-  }
+  const registrationNumbersVariables = utils.buildUpdateBusinessRegistrationNumbersVariables(
+    companiesHouseNumber,
+    charityCommissionNumber,
+    sbi
+  )
 
   // Execute in sequence because both mutations touch additional business details in the upstream.
   // Running these in parallel can result in stale-write ordering where the legal status change is lost.
   if (legalStatusChanged) {
-    const legalStatusVariables = {
-      input: {
-        sbi,
-        legalStatusCode: Number(legalStatusCode)
-      }
-    }
+    const legalStatusVariables = utils.buildUpdateBusinessLegalStatusVariables(legalStatusCode, sbi)
 
     const legalStatusResponse = await updateDalService(mutations.updateBusinessLegalStatus, legalStatusVariables, email)
     assertMutationSuccess(legalStatusResponse, 'updateBusinessLegalStatus')

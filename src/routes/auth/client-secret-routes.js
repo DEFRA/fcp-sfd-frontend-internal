@@ -41,6 +41,13 @@ const signInOidc = {
       profile.email = config.get('dalConfig.emailHeader')
     }
 
+    if (!profile.email) {
+      // Claim names only - the values identify the user and must not be logged.
+      request.logger.error({ claims: Object.keys(profile) }, 'Entra token has no claim usable as the DAL email header')
+    } else {
+      request.logger.info({ emailClaim: profile.emailClaim }, 'Resolved DAL email header from Entra claim')
+    }
+
     // Store token and all useful data in the session cache
     await request.server.app.cache.set(sessionId, {
       isAuthenticated: true,

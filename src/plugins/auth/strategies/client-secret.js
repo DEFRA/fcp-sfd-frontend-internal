@@ -71,14 +71,26 @@ function getBellOptions (oidcConfig) {
   }
 }
 
+// The DAL identifies the acting caseworker from the `email` header, but Entra only puts an `email` claim in an
+// access token when it has been configured as an optional claim on the app registration. Fall back to the other
+// standard claims that carry the user's UPN so the header is populated whichever tenant issued the token.
+const EMAIL_CLAIMS = ['email', 'upn', 'preferred_username', 'unique_name']
+
+function getEmailClaim (payload) {
+  return EMAIL_CLAIMS.find((name) => typeof payload[name] === 'string' && payload[name].trim() !== '')
+}
+
 function getProfile (credentials, _params, _get) {
   const payload = Jwt.token.decode(credentials.token).decoded.payload
+  const emailClaim = getEmailClaim(payload)
 
   // Map all JWT properties to the credentials object so it can be stored in the session
   // Add some additional properties to the profile object for convenience
 
   credentials.profile = {
     ...payload,
+    email: payload[emailClaim]?.trim(),
+    emailClaim,
     sessionId: payload.sid,
     loginHint: payload.login_hint
   }
@@ -112,4 +124,4 @@ async function validateToken (request, session) {
   return { isValid: true, credentials: userSession }
 }
 
-export { registerClientSecretStrategy, getBellOptions, validateToken }
+export { registerClientSecretStrategy, getBellOptions, getEmailClaim, validateToken }

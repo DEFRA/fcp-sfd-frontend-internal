@@ -138,6 +138,10 @@ describe('client-secret-routes', () => {
         cookieAuth: {
           set: vi.fn()
         },
+        logger: {
+          info: vi.fn(),
+          error: vi.fn()
+        },
         yar: {
           clear: vi.fn(),
           set: vi.fn()

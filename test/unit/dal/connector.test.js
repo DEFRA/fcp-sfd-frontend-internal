@@ -5,6 +5,7 @@ import { vi, describe, test, expect, beforeEach, afterEach } from 'vitest'
 import { initDalConnector, getDalConnector } from '../../../src/dal/connector.js'
 
 const testQuery = 'query { __typename }'
+const testEmail = 'Test.User@defra.gov.uk'
 
 vi.mock('../../../src/config/index.js', () => ({
   config: {
@@ -56,7 +57,7 @@ describe('DAL (data access layer) connector', () => {
     test('should return data and status without errors', async () => {
       mockSuccessfulDalResponse()
 
-      const result = await dalConnector.query(testQuery, { sbi: 123456789 })
+      const result = await dalConnector.query(testQuery, { sbi: 123456789 }, testEmail)
 
       expect(result.data).toBeDefined()
       expect(result.data.business.name).toBe('Test Business')
@@ -86,7 +87,7 @@ describe('DAL (data access layer) connector', () => {
         })
       })
 
-      const result = await dalConnector.query(testQuery, { sbi: 123456789 })
+      const result = await dalConnector.query(testQuery, { sbi: 123456789 }, testEmail)
 
       expect(result.data).toBeNull()
       expect(result.errors).toBeDefined()
@@ -100,11 +101,23 @@ describe('DAL (data access layer) connector', () => {
     test('returns a formatted error response', async () => {
       global.fetch = vi.fn().mockRejectedValue(new Error('Network error'))
 
-      const result = await dalConnector.query(testQuery, { sbi: 123456789 })
+      const result = await dalConnector.query(testQuery, { sbi: 123456789 }, testEmail)
 
       expect(result.data).toBeNull()
       expect(result.statusCode).toBe(500)
       expect(result.errors[0].message).toBe('Network error')
+    })
+  })
+
+  describe('when no email is supplied for the acting user', () => {
+    test('returns a formatted error response without calling the DAL', async () => {
+      mockSuccessfulDalResponse()
+
+      const result = await dalConnector.query(testQuery, { sbi: 123456789 })
+
+      expect(global.fetch).not.toHaveBeenCalled()
+      expect(result.statusCode).toBe(500)
+      expect(result.errors[0].message).toBe('DAL request is missing the email header identifying the acting user.')
     })
   })
 

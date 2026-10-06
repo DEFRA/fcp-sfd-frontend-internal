@@ -43,27 +43,6 @@ const buildDalRequest = (bearerToken, email, graphqlQuery, variables) => {
   }
 }
 
-// Describes the email header without logging it in full, so we can spot a wrong account, wrong domain,
-// stray whitespace or a non-ASCII character in an environment we can't debug directly.
-const describeEmailHeader = (email) => {
-  if (typeof email !== 'string' || email === '') {
-    return { present: false, type: typeof email }
-  }
-
-  const [localPart, domain] = email.split('@')
-
-  return {
-    present: true,
-    localPartInitial: localPart.slice(0, 1),
-    localPartLength: localPart.length,
-    domain,
-    length: email.length,
-    hasWhitespace: /\s/.test(email),
-    hasNonAscii: /[^\x20-\x7E]/.test(email),
-    isAllLowerCase: email === email.toLowerCase()
-  }
-}
-
 // Logs DAL connection failures and returns a 500-formatted DAL response.
 const handleDalFailure = (err) => {
   logger.error(err, 'Error connecting to DAL')
@@ -112,7 +91,7 @@ const executeDalQuery = async (graphqlQuery, variables, tokenCache, email) => {
   const result = handleDalResponse(responseBody)
 
   if (result.errors) {
-    logger.error({ ...result, emailHeader: describeEmailHeader(email) }, 'DAL responded with errors')
+    logger.error(result, 'DAL responded with errors')
   }
 
   return result

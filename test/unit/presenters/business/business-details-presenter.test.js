@@ -247,17 +247,17 @@ describe('businessDetailsPresenter', () => {
       expect(result.tradeNumber).toBeNull()
     })
 
-    test('returns vendorRegistrationNumber when present', () => {
+    test('returns vendorNumber when present', () => {
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.vendorRegistrationNumber).toBe('654321')
+      expect(result.vendorNumber).toBe('654321')
     })
 
-    test('returns null vendorRegistrationNumber when absent', () => {
+    test('returns null vendorNumber when absent', () => {
       data.vendorNumber = null
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.vendorRegistrationNumber).toBeNull()
+      expect(result.vendorNumber).toBeNull()
     })
   })
 

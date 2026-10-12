@@ -15,16 +15,18 @@ const getSearchSbi = {
     }
   },
   handler: async (request, h) => {
+    const { query, auth } = request
+
     // The SBI arrives via query string, either from the POST redirect or the "Search results" link.
     // Route validation has already trimmed it, so it'll be a valid SBI, undefined, or ''.
-    const { sbi } = request.query
+    const { sbi } = query
 
     // Undefined or '' is a falsy value, so this will catch both cases and just render the search page without results.
     if (!sbi) {
       return h.view(SEARCH_SBI_VIEW)
     }
 
-    const email = request.auth.credentials?.email
+    const email = auth.credentials?.email
     const sbiDetails = await fetchSbiSearchDetailsService(sbi, email)
     const pageData = searchSbiPresenter(sbiDetails, sbi)
 

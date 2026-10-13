@@ -22,14 +22,16 @@ const signInOidc = {
     auth: { strategy: 'entra', mode: 'try' }
   },
   handler: async function (request, h) {
+    const { auth, server, logger, cookieAuth, yar } = request
+
     // If the user is not authenticated, redirect to the home page
     // This should only occur if the user tries to access the sign-in page directly and not part of the sign-in flow
     // eg if the user has bookmarked the Entra sign-in page or they have signed out and tried to go back in the browser
-    if (!request.auth.isAuthenticated) {
+    if (!auth.isAuthenticated) {
       return h.view('unauthorised')
     }
 
-    const { profile, token, refreshToken } = request.auth.credentials
+    const { profile, token, refreshToken } = auth.credentials
     // verify token returned from Entra against public key
     await verifyToken(token)
 
@@ -43,13 +45,13 @@ const signInOidc = {
 
     if (!profile.email) {
       // Claim names only - the values identify the user and must not be logged.
-      request.logger.error({ claims: Object.keys(profile) }, 'Entra token has no claim usable as the DAL email header')
+      logger.error({ claims: Object.keys(profile) }, 'Entra token has no claim usable as the DAL email header')
     } else {
-      request.logger.info({ emailClaim: profile.emailClaim }, 'Resolved DAL email header from Entra claim')
+      logger.info({ emailClaim: profile.emailClaim }, 'Resolved DAL email header from Entra claim')
     }
 
     // Store token and all useful data in the session cache
-    await request.server.app.cache.set(sessionId, {
+    await server.app.cache.set(sessionId, {
       isAuthenticated: true,
       ...profile,
       scope: roles,
@@ -58,9 +60,9 @@ const signInOidc = {
     })
 
     // Create a new session using cookie authentication strategy which is used for all subsequent requests
-    request.cookieAuth.set({ sessionId })
+    cookieAuth.set({ sessionId })
 
-    request.yar.clear('redirect')
+    yar.clear('redirect')
 
     return h.redirect(SEARCH_SBI)
   }
@@ -73,11 +75,13 @@ const signOut = {
     auth: { mode: 'try' }
   },
   handler: async function (request, h) {
-    await request.yar.reset()
-    if (!request.auth.isAuthenticated) {
+    const { auth, yar } = request
+
+    await yar.reset()
+    if (!auth.isAuthenticated) {
       return h.redirect('/')
     }
-    const signOutUrl = await getSignOutUrl(request, request.auth.credentials.loginHint)
+    const signOutUrl = await getSignOutUrl(request, auth.credentials.loginHint)
     return h.redirect(signOutUrl)
   }
 }
@@ -89,12 +93,14 @@ const signOutOidc = {
     auth: { mode: 'try' }
   },
   handler: async function (request, h) {
-    if (request.auth.isAuthenticated) {
-      validateState(request, request.query.state)
-      if (request.auth.credentials?.sessionId) {
-        await request.server.app.cache.drop(request.auth.credentials.sessionId)
+    const { auth, query, server, cookieAuth } = request
+
+    if (auth.isAuthenticated) {
+      validateState(request, query.state)
+      if (auth.credentials?.sessionId) {
+        await server.app.cache.drop(auth.credentials.sessionId)
       }
-      request.cookieAuth.clear()
+      cookieAuth.clear()
     }
     return h.redirect('/signed-out')
   }

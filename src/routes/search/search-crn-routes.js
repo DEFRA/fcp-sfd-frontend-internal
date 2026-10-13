@@ -15,16 +15,18 @@ const getSearchCrn = {
     }
   },
   handler: async (request, h) => {
+    const { query, auth } = request
+
     // The CRN arrives via query string, either from the POST redirect or the "Search results" link.
     // Route validation has already trimmed it, so it'll be a valid CRN, undefined, or ''.
-    const { crn } = request.query
+    const { crn } = query
 
     // Undefined or '' is a falsy value, so this will catch both cases and just render the search page without results.
     if (!crn) {
       return h.view(SEARCH_CRN_VIEW)
     }
 
-    const email = request.auth.credentials?.email
+    const email = auth.credentials?.email
     const crnDetails = await fetchCrnSearchDetailsService(crn, email)
     const pageData = searchCrnPresenter(crnDetails, crn)
 

@@ -39,7 +39,7 @@ const businessDetailsPresenter = (data, sbi, yar, hasValidBusinessDetails, secti
     businessEmail: buildValueDisplay(email, 'Not added', changeLinks.email),
     vatNumber: buildVatDisplay(vat, sbi, changeLinks.vat),
     tradeNumber: traderNumber ?? null,
-    vendorRegistrationNumber: vendorNumber ?? null,
+    vendorNumber: vendorNumber ?? null,
     countyParishHoldingNumbers,
     countyParishHoldingNumbersText: presenters.formatCphText(countyParishHoldingNumbers.length),
     businessLegalStatus: buildValueDisplay(legalStatus, 'Not added', BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)),

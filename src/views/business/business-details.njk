@@ -206,10 +206,10 @@
       %}
     {% endif %}
 
-    {% if vendorRegistrationNumber and vendorRegistrationNumber | length %}
+    {% if vendorNumber and vendorNumber | length %}
       {% set _ = referenceRows.push({
-          key: { text: "Vendor registration number" },
-          value: { html: vendorRegistrationNumber }
+          key: { text: "Vendor number" },
+          value: { html: vendorNumber }
         })
       %}
     {% endif %}

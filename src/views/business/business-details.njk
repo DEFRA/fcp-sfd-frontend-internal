@@ -86,7 +86,7 @@
     {% endset %}
 
     {% set displayVatNumber %}
-      {% if vatNumber.value === 'No number added' %}
+      {% if vatNumber.value === 'Not added' %}
         <span class="govuk-hint display-inline">{{ vatNumber.value }}</span>
       {% else %}
         <span>{{ vatNumber.value }}</span>

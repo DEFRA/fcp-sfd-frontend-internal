@@ -122,7 +122,7 @@ const buildVatDisplay = (vatNumber, sbi, vatFixLink) => {
 
   if (!vatNumber) {
     return {
-      value: 'No number added',
+      value: 'Not added',
       action: 'Add',
       changeLink: vatFixLink ?? BUSINESS_CHANGE_LINKS.businessVat(sbi)
     }

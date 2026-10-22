@@ -222,6 +222,32 @@
       %}
     {% endif %}
 
+    {% if legalStatusRegistrationNumber %}
+      {% set legalStatusRegistrationNumberDisplay %}
+        {% if legalStatusRegistrationNumber.value === 'Not added' %}
+          <span class="govuk-hint display-inline">{{ legalStatusRegistrationNumber.value }}</span>
+        {% else %}
+          <span>{{ legalStatusRegistrationNumber.value }}</span>
+        {% endif %}
+      {% endset %}
+
+      {% set _ = referenceRows.push({
+          key: { text: legalStatusRegistrationNumber.label },
+          value: { html: legalStatusRegistrationNumberDisplay },
+          actions: {
+            items: [
+              {
+                href: legalStatusRegistrationNumber.changeLink,
+                text: legalStatusRegistrationNumber.action,
+                visuallyHiddenText: legalStatusRegistrationNumber.label,
+                classes: "govuk-link--no-visited-state"
+              }
+            ]
+          }
+        })
+      %}
+    {% endif %}
+
     {{ govukSummaryList({ rows: referenceRows }) }}
 
     <h2 class="govuk-heading-m">
@@ -233,14 +259,6 @@
         <span class="govuk-hint display-inline">{{ businessLegalStatus.value }}</span>
       {% else %}
         <span>{{ businessLegalStatus.value }}</span>
-      {% endif %}
-    {% endset %}
-
-    {% set legalStatusRegistrationNumberDisplay %}
-      {% if legalStatusRegistrationNumber.value === 'Not added' %}
-        <span class="govuk-hint display-inline">{{ legalStatusRegistrationNumber.value }}</span>
-      {% else %}
-        <span>{{ legalStatusRegistrationNumber.value }}</span>
       {% endif %}
     {% endset %}
 
@@ -263,19 +281,6 @@
       ]
     } %}
 
-    {% if legalStatusRegistrationNumber %}
-      {% set legalStatusRegistrationNumberActions = {
-        items: [
-          {
-            href: legalStatusRegistrationNumber.changeLink,
-            text: legalStatusRegistrationNumber.action,
-            visuallyHiddenText: legalStatusRegistrationNumber.label,
-            classes: "govuk-link--no-visited-state"
-          }
-        ]
-      } %}
-    {% endif %}
-
     {% set businessTypeActions = {
       items: [
         {
@@ -294,15 +299,6 @@
         actions: businessLegalStatusActions
       }
     ] %}
-
-    {% if legalStatusRegistrationNumber %}
-      {% set _ = additionalDetailsRows.push({
-          key: { text: legalStatusRegistrationNumber.label },
-          value: { html: legalStatusRegistrationNumberDisplay },
-          actions: legalStatusRegistrationNumberActions
-        })
-      %}
-    {% endif %}
 
     {% set _ = additionalDetailsRows.push({
         key: { text: "Business type" },

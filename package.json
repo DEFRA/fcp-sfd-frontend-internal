@@ -6,7 +6,7 @@
   "main": "src/index.js",
   "type": "module",
   "engines": {
-    "node": ">=24",
+    "node": ">=24.22.1",
     "npm": ">=11.10"
   },
   "scripts": {
@@ -45,7 +45,7 @@
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
-    "@defra/fcp-sfd-frontend-engine": "0.37.1",
+    "@defra/fcp-sfd-frontend-engine": "0.38.0",
     "@defra/hapi-auth-oidc": "0.5.6",
     "@defra/hapi-tracing": "1.30.0",
     "@elastic/ecs-pino-format": "1.5.0",

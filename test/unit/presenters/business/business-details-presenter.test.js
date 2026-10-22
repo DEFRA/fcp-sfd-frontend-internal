@@ -223,11 +223,11 @@ describe('businessDetailsPresenter', () => {
       })
     })
 
-    test('returns "No number added" and a single "Add" link when VAT is absent', () => {
+    test('returns "Not added" and a single "Add" link when VAT is absent', () => {
       data.vat = null
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.vatNumber.value).toBe('No number added')
+      expect(result.vatNumber.value).toBe('Not added')
       expect(result.vatNumber.action).toBe('Add')
       expect(result.vatNumber.changeLink).toBe(`/business/${sbi}/vat-registration-number-change`)
     })

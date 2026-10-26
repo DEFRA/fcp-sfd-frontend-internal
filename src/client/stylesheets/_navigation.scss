@@ -31,26 +31,26 @@
   margin-right: govuk-spacing(0);
 }
 
-a.login-nav__link:link {
+.login-nav__link:link {
   margin-right: govuk-spacing(1);
   color: #0b0c0c;
 }
 
-.login-nav__list li:last-child a.login-nav__link:link {
+.login-nav__list li:last-child .login-nav__link:link {
   margin-right: govuk-spacing(0);
 }
 
-a.login-nav__link:visited {
+.login-nav__link:visited {
   color: #0b0c0c;
 }
 
-a.login-nav__link:hover {
-  color: rgba(11, 12, 12, 0.99);
+.login-nav__link:hover {
+  color: rgb(11, 12, 12, 0.99);
 }
 
-a.login-nav__sign-out-link:link,
-a.login-nav__sign-out-link:visited,
-a.login-nav__sign-out-link:hover {
+.login-nav__sign-out-link:link,
+.login-nav__sign-out-link:visited,
+.login-nav__sign-out-link:hover {
   color: $govuk-link-colour;
 }
 

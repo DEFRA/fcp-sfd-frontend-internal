@@ -25,27 +25,6 @@ const getTokenService = async (cache) => {
 }
 
 /**
- * Attempts to get a token from cache first.
- * If no cached token exists, requests a new one from Azure AD.
- */
-const getToken = async (cache) => {
-  const cachedToken = await get(DAL_TOKEN, cache)
-
-  if (cachedToken) {
-    return cachedToken
-  }
-
-  // No cached token, fetch a new one
-  const token = await getNewToken()
-
-  // Cache the token slightly less than the actual expiry to avoid using an expired token
-  // Here, 60 seconds is subtracted—adjust if your expires_in is in seconds
-  await set(DAL_TOKEN, token.token, (token.expiresAt * 1000) - TOKEN_EXPIRY_BUFFER_MS, cache)
-
-  return token.token
-}
-
-/**
  * Performs the actual POST request to the Azure AD token endpoint.
  * Constructs a URL-encoded form payload as required by OAuth 2.0 client credentials flow.
  *
@@ -75,6 +54,27 @@ const getNewToken = async () => {
     token: `${payload.token_type} ${payload.access_token}`,
     expiresAt: payload.expires_in
   }
+}
+
+/**
+ * Attempts to get a token from cache first.
+ * If no cached token exists, requests a new one from Azure AD.
+ */
+const getToken = async (cache) => {
+  const cachedToken = await get(DAL_TOKEN, cache)
+
+  if (cachedToken) {
+    return cachedToken
+  }
+
+  // No cached token, fetch a new one
+  const token = await getNewToken()
+
+  // Cache the token slightly less than the actual expiry to avoid using an expired token
+  // Here, 60 seconds is subtracted—adjust if your expires_in is in seconds
+  await set(DAL_TOKEN, token.token, (token.expiresAt * 1000) - TOKEN_EXPIRY_BUFFER_MS, cache)
+
+  return token.token
 }
 
 export {

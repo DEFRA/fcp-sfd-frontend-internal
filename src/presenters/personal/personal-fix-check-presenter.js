@@ -35,6 +35,14 @@ const personalFixCheckPresenter = (data, crn) => {
   }
 }
 
+const formatAddress = (personalAddress) => {
+  if (personalAddress) {
+    return Object.values(personalAddress).filter(Boolean)
+  }
+
+  return null
+}
+
 const formatDob = (dob) => {
   if (dob) {
     const { day, month, year } = dob
@@ -44,14 +52,6 @@ const formatDob = (dob) => {
     )
 
     return presenters.formatLongDate(personalDob)
-  }
-
-  return null
-}
-
-const formatAddress = (personalAddress) => {
-  if (personalAddress) {
-    return Object.values(personalAddress).filter(Boolean)
   }
 
   return null

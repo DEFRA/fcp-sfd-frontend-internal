@@ -49,15 +49,10 @@ const buildBackLink = (sbi, source) => {
   return source ? `/business/${sbi}/details/fix?source=${source}` : `/business/${sbi}/details/fix`
 }
 
-/**
- * Resolves the value to show for a fix-list field from the payload, session data or the original record.
- *
- * A payload means the user just submitted the form, so that value is shown to preserve their
- * input if validation failed. Otherwise, use data already fixed earlier in the journey, then
- * fall back to what's on the original record if neither of those exist yet.
- */
-const resolveFixValue = (payloadValue, changedValue, originalValue) => {
-  return payloadValue ?? changedValue ?? originalValue
+const buildSortedErrors = (errors, orderedSectionsToFix, sectionFieldOrder) => {
+  return errors
+    ? presenters.sortErrorsBySectionOrder(errors, orderedSectionsToFix, sectionFieldOrder)
+    : null
 }
 
 const formatAddress = (payload, changeBusinessAddress) => {
@@ -82,10 +77,15 @@ const formatAddress = (payload, changeBusinessAddress) => {
   return null
 }
 
-const buildSortedErrors = (errors, orderedSectionsToFix, sectionFieldOrder) => {
-  return errors
-    ? presenters.sortErrorsBySectionOrder(errors, orderedSectionsToFix, sectionFieldOrder)
-    : null
+/**
+ * Resolves the value to show for a fix-list field from the payload, session data or the original record.
+ *
+ * A payload means the user just submitted the form, so that value is shown to preserve their
+ * input if validation failed. Otherwise, use data already fixed earlier in the journey, then
+ * fall back to what's on the original record if neither of those exist yet.
+ */
+const resolveFixValue = (payloadValue, changedValue, originalValue) => {
+  return payloadValue ?? changedValue ?? originalValue
 }
 
 export {

@@ -39,6 +39,35 @@ const buildName = (firstName, lastName) => {
 }
 
 /**
+ * Caps a requested page to the max so we never point past the final page.
+ *
+ * If a user has requested a page that is beyond the end of the list of results i.e they have manually edited the URL
+ * to have an invalid page number, we will show them the last page of results instead of an empty page.
+ * @private
+ */
+const clampPageNumber = (requestedPageNumber, totalCustomers) => {
+  const totalPages = Math.ceil(totalCustomers / PAGE_SIZE)
+
+  // When there are no customers we still treat page 1 as the only valid page.
+  const maxPageNumber = Math.max(totalPages, 1)
+
+  if (requestedPageNumber > maxPageNumber) {
+    return maxPageNumber
+  }
+
+  return requestedPageNumber
+}
+
+const formatCustomer = (customer) => ({
+  fullName: buildName(customer?.firstName, customer?.lastName),
+  crn: customer?.crn ?? ''
+})
+
+const formatCustomers = (customers = []) => {
+  return customers.map(formatCustomer)
+}
+
+/**
  * Converts whatever page number came from the URL query into a valid number
  * @private
  */
@@ -50,6 +79,17 @@ const normalisePageNumber = (page) => {
   }
 
   return parsedPage
+}
+
+/**
+ * Returns only the customers for the current page.
+ * @private
+ */
+const paginateCustomers = (customers, currentPage) => {
+  const startIndex = (currentPage - 1) * PAGE_SIZE
+  const endIndex = startIndex + PAGE_SIZE
+
+  return customers.slice(startIndex, endIndex)
 }
 
 /**
@@ -79,46 +119,6 @@ const sortAndCountCustomers = (customers) => {
     sortedCustomers: customersCopy,
     totalCustomers: customersCopy.length
   }
-}
-
-/**
- * Caps a requested page to the max so we never point past the final page.
- *
- * If a user has requested a page that is beyond the end of the list of results i.e they have manually edited the URL
- * to have an invalid page number, we will show them the last page of results instead of an empty page.
- * @private
- */
-const clampPageNumber = (requestedPageNumber, totalCustomers) => {
-  const totalPages = Math.ceil(totalCustomers / PAGE_SIZE)
-
-  // When there are no customers we still treat page 1 as the only valid page.
-  const maxPageNumber = Math.max(totalPages, 1)
-
-  if (requestedPageNumber > maxPageNumber) {
-    return maxPageNumber
-  }
-
-  return requestedPageNumber
-}
-
-/**
- * Returns only the customers for the current page.
- * @private
- */
-const paginateCustomers = (customers, currentPage) => {
-  const startIndex = (currentPage - 1) * PAGE_SIZE
-  const endIndex = startIndex + PAGE_SIZE
-
-  return customers.slice(startIndex, endIndex)
-}
-
-const formatCustomer = (customer) => ({
-  fullName: buildName(customer?.firstName, customer?.lastName),
-  crn: customer?.crn ?? ''
-})
-
-const formatCustomers = (customers = []) => {
-  return customers.map(formatCustomer)
 }
 
 export {

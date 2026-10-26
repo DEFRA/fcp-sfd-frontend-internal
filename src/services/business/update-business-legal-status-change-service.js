@@ -69,16 +69,11 @@ const updateBusinessLegalStatusChangeService = async (yar, sbi, email) => {
   flashNotification(yar, 'Success', getSuccessMessage(legalStatusChanged, isCharity))
 }
 
-// The user may be changing away from a legal status that requires a registration number, so default both to null
-const resolveRegistrationNumbers = (businessDetails, requiresRegistrationNumber) => {
-  if (!requiresRegistrationNumber) {
-    return { companiesHouseNumber: null, charityCommissionNumber: null }
-  }
+const assertMutationSuccess = (response, mutationFieldName) => {
+  const success = response?.data?.[mutationFieldName]?.success
 
-  // Fall back to the fetched value so an unchanged, already-stored number isn't wiped out
-  return {
-    companiesHouseNumber: businessDetails.changeBusinessCompanyRegistrationNumber ?? businessDetails.registrationNumbers?.companiesHouse ?? null,
-    charityCommissionNumber: businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? businessDetails.registrationNumbers?.charityCommission ?? null
+  if (success !== true) {
+    throw new Error(`DAL mutation did not succeed: ${mutationFieldName}`)
   }
 }
 
@@ -94,11 +89,16 @@ const getSuccessMessage = (legalStatusChanged, isCharity) => {
   return constants.successMessages.BUSINESS_COMPANY_REGISTRATION_NUMBER
 }
 
-const assertMutationSuccess = (response, mutationFieldName) => {
-  const success = response?.data?.[mutationFieldName]?.success
+// The user may be changing away from a legal status that requires a registration number, so default both to null
+const resolveRegistrationNumbers = (businessDetails, requiresRegistrationNumber) => {
+  if (!requiresRegistrationNumber) {
+    return { companiesHouseNumber: null, charityCommissionNumber: null }
+  }
 
-  if (success !== true) {
-    throw new Error(`DAL mutation did not succeed: ${mutationFieldName}`)
+  // Fall back to the fetched value so an unchanged, already-stored number isn't wiped out
+  return {
+    companiesHouseNumber: businessDetails.changeBusinessCompanyRegistrationNumber ?? businessDetails.registrationNumbers?.companiesHouse ?? null,
+    charityCommissionNumber: businessDetails.changeBusinessCharityCommissionRegistrationNumber ?? businessDetails.registrationNumbers?.charityCommission ?? null
   }
 }
 

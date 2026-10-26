@@ -5,6 +5,7 @@ export default defineConfig({
     include: ['**/test/**/*.test.js'],
     timeout: 10000,
     hookTimeout: 10000,
+    clearMocks: true,
     coverage: {
       reportOnFailure: true,
       clean: false,

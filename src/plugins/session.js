@@ -1,3 +1,9 @@
+/**
+ * Hapi plugin registering session management with yar
+ *
+ * @module session
+ */
+
 import Yar from '@hapi/yar'
 import { config } from '../config/index.js'
 

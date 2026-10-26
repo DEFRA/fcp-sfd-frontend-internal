@@ -1,3 +1,9 @@
+/**
+ * GraphQL query for customer details by CRN
+ *
+ * @module customerDetailsByCrn
+ */
+
 export const customerDetailsByCrn = `
   query Customer($crn: ID!) {
   customer(crn: $crn) {

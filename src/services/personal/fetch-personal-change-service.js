@@ -1,3 +1,9 @@
+/**
+ * Fetches the latest personal details from the DAL and merges in a temporary change stored in the user's session
+ *
+ * @module fetchPersonalChangeService
+ */
+
 import { fetchPersonalDetailsService } from '../fetch-personal-details-service.js'
 
 /**
@@ -11,6 +17,8 @@ import { fetchPersonalDetailsService } from '../fetch-personal-details-service.j
  * @param {string} crn - The customer reference number of the customer being viewed
  * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
  * @param {string|string[]} fields - The input field(s) the user has updated that we want to fetch (if exists)
+ *
+ * @returns {Promise<object>} The personal details, including any pending changes for the given fields
  */
 const fetchPersonalChangeService = async (yar, crn, email, fields) => {
   const personalDetails = await fetchPersonalDetailsService(crn, email)

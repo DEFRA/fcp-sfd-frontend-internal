@@ -2,6 +2,8 @@
  * Session journey configurations for route guards and pre-handlers.
  * Each journey defines the session key and redirect path for a change/fix workflow.
  * The field being checked is passed separately to checkSessionDataGuard.
+ *
+ * @module journeys
  */
 
 // Personal fix (interrupter) journey

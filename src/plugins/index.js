@@ -1,3 +1,9 @@
+/**
+ * Registers all Hapi plugins
+ *
+ * @module index
+ */
+
 import Crumb from '@hapi/crumb'
 import Bell from '@hapi/bell'
 import Cookie from '@hapi/cookie'

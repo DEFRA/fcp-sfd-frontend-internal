@@ -1,5 +1,6 @@
 /**
  * Formats data ready for presenting in the `/business/{sbi}/address-select` page
+ *
  * @module businessAddressSelectPresenter
  */
 
@@ -8,6 +9,13 @@ import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
 
+/**
+ * Formats data ready for presenting in the `/business/{sbi}/address-select` page
+ *
+ * @param {object} data - The business data, including the postcode lookup results held in the session
+ *
+ * @returns {object} The page data for the view
+ */
 const businessAddressSelectPresenter = (data) => {
   const sbi = data.sbi
 

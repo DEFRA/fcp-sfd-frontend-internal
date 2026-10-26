@@ -1,11 +1,19 @@
 /**
  * Formats data ready for presenting in the `/business/{sbi}/address-check` page
+ *
  * @module businessAddressCheckPresenter
  */
 
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
+/**
+ * Formats data ready for presenting in the `/business/{sbi}/address-check` page
+ *
+ * @param {object} data - The business data, including any pending address change held in the session
+ *
+ * @returns {object} The page data for the view
+ */
 const businessAddressCheckPresenter = (data) => {
   const { changeBusinessAddress, address, sbi } = data
 

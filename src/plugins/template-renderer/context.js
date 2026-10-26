@@ -1,3 +1,9 @@
+/**
+ * Builds the global context passed to every template
+ *
+ * @module context
+ */
+
 import path from 'node:path'
 import { readFileSync } from 'node:fs'
 
@@ -14,6 +20,16 @@ const manifestPath = path.join(
 
 let webpackManifest
 
+/**
+ * Builds the global context passed to every template
+ *
+ * Merges any context set on the response with the asset path, service name, navigation and the signed in user's
+ * cached session. Loads the Webpack manifest on first use so asset paths can be resolved.
+ *
+ * @param {object} request - The Hapi request object
+ *
+ * @returns {Promise<object>} The template context
+ */
 export const context = async (request) => {
   if (!webpackManifest) {
     try {

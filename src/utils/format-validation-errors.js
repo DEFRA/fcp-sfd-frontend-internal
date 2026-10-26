@@ -1,3 +1,18 @@
+/**
+ * Formats Joi validation errors for display
+ *
+ * @module formatValidationErrors
+ */
+
+/**
+ * Formats Joi validation errors for display
+ *
+ * Errors are keyed by field name. Missing-peer errors are applied to each peer field.
+ *
+ * @param {object[]} errors - The Joi validation error details
+ *
+ * @returns {object} The errors keyed by field name, each in the form `{ text }`
+ */
 export const formatValidationErrors = (errors) => {
   const formattedErrors = {}
 

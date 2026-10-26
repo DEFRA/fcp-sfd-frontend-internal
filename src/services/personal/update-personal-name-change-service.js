@@ -15,6 +15,17 @@ import { fetchPersonalChangeService } from './fetch-personal-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 import { updateDalService } from '../DAL/update-dal-service.js'
 
+/**
+ * Service to update a personal full name (first, last and middle)
+ *
+ * Does nothing if there is no pending name change.
+ *
+ * @param {object} yar - The hapi `request.yar` object
+ * @param {string} crn - The customer reference number
+ * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
+ *
+ * @returns {Promise<void>}
+ */
 const updatePersonalNameChangeService = async (yar, crn, email) => {
   const personalDetails = await fetchPersonalChangeService(yar, crn, email, 'changePersonalName')
 

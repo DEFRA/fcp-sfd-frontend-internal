@@ -1,5 +1,20 @@
+/**
+ * Creates a state value and stores it in the session
+ *
+ * @module state
+ */
+
 import crypto from 'node:crypto'
 
+/**
+ * Creates a state value and stores it in the session
+ *
+ * The value is passed to Entra during redirection and must be verified when the user returns.
+ *
+ * @param {object} request - The Hapi request object
+ *
+ * @returns {string} The base64 encoded state value
+ */
 function createState (request) {
   // Generate a unique state value and store it in the session
   // Entra will pass this value back to the application during redirection
@@ -10,6 +25,16 @@ function createState (request) {
   return state
 }
 
+/**
+ * Validates the returned state against the value stored in the session
+ *
+ * The stored value is cleared whether or not it matches.
+ *
+ * @param {object} request - The Hapi request object
+ * @param {string} state - The state value returned by Entra
+ *
+ * @throws {Error} If the state does not match, as this is a possible CSRF attack
+ */
 function validateState (request, state) {
   const storedState = request.yar.get('state')
   request.yar.clear('state')

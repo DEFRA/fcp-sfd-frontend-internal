@@ -1,5 +1,5 @@
 /**
- * Authentication strategies configuration for the Hapi server.
+ * Registers the authentication strategies for the Hapi server
  *
  * This file sets up two authentication methods:
  * 1. Entra (Azure AD) OAuth 2.0 - logs users in via the corporate identity provider
@@ -10,6 +10,8 @@
  * we validate their JWT token and refresh it if needed to keep them logged in.
  *
  * This is the glue between user identity and the rest of the app.
+ *
+ * @module clientSecret
  */
 
 import Jwt from '@hapi/jwt'
@@ -19,6 +21,15 @@ import { getSafeRedirect } from '../../../utils/get-safe-redirect.js'
 import { getCookieOptions } from '../get-cookie-options.js'
 import { config } from '../../../config/index.js'
 
+/**
+ * Registers the authentication strategies for the Hapi server
+ *
+ * Registers the Entra (Bell) strategy and the session cookie strategy, and sets the session strategy as the default.
+ *
+ * @param {object} server - The Hapi server
+ *
+ * @returns {Promise<void>}
+ */
 async function registerClientSecretStrategy (server) {
   const oidcConfig = await getOidcConfig()
 
@@ -37,6 +48,13 @@ async function registerClientSecretStrategy (server) {
   server.auth.default('session')
 }
 
+/**
+ * Builds the Bell options used to authenticate users with Entra
+ *
+ * @param {object} oidcConfig - The Entra OpenID Connect configuration
+ *
+ * @returns {object} The Bell strategy options
+ */
 function getBellOptions (oidcConfig) {
   const sessionCookieSecure = config.get('server.session.cookie.secure')
 
@@ -76,6 +94,13 @@ function getBellOptions (oidcConfig) {
 // standard claims that carry the user's UPN so the header is populated whichever tenant issued the token.
 const EMAIL_CLAIMS = ['email', 'upn', 'preferred_username', 'unique_name']
 
+/**
+ * Finds the name of the first claim in the token payload that holds a non-empty email address
+ *
+ * @param {object} payload - The decoded token payload
+ *
+ * @returns {string|undefined} The claim name, or undefined if none is found
+ */
 function getEmailClaim (payload) {
   return EMAIL_CLAIMS.find((name) => typeof payload[name] === 'string' && payload[name].trim() !== '')
 }
@@ -96,6 +121,17 @@ function getProfile (credentials, _params, _get) {
   }
 }
 
+/**
+ * Validates the session and refreshes the Entra token when it has expired
+ *
+ * Returns an invalid result if there is no cached session, or if the token has expired and refreshing is disabled.
+ *
+ * @param {object} request - The Hapi request object
+ * @param {object} session - The session cookie data
+ * @param {string} session.sessionId - The ID used to look up the cached user session
+ *
+ * @returns {Promise<{isValid: boolean, credentials?: object}>} The validation result
+ */
 async function validateToken (request, session) {
   const userSession = await request.server.app.cache.get(session.sessionId)
 

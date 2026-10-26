@@ -17,7 +17,7 @@
  * If validation fails:
  * - `hasValidBusinessDetails` is `false`
  * - `sectionsNeedingUpdate` contains the business detail sections
- *   that need to be updated (e.g. `name`, `address`, `phone`, `email`, `vat`)
+ * that need to be updated (e.g. `name`, `address`, `phone`, `email`, `vat`)
  *
  * Address validation is only performed when no UPRN is present.
  *
@@ -34,6 +34,14 @@ import { schemas } from '@defra/fcp-sfd-frontend-engine'
 
 import { validateDetailsService } from '../validate-details-service.js'
 
+/**
+ * Validates business details against the business details schemas.
+ *
+ * @param {object} businessDetails - The mapped business details
+ *
+ * @returns {{hasValidBusinessDetails: boolean, sectionsNeedingUpdate: string[]}} Whether the details are valid and
+ * the sections that need updating
+ */
 const validateBusinessDetailsService = (businessDetails) => {
   const hasUprn = Boolean(businessDetails.address?.lookup?.uprn)
   const mappedBusinessDetails = mapBusinessDetails(businessDetails, hasUprn)

@@ -1,11 +1,16 @@
 /**
- * Takes the raw business overview details data and maps it to a more usable format
+ * Maps the raw business overview details data from the DAL to a more usable format
  *
- * @param {Object} value - The data from the DAL
- *
- * @returns {Object} Formatted business overview details data
+ * @module businessOverviewDetailsMapper
  */
 
+/**
+ * Maps the raw business overview details data from the DAL to a more usable format
+ *
+ * @param {object} value - The data from the DAL
+ *
+ * @returns {object} Formatted business overview details data
+ */
 export const mapBusinessOverviewDetails = (value) => {
   const business = value?.business ?? {}
 

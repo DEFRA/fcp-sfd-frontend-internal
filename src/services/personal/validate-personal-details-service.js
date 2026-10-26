@@ -18,7 +18,7 @@
  * If validation fails:
  * - `hasValidPersonalDetails` is `false`
  * - `sectionsNeedingUpdate` contains the personal detail sections
- *   that need to be updated (e.g. `name`, `dob`, `address`, `phone`)
+ * that need to be updated (e.g. `name`, `dob`, `address`, `phone`)
  *
  * Address validation is only performed when no UPRN is present.
  *
@@ -32,6 +32,14 @@ import { schemas } from '@defra/fcp-sfd-frontend-engine'
 
 import { validateDetailsService } from '../validate-details-service.js'
 
+/**
+ * Validates personal details against the personal details schemas.
+ *
+ * @param {object} personalDetails - The mapped personal details
+ *
+ * @returns {{hasValidPersonalDetails: boolean, sectionsNeedingUpdate: string[]}} Whether the details are valid and
+ * the sections that need updating
+ */
 const validatePersonalDetailsService = (personalDetails) => {
   const hasUprn = Boolean(personalDetails.address?.lookup?.uprn)
   const mappedPersonalDetails = mapPersonalDetails(personalDetails, hasUprn)

@@ -1,3 +1,9 @@
+/**
+ * Nunjucks template configuration
+ *
+ * @module nunjucks
+ */
+
 import { isDevelopment } from '../constants/environments.js'
 
 export const nunjucksConfig = {

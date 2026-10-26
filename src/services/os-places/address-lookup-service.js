@@ -1,5 +1,7 @@
 /**
- * Wrapper service that calls the OS Places address lookup service from the frontend engine.
+ * Fetches and stores addresses from the OS Places API for a postcode
+ *
+ * Wraps the OS Places address lookup service from the frontend engine.
  *
  * This wrapper:
  * - Gets the OS Places configuration from the application config
@@ -19,7 +21,7 @@ import { services } from '@defra/fcp-sfd-frontend-engine'
 const logger = createLogger()
 
 /**
- * Fetch and store addresses from OS Places API based on postcode.
+ * Fetches and stores addresses from the OS Places API for a postcode
  *
  * @param {string} postcode - The UK postcode to search for
  * @param {object} yar - Hapi yar session object

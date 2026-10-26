@@ -1,5 +1,6 @@
 /**
- * Formats data ready for presenting in the `/customer/{CRN}/details/account-name-check` page
+ * Formats data ready for presenting in the `/customer/{crn}/account-name-check` page
+ *
  * @module personalNameCheckPresenter
  */
 
@@ -8,6 +9,14 @@ import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const { PERSONAL: PERSONAL_CHANGE_LINKS } = constants.changeLinks.internal
 
+/**
+ * Formats data ready for presenting in the `/customer/{crn}/account-name-check` page
+ *
+ * @param {object} data - The customer data, including any pending name change held in the session
+ * @param {string} crn - The Customer Reference Number
+ *
+ * @returns {object} The page data for the view
+ */
 const personalNameCheckPresenter = (data, crn) => {
   return {
     backLink: crn ? PERSONAL_CHANGE_LINKS.personalName(crn) : SEARCH_CRN,

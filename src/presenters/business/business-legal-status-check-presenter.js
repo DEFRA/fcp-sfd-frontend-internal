@@ -30,6 +30,50 @@ const businessLegalStatusCheckPresenter = (data) => {
   }
 }
 
+// changeBusinessLegalStatus is stored as a numeric code, so look up its display text
+const getLegalStatusText = (payloadBusinessLegalStatus) => {
+  if (!payloadBusinessLegalStatus) {
+    return null
+  }
+
+  const match = Object.values(constants.business.LEGAL_STATUS).find(({ code }) => {
+    return String(code) === String(payloadBusinessLegalStatus)
+  })
+
+  return match?.text ?? null
+}
+
+const getRegistrationNumber = (data, isCharity, isCompany) => {
+  if (isCharity) {
+    return data.changeBusinessCharityCommissionRegistrationNumber ?? data.registrationNumbers?.charityCommission ?? null
+  }
+
+  if (isCompany) {
+    return data.changeBusinessCompanyRegistrationNumber ?? data.registrationNumbers?.companiesHouse ?? null
+  }
+
+  return null
+}
+
+const getRegistrationNumberLabel = (isCharity, isCompany) => {
+  if (isCharity) {
+    return 'Charity commission registration number'
+  }
+
+  if (isCompany) {
+    return 'Company registration number'
+  }
+
+  return null
+}
+
+const isCharityOrCompany = (legalStatusCode) => {
+  const isCharity = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
+  const isCompany = constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
+
+  return { isCharity, isCompany }
+}
+
 const setLinks = (isCharity, isCompany, sbi) => {
   if (sbi) {
     const legalStatusChangeLink = BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)
@@ -53,50 +97,6 @@ const setLinks = (isCharity, isCompany, sbi) => {
     legalStatusChangeLink: SEARCH_SBI,
     registrationNumberChangeLink: SEARCH_SBI
   }
-}
-
-const isCharityOrCompany = (legalStatusCode) => {
-  const isCharity = constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
-  const isCompany = constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)
-
-  return { isCharity, isCompany }
-}
-
-const getRegistrationNumberLabel = (isCharity, isCompany) => {
-  if (isCharity) {
-    return 'Charity commission registration number'
-  }
-
-  if (isCompany) {
-    return 'Company registration number'
-  }
-
-  return null
-}
-
-const getRegistrationNumber = (data, isCharity, isCompany) => {
-  if (isCharity) {
-    return data.changeBusinessCharityCommissionRegistrationNumber ?? data.registrationNumbers?.charityCommission ?? null
-  }
-
-  if (isCompany) {
-    return data.changeBusinessCompanyRegistrationNumber ?? data.registrationNumbers?.companiesHouse ?? null
-  }
-
-  return null
-}
-
-// changeBusinessLegalStatus is stored as a numeric code, so look up its display text
-const getLegalStatusText = (payloadBusinessLegalStatus) => {
-  if (!payloadBusinessLegalStatus) {
-    return null
-  }
-
-  const match = Object.values(constants.business.LEGAL_STATUS).find(({ code }) => {
-    return String(code) === String(payloadBusinessLegalStatus)
-  })
-
-  return match?.text ?? null
 }
 
 export { businessLegalStatusCheckPresenter }

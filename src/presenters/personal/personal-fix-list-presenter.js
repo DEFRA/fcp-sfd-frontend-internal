@@ -46,23 +46,6 @@ const buildBackLink = (crn, source) => {
   return source ? `/customer/${crn}/details/fix?source=${source}` : `/customer/${crn}/details/fix`
 }
 
-const formatName = (payload, data) => {
-  return {
-    first:
-      payload?.first ??
-      data.changePersonalName?.first ??
-      data.fullName.first,
-    middle:
-      payload?.middle ??
-      data.changePersonalName?.middle ??
-      data.fullName.middle,
-    last:
-      payload?.last ??
-      data.changePersonalName?.last ??
-      data.fullName.last
-  }
-}
-
 const formatAddress = (payload, changePersonalAddress) => {
   if (payload) {
     const {
@@ -110,6 +93,23 @@ const formatDateOfBirth = (data, payload) => {
     day: data.changePersonalDob?.day ?? data.dateOfBirth.day?.toString() ?? '',
     month: data.changePersonalDob?.month ?? data.dateOfBirth.month?.toString() ?? '',
     year: data.changePersonalDob?.year ?? data.dateOfBirth.year?.toString() ?? ''
+  }
+}
+
+const formatName = (payload, data) => {
+  return {
+    first:
+      payload?.first ??
+      data.changePersonalName?.first ??
+      data.fullName.first,
+    middle:
+      payload?.middle ??
+      data.changePersonalName?.middle ??
+      data.fullName.middle,
+    last:
+      payload?.last ??
+      data.changePersonalName?.last ??
+      data.fullName.last
   }
 }
 

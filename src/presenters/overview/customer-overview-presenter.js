@@ -31,6 +31,35 @@ const customerOverviewPresenter = (data, page) => {
 }
 
 /**
+ * Caps a requested page to that max so we never point past the final page.
+ *
+ * If a user has requested a page that is beyond the end of the list of results i.e they have manually edited the URL
+ * to have an invalid page number, we will show them the last page of results instead of an empty page.
+ * @private
+ */
+const clampPageNumber = (requestedPageNumber, totalBusinesses) => {
+  const totalPages = Math.ceil(totalBusinesses / PAGE_SIZE)
+
+  // When there are no businesses we still treat page 1 as the only valid page.
+  const maxPageNumber = Math.max(totalPages, 1)
+
+  if (requestedPageNumber > maxPageNumber) {
+    return maxPageNumber
+  }
+
+  return requestedPageNumber
+}
+
+const formatBusiness = (business) => ({
+  name: business?.name ?? '',
+  sbi: business?.sbi ?? ''
+})
+
+const formatBusinesses = (businesses = []) => {
+  return businesses.map(formatBusiness)
+}
+
+/**
  * Converts whatever page number came from the URL query into a valid number
  * @private
  */
@@ -42,6 +71,17 @@ const normalisePageNumber = (page) => {
   }
 
   return parsedPage
+}
+
+/**
+ * Returns only the businesses for the current page.
+ * @private
+ */
+const paginateBusinesses = (businesses, currentPage) => {
+  const startIndex = (currentPage - 1) * PAGE_SIZE
+  const endIndex = startIndex + PAGE_SIZE
+
+  return businesses.slice(startIndex, endIndex)
 }
 
 /**
@@ -71,46 +111,6 @@ const sortAndCountBusinesses = (businesses) => {
     sortedBusinesses: businessesCopy,
     totalBusinesses: businessesCopy.length
   }
-}
-
-/**
- * Caps a requested page to that max so we never point past the final page.
- *
- * If a user has requested a page that is beyond the end of the list of results i.e they have manually edited the URL
- * to have an invalid page number, we will show them the last page of results instead of an empty page.
- * @private
- */
-const clampPageNumber = (requestedPageNumber, totalBusinesses) => {
-  const totalPages = Math.ceil(totalBusinesses / PAGE_SIZE)
-
-  // When there are no businesses we still treat page 1 as the only valid page.
-  const maxPageNumber = Math.max(totalPages, 1)
-
-  if (requestedPageNumber > maxPageNumber) {
-    return maxPageNumber
-  }
-
-  return requestedPageNumber
-}
-
-/**
- * Returns only the businesses for the current page.
- * @private
- */
-const paginateBusinesses = (businesses, currentPage) => {
-  const startIndex = (currentPage - 1) * PAGE_SIZE
-  const endIndex = startIndex + PAGE_SIZE
-
-  return businesses.slice(startIndex, endIndex)
-}
-
-const formatBusiness = (business) => ({
-  name: business?.name ?? '',
-  sbi: business?.sbi ?? ''
-})
-
-const formatBusinesses = (businesses = []) => {
-  return businesses.map(formatBusiness)
 }
 
 export {

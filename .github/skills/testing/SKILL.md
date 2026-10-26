@@ -17,6 +17,7 @@ description: Testing standards and conventions for this project. Use when writin
 - Unit tests live in `test/unit/` and mirror `src/`.
 - Integration tests live in `test/integration/narrow/`.
 - Integration route tests use `server.inject()` and can reuse stubs from `test/mocks/setup-server-mocks.js`.
+- Test structure rules live in `.github/instructions/tests.instructions.md`.
 
 ## Mocking and isolation
 

@@ -1,5 +1,6 @@
 /**
  * Takes the data from a request and sets it on the session
+ *
  * @module setSessionData
  */
 

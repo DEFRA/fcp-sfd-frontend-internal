@@ -1,11 +1,14 @@
 /**
  * Validates a business registration number submitted on the `/business/{sbi}/legal-status-enter` page
+ *
  * @module validateBusinessRegistrationNumberService
  */
 
 import { constants, schemas } from '@defra/fcp-sfd-frontend-engine'
 
 /**
+ * Validates a business registration number submitted on the `/business/{sbi}/legal-status-enter` page
+ *
  * Charity Commission and Companies House numbers have different formats, so this works out which one applies
  * for the selected legal status, validates the payload against the matching schema, and returns the session
  * key the result should be stored under.

@@ -1,3 +1,9 @@
+/**
+ * Data access layer (DAL) configuration schema
+ *
+ * @module dal
+ */
+
 export const dalConfig = {
   dalConfig: {
     endpoint: {

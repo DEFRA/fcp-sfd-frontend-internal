@@ -1,3 +1,9 @@
+/**
+ * Hapi plugin handling graceful server shutdown
+ *
+ * @module pulse
+ */
+
 import hapiPulse from 'hapi-pulse'
 import { createLogger } from '../utils/logger.js'
 

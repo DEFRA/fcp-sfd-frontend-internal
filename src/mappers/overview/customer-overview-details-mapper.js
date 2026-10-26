@@ -1,11 +1,16 @@
 /**
- * Takes the raw customer overview details data and maps it to a more usable format
+ * Maps the raw customer overview details data from the DAL to a more usable format
  *
- * @param {Object} value - The data from the DAL
- *
- * @returns {Object} Formatted customer overview details data
+ * @module customerOverviewDetailsMapper
  */
 
+/**
+ * Maps the raw customer overview details data from the DAL to a more usable format
+ *
+ * @param {object} value - The data from the DAL
+ *
+ * @returns {object} Formatted customer overview details data
+ */
 export const mapCustomerOverviewDetails = (value) => {
   const name = value?.customer?.info?.name ?? {}
 

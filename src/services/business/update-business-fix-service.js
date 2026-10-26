@@ -14,6 +14,18 @@ import { fetchBusinessFixService } from './fetch-business-fix-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 import { updateDalService } from '../DAL/update-dal-service.js'
 
+/**
+ * Service to update a business's details via the fix journey.
+ *
+ * The flash notification is HTML or plain text depending on the type of success message built for the fixed sections.
+ *
+ * @param {string} sbi - The Single Business Identifier
+ * @param {object} sessionData - The fix journey session data (`orderedSectionsToFix`, `businessFixUpdates`, `source`)
+ * @param {object} yar - The hapi `request.yar` object
+ * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
+ *
+ * @returns {Promise<void>}
+ */
 const updateBusinessFixService = async (sbi, sessionData, yar, email) => {
   const businessDetails = await fetchBusinessFixService(sbi, email, sessionData)
   const variables = services.buildBusinessFixUpdateVariables(businessDetails)

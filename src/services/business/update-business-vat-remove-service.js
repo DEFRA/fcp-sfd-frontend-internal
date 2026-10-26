@@ -16,6 +16,17 @@ import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 import { updateDalService } from '../DAL/update-dal-service.js'
 
+/**
+ * Service to remove a business's VAT registration number
+ *
+ * The VAT number is removed by updating it to an empty string.
+ *
+ * @param {object} yar - The hapi `request.yar` object
+ * @param {string} sbi - The Single Business Identifier
+ * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
+ *
+ * @returns {Promise<void>}
+ */
 const updateBusinessVatRemoveService = async (yar, sbi, email) => {
   const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessVat')
   const variables = utils.buildUpdateBusinessVatVariables('', businessDetails.sbi)

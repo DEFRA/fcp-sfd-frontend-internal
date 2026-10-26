@@ -1,3 +1,9 @@
+/**
+ * GraphQL query for business details by SBI
+ *
+ * @module businessDetailsBySbi
+ */
+
 export const businessDetailsBySbi = `
   query Business($sbi: ID!) {
   business(sbi: $sbi) {

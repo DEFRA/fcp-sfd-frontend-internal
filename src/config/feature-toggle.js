@@ -1,3 +1,9 @@
+/**
+ * Feature toggle configuration
+ *
+ * @module featureToggle
+ */
+
 export const featureToggleConfig = {
   featureToggle: {
     useDalTestEmail: {

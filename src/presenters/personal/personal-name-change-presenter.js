@@ -1,10 +1,23 @@
-/*
- * Formats data ready for presenting in the `/customer/{CRN}/details/account-name-change` page
+/**
+ * Formats data ready for presenting in the `/customer/{crn}/account-name-change` page
+ *
  * @module personalNameChangePresenter
  */
 
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
+/**
+ * Formats data ready for presenting in the `/customer/{crn}/account-name-change` page
+ *
+ * Each name part is, in order of preference, the submitted payload, the pending change held in the
+ * session, or the current name.
+ *
+ * @param {object} data - The customer data, including any pending name change held in the session
+ * @param {object} [payload] - The name parts submitted by the user, when the form is re-rendered after a validation failure
+ * @param {string} crn - The Customer Reference Number
+ *
+ * @returns {object} The page data for the view
+ */
 const personalNameChangePresenter = (data, payload, crn) => {
   return {
     backLink: crn ? `/customer/${crn}/details` : SEARCH_CRN,

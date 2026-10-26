@@ -1,10 +1,21 @@
 /**
  * Generic multi-schema validation service.
  *
- * - Maps nested details into a flat structure
- * - Validates multiple Joi schemas independently
+ * @module validateDetailsService
+ */
+
+/**
+ * Generic multi-schema validation service.
+ *
+ * - Validates multiple Joi schemas independently against the mapped (flat) details
  * - Collects all validation errors
  * - Maps errors to form sections
+ *
+ * @param {object[]} schemasToValidate - The Joi schemas to validate against
+ * @param {object} mappedDetails - The details, mapped into a flat structure that mirrors the schemas
+ *
+ * @returns {{isValid: boolean, sectionsNeedingUpdate: string[]}} Whether all schemas passed and the sections that
+ * need updating
  */
 const validateDetailsService = (schemasToValidate, mappedDetails) => {
   const errors = []

@@ -1,11 +1,23 @@
 /**
- * Formats data ready for presenting in the `legal-status-change` page
+ * Formats data ready for presenting in the `/business/{sbi}/legal-status-change` page
+ *
  * @module businessLegalStatusChangePresenter
  */
 
 import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
+/**
+ * Formats data ready for presenting in the `/business/{sbi}/legal-status-change` page
+ *
+ * The selected legal status is, in order of preference, the submitted payload, the pending change
+ * held in the session, or the current legal status code from the DAL.
+ *
+ * @param {object} data - The business data, including any pending legal status change held in the session
+ * @param {string} [payload] - The legal status code submitted by the user, when the form is re-rendered after a validation failure
+ *
+ * @returns {object} The page data for the view
+ */
 const businessLegalStatusChangePresenter = (data, payload) => {
   const sbi = data.sbi
 

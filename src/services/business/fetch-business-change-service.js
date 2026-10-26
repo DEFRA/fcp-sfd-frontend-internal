@@ -1,3 +1,9 @@
+/**
+ * Fetches the latest business details from the DAL and merges in a temporary change stored in the user's session
+ *
+ * @module fetchBusinessChangeService
+ */
+
 import { fetchBusinessDetailsService } from './fetch-business-details-service.js'
 
 /**
@@ -11,6 +17,8 @@ import { fetchBusinessDetailsService } from './fetch-business-details-service.js
  * @param {string} sbi - The single business identifier of the business being viewed
  * @param {string} email - The authenticated user's email
  * @param {string|string[]} fields - The input field(s) the user has updated that we want to fetch (if exists)
+ *
+ * @returns {Promise<object>} The business details, including any pending changes for the given fields
  */
 const fetchBusinessChangeService = async (yar, sbi, email, fields) => {
   const businessDetails = await fetchBusinessDetailsService(sbi, email)

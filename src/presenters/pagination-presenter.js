@@ -1,5 +1,6 @@
 /**
- * Transforms pagination information into the appropriate pagination component element
+ * Transforms pagination information into the appropriate pagination component elements
+ *
  * @module paginationPresenter
  */
 
@@ -185,7 +186,7 @@ const buildItems = (currentPageNumber, numberOfPages, path, queryString) => {
  * @param {string} path - the base URL path for pagination links
  * @param {string} queryString - any additional query parameters to append to links
  *
- * @returns {array} array of 7 page items and ellipses
+ * @returns {Array} array of 7 page items and ellipses
  */
 const complexPaginatorStart = (currentPageNumber, numberOfPages, path, queryString) => {
   return [
@@ -225,7 +226,7 @@ const buildQueryString = (queryArgs) => {
  * @param {string} path - the base URL path for pagination links
  * @param {string} queryString - any additional query parameters to append to links
  *
- * @returns {array} array of page items with no ellipses
+ * @returns {Array} array of page items with no ellipses
  */
 const simplePaginator = (currentPageNumber, numberOfPages, path, queryString) => {
   const items = []
@@ -249,7 +250,7 @@ const simplePaginator = (currentPageNumber, numberOfPages, path, queryString) =>
  * @param {string} path - the base URL path for pagination links
  * @param {string} queryString - any additional query parameters to append to links
  *
- * @returns {array} array of 7 page items and ellipses
+ * @returns {Array} array of 7 page items and ellipses
  */
 const complexPaginatorMiddle = (currentPageNumber, numberOfPages, path, queryString) => {
   return [
@@ -274,7 +275,7 @@ const complexPaginatorMiddle = (currentPageNumber, numberOfPages, path, queryStr
  * @param {string} path - the base URL path for pagination links
  * @param {string} queryString - any additional query parameters to append to links
  *
- * @returns {array} array of 7 page items and ellipses
+ * @returns {Array} array of 7 page items and ellipses
  */
 const complexPaginatorEnd = (currentPageNumber, numberOfPages, path, queryString) => {
   return [

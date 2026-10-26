@@ -13,6 +13,18 @@ import { flashNotification } from '../../utils/notifications/flash-notification.
 import { updateDalService } from '../DAL/update-dal-service.js'
 import { mutations, services } from '@defra/fcp-sfd-frontend-engine'
 
+/**
+ * Service to update a customer's personal details via the fix journey.
+ *
+ * The flash notification is HTML or plain text depending on the type of success message built for the fixed sections.
+ *
+ * @param {string} crn - The customer reference number
+ * @param {object} sessionData - The fix journey session data (`orderedSectionsToFix`, `personalFixUpdates`, `source`)
+ * @param {object} yar - The hapi `request.yar` object
+ * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
+ *
+ * @returns {Promise<void>}
+ */
 const updatePersonalFixService = async (crn, sessionData, yar, email) => {
   const personalDetails = await fetchPersonalFixService(crn, email, sessionData)
   const variables = services.buildCustomerFixUpdateVariables(personalDetails)

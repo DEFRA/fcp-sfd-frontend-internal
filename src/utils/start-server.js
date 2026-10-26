@@ -1,8 +1,21 @@
+/**
+ * Starts the Hapi server
+ *
+ * @module startServer
+ */
+
 import { config } from '../config/index.js'
 
 import { createServer } from '../server.js'
 import { createLogger } from './logger.js'
 
+/**
+ * Starts the Hapi server
+ *
+ * Failures are logged rather than thrown, in which case the returned server is undefined.
+ *
+ * @returns {Promise<object|undefined>} The started Hapi server
+ */
 export const startServer = async () => {
   let server
 

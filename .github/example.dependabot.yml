@@ -40,7 +40,7 @@ updates:
           - 'vi'
           - 'vi-*'
           - 'nodemon'
-          - 'npm-run-all'
+          - 'npm-run-all2'
           - 'source-map-loader'
           - 'sass-*'
           - 'postcss-*'

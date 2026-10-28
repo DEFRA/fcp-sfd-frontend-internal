@@ -105,7 +105,18 @@ describe('DAL (data access layer) connector', () => {
 
       expect(result.data).toBeNull()
       expect(result.statusCode).toBe(500)
-      expect(result.errors[0].message).toBe('Network error')
+      expect(result.errors[0]).toEqual({ message: 'Network error' })
+      expect(result.errors[0].stack).toBeUndefined()
+    })
+
+    test('returns a generic structured error when a non-Error value is thrown', async () => {
+      global.fetch = vi.fn().mockRejectedValue('boom')
+
+      const result = await dalConnector.query(testQuery, { sbi: 123456789 }, testEmail)
+
+      expect(result.data).toBeNull()
+      expect(result.statusCode).toBe(500)
+      expect(result.errors).toEqual([{ message: 'Error connecting to DAL' }])
     })
   })
 

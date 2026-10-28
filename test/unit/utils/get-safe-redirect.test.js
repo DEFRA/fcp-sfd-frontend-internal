@@ -29,4 +29,14 @@ describe('getSafeRedirect', () => {
     const result = getSafeRedirect(null)
     expect(result).toBe('/search-sbi')
   })
+
+  test('should return "/search-sbi" if redirect starts with //', () => {
+    const result = getSafeRedirect('//evil.com')
+    expect(result).toBe('/search-sbi')
+  })
+
+  test('should return "/search-sbi" for backslash at start', () => {
+    const result = getSafeRedirect(String.raw`\admin\payments`)
+    expect(result).toBe('/search-sbi')
+  })
 })

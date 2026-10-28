@@ -68,9 +68,13 @@ const describeEmailHeader = (email) => {
 const handleDalFailure = (err) => {
   logger.error(err, 'Error connecting to DAL')
 
+  const error = err instanceof Error
+    ? { message: err.message }
+    : { message: 'Error connecting to DAL' }
+
   return formatDalResponse({
     statusCode: constants.statusCodes.INTERNAL_SERVER_ERROR,
-    errors: [err]
+    errors: [error]
   })
 }
 

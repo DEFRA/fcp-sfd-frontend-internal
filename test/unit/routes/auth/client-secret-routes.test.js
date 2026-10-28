@@ -188,11 +188,6 @@ describe('client-secret-routes', () => {
       expect(request.cookieAuth.set).toHaveBeenCalledWith({ sessionId: 'session-123' })
     })
 
-    test('should clear redirect session variable', async () => {
-      await signInOidc.handler(request, h)
-      expect(request.yar.clear).toHaveBeenCalledWith('redirect')
-    })
-
     test('should redirect to search-sbi', async () => {
       await signInOidc.handler(request, h)
       expect(h.redirect).toHaveBeenCalledWith('/search-sbi')

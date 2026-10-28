@@ -22,7 +22,7 @@ const signInOidc = {
     auth: { strategy: 'entra', mode: 'try' }
   },
   handler: async function (request, h) {
-    const { auth, server, logger, cookieAuth, yar } = request
+    const { auth, server, logger, cookieAuth } = request
 
     // If the user is not authenticated, redirect to the home page
     // This should only occur if the user tries to access the sign-in page directly and not part of the sign-in flow
@@ -61,8 +61,6 @@ const signInOidc = {
 
     // Create a new session using cookie authentication strategy which is used for all subsequent requests
     cookieAuth.set({ sessionId })
-
-    yar.clear('redirect')
 
     return h.redirect(SEARCH_SBI)
   }

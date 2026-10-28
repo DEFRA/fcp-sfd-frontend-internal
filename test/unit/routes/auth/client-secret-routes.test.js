@@ -133,6 +133,9 @@ describe('client-secret-routes', () => {
             cache: {
               set: vi.fn().mockResolvedValue(undefined)
             }
+          },
+          auth: {
+            test: vi.fn().mockRejectedValue(new Error('Missing authentication'))
           }
         },
         cookieAuth: {
@@ -141,18 +144,29 @@ describe('client-secret-routes', () => {
         logger: {
           info: vi.fn(),
           error: vi.fn()
-        },
-        yar: {
-          clear: vi.fn(),
-          set: vi.fn()
         }
       }
     })
 
-    test('should return unauthorised view when not authenticated', async () => {
+    test('should return unauthorised view when not authenticated and no valid session exists', async () => {
       request.auth.isAuthenticated = false
       await signInOidc.handler(request, h)
+      expect(request.server.auth.test).toHaveBeenCalledWith('session', request)
       expect(h.view).toHaveBeenCalledWith('unauthorised')
+      expect(h.redirect).not.toHaveBeenCalled()
+    })
+
+    test('should redirect to search-sbi when not authenticated but a valid session exists', async () => {
+      request.auth.isAuthenticated = false
+      request.server.auth.test.mockResolvedValue({ credentials: { sessionId: 'session-123' } })
+      await signInOidc.handler(request, h)
+      expect(h.redirect).toHaveBeenCalledWith('/search-sbi')
+      expect(h.view).not.toHaveBeenCalled()
+    })
+
+    test('should not check for an existing session when authenticated', async () => {
+      await signInOidc.handler(request, h)
+      expect(request.server.auth.test).not.toHaveBeenCalled()
     })
 
     test('should verify token when authenticated', async () => {

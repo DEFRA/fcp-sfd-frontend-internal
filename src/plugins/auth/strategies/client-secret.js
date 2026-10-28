@@ -15,7 +15,6 @@
 import Jwt from '@hapi/jwt'
 import { getOidcConfig } from '../../../auth/get-oidc-config.js'
 import { refreshTokens } from '../../../auth/refresh-tokens.js'
-import { getSafeRedirect } from '../../../utils/get-safe-redirect.js'
 import { getCookieOptions } from '../get-cookie-options.js'
 import { config } from '../../../config/index.js'
 
@@ -55,12 +54,7 @@ function getBellOptions (oidcConfig) {
     password: config.get('server.session.cookie.password'),
     isSecure: sessionCookieSecure,
     forceHttps: sessionCookieSecure,
-    location: function (request) {
-      if (request.query.redirect) {
-        const safeRedirect = getSafeRedirect(request.query.redirect)
-        request.yar.set('redirect', safeRedirect)
-      }
-
+    location: function (_request) {
       return config.get('entra.redirectUrl')
     },
     providerParams: function (_request) {

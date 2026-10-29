@@ -65,7 +65,7 @@ Webpack bundles `src/client/` → `.public/`. Entry points: `src/client/javascri
 
 ## Testing
 
-**Always run tests in Docker: `npm run docker:test`.** Host `vitest` / `npm test` runs fail — integration tests need dependent services (DAL API, upstream-mock, Redis) that only `compose.test.yaml` provides. Watch mode: `npm run docker:test:watch`.
+**Always run tests in Docker: `npm run docker:test`.** Host `vitest` / `npm test` runs fail — integration tests need dependent services (Redis) that only `compose.test.yaml` provides. The DAL API and upstream-mock are not started for tests. Watch mode: `npm run docker:test:watch`.
 
 - **Unit tests** (`test/unit/`): mirror `src/` structure. Pure logic with `vi.mock`.
 - **Integration tests** (`test/integration/narrow/`): spin up a real Hapi server (Redis mocked to CatboxMemory). Use `server.inject()` to test routes end-to-end. Import `test/mocks/setup-server-mocks.js` for OIDC/Redis stubbing.

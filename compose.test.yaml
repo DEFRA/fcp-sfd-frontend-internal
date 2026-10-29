@@ -18,11 +18,6 @@ services:
       ENTRA_FEDERATED_AUDIENCE: dummy-audience
       ENTRA_FEDERATED_MOCK: 'true'
       USE_FEDERATED_CREDENTIALS: 'false'
-    depends_on:
-      fcp-dal-api:
-        condition: service_started
-      upstream-mock:
-        condition: service_started
     volumes:
       - ./src/:/home/node/src
       - ./test/:/home/node/test

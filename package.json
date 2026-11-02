@@ -35,7 +35,9 @@
     "server:watch:link-engine": "nodemon --config nodemon.link-engine.json --inspect=0.0.0.0 --legacy-watch src/index.js",
     "server:debug": "nodemon --inspect-brk=0.0.0.0 --ext js --legacy-watch src/index.js",
     "prestart": "npm run build",
-    "start": "NODE_ENV=production node --use-strict ."
+    "start": "NODE_ENV=production node --use-strict .",
+    "check:synthetic-ids": "sfd-id-check --staged",
+    "setup:husky": "node -e \"try { (await import('husky')).default() } catch (e) { if (e.code !== 'ERR_MODULE_NOT_FOUND') throw e }\" --input-type module"
   },
   "author": "Defra DDTS",
   "contributors": [
@@ -86,11 +88,13 @@
     "@types/node": "26.1.0",
     "@types/nunjucks": "3.2.6",
     "@types/webpack-assets-manifest": "5.1.4",
-    "@vitest/coverage-v8": "5.0.0",
+    "@vitest/coverage-v8": "5.0.3",
     "autoprefixer": "10.5.4",
     "clean-webpack-plugin": "4.0.0",
     "copy-webpack-plugin": "14.0.0",
     "eslint": "9.29.0",
+    "fcp-sfd-core": "github:DEFRA/fcp-sfd-core#95f58ade56b2d0dd0f15bdcba6a5f37a54bcc939",
+    "husky": "9.1.7",
     "jsdom": "30.0.1",
     "neostandard": "0.13.0",
     "nodemon": "3.1.14",
@@ -103,7 +107,7 @@
     "stylelint": "17.13.0",
     "stylelint-config-gds": "3.0.0",
     "terser-webpack-plugin": "5.6.1",
-    "vitest": "5.0.0",
+    "vitest": "5.0.3",
     "webpack": "5.109.2",
     "webpack-assets-manifest": "6.5.2",
     "webpack-cli": "7.2.2"

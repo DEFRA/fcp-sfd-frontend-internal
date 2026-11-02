@@ -49,6 +49,40 @@ const businessDetailsPresenter = (data, sbi, yar, hasValidBusinessDetails, secti
 }
 
 /**
+ * Builds the registration number row for the business details page.
+ *
+ * Only charity and company legal statuses hold a registration number, so this
+ * returns null for every other status and the view omits the row entirely. The
+ * change link goes straight to the enter page, letting the number be corrected
+ * without going through the legal status journey.
+ */
+const buildLegalStatusRegistrationNumberDisplay = (data, sbi) => {
+  // The DAL returns the legal status code as a number, the engine codes are strings
+  const legalStatusCode = String(data.legalStatusCode ?? '')
+  const registrationNumbers = data.registrationNumbers ?? {}
+
+  let label
+  let number
+
+  if (constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)) {
+    label = 'Charity commission registration number'
+    number = registrationNumbers.charityCommission
+  } else if (constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)) {
+    label = 'Company registration number'
+    number = registrationNumbers.companiesHouse
+  } else {
+    return null
+  }
+
+  return {
+    label,
+    value: number || 'Not added',
+    action: presenters.getActionText(number),
+    changeLink: BUSINESS_CHANGE_LINKS.businessLegalStatusRegistrationNumber(sbi)
+  }
+}
+
+/**
  * Builds the value, action and changeLink for a simple business details field.
  *
  * Most fields on this page just need to show their value (or a fallback like
@@ -60,50 +94,6 @@ const buildValueDisplay = (value, emptyValueText, changeLink) => {
     value: value || emptyValueText,
     action: presenters.getActionText(value),
     changeLink
-  }
-}
-
-/**
- * Builds change links for business details based on whether the
- * business details interrupter is enabled and the validity of the data.
- *
- * When the interrupter is disabled or all business details are valid,
- * standard change links are returned.
- *
- * When the interrupter is enabled and details are invalid:
- * - If exactly one section needs updating, that section keeps its standard change
- *   link and every other row routes through the fix journey
- * - Otherwise, all links point to the business details fix journey
- *
- * VAT is null unless it is routed through the interrupter, because the VAT row
- * builds its own add/change/remove links.
- */
-const formatChangeLinks = (sbi, hasValidBusinessDetails, sectionsNeedingUpdate = []) => {
-  const CHANGE_LINKS = {
-    name: BUSINESS_CHANGE_LINKS.businessName(sbi),
-    address: BUSINESS_CHANGE_LINKS.businessAddress(sbi),
-    phone: BUSINESS_CHANGE_LINKS.businessPhone(sbi),
-    email: BUSINESS_CHANGE_LINKS.businessEmail(sbi),
-    vat: null
-  }
-
-  const businessDetailsInterrupterEnabled = config.get('featureToggle.businessDetailsInterrupterEnabled')
-
-  // Happy path – interrupter off or data is valid
-  if (!businessDetailsInterrupterEnabled || hasValidBusinessDetails || sectionsNeedingUpdate.length === 0) {
-    return CHANGE_LINKS
-  }
-
-  // Interrupter on and data invalid
-  const singleSection = sectionsNeedingUpdate.length === 1 ? sectionsNeedingUpdate[0] : null
-  const fixLink = (section) => `/business/${sbi}/details/fix?source=${section}`
-
-  return {
-    name: singleSection === 'name' ? CHANGE_LINKS.name : fixLink('name'),
-    address: singleSection === 'address' ? CHANGE_LINKS.address : fixLink('address'),
-    phone: singleSection === 'phone' ? CHANGE_LINKS.phone : fixLink('phone'),
-    email: singleSection === 'email' ? CHANGE_LINKS.email : fixLink('email'),
-    vat: singleSection === 'vat' ? null : fixLink('vat')
   }
 }
 
@@ -151,36 +141,46 @@ const buildVatDisplay = (vatNumber, sbi, vatFixLink) => {
 }
 
 /**
- * Builds the registration number row for the business details page.
+ * Builds change links for business details based on whether the
+ * business details interrupter is enabled and the validity of the data.
  *
- * Only charity and company legal statuses hold a registration number, so this
- * returns null for every other status and the view omits the row entirely. The
- * change link goes straight to the enter page, letting the number be corrected
- * without going through the legal status journey.
+ * When the interrupter is disabled or all business details are valid,
+ * standard change links are returned.
+ *
+ * When the interrupter is enabled and details are invalid:
+ * - If exactly one section needs updating, that section keeps its standard change
+ *   link and every other row routes through the fix journey
+ * - Otherwise, all links point to the business details fix journey
+ *
+ * VAT is null unless it is routed through the interrupter, because the VAT row
+ * builds its own add/change/remove links.
  */
-const buildLegalStatusRegistrationNumberDisplay = (data, sbi) => {
-  // The DAL returns the legal status code as a number, the engine codes are strings
-  const legalStatusCode = String(data.legalStatusCode ?? '')
-  const registrationNumbers = data.registrationNumbers ?? {}
-
-  let label
-  let number
-
-  if (constants.business.CHARITY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)) {
-    label = 'Charity commission registration number'
-    number = registrationNumbers.charityCommission
-  } else if (constants.business.COMPANY_REGISTRATION_LEGAL_STATUS_CODES.includes(legalStatusCode)) {
-    label = 'Company registration number'
-    number = registrationNumbers.companiesHouse
-  } else {
-    return null
+const formatChangeLinks = (sbi, hasValidBusinessDetails, sectionsNeedingUpdate = []) => {
+  const CHANGE_LINKS = {
+    name: BUSINESS_CHANGE_LINKS.businessName(sbi),
+    address: BUSINESS_CHANGE_LINKS.businessAddress(sbi),
+    phone: BUSINESS_CHANGE_LINKS.businessPhone(sbi),
+    email: BUSINESS_CHANGE_LINKS.businessEmail(sbi),
+    vat: null
   }
 
+  const businessDetailsInterrupterEnabled = config.get('featureToggle.businessDetailsInterrupterEnabled')
+
+  // Happy path – interrupter off or data is valid
+  if (!businessDetailsInterrupterEnabled || hasValidBusinessDetails || sectionsNeedingUpdate.length === 0) {
+    return CHANGE_LINKS
+  }
+
+  // Interrupter on and data invalid
+  const singleSection = sectionsNeedingUpdate.length === 1 ? sectionsNeedingUpdate[0] : null
+  const fixLink = (section) => `/business/${sbi}/details/fix?source=${section}`
+
   return {
-    label,
-    value: number || 'Not added',
-    action: presenters.getActionText(number),
-    changeLink: BUSINESS_CHANGE_LINKS.businessLegalStatusRegistrationNumber(sbi)
+    name: singleSection === 'name' ? CHANGE_LINKS.name : fixLink('name'),
+    address: singleSection === 'address' ? CHANGE_LINKS.address : fixLink('address'),
+    phone: singleSection === 'phone' ? CHANGE_LINKS.phone : fixLink('phone'),
+    email: singleSection === 'email' ? CHANGE_LINKS.email : fixLink('email'),
+    vat: singleSection === 'vat' ? null : fixLink('vat')
   }
 }
 

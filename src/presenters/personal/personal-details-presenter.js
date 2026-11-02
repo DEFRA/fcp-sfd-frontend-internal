@@ -59,10 +59,6 @@ const formatAddress = (personalAddress) => {
   return addressText
 }
 
-const getActionText = (value) => {
-  return value ? 'Change' : 'Add'
-}
-
 /**
  * Builds change links for personal details based on whether the
  * personal details interrupter is enabled and the validity of the data.
@@ -118,6 +114,10 @@ const formatDob = (dob) => {
     formattedDob: presenters.formatLongDate(date),
     action: 'Change'
   }
+}
+
+const getActionText = (value) => {
+  return value ? 'Change' : 'Add'
 }
 
 export {

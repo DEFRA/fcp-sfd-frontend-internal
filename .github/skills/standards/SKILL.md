@@ -31,6 +31,7 @@ This document defines the standards an agent must apply when reviewing or writin
 - No error handling for scenarios that cannot happen
 - No abstractions for a single use case
 - Private functions must be ordered alphabetically by name
+  - Exception: where helpers form a sequential flow that reads top to bottom (for example `src/presenters/pagination-presenter.js`, `src/dal/connector.js` and `src/config/logger-options.js`), keep the flow order
 
 ## Testing
 

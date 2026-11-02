@@ -44,7 +44,7 @@ describe('DAL (data access layer) connector', () => {
     global.fetch = originalFetch
   })
 
-  const defaultSuccessData = { business: { sbi: 123456789, name: 'Test Business' } }
+  const defaultSuccessData = { business: { sbi: 876543210, name: 'Test Business' } }
   const mockSuccessfulDalResponse = (data = defaultSuccessData) => {
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
@@ -57,7 +57,7 @@ describe('DAL (data access layer) connector', () => {
     test('should return data and status without errors', async () => {
       mockSuccessfulDalResponse()
 
-      const result = await dalConnector.query(testQuery, { sbi: 123456789 }, testEmail)
+      const result = await dalConnector.query(testQuery, { sbi: 876543210 }, testEmail)
 
       expect(result.data).toBeDefined()
       expect(result.data.business.name).toBe('Test Business')
@@ -87,7 +87,7 @@ describe('DAL (data access layer) connector', () => {
         })
       })
 
-      const result = await dalConnector.query(testQuery, { sbi: 123456789 }, testEmail)
+      const result = await dalConnector.query(testQuery, { sbi: 876543210 }, testEmail)
 
       expect(result.data).toBeNull()
       expect(result.errors).toBeDefined()
@@ -101,11 +101,22 @@ describe('DAL (data access layer) connector', () => {
     test('returns a formatted error response', async () => {
       global.fetch = vi.fn().mockRejectedValue(new Error('Network error'))
 
-      const result = await dalConnector.query(testQuery, { sbi: 123456789 }, testEmail)
+      const result = await dalConnector.query(testQuery, { sbi: 876543210 }, testEmail)
 
       expect(result.data).toBeNull()
       expect(result.statusCode).toBe(500)
-      expect(result.errors[0].message).toBe('Network error')
+      expect(result.errors[0]).toEqual({ message: 'Network error' })
+      expect(result.errors[0].stack).toBeUndefined()
+    })
+
+    test('returns a generic structured error when a non-Error value is thrown', async () => {
+      global.fetch = vi.fn().mockRejectedValue('boom')
+
+      const result = await dalConnector.query(testQuery, { sbi: 876543210 }, testEmail)
+
+      expect(result.data).toBeNull()
+      expect(result.statusCode).toBe(500)
+      expect(result.errors).toEqual([{ message: 'Error connecting to DAL' }])
     })
   })
 
@@ -113,7 +124,7 @@ describe('DAL (data access layer) connector', () => {
     test('returns a formatted error response without calling the DAL', async () => {
       mockSuccessfulDalResponse()
 
-      const result = await dalConnector.query(testQuery, { sbi: 123456789 })
+      const result = await dalConnector.query(testQuery, { sbi: 876543210 })
 
       expect(global.fetch).not.toHaveBeenCalled()
       expect(result.statusCode).toBe(500)

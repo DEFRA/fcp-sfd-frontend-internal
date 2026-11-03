@@ -1,6 +1,9 @@
 // Test framework dependencies
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 
+// Test helpers
+import { constants } from '@defra/fcp-sfd-frontend-engine'
+
 // Thing under test
 import { personalDetailsPresenter } from '../../../../src/presenters/personal/personal-details-presenter.js'
 
@@ -16,6 +19,8 @@ vi.mock('../../../../src/config/index.js', () => ({
     get: vi.fn()
   }
 }))
+
+const { NOT_ADDED_TEXT } = constants
 
 describe('personalDetailsPresenter', () => {
   let yar
@@ -87,7 +92,7 @@ describe('personalDetailsPresenter', () => {
         },
         personalTelephone: {
           telephone: data.telephone,
-          mobile: 'Not added',
+          mobile: NOT_ADDED_TEXT,
           action: 'Change',
           changeLink: `/customer/${data.crn}/account-phone-numbers-change`
         },
@@ -167,23 +172,23 @@ describe('personalDetailsPresenter', () => {
     })
 
     describe('when the telephone property is missing', () => {
-      test('returns "Not added" if telephone is missing', () => {
+      test('returns NOT_ADDED_TEXT if telephone is missing', () => {
         data.telephone = null
         const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-        expect(result.personalTelephone.telephone).toBe('Not added')
+        expect(result.personalTelephone.telephone).toBe(NOT_ADDED_TEXT)
       })
     })
   })
 
   describe('the "personalMobile" property', () => {
     describe('when the mobile property is missing', () => {
-      test('returns "Not added" if mobile is missing', () => {
+      test('returns NOT_ADDED_TEXT if mobile is missing', () => {
         data.mobile = null
 
         const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-        expect(result.personalTelephone.mobile).toBe('Not added')
+        expect(result.personalTelephone.mobile).toBe(NOT_ADDED_TEXT)
       })
     })
   })
@@ -251,11 +256,11 @@ describe('personalDetailsPresenter', () => {
 
   describe('the "personalEmail.email" property', () => {
     describe('when the email property is missing', () => {
-      test('it should return the text "Not added"', () => {
+      test('it should return NOT_ADDED_TEXT', () => {
         data.email = null
         const result = personalDetailsPresenter(data, yar, hasValidPersonalDetails, sectionsNeedingUpdate)
 
-        expect(result.personalEmail.email).toEqual('Not added')
+        expect(result.personalEmail.email).toEqual(NOT_ADDED_TEXT)
       })
     })
 
@@ -291,20 +296,20 @@ describe('personalDetailsPresenter', () => {
 
   describe('the "dob.fullDateOfBirth" property', () => {
     describe('when dateOfBirth is missing', () => {
-      test('it should return the text "Not added"', () => {
+      test('it should return NOT_ADDED_TEXT', () => {
         delete data.dateOfBirth.full
         const result = personalDetailsPresenter(data, yar)
 
-        expect(result.dob.fullDateOfBirth).toEqual('Not added')
+        expect(result.dob.fullDateOfBirth).toEqual(NOT_ADDED_TEXT)
       })
     })
 
     describe('when dateOfBirth is an invalid date', () => {
-      test('it should return the text "Not added"', () => {
+      test('it should return NOT_ADDED_TEXT', () => {
         data.dateOfBirth.full = '4000-14-01'
         const result = personalDetailsPresenter(data, yar)
 
-        expect(result.dob.fullDateOfBirth).toEqual('Not added')
+        expect(result.dob.fullDateOfBirth).toEqual(NOT_ADDED_TEXT)
       })
     })
 

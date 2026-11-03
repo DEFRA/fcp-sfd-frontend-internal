@@ -16,6 +16,7 @@ vi.mock('../../../../src/config/index.js', () => ({
 }))
 
 const { LEGAL_STATUS } = constants.business
+const { NOT_ADDED_TEXT } = constants
 
 describe('businessDetailsPresenter', () => {
   let data
@@ -133,11 +134,11 @@ describe('businessDetailsPresenter', () => {
       expect(result.businessName.changeLink).toBe('/business/106705779/name-change')
     })
 
-    test('returns "Not added" and "Add" action when business name is absent', () => {
+    test('returns NOT_ADDED_TEXT and "Add" action when business name is absent', () => {
       data.businessName = null
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.businessName.value).toBe('Not added')
+      expect(result.businessName.value).toBe(NOT_ADDED_TEXT)
       expect(result.businessName.action).toBe('Add')
     })
   })
@@ -151,11 +152,11 @@ describe('businessDetailsPresenter', () => {
       expect(result.businessAddress.changeLink).toBe(`/business/${sbi}/address-change`)
     })
 
-    test('returns "Not added" and "Add" action when address has no content', () => {
+    test('returns NOT_ADDED_TEXT and "Add" action when address has no content', () => {
       data.address = { lookup: {}, manual: {}, postcode: null, country: null }
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.businessAddress.value).toBe('Not added')
+      expect(result.businessAddress.value).toBe(NOT_ADDED_TEXT)
       expect(result.businessAddress.action).toBe('Add')
     })
   })
@@ -170,13 +171,13 @@ describe('businessDetailsPresenter', () => {
       expect(result.businessTelephone.changeLink).toBe('/business/106705779/phone-numbers-change')
     })
 
-    test('returns "Not added" placeholders and "Add" action when both are absent', () => {
+    test('returns NOT_ADDED_TEXT placeholders and "Add" action when both are absent', () => {
       data.landline = null
       data.mobile = null
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.businessTelephone.telephone).toBe('Not added')
-      expect(result.businessTelephone.mobile).toBe('Not added')
+      expect(result.businessTelephone.telephone).toBe(NOT_ADDED_TEXT)
+      expect(result.businessTelephone.mobile).toBe(NOT_ADDED_TEXT)
       expect(result.businessTelephone.action).toBe('Add')
     })
   })
@@ -190,11 +191,11 @@ describe('businessDetailsPresenter', () => {
       expect(result.businessEmail.changeLink).toBe('/business/106705779/email-change')
     })
 
-    test('returns "Not added" and "Add" action when email is absent', () => {
+    test('returns NOT_ADDED_TEXT and "Add" action when email is absent', () => {
       data.email = null
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.businessEmail.value).toBe('Not added')
+      expect(result.businessEmail.value).toBe(NOT_ADDED_TEXT)
       expect(result.businessEmail.action).toBe('Add')
     })
   })
@@ -223,11 +224,11 @@ describe('businessDetailsPresenter', () => {
       })
     })
 
-    test('returns "Not added" and a single "Add" link when VAT is absent', () => {
+    test('returns NOT_ADDED_TEXT and a single "Add" link when VAT is absent', () => {
       data.vat = null
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.vatNumber.value).toBe('Not added')
+      expect(result.vatNumber.value).toBe(NOT_ADDED_TEXT)
       expect(result.vatNumber.action).toBe('Add')
       expect(result.vatNumber.changeLink).toBe(`/business/${sbi}/vat-registration-number-change`)
     })
@@ -299,11 +300,11 @@ describe('businessDetailsPresenter', () => {
       expect(result.businessLegalStatus.changeLink).toBe(`/business/${sbi}/legal-status-change`)
     })
 
-    test('returns "Not added" and "Add" action when legal status is absent', () => {
+    test('returns NOT_ADDED_TEXT and "Add" action when legal status is absent', () => {
       data.legalStatus = null
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.businessLegalStatus.value).toBe('Not added')
+      expect(result.businessLegalStatus.value).toBe(NOT_ADDED_TEXT)
       expect(result.businessLegalStatus.action).toBe('Add')
     })
   })
@@ -317,11 +318,11 @@ describe('businessDetailsPresenter', () => {
       expect(result.businessType.changeLink).toBe('#')
     })
 
-    test('returns "Not added" and "Add" action when business type is absent', () => {
+    test('returns NOT_ADDED_TEXT and "Add" action when business type is absent', () => {
       data.type = null
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.businessType.value).toBe('Not added')
+      expect(result.businessType.value).toBe(NOT_ADDED_TEXT)
       expect(result.businessType.action).toBe('Add')
     })
   })
@@ -344,11 +345,11 @@ describe('businessDetailsPresenter', () => {
         })
       })
 
-      test('returns "Not added" and an "Add" action when the charity commission number is absent', () => {
+      test('returns NOT_ADDED_TEXT and an "Add" action when the charity commission number is absent', () => {
         data.registrationNumbers.charityCommission = null
         const result = businessDetailsPresenter(data, sbi)
 
-        expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
+        expect(result.legalStatusRegistrationNumber.value).toBe(NOT_ADDED_TEXT)
         expect(result.legalStatusRegistrationNumber.action).toBe('Add')
         expect(result.legalStatusRegistrationNumber.changeLink).toBe(`/business/${sbi}/legal-status-enter`)
       })
@@ -378,11 +379,11 @@ describe('businessDetailsPresenter', () => {
         })
       })
 
-      test('returns "Not added" and an "Add" action when the companies house number is absent', () => {
+      test('returns NOT_ADDED_TEXT and an "Add" action when the companies house number is absent', () => {
         data.registrationNumbers.companiesHouse = null
         const result = businessDetailsPresenter(data, sbi)
 
-        expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
+        expect(result.legalStatusRegistrationNumber.value).toBe(NOT_ADDED_TEXT)
         expect(result.legalStatusRegistrationNumber.action).toBe('Add')
         expect(result.legalStatusRegistrationNumber.changeLink).toBe(`/business/${sbi}/legal-status-enter`)
       })
@@ -408,12 +409,12 @@ describe('businessDetailsPresenter', () => {
       expect(result.legalStatusRegistrationNumber).toBeNull()
     })
 
-    test('returns "Not added" when the registration numbers are absent entirely', () => {
+    test('returns NOT_ADDED_TEXT when the registration numbers are absent entirely', () => {
       data.legalStatusCode = LEGAL_STATUS.charitableIncorporatedOrganisation.code
       delete data.registrationNumbers
       const result = businessDetailsPresenter(data, sbi)
 
-      expect(result.legalStatusRegistrationNumber.value).toBe('Not added')
+      expect(result.legalStatusRegistrationNumber.value).toBe(NOT_ADDED_TEXT)
     })
   })
 

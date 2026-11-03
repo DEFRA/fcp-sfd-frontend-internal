@@ -36,16 +36,16 @@
       </h1>
 
       {% set displayDOB %}
-        {% if dob.fullDateOfBirth === 'Not added' %}
-          <div><span class="govuk-hint display-inline">Not added</span></div>
+        {% if dob.fullDateOfBirth === notAddedText %}
+          <div><span class="govuk-hint display-inline">{{ notAddedText }}</span></div>
         {% else %}
           <div>{{ dob.fullDateOfBirth }}</div>
         {% endif %}
       {% endset %}
 
       {% set formattedAddress %}
-        {% if personalAddress.address === 'Not added'%}
-          <div><span class="govuk-hint display-inline">Not added</span></div>
+        {% if personalAddress.address === notAddedText %}
+          <div><span class="govuk-hint display-inline">{{ notAddedText }}</span></div>
         {% else %}
           {% for addressLine in personalAddress.address %}
             <div>{{addressLine}}</div>
@@ -56,7 +56,7 @@
       {% set displayPersonalTelephone %}
         <div>
           Telephone:
-          {% if personalTelephone.telephone === 'Not added' %}
+          {% if personalTelephone.telephone === notAddedText %}
             <span class="govuk-hint display-inline">{{ personalTelephone.telephone }}</span>
           {% else %}
             <span>{{ personalTelephone.telephone }}</span>
@@ -64,7 +64,7 @@
         </div>
         <div>
           Mobile:
-          {% if personalTelephone.mobile === 'Not added' %}
+          {% if personalTelephone.mobile === notAddedText %}
             <span class="govuk-hint display-inline">{{ personalTelephone.mobile }}</span>
           {% else %}
             <span>{{ personalTelephone.mobile }}</span>
@@ -73,8 +73,8 @@
       {% endset %}
 
       {% set displayPersonalEmail %}
-        {% if personalEmail.email === 'Not added' %}
-          <div><span class="govuk-hint display-inline">Not added</span></div>
+        {% if personalEmail.email === notAddedText %}
+          <div><span class="govuk-hint display-inline">{{ notAddedText }}</span></div>
         {% else %}
           <div>{{ personalEmail.email }}</div>
         {% endif %}

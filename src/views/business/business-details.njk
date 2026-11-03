@@ -35,24 +35,24 @@
     </h1>
 
     {% set displayBusinessName %}
-      {% if businessName.value === 'Not added' %}
-        <div><span class="govuk-hint display-inline">Not added</span></div>
+      {% if businessName.value === notAddedText %}
+        <div><span class="govuk-hint display-inline">{{ notAddedText }}</span></div>
       {% else %}
         <div>{{ businessName.value }}</div>
       {% endif %}
     {% endset %}
 
     {% set displayBusinessEmail %}
-      {% if businessEmail.value === 'Not added' %}
-        <div><span class="govuk-hint display-inline">Not added</span></div>
+      {% if businessEmail.value === notAddedText %}
+        <div><span class="govuk-hint display-inline">{{ notAddedText }}</span></div>
       {% else %}
         <div>{{ businessEmail.value }}</div>
       {% endif %}
     {% endset %}
 
     {% set formattedAddress %}
-      {% if businessAddress.value === 'Not added' %}
-        <div><span class="govuk-hint display-inline">Not added</span></div>
+      {% if businessAddress.value === notAddedText %}
+        <div><span class="govuk-hint display-inline">{{ notAddedText }}</span></div>
       {% else %}
         {% for addressLine in businessAddress.value %}
           <div>{{ addressLine }}</div>
@@ -69,7 +69,7 @@
     {% set displayBusinessTelephone %}
       <div>
         Telephone:
-        {% if businessTelephone.telephone === 'Not added' %}
+        {% if businessTelephone.telephone === notAddedText %}
           <span class="govuk-hint display-inline">{{ businessTelephone.telephone }}</span>
         {% else %}
           <span>{{ businessTelephone.telephone }}</span>
@@ -77,7 +77,7 @@
       </div>
       <div>
         Mobile:
-        {% if businessTelephone.mobile === 'Not added' %}
+        {% if businessTelephone.mobile === notAddedText %}
           <span class="govuk-hint display-inline">{{ businessTelephone.mobile }}</span>
         {% else %}
           <span>{{ businessTelephone.mobile }}</span>
@@ -86,7 +86,7 @@
     {% endset %}
 
     {% set displayVatNumber %}
-      {% if vatNumber.value === 'Not added' %}
+      {% if vatNumber.value === notAddedText %}
         <span class="govuk-hint display-inline">{{ vatNumber.value }}</span>
       {% else %}
         <span>{{ vatNumber.value }}</span>
@@ -224,7 +224,7 @@
 
     {% if legalStatusRegistrationNumber %}
       {% set legalStatusRegistrationNumberDisplay %}
-        {% if legalStatusRegistrationNumber.value === 'Not added' %}
+        {% if legalStatusRegistrationNumber.value === notAddedText %}
           <span class="govuk-hint display-inline">{{ legalStatusRegistrationNumber.value }}</span>
         {% else %}
           <span>{{ legalStatusRegistrationNumber.value }}</span>
@@ -255,7 +255,7 @@
     </h2>
 
     {% set businessLegalStatusDisplay %}
-      {% if businessLegalStatus.value === 'Not added' %}
+      {% if businessLegalStatus.value === notAddedText %}
         <span class="govuk-hint display-inline">{{ businessLegalStatus.value }}</span>
       {% else %}
         <span>{{ businessLegalStatus.value }}</span>
@@ -263,7 +263,7 @@
     {% endset %}
 
     {% set businessTypeDisplay %}
-      {% if businessType.value === 'Not added' %}
+      {% if businessType.value === notAddedText %}
         <span class="govuk-hint display-inline">{{ businessType.value }}</span>
       {% else %}
         <span>{{ businessType.value }}</span>

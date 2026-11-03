@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import nunjucks from 'nunjucks'
 import hapiVision from '@hapi/vision'
+import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 import { config } from '../../config/index.js'
 import { context } from './context.js'
@@ -25,6 +26,7 @@ export const nunjucksEnvironment = nunjucks.configure(
 )
 
 nunjucksEnvironment.addGlobal('govukRebrand', true)
+nunjucksEnvironment.addGlobal('notAddedText', constants.NOT_ADDED_TEXT)
 
 Object.entries(filters).forEach(([name, filter]) => {
   nunjucksEnvironment.addFilter(name, filter)

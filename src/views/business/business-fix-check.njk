@@ -79,7 +79,7 @@
                     {{ businessTelephone.telephone }}
                   {% else %}
                     <span class="govuk-hint">
-                      Not added
+                      {{ notAddedText }}
                     </span>
                   {% endif %}
                   <br>
@@ -88,7 +88,7 @@
                     {{ businessTelephone.mobile }}
                   {% else %}
                     <span class="govuk-hint">
-                      Not added
+                      {{ notAddedText }}
                     </span>
                   {% endif %}
                 </p>
@@ -137,7 +137,7 @@
                 {% if vatNumber %}
                   <span>{{ vatNumber }}</span>
                 {% else %}
-                  <span class="govuk-hint display-inline">Not added</span>
+                  <span class="govuk-hint display-inline">{{ notAddedText }}</span>
                 {% endif %}
               {% endset %}
 

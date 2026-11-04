@@ -1,5 +1,6 @@
 /**
- * Formats data ready for presenting in the `/customer/{CRN}/account-date-of-birth-check` page
+ * Formats data ready for presenting in the `/customer/{crn}/account-date-of-birth-check` page
+ *
  * @module personalDobCheckPresenter
  */
 
@@ -8,6 +9,14 @@ import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const { PERSONAL: PERSONAL_CHANGE_LINKS } = constants.changeLinks.internal
 
+/**
+ * Formats data ready for presenting in the `/customer/{crn}/account-date-of-birth-check` page
+ *
+ * @param {object} data - The customer data, including any pending date of birth change held in the session
+ * @param {string} crn - The Customer Reference Number
+ *
+ * @returns {object} The page data for the view
+ */
 const personalDobCheckPresenter = (data, crn) => {
   const { day, month, year } = data.changePersonalDob ?? data.dateOfBirth
   // new Date() needs the format YYYY-MM-DD with leading zeros e.g. '1990-04-05' not '1990-4-5'

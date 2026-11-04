@@ -1,7 +1,13 @@
+/**
+ * Creates the cookie configuration that keeps users logged in
+ *
+ * @module getCookieOptions
+ */
+
 import { config } from '../../config/index.js'
 
 /**
- * Creates the cookie configuration that keeps users logged in.
+ * Creates the cookie configuration that keeps users logged in
  *
  * If the session cookie doesn't exist or has expired, users are redirected to the
  * sign-in page with their original URL preserved in the redirect parameter so they

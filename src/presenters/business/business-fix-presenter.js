@@ -1,5 +1,6 @@
 /**
  * Formats data ready for presenting in the `/business/{sbi}/details/fix` page
+ *
  * @module businessFixPresenter
  */
 
@@ -8,6 +9,14 @@ import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const { BUSINESS_SECTION_ORDER, BUSINESS_UPDATE_TEXT_LABELS, BUSINESS_SECTION_LABELS } = constants.interrupterJourney
 
+/**
+ * Formats data ready for presenting in the `/business/{sbi}/details/fix` page
+ *
+ * @param {object} data - The business data, including the source section and ordered sections to fix
+ * @param {string} sbi - The Single Business Identifier
+ *
+ * @returns {object} The page data for the view
+ */
 const businessFixPresenter = (data, sbi) => {
   const { source, orderedSectionsToFix } = data
   const hasMultipleErrors = orderedSectionsToFix.length > 2
@@ -57,7 +66,7 @@ const buildListOfErrors = (orderedSectionsToFix, source) => {
  * Behaviour:
  * - If exactly two sections need fixing, both are named explicitly in the text.
  * - If more than two sections need fixing and a source is provided, the source
- *   section is named and the remaining fixes are implied.
+ * section is named and the remaining fixes are implied.
  * - If no source is provided, a generic message is shown.
  *
  * Note: There should never be a case where only one section needs fixing,

@@ -1,6 +1,22 @@
+/**
+ * Sets security response headers
+ *
+ * @module headers
+ */
+
 export const headersPlugin = {
   plugin: {
     name: 'headers',
+
+    /**
+     * Sets security response headers
+     *
+     * Also disables caching for every route except the index page and assets, so sensitive data cannot be shown
+     * from the browser history after the user has signed out.
+     *
+     * @param {object} server - The Hapi server
+     * @param {object} _options - The plugin options (unused)
+     */
     register: (server, _options) => {
       server.ext('onPreResponse', (request, h) => {
         const headers = request.response.headers

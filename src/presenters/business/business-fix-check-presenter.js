@@ -1,10 +1,19 @@
 /**
  * Formats data ready for presenting in the `/business/{sbi}/details/fix-check` page
+ *
  * @module businessFixCheckPresenter
  */
 
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
+/**
+ * Formats data ready for presenting in the `/business/{sbi}/details/fix-check` page
+ *
+ * @param {object} data - The business data, including the ordered sections to fix and any pending changes held in the session
+ * @param {string} sbi - The Single Business Identifier
+ *
+ * @returns {object} The page data for the view
+ */
 const businessFixCheckPresenter = (data, sbi) => {
   const {
     orderedSectionsToFix,

@@ -1,5 +1,6 @@
 /**
- * Formats data ready for presenting in the `/business/{sbi}/legal-status-enter` page
+ * Formats data for the `charity` or `company` variant of the `/business/{sbi}/legal-status-enter` page
+ *
  * @module businessLegalStatusEnterPresenter
  */
 

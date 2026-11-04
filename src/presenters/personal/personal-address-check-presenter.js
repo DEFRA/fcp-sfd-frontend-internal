@@ -1,11 +1,19 @@
 /**
- * Formats data ready for presenting in the `/account-address-check` page
+ * Formats data ready for presenting in the `/customer/{crn}/account-address-check` page
+ *
  * @module personalAddressCheckPresenter
  */
 
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
+/**
+ * Formats data ready for presenting in the `/customer/{crn}/account-address-check` page
+ *
+ * @param {object} data - The customer data, including any pending address change held in the session
+ *
+ * @returns {object} The page data for the view
+ */
 const personalAddressCheckPresenter = (data) => {
   const { changePersonalAddress, address, crn, userName } = data
 
@@ -23,6 +31,7 @@ const personalAddressCheckPresenter = (data) => {
     address: formatAddress(changePersonalAddress, address)
   }
 }
+
 /**
  * Formats the personal address into an array of address parts.
  *

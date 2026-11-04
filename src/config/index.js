@@ -1,3 +1,9 @@
+/**
+ * Application configuration, combining all config schemas
+ *
+ * @module index
+ */
+
 import convict from 'convict'
 import { serverConfig } from './server.js'
 import { nunjucksConfig } from './nunjucks.js'

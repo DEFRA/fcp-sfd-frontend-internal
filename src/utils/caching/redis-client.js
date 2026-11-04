@@ -1,7 +1,28 @@
+/**
+ * Creates the Redis client, as a single instance or a cluster
+ *
+ * @module redisClient
+ */
+
 import { Cluster, Redis } from 'ioredis'
 
 import { createLogger } from '../logger.js'
 
+/**
+ * Creates the Redis client, as a single instance or a cluster
+ *
+ * Credentials are only used when a username is configured, and TLS only when enabled in the config.
+ *
+ * @param {object} redisConfig - The Redis config
+ * @param {string} redisConfig.host - The Redis host
+ * @param {string} redisConfig.keyPrefix - The prefix applied to all keys
+ * @param {string} redisConfig.username - The username, empty if none is required
+ * @param {string} redisConfig.password - The password
+ * @param {boolean} redisConfig.useTLS - Whether to connect using TLS
+ * @param {boolean} redisConfig.useSingleInstanceCache - Whether to use a single instance rather than a cluster
+ *
+ * @returns {object} The Redis or Cluster client
+ */
 export const buildRedisClient = (redisConfig) => {
   const logger = createLogger()
   const port = 6379

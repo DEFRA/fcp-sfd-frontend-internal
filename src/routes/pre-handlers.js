@@ -1,3 +1,9 @@
+/**
+ * Pre-handlers guarding routes and validating route params
+ *
+ * @module preHandlers
+ */
+
 import { schemas, services, constants } from '@defra/fcp-sfd-frontend-engine'
 import { fetchBusinessChangeService } from '../services/business/fetch-business-change-service.js'
 import { BUSINESS_LEGAL_STATUS_SESSION_FIELDS } from '../constants/business-legal-status-session-fields.js'

@@ -27,6 +27,28 @@ This document defines the standards an agent must apply when reviewing or writin
 - Match the style and conventions of the surrounding code
 - All internal `import` paths must include the `.js` extension
 - All `import` statements must be at the top of the file, after the `@module` JSDoc and before any function definitions
+- Every file starts with a `@module` JSDoc block; route files in `src/routes/` (other than `pre-handlers.js`) are exempt. The `@module` value is the camelCase file name (e.g. `fetch-business-change-service.js` is `@module fetchBusinessChangeService`), and a blank ` *` line separates the description from the `@module` tag. Do not add `'use strict'` — ESM modules are always strict
+- JSDoc is required on all exported functions — use a description, `@param {type} name - description`, and `@returns {type}`. The `@module` block's description must match the first line of the main exported function's JSDoc description, for example [business-vat-change-presenter.js](../../../src/presenters/business/business-vat-change-presenter.js):
+
+  ```js
+  /**
+   * Formats data ready for presenting in the `/business/{sbi}/vat-registration-number-change` page
+   *
+   * @module businessVatChangePresenter
+   */
+
+  import { SEARCH_SBI } from '../../constants/search-links.js'
+
+  /**
+   * Formats data ready for presenting in the `/business/{sbi}/vat-registration-number-change` page
+   *
+   * @param {object} data - The business data, including any pending VAT number change held in the session
+   * @param {string} [payload] - The VAT number submitted by the user, when the form is re-rendered after a validation failure
+   *
+   * @returns {object} The page data for the view
+   */
+  const businessVatChangePresenter = (data, payload) => {
+  ```
 - No inline comments unless the *why* is genuinely non-obvious
 - No error handling for scenarios that cannot happen
 - No abstractions for a single use case

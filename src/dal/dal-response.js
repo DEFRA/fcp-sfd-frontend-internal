@@ -1,11 +1,25 @@
 /**
- * Shapes raw DAL responses into a consistent format.
+ * Takes the raw JSON body from the DAL and returns a formatted response.
+ *
  * Responses from the DAL (success or error) pass through here
  * so the rest of the app always gets the same { data, statusCode, errors } shape.
+ *
+ * @module dalResponse
  */
 import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 // Default contract expected by services and tests.
+
+/**
+ * Formats a DAL response into the { data, statusCode, errors } shape
+ *
+ * @param {object} response - The response parts
+ * @param {object} [response.data] - The response data
+ * @param {object[]} [response.errors] - The mapped errors
+ * @param {number} [response.statusCode] - The HTTP status code, defaulting to 200
+ *
+ * @returns {{data: object, statusCode: number, errors: object[]}} The formatted response
+ */
 const formatDalResponse = ({
   data = null,
   errors = null,
@@ -37,6 +51,10 @@ const mapDalErrors = (responseErrors) => {
  * Takes the raw JSON body from the DAL and returns a formatted response.
  * If the body contains errors they are mapped and normalised first;
  * otherwise the data is passed through as a success.
+ *
+ * @param {object} responseBody - The raw JSON body from the DAL
+ *
+ * @returns {{data: object, statusCode: number, errors: object[]}} The formatted response
  */
 const handleDalResponse = (responseBody) => {
   if (responseBody.errors) {

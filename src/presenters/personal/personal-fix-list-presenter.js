@@ -1,11 +1,25 @@
 /**
  * Formats data ready for presenting in the `/customer/{crn}/details/fix-list` page
+ *
  * @module personalFixListPresenter
  */
 
 import { presenters, constants } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
+/**
+ * Formats data ready for presenting in the `/customer/{crn}/details/fix-list` page
+ *
+ * Each field shows the submitted payload if present, then any value already fixed earlier in the
+ * journey, then the original customer record.
+ *
+ * @param {object} data - The customer data, including the ordered sections to fix and any pending changes held in the session
+ * @param {object} [payload] - The form values submitted by the user, when the form is re-rendered after a validation failure
+ * @param {string} crn - The Customer Reference Number
+ * @param {object} [errors] - The validation errors to display, if any
+ *
+ * @returns {object} The page data for the view
+ */
 const personalFixListPresenter = (data, payload, crn, errors = null) => {
   const { day, month, year } = formatDateOfBirth(data, payload)
   const { PERSONAL_SECTION_FIELD_ORDER } = constants.interrupterJourney

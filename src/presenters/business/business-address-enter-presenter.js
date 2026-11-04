@@ -1,5 +1,6 @@
 /**
  * Formats data ready for presenting in the `/business/{sbi}/address-enter` page
+ *
  * @module businessAddressEnterPresenter
  */
 
@@ -8,6 +9,14 @@ import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
 
+/**
+ * Formats data ready for presenting in the `/business/{sbi}/address-enter` page
+ *
+ * @param {object} data - The business data, including any pending address change held in the session
+ * @param {object} [payload] - The address submitted by the user, when the form is re-rendered after a validation failure
+ *
+ * @returns {object} The page data for the view
+ */
 const businessAddressEnterPresenter = (data, payload) => {
   const sbi = data.sbi
 
@@ -27,23 +36,28 @@ const businessAddressEnterPresenter = (data, payload) => {
  * The function prioritises the input parameters in the following order:
  *
  * 1. If `payload` exists, it is returned as-is.
- *    This usually occurs when validation has failed and the form needs to be
- *    re-rendered with the user's submitted values.
+ * This usually occurs when validation has failed and the form needs to be
+ * re-rendered with the user's submitted values.
  *
  * 2. If `changeBusinessAddress` exists:
- *    - If it contains a `uprn`, it indicates the address was selected from
- *      the postcode lookup. The lookup fields are mapped into the manual
- *      address structure used by the form.
- *
- *    - If no `uprn` is present, the address is assumed to have been manually
- *      entered and is returned as-is.
+ * - If it contains a `uprn`, it indicates the address was selected from
+ * the postcode lookup. The lookup fields are mapped into the manual
+ * address structure used by the form.
+ * - If no `uprn` is present, the address is assumed to have been manually
+ * entered and is returned as-is.
  *
  * 3. If `originalAddress` exists:
- *    - If `lookup.uprn` is present, the lookup address is mapped into the
- *      manual address structure used by the form.
- *    - Otherwise, the manual address lines are used.
+ * - If `lookup.uprn` is present, the lookup address is mapped into the
+ * manual address structure used by the form.
+ * - Otherwise, the manual address lines are used.
  *
  * Returns `null` if no address data is available.
+ *
+ * @param {object} [payload] - The address submitted by the user
+ * @param {object} [changeBusinessAddress] - The pending address change held in the session
+ * @param {object} [originalAddress] - The current business address mapped from the DAL
+ *
+ * @returns {object|null} The address in the manual address structure, or `null` if none is available
  */
 const formatAddress = (payload, changeBusinessAddress, originalAddress) => {
   if (payload) {

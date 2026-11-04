@@ -14,6 +14,17 @@ import { updateDalService } from '../DAL/update-dal-service.js'
 import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 
+/**
+ * Service to update a business's VAT registration number
+ *
+ * Does nothing if there is no pending VAT change.
+ *
+ * @param {object} yar - The hapi `request.yar` object
+ * @param {string} sbi - The Single Business Identifier
+ * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
+ *
+ * @returns {Promise<void>}
+ */
 const updateBusinessVatChangeService = async (yar, sbi, email) => {
   const businessDetails = await fetchBusinessChangeService(yar, sbi, email, 'changeBusinessVat')
 

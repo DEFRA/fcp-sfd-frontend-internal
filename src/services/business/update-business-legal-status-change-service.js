@@ -17,6 +17,18 @@ import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 import { BUSINESS_LEGAL_STATUS_SESSION_FIELDS } from '../../constants/business-legal-status-session-fields.js'
 
+/**
+ * Service to update a business's legal status
+ *
+ * Does nothing if neither the legal status nor a relevant registration number has changed. Throws if either
+ * mutation does not report success.
+ *
+ * @param {object} yar - The hapi `request.yar` object
+ * @param {string} sbi - The Single Business Identifier
+ * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
+ *
+ * @returns {Promise<void>}
+ */
 const updateBusinessLegalStatusChangeService = async (yar, sbi, email) => {
   const businessDetails = await fetchBusinessChangeService(yar, sbi, email, BUSINESS_LEGAL_STATUS_SESSION_FIELDS)
 

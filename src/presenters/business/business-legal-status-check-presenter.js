@@ -1,5 +1,6 @@
 /**
- * Formats data ready for presenting in the `legal-status-check` page
+ * Formats data ready for presenting in the `/business/{sbi}/legal-status-check` page
+ *
  * @module businessLegalStatusCheckPresenter
  */
 
@@ -8,6 +9,16 @@ import { SEARCH_SBI } from '../../constants/search-links.js'
 
 const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
 
+/**
+ * Formats data ready for presenting in the `/business/{sbi}/legal-status-check` page
+ *
+ * The back link depends on the legal status: charities and companies return to the registration
+ * number page, other legal statuses return to the legal status page.
+ *
+ * @param {object} data - The business data, including any pending legal status and registration number changes held in the session
+ *
+ * @returns {object} The page data for the view
+ */
 const businessLegalStatusCheckPresenter = (data) => {
   const sbi = data.sbi
   const legalStatusCode = String(data.changeBusinessLegalStatus ?? data.legalStatusCode ?? '')

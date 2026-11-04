@@ -1,5 +1,6 @@
 /**
- * Formats data ready for presenting in the `/account-address-select` page
+ * Formats data ready for presenting in the `/customer/{crn}/account-address-select` page
+ *
  * @module personalAddressSelectPresenter
  */
 
@@ -8,6 +9,13 @@ import { SEARCH_CRN } from '../../constants/search-links.js'
 
 const { PERSONAL: PERSONAL_CHANGE_LINKS } = constants.changeLinks.internal
 
+/**
+ * Formats data ready for presenting in the `/customer/{crn}/account-address-select` page
+ *
+ * @param {object} data - The customer data, including the postcode lookup results held in the session
+ *
+ * @returns {object} The page data for the view
+ */
 const personalAddressSelectPresenter = (data) => {
   const crn = data.crn
 

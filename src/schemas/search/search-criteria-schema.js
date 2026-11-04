@@ -1,3 +1,9 @@
+/**
+ * Joi schema for validating search criteria
+ *
+ * @module searchCriteriaSchema
+ */
+
 import Joi from 'joi'
 
 const VALID_VALUES = ['sbi', 'crn']

@@ -1,11 +1,25 @@
 /**
  * Formats data ready for presenting in the `/business/{sbi}/details/fix-list` page
+ *
  * @module businessFixListPresenter
  */
 
 import { presenters, constants } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
+/**
+ * Formats data ready for presenting in the `/business/{sbi}/details/fix-list` page
+ *
+ * Each field shows the submitted payload if present, then any value already fixed earlier in the
+ * journey, then the original business record.
+ *
+ * @param {object} data - The business data, including the ordered sections to fix and any pending changes held in the session
+ * @param {object} [payload] - The form values submitted by the user, when the form is re-rendered after a validation failure
+ * @param {string} sbi - The Single Business Identifier
+ * @param {object} [errors] - The validation errors to display, if any
+ *
+ * @returns {object} The page data for the view
+ */
 const businessFixListPresenter = (data, payload, sbi, errors = null) => {
   const { BUSINESS_SECTION_FIELD_ORDER } = constants.interrupterJourney
 

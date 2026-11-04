@@ -1,3 +1,9 @@
+/**
+ * Search page links and view names
+ *
+ * @module searchLinks
+ */
+
 export const SEARCH_SBI = '/search-sbi'
 export const SEARCH_SBI_VIEW = 'search/search-sbi'
 

@@ -1,11 +1,23 @@
 /**
- * Formats data ready for presenting on the `/business/{sbi}/phone-numbers-change` page
+ * Formats data ready for presenting in the `/business/{sbi}/phone-numbers-change` page
+ *
  * @module businessPhoneNumbersChangePresenter
  */
 
 import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
+/**
+ * Formats data ready for presenting in the `/business/{sbi}/phone-numbers-change` page
+ *
+ * Each number is, in order of preference, the submitted payload, the pending change held in the
+ * session, or the current number from the DAL.
+ *
+ * @param {object} data - The business data, including any pending phone number change held in the session
+ * @param {object} [payload] - The phone numbers submitted by the user, when the form is re-rendered after a validation failure
+ *
+ * @returns {object} The page data for the view
+ */
 const businessPhoneNumbersChangePresenter = (data, payload) => {
   const sbi = data.sbi
 

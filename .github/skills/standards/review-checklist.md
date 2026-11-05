@@ -38,6 +38,7 @@ See `../testing/SKILL.md` for testing patterns and conventions.
 Apply the Writing code and Refactoring sections in [SKILL.md](./SKILL.md).
 
 - No commented-out code.
+- Private functions and object keys are in alphabetical order.
 - Functions and variables have descriptive names.
 - Complex logic has explanatory comments or is split into named functions.
 - Avoid magic numbers or strings; use named constants.

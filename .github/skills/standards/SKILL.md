@@ -32,6 +32,24 @@ This document defines the standards an agent must apply when reviewing or writin
 - No abstractions for a single use case
 - Private functions must be ordered alphabetically by name
   - Exception: where helpers form a sequential flow that reads top to bottom (for example `src/presenters/pagination-presenter.js`, `src/dal/connector.js` and `src/config/logger-options.js`), keep the flow order
+- Object keys must be in alphabetical order (A–Z) in every object literal: return values, inline objects, export declarations and test assertions
+  - Exception: keep the existing order where it changes behaviour, for example keys that follow a spread and override it
+
+```js
+// Bad
+return {
+  pageTitle: 'Jokes',
+  joke: data.joke,
+  backLink: { href: '/', text: 'Back' }
+}
+
+// Good
+return {
+  backLink: { href: '/', text: 'Back' },
+  joke: data.joke,
+  pageTitle: 'Jokes'
+}
+```
 
 ## Testing
 

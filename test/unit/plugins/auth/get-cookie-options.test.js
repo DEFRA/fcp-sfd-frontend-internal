@@ -34,10 +34,6 @@ describe('getCookieOptions', () => {
     expect(getCookieOptions(mockValidateToken).cookie).toBeInstanceOf(Object)
   })
 
-  test('should return a redirectTo function', () => {
-    expect(getCookieOptions(mockValidateToken).redirectTo).toBeInstanceOf(Function)
-  })
-
   test('should return a validate function', () => {
     expect(getCookieOptions(mockValidateToken).validate).toBeInstanceOf(Function)
   })
@@ -63,33 +59,8 @@ describe('getCookieOptions', () => {
   })
 
   describe('redirectTo', () => {
-    const mockValidateTokenFn = vi.fn()
-    const redirectTo = getCookieOptions(mockValidateTokenFn).redirectTo
-    const request = {
-      url: {
-        pathname: '/search-sbi',
-        search: '?query=string'
-      }
-    }
-
-    test('should redirect to sign-in route', () => {
-      expect(redirectTo(request).startsWith('/auth/sign-in')).toBe(true)
-    })
-
-    test('should include encoded redirect param in redirection to intended path', () => {
-      expect(redirectTo(request)).toContain('redirect=%2Fsearch-sbi%3Fquery%3Dstring')
-    })
-
-    test('should properly encode redirect URL with multiple query parameters', () => {
-      const requestWithMultipleParams = {
-        url: {
-          pathname: '/search-sbi',
-          search: '?sbi=123&crn=456'
-        }
-      }
-      const result = redirectTo(requestWithMultipleParams)
-      // Verify the entire URL is encoded as a single value, preventing parameter injection
-      expect(result).toBe('/auth/sign-in?redirect=%2Fsearch-sbi%3Fsbi%3D123%26crn%3D456')
+    test('should redirect to sign-in route without a redirect param', () => {
+      expect(getCookieOptions(vi.fn()).redirectTo).toBe('/auth/sign-in')
     })
   })
 

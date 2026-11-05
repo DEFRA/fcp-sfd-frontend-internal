@@ -14,11 +14,6 @@ vi.mock('../../../../src/config/index.js', () => ({
   }
 }))
 
-const mockGetSafeRedirect = vi.fn()
-vi.mock('../../../../src/utils/get-safe-redirect.js', () => ({
-  getSafeRedirect: mockGetSafeRedirect
-}))
-
 const mockRefreshTokens = vi.fn()
 vi.mock('../../../../src/auth/refresh-tokens.js', () => ({
   refreshTokens: mockRefreshTokens
@@ -145,33 +140,15 @@ describe('client-secret strategy', () => {
 
     describe('location', () => {
       const location = getBellOptions(mockOidcConfig).location
-      let request
-
-      beforeEach(() => {
-        vi.clearAllMocks()
-        mockGetSafeRedirect.mockReturnValue('/search-sbi')
-        request = {
-          query: {},
-          yar: {
-            set: vi.fn()
-          }
-        }
-      })
 
       test('should return redirectUrl from config', () => {
-        expect(location(request)).toBe('mockRedirectUrl')
+        expect(location({ query: {} })).toBe('mockRedirectUrl')
       })
 
-      test('should check redirect link is safe if redirect query param is present', () => {
-        request.query.redirect = '/redirect'
+      test('should not store a redirect in the session when a redirect query param is present', () => {
+        const request = { query: { redirect: '/redirect' }, yar: { set: vi.fn() } }
         location(request)
-        expect(mockGetSafeRedirect).toHaveBeenCalledWith('/redirect')
-      })
-
-      test('should set safe redirect path in session if redirect query param is present', () => {
-        request.query.redirect = '/redirect'
-        location(request)
-        expect(request.yar.set).toHaveBeenCalledWith('redirect', '/search-sbi')
+        expect(request.yar.set).not.toHaveBeenCalled()
       })
     })
 

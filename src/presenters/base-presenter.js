@@ -74,7 +74,7 @@ export const formatAddressLines = (address) => {
  * @param {string} idLabel - The label for the identifier, e.g. 'SBI' or 'CRN'
  * @param {string} id - The SBI or CRN value
  *
- * @returns {string} e.g. "Alfred Waldron (CRN: 1101996862)" or "SBI: 123456789" when there's no name
+ * @returns {string} e.g. "Alfred Waldron (CRN: 9876543210)" or "SBI: 876543210" when there's no name
  */
 export const formatBreadcrumbLabel = (name, idLabel, id) => {
   return name ? `${name} (${idLabel}: ${id})` : `${idLabel}: ${id}`

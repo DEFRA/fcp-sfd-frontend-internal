@@ -53,16 +53,16 @@ const formatters = {
  *
  * Request lifecycle and logging:
  *
- * 1. User makes HTTP request (e.g., GET `/customer/1100014934/details`)
+ * 1. User makes HTTP request (e.g., GET `/customer/9876543210/details`)
  *
  * 2. hapi-pino's `onRequest` extension fires (BEFORE route matching):
  * - Creates a child logger for this request
  * - Calls `req` serializer → masks URL path via maskSensitivePath() using regex
- * - Log object includes masked URL: `/customer/******4934/details`
+ * - Log object includes masked URL: `/customer/******3210/details`
  * - At this point, request.params is still empty `{}` — routing hasn't happened yet
  *
  * 3. Hapi matches the route (now request.params is populated):
- * - request.params.crn becomes `"1100014934"`
+ * - request.params.crn becomes `"9876543210"`
  * - But hapi-pino's serializer already ran in step 2, so this doesn't affect the
  * URL field masking (which happened via regex on the path string)
  *
@@ -71,7 +71,7 @@ const formatters = {
  * 5. Response is sent:
  * - customRequestCompleteMessage() builds final message string
  * - Calls maskSensitivePath() again on the URL
- * - Creates message: `"[response] get /customer/******4934/details 200 (45ms)"`
+ * - Creates message: `"[response] get /customer/******3210/details 200 (45ms)"`
  *
  * 6. Log sent to stdout/Elasticsearch:
  * - CRN fully masked in the message and url fields (via maskSensitivePath at onRequest time)

@@ -4,8 +4,8 @@ import { config } from '../../config/index.js'
  * Creates the cookie configuration that keeps users logged in.
  *
  * If the session cookie doesn't exist or has expired, users are redirected to the
- * sign-in page with their original URL preserved in the redirect parameter so they
- * can be sent back to the intended page after logging in.
+ * sign-in page. After signing in they always land on the SBI search page rather than
+ * the page they originally requested.
  *
  * SameSite is set to 'Lax' to allow post-login redirects while maintaining security.
  *
@@ -22,10 +22,7 @@ function getCookieOptions (validateToken) {
       isSecure: sessionCookieSecure,
       isSameSite: 'Lax'
     },
-    redirectTo: function (request) {
-      const redirectUrl = `${request.url.pathname}${request.url.search}`
-      return `/auth/sign-in?redirect=${encodeURIComponent(redirectUrl)}`
-    },
+    redirectTo: '/auth/sign-in',
     validate: async (request, session) => validateToken(request, session)
   }
 }

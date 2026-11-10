@@ -4,6 +4,15 @@ import { verifyToken } from '../../auth/verify-token.js'
 import { config } from '../../config/index.js'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
+async function hasValidSession (request) {
+  try {
+    await request.server.auth.test('session', request)
+    return true
+  } catch {
+    return false
+  }
+}
+
 const signIn = {
   method: 'GET',
   path: '/auth/sign-in',
@@ -22,12 +31,17 @@ const signInOidc = {
     auth: { strategy: 'entra', mode: 'try' }
   },
   handler: async function (request, h) {
-    const { auth, server, logger, cookieAuth, yar } = request
+    const { auth, server, logger, cookieAuth } = request
 
-    // If the user is not authenticated, redirect to the home page
-    // This should only occur if the user tries to access the sign-in page directly and not part of the sign-in flow
-    // eg if the user has bookmarked the Entra sign-in page or they have signed out and tried to go back in the browser
+    // Entra authentication fails if the callback is replayed, eg the user presses the browser back button after
+    // signing in, because Bell's single-use state cookie has already been consumed.
+    // If they already have a valid session, send them to the landing page rather than showing an error.
+    // Otherwise they reached the callback outside the sign-in flow, eg a bookmarked Entra sign-in page.
     if (!auth.isAuthenticated) {
+      if (await hasValidSession(request)) {
+        return h.redirect(SEARCH_SBI)
+      }
+
       return h.view('unauthorised')
     }
 
@@ -61,8 +75,6 @@ const signInOidc = {
 
     // Create a new session using cookie authentication strategy which is used for all subsequent requests
     cookieAuth.set({ sessionId })
-
-    yar.clear('redirect')
 
     return h.redirect(SEARCH_SBI)
   }

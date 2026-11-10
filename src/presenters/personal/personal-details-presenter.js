@@ -9,6 +9,7 @@ import { config } from '../../config/index.js'
 import { buildEntityBreadcrumbs } from '../base-presenter.js'
 
 const { PERSONAL: PERSONAL_CHANGE_LINKS } = constants.changeLinks.internal
+const { NOT_ADDED_TEXT } = constants
 
 /**
  * Formats data ready for presenting in the personal details page '/customer/{crn}/details'.
@@ -50,13 +51,13 @@ const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNe
       changeLink: changeLinks.address
     },
     personalTelephone: {
-      telephone: data.telephone || 'Not added',
-      mobile: data.mobile || 'Not added',
+      telephone: data.telephone || NOT_ADDED_TEXT,
+      mobile: data.mobile || NOT_ADDED_TEXT,
       action: getActionText(data.telephone || data.mobile),
       changeLink: changeLinks.phone
     },
     personalEmail: {
-      email: data.email || 'Not added',
+      email: data.email || NOT_ADDED_TEXT,
       action: getActionText(data.email),
       changeLink: changeLinks.email
     }
@@ -64,7 +65,7 @@ const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNe
 }
 
 const formatAddress = (personalAddress) => {
-  let addressText = 'Not added'
+  let addressText = NOT_ADDED_TEXT
 
   if (personalAddress.lookup?.uprn || personalAddress.manual?.line1) {
     addressText = presenters.formatDisplayAddress(personalAddress)
@@ -118,14 +119,14 @@ const formatChangeLinks = (crn, hasValidPersonalDetails, sectionsNeedingUpdate =
 
 const formatDob = (dob) => {
   if (!dob) {
-    return { formattedDob: 'Not added', action: 'Add' }
+    return { formattedDob: NOT_ADDED_TEXT, action: 'Add' }
   }
 
   const date = new Date(dob)
 
   // getTime() returns NaN for invalid dates
   if (Number.isNaN(date.getTime()) || date > new Date()) {
-    return { formattedDob: 'Not added', action: 'Add' }
+    return { formattedDob: NOT_ADDED_TEXT, action: 'Add' }
   }
 
   return {

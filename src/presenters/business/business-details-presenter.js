@@ -9,6 +9,7 @@ import { config } from '../../config/index.js'
 import { buildEntityBreadcrumbs } from '../base-presenter.js'
 
 const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
+const { NOT_ADDED_TEXT } = constants
 
 const CHANGE_LINK = '#'
 
@@ -39,27 +40,27 @@ const businessDetailsPresenter = (data, sbi, yar, hasValidBusinessDetails, secti
     metaDescription: 'View and update your business details.',
     sbi,
     breadcrumbs: buildEntityBreadcrumbs('sbi', sbi, businessName, `/business/${sbi}`),
-    businessName: buildValueDisplay(businessName, 'Not added', changeLinks.name),
+    businessName: buildValueDisplay(businessName, NOT_ADDED_TEXT, changeLinks.name),
     businessAddress: {
-      value: hasAddress ? addressLines : 'Not added',
+      value: hasAddress ? addressLines : NOT_ADDED_TEXT,
       action: presenters.getActionText(hasAddress),
       changeLink: changeLinks.address
     },
     businessTelephone: {
-      telephone: landline || 'Not added',
-      mobile: mobile || 'Not added',
+      telephone: landline || NOT_ADDED_TEXT,
+      mobile: mobile || NOT_ADDED_TEXT,
       action: presenters.getActionText(landline || mobile),
       changeLink: changeLinks.phone
     },
-    businessEmail: buildValueDisplay(email, 'Not added', changeLinks.email),
+    businessEmail: buildValueDisplay(email, NOT_ADDED_TEXT, changeLinks.email),
     vatNumber: buildVatDisplay(vat, sbi, changeLinks.vat),
     tradeNumber: traderNumber ?? null,
     vendorNumber: vendorNumber ?? null,
     countyParishHoldingNumbers,
     countyParishHoldingNumbersText: presenters.formatCphText(countyParishHoldingNumbers.length),
-    businessLegalStatus: buildValueDisplay(legalStatus, 'Not added', BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)),
+    businessLegalStatus: buildValueDisplay(legalStatus, NOT_ADDED_TEXT, BUSINESS_CHANGE_LINKS.businessLegalStatus(sbi)),
     legalStatusRegistrationNumber: buildLegalStatusRegistrationNumberDisplay(data, sbi),
-    businessType: buildValueDisplay(type, 'Not added', CHANGE_LINK)
+    businessType: buildValueDisplay(type, NOT_ADDED_TEXT, CHANGE_LINK)
   }
 }
 
@@ -67,7 +68,7 @@ const businessDetailsPresenter = (data, sbi, yar, hasValidBusinessDetails, secti
  * Builds the value, action and changeLink for a simple business details field.
  *
  * Most fields on this page just need to show their value (or a fallback like
- * "Not added"), work out whether the link should say "Add" or "Change", and
+ * `NOT_ADDED_TEXT`), work out whether the link should say "Add" or "Change", and
  * link to a change page - this avoids repeating those three lines for every field.
  */
 const buildValueDisplay = (value, emptyValueText, changeLink) => {
@@ -137,7 +138,7 @@ const buildVatDisplay = (vatNumber, sbi, vatFixLink) => {
 
   if (!vatNumber) {
     return {
-      value: 'Not added',
+      value: NOT_ADDED_TEXT,
       action: 'Add',
       changeLink: vatFixLink ?? BUSINESS_CHANGE_LINKS.businessVat(sbi)
     }
@@ -193,7 +194,7 @@ const buildLegalStatusRegistrationNumberDisplay = (data, sbi) => {
 
   return {
     label,
-    value: number || 'Not added',
+    value: number || NOT_ADDED_TEXT,
     action: presenters.getActionText(number),
     changeLink: BUSINESS_CHANGE_LINKS.businessLegalStatusRegistrationNumber(sbi)
   }

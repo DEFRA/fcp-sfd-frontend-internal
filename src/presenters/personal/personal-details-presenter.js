@@ -1,5 +1,6 @@
 /**
  * Formats data ready for presenting in the personal details page '/customer/{crn}/details'.
+ *
  * @module personalDetailsPresenter
  */
 
@@ -10,6 +11,16 @@ import { buildEntityBreadcrumbs } from '../base-presenter.js'
 const { PERSONAL: PERSONAL_CHANGE_LINKS } = constants.changeLinks.internal
 const { NOT_ADDED_TEXT } = constants
 
+/**
+ * Change links go to the fix journey when the personal details are invalid.
+ *
+ * @param {object} data - The customer data mapped from the DAL
+ * @param {object} [yar] - The Hapi session, used to read any flash notification
+ * @param {boolean} hasValidPersonalDetails - Whether all personal details are valid
+ * @param {string[]} [sectionsNeedingUpdate] - The sections that need updating
+ *
+ * @returns {object} The page data for the view
+ */
 const personalDetailsPresenter = (data, yar, hasValidPersonalDetails, sectionsNeedingUpdate) => {
   const changeLinks = formatChangeLinks(data.crn, hasValidPersonalDetails, sectionsNeedingUpdate)
   const { action: dobAction, formattedDob } = formatDob(data.dateOfBirth.full)
@@ -66,12 +77,12 @@ const getActionText = (value) => {
 
 /**
  * Builds change links for personal details based on whether the
- * personal details interrupter is enabled and the validity of the data.
+ * personal details are valid.
  *
- * When the interrupter is disabled or all personal details are valid,
+ * When all personal details are valid,
  * standard change links are returned.
  *
- * When the interrupter is enabled and details are invalid:
+ * When details are invalid:
  * - If only one section needs updating, its normal change link is used
  * - Otherwise, all links point to the personal details fix journey
  */

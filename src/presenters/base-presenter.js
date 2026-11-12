@@ -1,5 +1,7 @@
 /**
  * Base presenter for formatting data for display
+ *
+ * @module basePresenter
  */
 
 import { SEARCH_SBI, SEARCH_CRN } from '../constants/search-links.js'
@@ -47,7 +49,7 @@ const getAddressParts = (address) => {
  *
  * The postcode is always returned separately so views can render it on its own line.
  *
- * @param {Object} address - The address object from the mapped DAL response
+ * @param {object} address - The address object from the mapped DAL response
  *
  * @returns {{ addressLines: string, postcode: string }}
  */
@@ -72,7 +74,7 @@ export const formatAddressLines = (address) => {
  * @param {string} idLabel - The label for the identifier, e.g. 'SBI' or 'CRN'
  * @param {string} id - The SBI or CRN value
  *
- * @returns {string} e.g. "Alfred Waldron (CRN: 1101996862)" or "SBI: 123456789" when there's no name
+ * @returns {string} e.g. "Alfred Waldron (CRN: 9876543210)" or "SBI: 876543210" when there's no name
  */
 export const formatBreadcrumbLabel = (name, idLabel, id) => {
   return name ? `${name} (${idLabel}: ${id})` : `${idLabel}: ${id}`
@@ -86,7 +88,7 @@ export const formatBreadcrumbLabel = (name, idLabel, id) => {
  * @param {string | null | undefined} name - The business or customer name
  * @param {string} [currentHref] - Href for the current page crumb, omitted when the crumb isn't a link
  *
- * @returns {Array<Object>} Breadcrumb items
+ * @returns {Array<object>} Breadcrumb items
  */
 export const buildEntityBreadcrumbs = (queryKey, id, name, currentHref) => {
   let searchPath = SEARCH_SBI

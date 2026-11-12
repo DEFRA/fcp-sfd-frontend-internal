@@ -9,6 +9,14 @@ import { businessDetailsBySbi } from '../../dal/queries/business-details-by-sbi.
 import { getDalConnector } from '../../dal/connector.js'
 import { mapBusinessDetailsBySbi } from '../../mappers/business-details-by-sbi-mapper.js'
 
+/**
+ * @param {string} sbi - The Single Business Identifier
+ * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
+ *
+ * @returns {Promise<object|null>} The mapped business details, or null if the business was not found
+ *
+ * @throws {Error} If the DAL returns an error other than the business not being found
+ */
 const fetchSbiSearchDetailsService = async (sbi, email) => {
   const dalConnector = getDalConnector()
   const dalResponse = await dalConnector.query(businessDetailsBySbi, { sbi }, email)

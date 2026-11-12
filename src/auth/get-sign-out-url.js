@@ -1,7 +1,22 @@
+/**
+ * Builds the Entra sign out URL
+ *
+ * @module getSignOutUrl
+ */
+
 import { getOidcConfig } from './get-oidc-config.js'
 import { createState } from './state.js'
 import { config } from '../config/index.js'
 
+/**
+ * Includes a random state value, stored in the session, so we can check that the user returns from the
+ * same sign out request. This protects against CSRF (a forged request from another site).
+ *
+ * @param {object} request - The Hapi request object
+ * @param {string} loginHint - The hint identifying the user to sign out
+ *
+ * @returns {Promise<string>} The encoded sign out URL
+ */
 async function getSignOutUrl (request, loginHint) {
   const { end_session_endpoint: url } = await getOidcConfig()
 

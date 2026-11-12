@@ -25,30 +25,30 @@ const formatters = {
  *
  * Request lifecycle and logging:
  *
- * 1. User makes HTTP request (e.g., GET `/customer/1100014934/details`)
+ * 1. User makes HTTP request (e.g., GET `/customer/9876543210/details`)
  *
  * 2. hapi-pino's `onRequest` extension fires (BEFORE route matching):
- *    - Creates a child logger for this request
- *    - Calls `req` serializer → masks URL path via maskSensitivePath() using regex
- *    - Log object includes masked URL: `/customer/******4934/details`
- *    - At this point, request.params is still empty `{}` — routing hasn't happened yet
+ * - Creates a child logger for this request
+ * - Calls `req` serializer → masks URL path via maskSensitivePath() using regex
+ * - Log object includes masked URL: `/customer/******3210/details`
+ * - At this point, request.params is still empty `{}` — routing hasn't happened yet
  *
  * 3. Hapi matches the route (now request.params is populated):
- *    - request.params.crn becomes `"1100014934"`
- *    - But hapi-pino's serializer already ran in step 2, so this doesn't affect the
- *      URL field masking (which happened via regex on the path string)
+ * - request.params.crn becomes `"9876543210"`
+ * - But hapi-pino's serializer already ran in step 2, so this doesn't affect the
+ * URL field masking (which happened via regex on the path string)
  *
  * 4. Route handler executes and builds response
  *
  * 5. Response is sent:
- *    - customRequestCompleteMessage() builds final message string
- *    - Calls maskSensitivePath() again on the URL
- *    - Creates message: `"[response] get /customer/******4934/details 200 (45ms)"`
+ * - customRequestCompleteMessage() builds final message string
+ * - Calls maskSensitivePath() again on the URL
+ * - Creates message: `"[response] get /customer/******3210/details 200 (45ms)"`
  *
  * 6. Log sent to stdout/Elasticsearch:
- *    - CRN fully masked in the message and url fields (via maskSensitivePath at onRequest time)
- *    - Note: params in the log will be empty {} because serializers.req ran during onRequest
- *      before route matching (maskSensitiveParams is called but has nothing to mask)
+ * - CRN fully masked in the message and url fields (via maskSensitivePath at onRequest time)
+ * - Note: params in the log will be empty {} because serializers.req ran during onRequest
+ * before route matching (maskSensitiveParams is called but has nothing to mask)
  *
  * Key architectural insight: hapi-pino serializers run once during onRequest, not again
  * after route matching. Therefore, URL-based masking (via regex on the path string) is
@@ -103,7 +103,14 @@ const maskSensitiveParams = (params) => {
   return maskedParams
 }
 
-// Mask CRN in the response completion message so it doesn't leak there
+/**
+ * Builds the log message for a completed request, masking any CRN in the path
+ *
+ * @param {object} request - The Hapi request object
+ * @param {number} responseTime - The response time in milliseconds
+ *
+ * @returns {string} The log message
+ */
 const requestCompleteMessage = (request, responseTime) => {
   const statusCode = request.raw.res.headersSent ? request.raw.res.statusCode : '-'
   return `[response] ${request.method} ${maskSensitivePath(request.path)} ${statusCode} (${responseTime}ms)`
@@ -140,6 +147,12 @@ export const loggerOptions = {
       },
   ...formatters[logConfig.format],
   nesting: true,
+
+  /**
+   * Adds the current trace ID, when present, to every log entry
+   *
+   * @returns {object} The values to merge into the log entry
+   */
   mixin: () => {
     const mixinValues = {}
     const traceId = getTraceId()

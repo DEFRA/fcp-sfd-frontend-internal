@@ -1,5 +1,6 @@
 /**
- * Formats data ready for presenting in the `/business/{sbi}/legal-status-enter` page
+ * Formats data for the `charity` or `company` variant of the `/business/{sbi}/legal-status-enter` page
+ *
  * @module businessLegalStatusEnterPresenter
  */
 
@@ -24,8 +25,6 @@ const REGISTRATION_CONTENT = {
 }
 
 /**
- * Formats data for the `charity` or `company` variant of the `/business/{sbi}/legal-status-enter` page
- *
  * This single page is shared by two journeys, chosen by the legal status the user picked on the
  * change page: a Charity Commission registration number, or a Companies House registration number.
  * The returned page data is the same shape for both, just with different copy and field name, so the

@@ -1,5 +1,6 @@
 /**
  * Formats data ready for presenting in the `/business/{sbi}/details` page
+ *
  * @module businessDetailsPresenter
  */
 
@@ -12,6 +13,17 @@ const { NOT_ADDED_TEXT } = constants
 
 const CHANGE_LINK = '#'
 
+/**
+ * Change links go to the fix journey when the business details are invalid.
+ *
+ * @param {object} data - The business data mapped from the DAL
+ * @param {string} sbi - The Single Business Identifier
+ * @param {object} [yar] - The Hapi session, used to read any flash notification
+ * @param {boolean} hasValidBusinessDetails - Whether all business details are valid
+ * @param {string[]} [sectionsNeedingUpdate] - The sections that need updating (for example `name` or `vat`)
+ *
+ * @returns {object} The page data for the view
+ */
 const businessDetailsPresenter = (data, sbi, yar, hasValidBusinessDetails, sectionsNeedingUpdate) => {
   const { businessName, address, email, landline, mobile, vat, traderNumber, vendorNumber, legalStatus, type } = data
   const changeLinks = formatChangeLinks(sbi, hasValidBusinessDetails, sectionsNeedingUpdate)
@@ -66,14 +78,14 @@ const buildValueDisplay = (value, emptyValueText, changeLink) => {
 
 /**
  * Builds change links for business details based on whether the
- * business details interrupter is enabled and the validity of the data.
+ * business details are valid.
  *
- * When the interrupter is disabled or all business details are valid,
+ * When all business details are valid,
  * standard change links are returned.
  *
- * When the interrupter is enabled and details are invalid:
+ * When details are invalid:
  * - If exactly one section needs updating, that section keeps its standard change
- *   link and every other row routes through the fix journey
+ * link and every other row routes through the fix journey
  * - Otherwise, all links point to the business details fix journey
  *
  * VAT is null unless it is routed through the interrupter, because the VAT row

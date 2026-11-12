@@ -1,11 +1,15 @@
+/**
+ * Returns the active cache client
+ *
+ * @module getCache
+ */
+
 import { server } from '../../server.js'
 
 /**
- * A helper function to retrieve active cache instances from the Hapi server
+ * Retrieves the cache configured on the Hapi server. In this app the cache is written to Redis.
  *
- * This module exports `getCache` function that returns the cache client
- * configured in the Hapi server. In this app the cache is written to Redis
- *
+ * @returns {object} The Catbox policy for the session cache
  */
 const getCache = () => {
   return server.app.cache

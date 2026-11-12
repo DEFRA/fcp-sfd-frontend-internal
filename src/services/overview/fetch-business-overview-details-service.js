@@ -10,6 +10,14 @@ import { businessDetailsOverview } from '../../dal/queries/overview/business-det
 import { getDalConnector } from '../../dal/connector.js'
 import { mapBusinessOverviewDetails } from '../../mappers/overview/business-overview-details-mapper.js'
 
+/**
+ * @param {string} sbi - The Single Business Identifier
+ * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
+ *
+ * @returns {Promise<object>} The mapped business overview details
+ *
+ * @throws {Boom.notFound} If the DAL returns no data for the business
+ */
 const fetchBusinessOverviewDetailsService = async (sbi, email) => {
   const dalConnector = getDalConnector()
   const dalResponse = await dalConnector.query(businessDetailsOverview, { sbi }, email)

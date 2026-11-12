@@ -1,9 +1,3 @@
-/**
- * Registers the authentication strategies
- *
- * @module index
- */
-
 import { config } from '../../config/index.js'
 import { registerClientSecretStrategy } from './strategies/client-secret.js'
 

@@ -46,7 +46,7 @@ This document defines the standards an agent must apply when reviewing or writin
 ### `@module` blocks
 
 - Add to files with real logic: services, presenters, mappers, utils, plugins, auth helpers and pre-handlers
-- Do not add to config files (`src/config/`), constants, route files in `src/routes/` or any file that only exports a config object or static values. `@module` identifies a module for generated documentation; it is not a description of an exported value
+- Do not add to config files (`src/config/`), constants, route files in `src/routes/`, `index.js` files or any file that only exports a config object, static values or re-exports. `@module` identifies a module for generated documentation; it is not a description of an exported value
 - The name is the camelCase file name (e.g. `fetch-business-change-service.js` is `@module fetchBusinessChangeService`). Where the file's main export has a different name, use the exported name
 - A blank ` *` line separates the description from the tag
 - Do not add `'use strict'` — ESM modules are always strict

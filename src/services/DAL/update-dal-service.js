@@ -14,8 +14,6 @@
 import { getDalConnector } from '../../dal/connector.js'
 
 /**
- * Runs a GraphQL mutation against the DAL
- *
  * @param {string} mutation - The GraphQL mutation to run
  * @param {object} variables - The variables for the mutation
  * @param {string} email - The internal user's email address (sent to the DAL in the request headers)

@@ -8,8 +8,6 @@ import { presenters, constants } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/business/{sbi}/details/fix-list` page
- *
  * Each field shows the submitted payload if present, then any value already fixed earlier in the
  * journey, then the original business record.
  *

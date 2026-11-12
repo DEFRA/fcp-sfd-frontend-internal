@@ -8,8 +8,6 @@
  */
 
 /**
- * Stores an item in the cache
- *
  * @param {string} key - The cache key
  * @param {*} value - The value to store
  * @param {number} expiresAt - How long the item should live in the cache, in milliseconds

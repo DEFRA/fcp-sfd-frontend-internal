@@ -10,8 +10,6 @@ import { SEARCH_SBI } from '../../constants/search-links.js'
 const { BUSINESS_SECTION_ORDER, BUSINESS_UPDATE_TEXT_LABELS, BUSINESS_SECTION_LABELS } = constants.interrupterJourney
 
 /**
- * Formats data ready for presenting in the `/business/{sbi}/details/fix` page
- *
  * @param {object} data - The business data, including the source section and ordered sections to fix
  * @param {string} sbi - The Single Business Identifier
  *

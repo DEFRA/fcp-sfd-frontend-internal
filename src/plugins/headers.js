@@ -9,8 +9,6 @@ export const headersPlugin = {
     name: 'headers',
 
     /**
-     * Sets security response headers
-     *
      * Also disables caching for every route except the index page and assets, so sensitive data cannot be shown
      * from the browser history after the user has signed out.
      *

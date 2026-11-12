@@ -10,9 +10,6 @@ import { getDalConnector } from '../../dal/connector.js'
 import { mapBusinessDetailsBySbi } from '../../mappers/business-details-by-sbi-mapper.js'
 
 /**
- * Returns the business details for the given sbi by querying the DAL, mapping
- * the response and returning the mapped payload
- *
  * @param {string} sbi - The Single Business Identifier
  * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
  *

@@ -7,8 +7,6 @@
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/customer/{crn}/account-name-change` page
- *
  * Each name part is, in order of preference, the submitted payload, the pending change held in the
  * session, or the current name.
  *

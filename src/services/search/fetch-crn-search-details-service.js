@@ -10,9 +10,6 @@ import { getDalConnector } from '../../dal/connector.js'
 import { mapCustomerDetailsByCrn } from '../../mappers/customer-details-by-crn-mapper.js'
 
 /**
- * Returns the customer details for the given CRN by querying the DAL, mapping
- * the response and returning the mapped payload
- *
  * @param {string} crn - The customer reference number
  * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
  *

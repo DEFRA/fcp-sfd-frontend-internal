@@ -10,8 +10,6 @@ import { SEARCH_CRN } from '../../constants/search-links.js'
 const { PERSONAL: PERSONAL_CHANGE_LINKS } = constants.changeLinks.internal
 
 /**
- * Formats data ready for presenting in the `/customer/{crn}/account-phone-numbers-check` page
- *
  * @param {object} data - The customer data, including any pending phone number change held in the session
  * @param {string} crn - The Customer Reference Number
  *

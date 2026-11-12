@@ -1,9 +1,3 @@
-/**
- * Microsoft Entra authentication configuration
- *
- * @module entra
- */
-
 export const entraConfig = {
   entra: {
     tenantId: {

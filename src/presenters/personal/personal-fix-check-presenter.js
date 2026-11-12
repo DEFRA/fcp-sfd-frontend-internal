@@ -8,8 +8,6 @@ import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/customer/{crn}/details/fix-check` page
- *
  * @param {object} data - The customer data, including the ordered sections to fix and any pending changes held in the session
  * @param {string} crn - The Customer Reference Number
  *

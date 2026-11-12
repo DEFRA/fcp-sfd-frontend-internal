@@ -21,9 +21,6 @@ import { fetchPersonalChangeService } from './fetch-personal-change-service.js'
 import { personalAddressChangePresenter } from '../../presenters/personal/personal-address-change-presenter.js'
 
 /**
- * Prepares page data for the personal address change page when there are validation
- * or postcode lookup errors.
- *
  * @param {object} yar - The hapi `request.yar` object
  * @param {string} crn - The customer reference number
  * @param {string} email - The internal user's email address (sent to the DAL in the request headers)

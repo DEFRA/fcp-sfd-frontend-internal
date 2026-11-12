@@ -14,8 +14,6 @@ export const secureContext = {
     name: 'secure-context',
 
     /**
-     * Adds the CDP trust store certificates to the secure context
-     *
      * Does nothing other than log when the custom secure context is disabled in config.
      *
      * @param {object} server - The Hapi server

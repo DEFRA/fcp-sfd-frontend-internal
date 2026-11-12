@@ -10,8 +10,6 @@ import { SEARCH_SBI } from '../../constants/search-links.js'
 const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
 
 /**
- * Formats data ready for presenting in the `/business/{sbi}/phone-numbers-check` page
- *
  * @param {object} data - The business data, including any pending phone number change held in the session
  *
  * @returns {object} The page data for the view

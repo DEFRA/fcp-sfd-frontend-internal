@@ -15,8 +15,6 @@ import { flashNotification } from '../../utils/notifications/flash-notification.
 import { updateDalService } from '../DAL/update-dal-service.js'
 
 /**
- * Service to update a business's details via the fix journey.
- *
  * The flash notification is HTML or plain text depending on the type of success message built for the fixed sections.
  *
  * @param {string} sbi - The Single Business Identifier

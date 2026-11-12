@@ -22,9 +22,8 @@ import { getCookieOptions } from '../get-cookie-options.js'
 import { config } from '../../../config/index.js'
 
 /**
- * Registers the authentication strategies for the Hapi server
- *
- * Registers the Entra (Bell) strategy and the session cookie strategy, and sets the session strategy as the default.
+ * Registers two ways to sign in: Entra (using the Bell plugin) for the first sign in, and a session cookie for
+ * every request after that. The session cookie is the default.
  *
  * @param {object} server - The Hapi server
  *
@@ -49,7 +48,7 @@ async function registerClientSecretStrategy (server) {
 }
 
 /**
- * Builds the Bell options used to authenticate users with Entra
+ * Builds the Bell plugin options used to sign users in with Entra
  *
  * @param {object} oidcConfig - The Entra OpenID Connect configuration
  *

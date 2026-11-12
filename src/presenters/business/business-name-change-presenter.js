@@ -7,8 +7,6 @@
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/business/{sbi}/name-change` page
- *
  * @param {object} data - The business data, including any pending name change held in the session
  * @param {string} [payload] - The business name submitted by the user, when the form is re-rendered after a validation failure
  *

@@ -10,10 +10,8 @@ import { CUSTOMER_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/customer/{crn}` page
- *
- * Businesses are sorted, then paginated for the requested page. The page number is normalised and
- * clamped to the available pages.
+ * Businesses are sorted, then split into pages. If the requested page number is missing, too low or too high,
+ * the nearest valid page is used.
  *
  * @param {object} [data] - The customer data, including their linked businesses
  * @param {number|string} [page] - The requested page number from the query string

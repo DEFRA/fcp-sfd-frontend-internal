@@ -8,9 +8,6 @@
 import { fetchBusinessDetailsService } from './fetch-business-details-service.js'
 
 /**
- * Fetches business details and overlays any in-progress fixes from the business
- * fix journey stored in session.
- *
  * @param {string} sbi - The Single Business Identifier
  * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
  * @param {object} [sessionData] - The fix journey session data (`orderedSectionsToFix`, `businessFixUpdates`, `source`)

@@ -11,8 +11,6 @@ const COMPLEX_END_PAGINATOR = 'end'
 const PAGE_SIZE = 20
 
 /**
- * Transforms pagination information into the appropriate pagination component elements
- *
  * This takes the information provided (number of records and selected page number) and uses it to generate the data
  * needed for the {@link https://design-system.service.gov.uk/components/pagination/ | GDS pagination component}.
  *

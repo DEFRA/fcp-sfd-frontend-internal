@@ -12,9 +12,6 @@ import { getDalConnector } from '../dal/connector.js'
 import { personalDetailsQuery } from '../dal/queries/personal-details.js'
 
 /**
- * Returns personal details for a given CRN by querying the DAL,
- * maps the response and returns the mapped payload
- *
  * @param {string} crn - The customer reference number
  * @param {string} email - The internal user's email address (sent to the DAL in the request headers)
  *

@@ -16,8 +16,6 @@ import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 
 /**
- * Service to update a business's email address
- *
  * Does nothing if there is no pending email change.
  *
  * @param {object} yar - The hapi `request.yar` object

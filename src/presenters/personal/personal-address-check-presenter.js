@@ -8,8 +8,6 @@ import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/customer/{crn}/account-address-check` page
- *
  * @param {object} data - The customer data, including any pending address change held in the session
  *
  * @returns {object} The page data for the view

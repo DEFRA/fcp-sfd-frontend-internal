@@ -7,8 +7,6 @@
 import { config } from '../../config/index.js'
 
 /**
- * Creates the cache used to store tokens for DAL requests
- *
  * @param {object} server - The Hapi server
  * @param {string} cacheName - The name of the server cache to use
  *

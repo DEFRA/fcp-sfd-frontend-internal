@@ -5,8 +5,6 @@
  */
 
 /**
- * Creates a flash notification using yar
- *
  * It uses the title and text provided to create the notification defaulting to Updated and Changes made
  * The HTML field is used if the notification has specific html formatting requirements
  *

@@ -7,8 +7,6 @@
 import crypto from 'node:crypto'
 
 /**
- * Creates a state value and stores it in the session
- *
  * The value is passed to Entra during redirection and must be verified when the user returns.
  *
  * @param {object} request - The Hapi request object

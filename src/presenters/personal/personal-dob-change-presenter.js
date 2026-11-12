@@ -8,8 +8,6 @@ import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/customer/{crn}/account-date-of-birth-change` page
- *
  * The date of birth shown is, in order of preference, the submitted payload, the pending change
  * held in the session, or the current date of birth.
  *

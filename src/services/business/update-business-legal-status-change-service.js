@@ -18,8 +18,6 @@ import { flashNotification } from '../../utils/notifications/flash-notification.
 import { BUSINESS_LEGAL_STATUS_SESSION_FIELDS } from '../../constants/business-legal-status-session-fields.js'
 
 /**
- * Service to update a business's legal status
- *
  * Does nothing if neither the legal status nor a relevant registration number has changed. Throws if either
  * mutation does not report success.
  *

@@ -5,8 +5,6 @@
  */
 
 /**
- * Reads trust store certificates from environment variables
- *
  * Any variable whose name starts with `TRUSTSTORE_` is treated as a base64 encoded certificate.
  *
  * @param {object} envs - The environment variables, for example `process.env`

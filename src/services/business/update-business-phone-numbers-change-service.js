@@ -16,8 +16,6 @@ import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { flashNotification } from '../../utils/notifications/flash-notification.js'
 
 /**
- * Service to update a business' telephone numbers
- *
  * Does nothing if there is no pending phone number change.
  *
  * @param {object} yar - The hapi `request.yar` object

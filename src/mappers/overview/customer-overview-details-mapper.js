@@ -5,8 +5,6 @@
  */
 
 /**
- * Maps the raw customer overview details data from the DAL to a more usable format
- *
  * @param {object} value - The data from the DAL
  *
  * @returns {object} Formatted customer overview details data

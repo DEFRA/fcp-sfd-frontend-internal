@@ -14,8 +14,6 @@ import { flashNotification } from '../../utils/notifications/flash-notification.
 import { updateDalService } from '../DAL/update-dal-service.js'
 
 /**
- * Updates the business address details through the DAL service.
- *
  * Does nothing if there is no pending address change. Otherwise clears the pending change from the session and
  * flashes a success notification.
  *

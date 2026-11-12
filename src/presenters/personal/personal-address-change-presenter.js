@@ -7,8 +7,6 @@
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/customer/{crn}/account-address-change` page
- *
  * The postcode shown is, in order of preference, the submitted payload, the postcode held in the
  * session for the pending change, or the current personal address postcode.
  *

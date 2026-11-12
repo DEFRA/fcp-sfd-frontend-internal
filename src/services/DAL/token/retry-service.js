@@ -9,8 +9,6 @@ import { drop } from '../../../utils/caching/drop.js'
 import { DAL_TOKEN } from '../../../constants/cache-keys.js'
 
 /**
- * Retries an asynchronous function multiple times if it fails
- *
  * If the function throws a 401 error, the cached DAL token is dropped so that
  * a new token can be fetched on the next attempt
  *

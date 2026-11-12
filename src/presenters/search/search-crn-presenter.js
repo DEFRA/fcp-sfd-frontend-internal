@@ -8,8 +8,6 @@ import { formatAddressLines } from '../base-presenter.js'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/search-crn` page
- *
  * @param {object} [data] - The customer found by the search, if any
  * @param {string} [payload] - The CRN the user searched for
  *

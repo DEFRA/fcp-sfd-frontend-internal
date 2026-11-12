@@ -14,8 +14,6 @@ import { updateDalService } from '../DAL/update-dal-service.js'
 import { mutations, services } from '@defra/fcp-sfd-frontend-engine'
 
 /**
- * Service to update a customer's personal details via the fix journey.
- *
  * The flash notification is HTML or plain text depending on the type of success message built for the fixed sections.
  *
  * @param {string} crn - The customer reference number

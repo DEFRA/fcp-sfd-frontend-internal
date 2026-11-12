@@ -16,8 +16,6 @@ import { flashNotification } from '../../utils/notifications/flash-notification.
 import { updateDalService } from '../DAL/update-dal-service.js'
 
 /**
- * Service to update a personal full name (first, last and middle)
- *
  * Does nothing if there is no pending name change.
  *
  * @param {object} yar - The hapi `request.yar` object

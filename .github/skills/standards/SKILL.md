@@ -26,33 +26,64 @@ This document defines the standards an agent must apply when reviewing or writin
 
 - Match the style and conventions of the surrounding code
 - All internal `import` paths must include the `.js` extension
-- All `import` statements must be at the top of the file, after the `@module` JSDoc and before any function definitions
-- Every file starts with a `@module` JSDoc block; route files in `src/routes/` (other than `pre-handlers.js`) are exempt. The `@module` value is the camelCase file name (e.g. `fetch-business-change-service.js` is `@module fetchBusinessChangeService`), and a blank ` *` line separates the description from the `@module` tag. Do not add `'use strict'` — ESM modules are always strict
-- JSDoc is required on all exported functions — use a description, `@param {type} name - description`, and `@returns {type}`. The `@module` block's description must match the first line of the main exported function's JSDoc description, for example [business-vat-change-presenter.js](../../../src/presenters/business/business-vat-change-presenter.js):
-
-  ```js
-  /**
-   * Formats data ready for presenting in the `/business/{sbi}/vat-registration-number-change` page
-   *
-   * @module businessVatChangePresenter
-   */
-
-  import { SEARCH_SBI } from '../../constants/search-links.js'
-
-  /**
-   * Formats data ready for presenting in the `/business/{sbi}/vat-registration-number-change` page
-   *
-   * @param {object} data - The business data, including any pending VAT number change held in the session
-   * @param {string} [payload] - The VAT number submitted by the user, when the form is re-rendered after a validation failure
-   *
-   * @returns {object} The page data for the view
-   */
-  const businessVatChangePresenter = (data, payload) => {
-  ```
-- No inline comments unless the *why* is genuinely non-obvious
+- All `import` statements must be at the top of the file, after any `@module` JSDoc and before any function definitions
 - No error handling for scenarios that cannot happen
 - No abstractions for a single use case
 - Private functions must be ordered alphabetically by name
+- For comments and JSDoc, see [Writing comments](#writing-comments)
+
+## Writing comments
+
+### Descriptions
+
+- Explain *why* the code exists or what its name and signature don't make obvious, not *what* it does. If a description only repeats the name, leave it out
+- Write for a junior developer or apprentice who is new to the codebase. Use short, plain sentences. Only use a technical term (e.g. JWKS, CSRF, RS256) when it is needed, and explain it in a few words (e.g. "CSRF (a forged request from another site)")
+- Be specific about inputs and outputs. When several similar things are involved (e.g. access token and refresh token), name each one and say which goes in and which comes out
+- Don't use one word with two meanings in a sentence. Prefer "Gets a new access token from Microsoft Entra ID using a refresh token" over "Refreshes tokens using a refresh token"
+- Note constraints a caller must know (e.g. a refresh token is single use, so the new one must replace the old one)
+- Only describe usage you have verified (e.g. a constant only used by tests is not a production permission rule). Check usages before writing
+
+### `@module` blocks
+
+- Add to files with real logic: services, presenters, mappers, utils, plugins, auth helpers and pre-handlers
+- Do not add to config files (`src/config/`), constants, route files in `src/routes/` or any file that only exports a config object or static values. `@module` identifies a module for generated documentation; it is not a description of an exported value
+- The name is the camelCase file name (e.g. `fetch-business-change-service.js` is `@module fetchBusinessChangeService`). Where the file's main export has a different name, use the exported name
+- A blank ` *` line separates the description from the tag
+- Do not add `'use strict'` — ESM modules are always strict
+
+### Function JSDoc
+
+- Required on exported functions that take parameters, return something non-obvious or have side effects. Use `@param {type} name - description` and `@returns {type}`
+- Otherwise omit it unless the name and signature leave something a caller needs to know unexplained
+- The function block must add detail (parameters, returns, behaviour), not restate the `@module` description. If a single-function file's module description already says what it does, omit the function block (or vice versa)
+
+### Inline comments
+
+- Only where the *why* is genuinely non-obvious
+
+### Example
+
+[business-vat-change-presenter.js](../../../src/presenters/business/business-vat-change-presenter.js):
+
+```js
+/**
+ * Formats data ready for presenting in the `/business/{sbi}/vat-registration-number-change` page
+ *
+ * @module businessVatChangePresenter
+ */
+
+import { SEARCH_SBI } from '../../constants/search-links.js'
+
+/**
+ * Adds any unsaved VAT number from the session so the form keeps the user's changes
+ *
+ * @param {object} data - The business data, including any pending VAT number change held in the session
+ * @param {string} [payload] - The VAT number submitted by the user, when the form is re-rendered after a validation failure
+ *
+ * @returns {object} The page data for the view
+ */
+const businessVatChangePresenter = (data, payload) => {
+```
 
 ## Testing
 

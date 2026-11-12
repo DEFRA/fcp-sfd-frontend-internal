@@ -21,8 +21,6 @@ import { services } from '@defra/fcp-sfd-frontend-engine'
 const logger = createLogger()
 
 /**
- * Fetches and stores addresses from the OS Places API for a postcode
- *
  * @param {string} postcode - The UK postcode to search for
  * @param {object} yar - Hapi yar session object
  * @param {string} context - Context identifier ('business' or 'personal')

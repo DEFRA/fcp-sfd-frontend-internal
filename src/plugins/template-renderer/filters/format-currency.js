@@ -5,8 +5,6 @@
  */
 
 /**
- * Formats a value as currency
- *
  * @param {number} value - The value to format
  * @param {string} [locale] - The locale, defaulting to en-GB
  * @param {string} [currency] - The ISO 4217 currency code, defaulting to GBP

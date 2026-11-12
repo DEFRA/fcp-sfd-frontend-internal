@@ -1,5 +1,5 @@
 /**
- * Pino logger options, including masking of CRNs in request logs
+ * Logger options, including hiding most of the CRN in request logs
  *
  * @module loggerOptions
  */
@@ -108,8 +108,6 @@ const maskSensitiveParams = (params) => {
 
   return maskedParams
 }
-
-// Mask CRN in the response completion message so it doesn't leak there
 
 /**
  * Builds the log message for a completed request, masking any CRN in the path

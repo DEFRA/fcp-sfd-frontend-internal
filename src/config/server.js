@@ -1,9 +1,3 @@
-/**
- * Server configuration schema
- *
- * @module server
- */
-
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { isProduction, isTest, isDevelopment } from '../constants/environments.js'

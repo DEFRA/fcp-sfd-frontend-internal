@@ -8,8 +8,6 @@ import { presenters } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/customer/{crn}/account-phone-numbers-change` page
- *
  * Each number is, in order of preference, the submitted payload, the pending change held in the
  * session, or the current number from the DAL.
  *

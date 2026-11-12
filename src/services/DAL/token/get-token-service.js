@@ -21,8 +21,6 @@ import { config } from '../../../config/index.js'
 import { get, set } from '../../../utils/caching/index.js'
 
 /**
- * Retrieves a bearer token from Azure AD (App Registration).
- *
  * Returns the cached token where one exists, otherwise requests a new one. The call is retried on failure.
  *
  * @param {object} cache - The cache used to store and retrieve the DAL token

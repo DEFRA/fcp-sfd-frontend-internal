@@ -1,9 +1,3 @@
-/**
- * Redis configuration schema
- *
- * @module redis
- */
-
 import { isProduction } from '../constants/environments.js'
 import { DEFAULT_CACHE_TTL_MINUTES } from '../constants/cache-keys.js'
 

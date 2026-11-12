@@ -5,8 +5,6 @@
  */
 
 /**
- * Resolves a field value from the current, original or fallback values
- *
  * Uses the original value unless a success message is being shown, otherwise the current value, then the fallback,
  * then an empty string.
  *

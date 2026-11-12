@@ -33,8 +33,6 @@ import { schemas } from '@defra/fcp-sfd-frontend-engine'
 import { validateDetailsService } from '../validate-details-service.js'
 
 /**
- * Validates personal details against the personal details schemas.
- *
  * @param {object} personalDetails - The mapped personal details
  *
  * @returns {{hasValidPersonalDetails: boolean, sectionsNeedingUpdate: string[]}} Whether the details are valid and

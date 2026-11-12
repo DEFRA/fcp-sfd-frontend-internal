@@ -12,9 +12,7 @@ import { config } from '../../config/index.js'
 import { createLogger } from '../logger.js'
 
 /**
- * Creates the Catbox cache engine, using Redis or memory
- *
- * Catbox Memory is intended for local development only, so an error is logged if it is used in production.
+ * The memory option is for local development only, so an error is logged if it is used in production.
  *
  * @param {string} engine - The engine to use, either 'redis' or 'memory'
  *

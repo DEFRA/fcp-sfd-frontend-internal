@@ -9,8 +9,6 @@ import { Cluster, Redis } from 'ioredis'
 import { createLogger } from '../logger.js'
 
 /**
- * Creates the Redis client, as a single instance or a cluster
- *
  * Credentials are only used when a username is configured, and TLS only when enabled in the config.
  *
  * @param {object} redisConfig - The Redis config

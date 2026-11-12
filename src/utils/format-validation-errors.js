@@ -5,8 +5,6 @@
  */
 
 /**
- * Formats Joi validation errors for display
- *
  * Errors are keyed by field name. Missing-peer errors are applied to each peer field.
  *
  * @param {object[]} errors - The Joi validation error details

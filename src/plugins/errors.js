@@ -12,8 +12,6 @@ export const errors = {
     name: 'errors',
 
     /**
-     * Renders error pages for failed requests
-     *
      * Shows the unauthorised page for 403 responses, the page not found page for 404 responses and the service
      * problem page for any other error, which is also logged.
      *

@@ -35,8 +35,6 @@ import { schemas } from '@defra/fcp-sfd-frontend-engine'
 import { validateDetailsService } from '../validate-details-service.js'
 
 /**
- * Validates business details against the business details schemas.
- *
  * @param {object} businessDetails - The mapped business details
  *
  * @returns {{hasValidBusinessDetails: boolean, sectionsNeedingUpdate: string[]}} Whether the details are valid and

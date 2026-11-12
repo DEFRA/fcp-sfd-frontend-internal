@@ -12,8 +12,6 @@ export const auth = {
     name: 'auth',
 
     /**
-     * Registers the authentication strategies
-     *
      * Federated credentials are not yet implemented, so the client secret strategy is always used.
      *
      * @param {object} server - The Hapi server

@@ -21,9 +21,6 @@ import { fetchBusinessChangeService } from './fetch-business-change-service.js'
 import { businessAddressChangePresenter } from '../../presenters/business/business-address-change-presenter.js'
 
 /**
- * Prepares page data for the business address change page when there are validation
- * or postcode lookup errors.
- *
  * @param {object} yar - The hapi `request.yar` object
  * @param {string} sbi - The Single Business Identifier of the business being viewed
  * @param {string} email - The internal user's email address (sent to the DAL in the request headers)

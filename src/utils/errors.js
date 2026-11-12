@@ -7,8 +7,6 @@
 import { constants } from '@defra/fcp-sfd-frontend-engine'
 
 /**
- * Catches errors for failed requests and renders the matching error page
- *
  * Maps 503, 404 and 500 responses to their error views, defaulting to the page not found view for any other error.
  * The error stack is logged.
  *

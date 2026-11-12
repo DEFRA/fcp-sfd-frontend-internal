@@ -10,8 +10,6 @@ import { createServer } from '../server.js'
 import { createLogger } from './logger.js'
 
 /**
- * Starts the Hapi server
- *
  * Failures are logged rather than thrown, in which case the returned server is undefined.
  *
  * @returns {Promise<object|undefined>} The started Hapi server

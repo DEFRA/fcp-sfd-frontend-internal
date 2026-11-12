@@ -16,8 +16,6 @@ import { flashNotification } from '../../utils/notifications/flash-notification.
 import { updateDalService } from '../DAL/update-dal-service.js'
 
 /**
- * Service to update personal phone numbers (landline and mobile)
- *
  * Does nothing if there is no pending phone number change.
  *
  * @param {object} yar - The hapi `request.yar` object

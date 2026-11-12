@@ -13,8 +13,6 @@ export const router = {
     name: 'router',
 
     /**
-     * Registers the application routes
-     *
      * Also registers the inert plugin so static files can be served.
      *
      * @param {object} server - The Hapi server

@@ -10,8 +10,6 @@ import { SEARCH_SBI } from '../../constants/search-links.js'
 const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
 
 /**
- * Formats data ready for presenting in the `/business/{sbi}/address-enter` page
- *
  * @param {object} data - The business data, including any pending address change held in the session
  * @param {object} [payload] - The address submitted by the user, when the form is re-rendered after a validation failure
  *

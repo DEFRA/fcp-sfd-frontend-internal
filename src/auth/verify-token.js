@@ -10,9 +10,9 @@ import Jwt from '@hapi/jwt'
 import { getOidcConfig } from './get-oidc-config.js'
 
 /**
- * Verifies tokens returned from Entra
+ * Checks that a token really came from Entra and has not been changed.
  *
- * Finds the matching signing key from the Entra JWKS endpoint and verifies the token signature using RS256.
+ * Gets the matching public key from Entra, then uses it to check the token signature.
  *
  * @param {string} token - The JWT to verify
  *

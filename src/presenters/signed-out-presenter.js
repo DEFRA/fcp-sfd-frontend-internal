@@ -5,8 +5,6 @@
  */
 
 /**
- * Formats data ready for presenting in the `/signed-out` page
- *
  * @returns {object} The page data for the view
  */
 const signedOutPresenter = () => {

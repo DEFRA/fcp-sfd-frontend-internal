@@ -7,8 +7,6 @@
  */
 
 /**
- * Removes an item from the cache
- *
  * @param {string} key - The cache key
  * @param {object} cache - The cache client, for example from `getCache()`
  *

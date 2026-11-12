@@ -7,8 +7,6 @@
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/business/{sbi}/vat-registration-number-change` page
- *
  * @param {object} data - The business data, including any pending VAT number change held in the session
  * @param {string} [payload] - The VAT number submitted by the user, when the form is re-rendered after a validation failure
  *

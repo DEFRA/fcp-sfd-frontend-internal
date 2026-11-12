@@ -7,8 +7,6 @@
 import { SEARCH_SBI } from '../constants/search-links.js'
 
 /**
- * Validates a redirect target to prevent open redirects
- *
  * Only relative paths starting with `/` are allowed; anything else falls back to the SBI search link.
  *
  * @param {string} [redirect] - The requested redirect target

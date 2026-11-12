@@ -1,9 +1,3 @@
-/**
- * OS Places address lookup configuration
- *
- * @module osPlaces
- */
-
 export const osPlacesConfig = {
   osPlacesConfig: {
     clientId: {

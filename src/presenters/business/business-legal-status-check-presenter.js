@@ -10,8 +10,6 @@ import { SEARCH_SBI } from '../../constants/search-links.js'
 const { BUSINESS: BUSINESS_CHANGE_LINKS } = constants.changeLinks.internal
 
 /**
- * Formats data ready for presenting in the `/business/{sbi}/legal-status-check` page
- *
  * The back link depends on the legal status: charities and companies return to the registration
  * number page, other legal statuses return to the legal status page.
  *

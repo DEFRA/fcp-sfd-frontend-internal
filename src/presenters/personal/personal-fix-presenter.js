@@ -10,8 +10,6 @@ import { SEARCH_CRN } from '../../constants/search-links.js'
 const { PERSONAL_SECTION_ORDER, PERSONAL_UPDATE_TEXT_LABELS, PERSONAL_SECTION_LABELS } = constants.interrupterJourney
 
 /**
- * Formats data ready for presenting in the `/customer/{crn}/details/fix` page
- *
  * @param {object} data - The customer data, including the source section and ordered sections to fix
  * @param {string} crn - The Customer Reference Number
  *

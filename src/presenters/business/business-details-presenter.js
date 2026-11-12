@@ -14,10 +14,7 @@ const { NOT_ADDED_TEXT } = constants
 const CHANGE_LINK = '#'
 
 /**
- * Formats data ready for presenting in the `/business/{sbi}/details` page
- *
- * Change links route through the fix journey when the business details interrupter is enabled
- * and the business details are invalid.
+ * Change links go to the fix journey when the business details are invalid.
  *
  * @param {object} data - The business data mapped from the DAL
  * @param {string} sbi - The Single Business Identifier
@@ -81,12 +78,12 @@ const buildValueDisplay = (value, emptyValueText, changeLink) => {
 
 /**
  * Builds change links for business details based on whether the
- * business details interrupter is enabled and the validity of the data.
+ * business details are valid.
  *
- * When the interrupter is disabled or all business details are valid,
+ * When all business details are valid,
  * standard change links are returned.
  *
- * When the interrupter is enabled and details are invalid:
+ * When details are invalid:
  * - If exactly one section needs updating, that section keeps its standard change
  * link and every other row routes through the fix journey
  * - Otherwise, all links point to the business details fix journey

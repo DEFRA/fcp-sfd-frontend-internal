@@ -14,8 +14,6 @@ import { config } from '../config/index.js'
 import { createLogger } from './logger.js'
 
 /**
- * Publishes a CDP count metric
- *
  * Does nothing when metrics are disabled. Errors are logged rather than thrown.
  *
  * @param {string} metricName - The name of the metric

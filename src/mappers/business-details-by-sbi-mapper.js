@@ -7,8 +7,6 @@
 import { mappers } from '@defra/fcp-sfd-frontend-engine'
 
 /**
- * Maps the raw business details by SBI data from the DAL to a more usable format
- *
  * @param {object} value - The data from the DAL
  *
  * @returns {object} Formatted business details data

@@ -5,8 +5,6 @@
  */
 
 /**
- * Generic multi-schema validation service.
- *
  * - Validates multiple Joi schemas independently against the mapped (flat) details
  * - Collects all validation errors
  * - Maps errors to form sections

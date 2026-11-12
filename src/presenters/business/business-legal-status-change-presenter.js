@@ -8,8 +8,6 @@ import { constants } from '@defra/fcp-sfd-frontend-engine'
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
 /**
- * Formats data ready for presenting in the `/business/{sbi}/legal-status-change` page
- *
  * The selected legal status is, in order of preference, the submitted payload, the pending change
  * held in the session, or the current legal status code from the DAL.
  *

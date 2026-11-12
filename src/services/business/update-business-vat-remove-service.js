@@ -17,8 +17,6 @@ import { flashNotification } from '../../utils/notifications/flash-notification.
 import { updateDalService } from '../DAL/update-dal-service.js'
 
 /**
- * Service to remove a business's VAT registration number
- *
  * The VAT number is removed by updating it to an empty string.
  *
  * @param {object} yar - The hapi `request.yar` object

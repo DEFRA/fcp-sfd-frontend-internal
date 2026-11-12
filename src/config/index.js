@@ -1,7 +1,7 @@
 /**
  * Application configuration, combining all config schemas
  *
- * @module index
+ * @module config
  */
 
 import convict from 'convict'

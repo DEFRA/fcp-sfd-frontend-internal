@@ -21,8 +21,6 @@ const manifestPath = path.join(
 let webpackManifest
 
 /**
- * Builds the global context passed to every template
- *
  * Merges any context set on the response with the asset path, service name, navigation and the signed in user's
  * cached session. Loads the Webpack manifest on first use so asset paths can be resolved.
  *

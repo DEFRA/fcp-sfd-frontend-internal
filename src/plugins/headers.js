@@ -1,7 +1,7 @@
 /**
  * Sets security response headers
  *
- * @module headers
+ * @module headersPlugin
  */
 
 export const headersPlugin = {

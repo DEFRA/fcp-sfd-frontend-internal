@@ -1,10 +1,6 @@
 /**
  * Navigation items shown in the service header
  *
- * @module navigationItems
- */
-
-/**
  * @param {object} [request] - The Hapi request object, used to set the active item
  *
  * @returns {object[]} The navigation items

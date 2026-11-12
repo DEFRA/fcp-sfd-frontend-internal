@@ -1,7 +1,7 @@
 /**
  * Creates and configures the Hapi server
  *
- * @module server
+ * @module createServer
  */
 
 import path from 'node:path'

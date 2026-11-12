@@ -1,7 +1,7 @@
 /**
  * Creates the application logger
  *
- * @module logger
+ * @module createLogger
  */
 
 import { pino } from 'pino'

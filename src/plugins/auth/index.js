@@ -6,7 +6,7 @@ export const auth = {
     name: 'auth',
 
     /**
-     * Federated credentials are not yet implemented, so the client secret strategy is always used.
+     * Registers the sign in strategies. Only the client secret strategy is supported at the moment.
      *
      * @param {object} server - The Hapi server
      *

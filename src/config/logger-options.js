@@ -1,9 +1,3 @@
-/**
- * Logger options, including hiding most of the CRN in request logs
- *
- * @module loggerOptions
- */
-
 import { ecsFormat } from '@elastic/ecs-pino-format'
 import { getTraceId } from '@defra/hapi-tracing'
 import { config } from './index.js'

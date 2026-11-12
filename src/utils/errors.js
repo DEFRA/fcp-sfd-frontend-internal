@@ -1,7 +1,7 @@
 /**
  * Catches errors for failed requests and renders the matching error page
  *
- * @module errors
+ * @module catchAll
  */
 
 import { constants } from '@defra/fcp-sfd-frontend-engine'

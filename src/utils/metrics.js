@@ -1,7 +1,7 @@
 /**
  * Publishes a CDP count metric
  *
- * @module metrics
+ * @module metricsCounter
  */
 
 import {

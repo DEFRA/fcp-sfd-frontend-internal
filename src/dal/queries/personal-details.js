@@ -1,9 +1,3 @@
-/**
- * GraphQL query for personal details
- *
- * @module personalDetails
- */
-
 export const personalDetailsQuery = `
 query Customer($crn: ID!) {
   customer(crn: $crn) {

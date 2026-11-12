@@ -8,7 +8,7 @@
  * Having this in one place also makes it easier to add retries
  * or extra error handling in the future.
  *
- * @module update-dal-service
+ * @module updateDalService
  */
 
 import { getDalConnector } from '../../dal/connector.js'

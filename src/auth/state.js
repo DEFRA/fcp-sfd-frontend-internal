@@ -31,7 +31,7 @@ function createState (request) {
  * @param {object} request - The Hapi request object
  * @param {string} state - The state value returned by Entra
  *
- * @throws {Error} If the state does not match, as this is a possible CSRF attack
+ * @throws {Error} If the state does not match, which could mean a CSRF (forged request from another site) attack
  */
 function validateState (request, state) {
   const storedState = request.yar.get('state')

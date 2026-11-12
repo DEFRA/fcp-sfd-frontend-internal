@@ -17,8 +17,7 @@ import { initTokenCache } from './utils/caching/token-cache.js'
 import { initDalConnector } from './dal/connector.js'
 
 /**
- * Sets up the proxy, session and token caches and the DAL connector, then registers the plugins and the catch-all
- * error handler.
+ * Initialises the proxy, cache and DAL wiring before registering the app plugins and the catch-all error handler.
  *
  * @returns {Promise<object>} The configured Hapi server
  */

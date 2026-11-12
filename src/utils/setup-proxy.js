@@ -1,5 +1,5 @@
 /**
- * Enables the configured HTTP proxy globally for outbound requests
+ * Configures the global HTTP proxy used by outbound requests
  *
  * @module setupProxy
  */
@@ -11,9 +11,8 @@ import { createLogger } from './logger.js'
 const logger = createLogger()
 
 /**
- * Enables the configured HTTP proxy globally for outbound requests
- * for a number of http clients.
- * Node Fetch will still need to pass a ProxyAgent in on each call.
+ * Applies the configured proxy to libraries that do not accept a per-request agent.
+ * Node Fetch still needs a ProxyAgent passed in on each call.
  */
 export const setupProxy = () => {
   const proxyUrl = config.get('server.httpProxy')

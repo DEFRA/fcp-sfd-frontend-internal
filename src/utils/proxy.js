@@ -14,7 +14,7 @@ import { createLogger } from './logger.js'
 const logger = createLogger()
 
 /**
- * Provides the proxy configuration for outbound requests
+ * Builds the proxy objects used by outbound HTTP calls when a proxy is configured.
  *
  * @returns {{url: URL, port: number, proxyAgent: object, httpAndHttpsProxyAgent: object}|null} The proxy details,
  * or null if no proxy is configured

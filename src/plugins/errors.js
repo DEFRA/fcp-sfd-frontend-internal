@@ -1,5 +1,5 @@
 /**
- * Renders error pages for failed requests
+ * Maps Boom errors to the app's unauthorised, not found and service-problem pages.
  *
  * @module errors
  */

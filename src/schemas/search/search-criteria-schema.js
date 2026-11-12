@@ -1,5 +1,5 @@
 /**
- * Joi schema for validating search criteria
+ * Validates the search selector so only SBI or CRN values reach the search flow.
  *
  * @module searchCriteriaSchema
  */

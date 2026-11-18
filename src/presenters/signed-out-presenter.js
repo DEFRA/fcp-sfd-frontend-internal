@@ -1,8 +1,12 @@
 /**
  * Formats data ready for presenting in the `/signed-out` page
+ *
  * @module signedOutPresenter
  */
 
+/**
+ * @returns {object} The page data for the view
+ */
 const signedOutPresenter = () => {
   return {
     pageTitle: 'You have signed out',

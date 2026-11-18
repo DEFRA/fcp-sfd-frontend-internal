@@ -20,6 +20,13 @@ import { retry } from './retry-service.js'
 import { config } from '../../../config/index.js'
 import { get, set } from '../../../utils/caching/index.js'
 
+/**
+ * Returns the cached token where one exists, otherwise requests a new one. The call is retried on failure.
+ *
+ * @param {object} cache - The cache used to store and retrieve the DAL token
+ *
+ * @returns {Promise<string>} The bearer token, formatted for use as an Authorization header value
+ */
 const getTokenService = async (cache) => {
   return retry(() => getToken(cache))
 }

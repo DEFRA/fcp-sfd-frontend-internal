@@ -1,7 +1,13 @@
+/**
+ * Reduces a client-supplied Referer value down to a safe, same-origin relative path
+ *
+ * @module getSafeBackLink
+ */
+
 const ALLOWED_PROTOCOLS = new Set(['http:', 'https:'])
 
 /**
- * Reduces a client-supplied Referer value down to a safe, same-origin relative path.
+ * Reduces a client-supplied Referer value down to a safe, same-origin relative path
  * Real browsers only ever send an absolute Referer, so relative values are treated as unsafe
  * rather than special-cased, closing off tricks (e.g. "/\evil.com") that rely on a lenient
  * relative-path check and the URL parser's backslash normalisation to escape to another origin.

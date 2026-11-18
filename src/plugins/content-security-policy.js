@@ -1,3 +1,9 @@
+/**
+ * Hapi plugin setting the content security policy
+ *
+ * @module contentSecurityPolicy
+ */
+
 import Blankie from 'blankie'
 
 // Hash 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' is to support a GOV.UK frontend script bundled within Nunjucks macros

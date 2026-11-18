@@ -1,7 +1,23 @@
+/**
+ * Gets a new access token from Microsoft Entra ID using a refresh token
+ *
+ * @module refreshTokens
+ */
+
 import Wreck from '@hapi/wreck'
 import { getOidcConfig } from './get-oidc-config.js'
 import { config } from '../config/index.js'
 
+/**
+ * Sends a refresh token to Entra and gets back a new access token and a new refresh token
+ *
+ * The access token is short-lived and used to call APIs. The refresh token is single use, so the new one must be
+ * stored in place of the old one.
+ *
+ * @param {string} refreshToken - The refresh token to exchange
+ *
+ * @returns {Promise<{access_token: string, refresh_token: string}>} The new access token and new refresh token from Entra
+ */
 async function refreshTokens (refreshToken) {
   const { token_endpoint: url } = await getOidcConfig()
 

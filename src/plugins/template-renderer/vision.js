@@ -1,3 +1,9 @@
+/**
+ * Hapi plugin configuring Vision to render Nunjucks templates
+ *
+ * @module vision
+ */
+
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import nunjucks from 'nunjucks'
@@ -32,16 +38,25 @@ Object.entries(filters).forEach(([name, filter]) => {
   nunjucksEnvironment.addFilter(name, filter)
 })
 
+/**
+ * Compiles a Nunjucks template string into a render function
+ *
+ * @param {string} src - The template source
+ * @param {object} options - The compile options
+ * @param {object} options.environment - The Nunjucks environment
+ *
+ * @returns {Function} A function that renders the template with a given context
+ */
+const compile = (src, options) => {
+  const template = nunjucks.compile(src, options.environment)
+  return (ctx) => template.render(ctx)
+}
+
 export const vision = {
   plugin: hapiVision,
   options: {
     engines: {
-      njk: {
-        compile: (src, options) => {
-          const template = nunjucks.compile(src, options.environment)
-          return (ctx) => template.render(ctx)
-        }
-      }
+      njk: { compile }
     },
     compileOptions: {
       environment: nunjucksEnvironment

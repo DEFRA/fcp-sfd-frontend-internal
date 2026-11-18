@@ -1,3 +1,9 @@
+/**
+ * Hapi plugin for request tracing
+ *
+ * @module requestTracing
+ */
+
 import { config } from '../config/index.js'
 import { tracing } from '@defra/hapi-tracing'
 

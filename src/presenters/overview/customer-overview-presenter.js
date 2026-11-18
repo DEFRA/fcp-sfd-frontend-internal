@@ -1,5 +1,6 @@
 /**
  * Formats data ready for presenting in the `/customer/{crn}` page
+ *
  * @module customerOverviewPresenter
  */
 
@@ -8,6 +9,15 @@ import { buildEntityBreadcrumbs } from '../base-presenter.js'
 import { CUSTOMER_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 import { SEARCH_CRN } from '../../constants/search-links.js'
 
+/**
+ * Businesses are sorted, then split into pages. If the requested page number is missing, too low or too high,
+ * the nearest valid page is used.
+ *
+ * @param {object} [data] - The customer data, including their linked businesses
+ * @param {number|string} [page] - The requested page number from the query string
+ *
+ * @returns {object} The page data for the view
+ */
 const customerOverviewPresenter = (data, page) => {
   const businesses = data?.businesses ?? []
 

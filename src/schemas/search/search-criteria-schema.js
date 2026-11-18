@@ -1,3 +1,9 @@
+/**
+ * Validates the search selector so only SBI or CRN values reach the search flow.
+ *
+ * @module searchCriteriaSchema
+ */
+
 import Joi from 'joi'
 
 const VALID_VALUES = ['sbi', 'crn']

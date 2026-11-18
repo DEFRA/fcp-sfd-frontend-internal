@@ -1,10 +1,17 @@
 /**
- * Formats data ready for presenting on the `/vat-registration-remove` page
+ * Formats data ready for presenting in the `/business/{sbi}/vat-registration-remove` page
+ *
  * @module businessVatRemovePresenter
  */
 
 import { SEARCH_SBI } from '../../constants/search-links.js'
 
+/**
+ * @param {object} data - The business data, including the current VAT number
+ * @param {string} [payload] - The confirmation value submitted by the user, when the form is re-rendered after a validation failure
+ *
+ * @returns {object} The page data for the view
+ */
 const businessVatRemovePresenter = (data, payload) => {
   const sbi = data.sbi
 

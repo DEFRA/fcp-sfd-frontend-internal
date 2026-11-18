@@ -1,3 +1,9 @@
+/**
+ * Creates and configures the Hapi server
+ *
+ * @module createServer
+ */
+
 import path from 'node:path'
 import hapi from '@hapi/hapi'
 import Joi from 'joi'
@@ -10,6 +16,11 @@ import { getCacheEngine } from './utils/caching/cache-engine.js'
 import { initTokenCache } from './utils/caching/token-cache.js'
 import { initDalConnector } from './dal/connector.js'
 
+/**
+ * Initialises the proxy, cache and DAL wiring before registering the app plugins and the catch-all error handler.
+ *
+ * @returns {Promise<object>} The configured Hapi server
+ */
 export const createServer = async () => {
   setupProxy()
 

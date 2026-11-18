@@ -1,5 +1,6 @@
 /**
  * Formats data ready for presenting in the `/business/{sbi}` page
+ *
  * @module businessOverviewPresenter
  */
 
@@ -7,6 +8,15 @@ import { paginationPresenter } from '../pagination-presenter.js'
 import { buildEntityBreadcrumbs } from '../base-presenter.js'
 import { BUSINESS_PAGE_SIZE as PAGE_SIZE } from '../../constants/pagination.js'
 
+/**
+ * Customers are sorted, then split into pages. If the requested page number is missing, too low or too high,
+ * the nearest valid page is used.
+ *
+ * @param {object} [data] - The business data, including its linked customers
+ * @param {number|string} [page] - The requested page number from the query string
+ *
+ * @returns {object} The page data for the view
+ */
 const businessOverviewPresenter = (data, page) => {
   const customers = data?.customers ?? []
 

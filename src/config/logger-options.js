@@ -116,6 +116,20 @@ const requestCompleteMessage = (request, responseTime) => {
   return `[response] ${request.method} ${maskSensitivePath(request.path)} ${statusCode} (${responseTime}ms)`
 }
 
+/**
+ * Adds the current trace ID, when present, to every log entry
+ *
+ * @returns {object} The values to merge into the log entry
+ */
+const mixin = () => {
+  const mixinValues = {}
+  const traceId = getTraceId()
+  if (traceId) {
+    mixinValues.trace = { id: traceId }
+  }
+  return mixinValues
+}
+
 export const loggerOptions = {
   enabled: logConfig.enabled,
   ignorePaths: isLocal ? ['/health', '/public', '/favicon.ico'] : ['/health'],
@@ -147,18 +161,5 @@ export const loggerOptions = {
       },
   ...formatters[logConfig.format],
   nesting: true,
-
-  /**
-   * Adds the current trace ID, when present, to every log entry
-   *
-   * @returns {object} The values to merge into the log entry
-   */
-  mixin: () => {
-    const mixinValues = {}
-    const traceId = getTraceId()
-    if (traceId) {
-      mixinValues.trace = { id: traceId }
-    }
-    return mixinValues
-  }
+  mixin
 }

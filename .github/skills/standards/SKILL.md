@@ -61,6 +61,8 @@ This document defines the standards an agent must apply when reviewing or writin
 - Required on exported functions that take parameters, return something non-obvious or have side effects. Use `@param {type} name - description` and `@returns {type}`
 - Otherwise omit it unless the name and signature leave something a caller needs to know unexplained
 - The function block must add detail (parameters, returns, behaviour), not restate the `@module` description. If a single-function file's module description already says what it does, omit the function block (or vice versa)
+- Never put a JSDoc block inside an exported object literal (for example a Hapi plugin's `register`, a Vision `compile` or a logger `mixin`). It is buried in the config and describes one property rather than the object. Declare the function as a named `const` above the export, put the JSDoc on it, and reference it with shorthand (`plugin: { name, register }`). For a trivial function, a one-line `//` comment is enough
+- Do not move the JSDoc above the `export` instead, as it would then describe the whole object
 
 ### Inline comments
 

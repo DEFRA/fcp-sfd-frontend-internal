@@ -43,6 +43,11 @@ This document defines the standards an agent must apply when reviewing or writin
 - Note constraints a caller must know (e.g. a refresh token is single use, so the new one must replace the old one)
 - Only describe usage you have verified (e.g. a constant only used by tests is not a production permission rule). Check usages before writing
 
+### Example data
+
+- Never put real CRNs or SBIs in comments, JSDoc or docs. Use synthetic values only, as set out in the [README](../../../README.md)
+- CRNs are 10 digits from `9000000000` to `9999999999` (use `9876543210`). SBIs are 9 digits from `800000000` to `899999999` (use `876543210`)
+
 ### `@module` blocks
 
 - Add to files with real logic: services, presenters, mappers, utils, plugins, auth helpers and pre-handlers
